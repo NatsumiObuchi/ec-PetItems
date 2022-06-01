@@ -17,10 +17,23 @@ public class ItemController {
 	@Autowired
 	private ItemService service;
 
+	/**
+	 * 商品一覧を表示する
+	 */
 	@RequestMapping("/list")
 	public String itemList(Model model) {
 		List<Item> itemList = service.findAll();
 		model.addAttribute("itemList", itemList);
 		return "item_list_pizza";
+	}
+
+	/**
+	 * 商品詳細を表示する
+	 */
+	@RequestMapping("/itemDetail")
+	public String itemDetail(Integer id,Model model) {
+		Item item = service.load(id);
+		model.addAttribute("item", item);
+		return "item_detail";
 	}
 }
