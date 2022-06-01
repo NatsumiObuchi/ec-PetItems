@@ -1,6 +1,5 @@
 package jp.co.example.ecommerce_b.controller;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.service.UserService;
 
@@ -40,9 +38,7 @@ public class UserController {
 			signupCheck(form, model);
 			return toSignUp();
 		} else {
-			User user = new User();
-			BeanUtils.copyProperties(form, user);
-			userService.insertUser(user);
+			userService.insertUser(form);
 			return "login";// あとでここをリダイレクトにする。
 		}
 	}

@@ -24,7 +24,7 @@ public class UserForm {
 	@NotBlank(message = "住所を入力してください")
 	String address;
 	@NotBlank(message = "電話番号を入力してください")
-	@Pattern(regexp = "^[0-9]{3}-[0-9]{4}-[0-9]{4}$", message = "電話番号はXXX-XXXX-XXXXの形式で入力してください")
+	@Pattern(regexp = "^[0-9]{2,4}-[0-9]{2,4}-[0-9]{4}$", message = "電話番号はXXXX-XXXX-XXXXの形式で入力してください")
 	String telephone;
 
 	public String getName() {

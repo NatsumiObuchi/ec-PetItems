@@ -31,14 +31,32 @@ public class UserRepository {
 	};
 
 	/**
+	 * @param form
+	 * @return UserFormの郵便番号を変更するメソッド
+	 *         ユースケースの制約上「ハイフンありの８桁」で入力を受け取るが、DBの制約上「ハイフンなしの７桁」で登録する必要がある。
+	 */
+	private UserForm modifyZipcode(UserForm form) {
+		String zipcode8 = form.getZipcode();
+		String zipcode7 = "";
+		for (int i = 0; i <= 7; i++) {
+			if (i != 3) {// ハイフンの時以外
+				zipcode7 += zipcode8.charAt(i);
+			}
+		}
+		form.setZipcode(zipcode7);
+		return form;
+	}
+
+	/**
 	 * @param user ユーザーを追加する
 	 */
-	public void insertUser(User user) {
+	public void insertUser(UserForm form) {
+		form = modifyZipcode(form);
 		String sql = "INSERT INTO users (name,email,password,zipcode,address,telephone) VALUES (:name,:email,:password,:zipcode,:address,:telephone)";
-		SqlParameterSource param = new MapSqlParameterSource().addValue("name", user.getName())
-				.addValue("email", user.getEmail()).addValue("password", user.getPassword())
-				.addValue("zipcode", user.getZipcode()).addValue("address", user.getAddress())
-				.addValue("telephone", user.getTelephone());
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", form.getName())
+				.addValue("email", form.getEmail()).addValue("password", form.getPassword())
+				.addValue("zipcode", form.getZipcode()).addValue("address", form.getAddress())
+				.addValue("telephone", form.getTelephone());
 		template.update(sql, param);
 	}
 
