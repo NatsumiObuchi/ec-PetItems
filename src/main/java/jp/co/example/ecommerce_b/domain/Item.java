@@ -8,6 +8,8 @@ public class Item {
 	private String name;
 	/** 商品説明 */
 	private String description;
+	/** 商品価格 */
+	private Integer price;
 	/** 画像パス */
 	private String imagePath;
 	/** 削除フラグ */
@@ -37,6 +39,14 @@ public class Item {
 		this.description = description;
 	}
 
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+
 	public String getImagePath() {
 		return imagePath;
 	}
@@ -55,8 +65,8 @@ public class Item {
 
 	@Override
 	public String toString() {
-		return "Item [id=" + id + ", name=" + name + ", description=" + description + ", imagePath=" + imagePath
-				+ ", deleted=" + deleted + "]";
+		return "Item [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price
+				+ ", imagePath=" + imagePath + ", deleted=" + deleted + "]";
 	}
 
 }
