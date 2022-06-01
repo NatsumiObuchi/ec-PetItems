@@ -28,7 +28,7 @@ public class UserController {
 		return "register_user";
 	}
 
-	@RequestMapping("/signup") // 要修正「ダブルサブミット対策（リダイレクト）」
+	@RequestMapping("/signup")
 	public String signup(@Validated UserForm form, BindingResult result,Model model) {
 		if (result.hasErrors()) {
 			signupCheck(form, model);//
@@ -39,8 +39,13 @@ public class UserController {
 			return toSignUp();
 		} else {
 			userService.insertUser(form);
-			return "login";// あとでここをリダイレクトにする。
+			return "redirect:/user/toLogin";
 		}
+	}
+
+	@RequestMapping("/toLogin")
+	public String toLogin() {
+		return "login";
 	}
 
 	/**
