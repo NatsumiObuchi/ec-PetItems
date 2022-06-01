@@ -13,6 +13,11 @@ public class OrderItem {
 	/** 商品 */
 	private Item item;
 
+	public int getSubTotal(Item item) {
+//		int subTotal = item.getPrice() * quantity;
+		return 000;
+	}
+
 	public Integer getId() {
 		return id;
 	}
