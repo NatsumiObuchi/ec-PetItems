@@ -76,8 +76,12 @@
               <div class="panel-title">商品を検索する</div>
             </div>
             <div class="panel-body">
-              <form method="post" action="#" class="form-horizontal">
+              <form method="post" class="form-horizontal"
+              	th:action="@{/item/search}">
                 <div class="form-group">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span th:text="${noItemMessage}" style="color: red;">エラー</span>
+                  <br>
                   <label for="code" class="control-label col-sm-2"
                     >商品名</label
                   >
