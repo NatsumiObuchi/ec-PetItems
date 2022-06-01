@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Item;
+import jp.co.example.ecommerce_b.service.ItemService;
+
 
 @Controller
 @RequestMapping("/item")
@@ -19,8 +21,16 @@ public class ItemController {
 	@Autowired
 	private HttpSession session;
 
-	@RequestMapping("/itemList")
-	public String index() {
+	@Autowired
+	private ItemService service;
+
+	/**
+	 * 商品一覧を表示する
+	 */
+	@RequestMapping("/list")
+	public String itemList(Model model) {
+		List<Item> itemList = service.findAll();
+		model.addAttribute("itemList", itemList);
 		return "item_list_pizza";
 	}
 
@@ -34,5 +44,16 @@ public class ItemController {
 			session.setAttribute("cartList", cartList);
 		}
 		return "cart_list";
+	}
+
+	/**
+	 * 商品詳細を表示する
+	 */
+	@RequestMapping("/itemDetail")
+	public String itemDetail(Integer id,Model model) {
+		Item item = service.load(id);
+		model.addAttribute("item", item);
+		return "item_detail";
+
 	}
 }
