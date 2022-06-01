@@ -3,6 +3,9 @@ package jp.co.example.ecommerce_b.controller;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -27,12 +30,33 @@ public class UserController {
 		return "register_user";
 	}
 
-	@RequestMapping("/signup") // 要修正「ダブルサブミット対策（リダイレクト）」「validationチェック（現時点だと、どんな状態でも登録できてしまう）」
-	public String signup(UserForm form) {
-		User user = new User();
-		BeanUtils.copyProperties(form, user);
-		System.out.println(user);// あとで消す。
-		userService.insertUser(user);
-		return "item_list_pizza";
+	@RequestMapping("/signup") // 要修正「ダブルサブミット対策（リダイレクト）」
+	public String signup(@Validated UserForm form, BindingResult result,Model model) {
+		if (result.hasErrors()) {
+			signupCheck(form, model);//
+			return toSignUp();
+		} else if (userService.duplicationCheckOfEmail(form)
+				|| !(form.getConfirmPassword().equals(form.getConfirmPassword()))) {// メールアドレスが重複しているか、確認用パスワードがパスワードと一致しない場合
+			signupCheck(form, model);
+			return toSignUp();
+		} else {
+			User user = new User();
+			BeanUtils.copyProperties(form, user);
+			userService.insertUser(user);
+			return "login";// あとでここをリダイレクトにする。
+		}
+	}
+
+	/**
+	 * @param form
+	 * @param model 「メールアドレスが重複している」か「確認用パスワードがパスワードと一致しない」場合にエラーコメントをスコープに格納するメソッド
+	 */
+	private void signupCheck(UserForm form, Model model) {
+		if (userService.duplicationCheckOfEmail(form)) {// メールアドレスが重複している場合
+			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
+		}
+		if (!(form.getConfirmPassword().equals(form.getConfirmPassword()))) {// 確認用パスワードがパスワードと一致しない場合
+			model.addAttribute("confirmPasswordError", "パスワードと確認用パスワードが不一致です");
+		}
 	}
 }
