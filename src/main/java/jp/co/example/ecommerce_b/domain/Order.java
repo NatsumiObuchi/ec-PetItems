@@ -35,6 +35,26 @@ public class Order {
 	/** 注文商品リスト */
 	private List<OrderItem> orderItemList;
 
+	/**
+	 * 消費税を計算するメソッド
+	 * 
+	 * @return tax
+	 */
+	public int getTax() {
+		int tax = (int) (totalPrice * 0.1);
+		return tax;
+	}
+
+	/**
+	 * 注文金額合計を計算するメソッド
+	 * 
+	 * @return calcTotal
+	 */
+	public int getCalcTotal(OrderItem orderItem) {
+//		totalPrice = orderItem.getSubTotal();
+		return totalPrice;
+	}
+
 	public Integer getId() {
 		return id;
 	}
