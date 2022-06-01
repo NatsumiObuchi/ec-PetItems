@@ -34,7 +34,7 @@ public class UserController {
 			signupCheck(form, model);//
 			return toSignUp();
 		} else if (userService.duplicationCheckOfEmail(form)
-				|| !(form.getConfirmPassword().equals(form.getConfirmPassword()))) {// メールアドレスが重複しているか、確認用パスワードがパスワードと一致しない場合
+				|| !(form.getConfirmPassword().equals(form.getPassword()))) {// メールアドレスが重複しているか、確認用パスワードがパスワードと一致しない場合
 			signupCheck(form, model);
 			return toSignUp();
 		} else {
@@ -51,7 +51,7 @@ public class UserController {
 		if (userService.duplicationCheckOfEmail(form)) {// メールアドレスが重複している場合
 			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
 		}
-		if (!(form.getConfirmPassword().equals(form.getConfirmPassword()))) {// 確認用パスワードがパスワードと一致しない場合
+		if (!(form.getConfirmPassword().equals(form.getPassword()))) {// 確認用パスワードがパスワードと一致しない場合
 			model.addAttribute("confirmPasswordError", "パスワードと確認用パスワードが不一致です");
 		}
 	}
