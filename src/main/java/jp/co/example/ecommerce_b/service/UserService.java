@@ -3,6 +3,7 @@ package jp.co.example.ecommerce_b.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.repository.UserRepository;
 
@@ -23,5 +24,13 @@ public class UserService {
 	 */
 	public Boolean duplicationCheckOfEmail(UserForm form) {
 		return userRepository.findByMailAddress(form);// メールアドレスが重複していればtrue
+	}
+	
+	/**
+	 * @param form
+	 * @return 入力されたメールアドレスとパスワードからユーザーを検索する。
+	 */
+	public User loginCheck(UserForm form) {
+		return userRepository.findByEmailAndPassword(form);
 	}
 }

@@ -75,4 +75,19 @@ public class UserRepository {
 		}
 	}
 
+	/**
+	 * @param form
+	 * @return 入力されたメールアドレスとパスワードからユーザーを検索する。
+	 */
+	public User findByEmailAndPassword(UserForm form) {
+		String sql = "SELECT id,name,email,password,zipcode,address,telephone FROM users WHERE email = :email AND password = :password";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("email", form.getEmail()).addValue("password",
+				form.getPassword());
+		List<User> userList = template.query(sql, param, USER_ROW_MAPPER);
+		if (userList.size() == 0) {
+			return null;
+		}
+		return userList.get(0);
+	}
+
 }
