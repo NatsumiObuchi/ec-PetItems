@@ -1,5 +1,7 @@
 package jp.co.example.ecommerce_b.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.service.UserService;
 
@@ -19,6 +22,9 @@ public class UserController {
 	private UserForm setUpUserForm() {
 		return new UserForm();
 	}
+
+	@Autowired
+	private HttpSession session;
 
 	@Autowired
 	private UserService userService;
@@ -43,14 +49,26 @@ public class UserController {
 		}
 	}
 
+	@RequestMapping("/reset")
+	public String reset() {
+		return "redirect:/user/toSignin";
+	}
+
 	@RequestMapping("/toLogin")
 	public String toLogin() {
 		return "login";
 	}
 
-	@RequestMapping("/reset")
-	public String reset() {
-		return "redirect:/user/toSignin";
+	@RequestMapping("/login")
+	public String login(UserForm form, Model model) {
+		User user = userService.loginCheck(form);
+		if(user==null) {
+			model.addAttribute("loginErrorMessage", "メールアドレス、またはパスワードが間違っています");
+			return "login";
+		}else {
+			session.setAttribute("user", user);
+			return "forward:/item/list";
+		}
 	}
 
 	/**
