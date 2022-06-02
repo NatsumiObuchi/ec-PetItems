@@ -117,4 +117,26 @@ public class ItemController {
 		session.setAttribute("cartList", cartList);
 		return cartListShow(model);
 	}
+
+	/**
+	 * 商品をあいまい検索する ※該当の商品がない場合は全件表示する。
+	 * 
+	 * @param code
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/search")
+	public String searchItem(String code, Model model) {
+		List<Item> itemList = service.findByName(code);
+
+		if (itemList.size() == 0) {
+			List<Item> itemList2 = service.findAll();
+			model.addAttribute("itemList", itemList2);
+			model.addAttribute("noItemMessage", "該当の商品がございません。商品一覧を表示します。");
+			return "item_list_pizza";
+		} else {
+			model.addAttribute("itemList", itemList);
+			return "item_list_pizza";
+		}
+	}
 }
