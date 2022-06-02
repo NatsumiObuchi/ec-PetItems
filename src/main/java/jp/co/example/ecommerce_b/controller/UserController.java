@@ -71,6 +71,12 @@ public class UserController {
 		}
 	}
 
+	@RequestMapping("/logout")
+	public String logout() {
+		session.invalidate();
+		return "forward:/item/list";
+	}
+
 	/**
 	 * @param form
 	 * @param model 「メールアドレスが重複している」か「確認用パスワードがパスワードと一致しない」場合にエラーコメントをスコープに格納するメソッド
