@@ -23,20 +23,20 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@RequestMapping("/toSignup")
-	public String toSignUp() {
+	@RequestMapping("/toSignin")
+	public String toSignin() {
 		return "register_user";
 	}
 
-	@RequestMapping("/signup")
-	public String signup(@Validated UserForm form, BindingResult result,Model model) {
+	@RequestMapping("/signin")
+	public String signin(@Validated UserForm form, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			signupCheck(form, model);//
-			return toSignUp();
+			signinCheck(form, model);//
+			return toSignin();
 		} else if (userService.duplicationCheckOfEmail(form)
 				|| !(form.getConfirmPassword().equals(form.getPassword()))) {// メールアドレスが重複しているか、確認用パスワードがパスワードと一致しない場合
-			signupCheck(form, model);
-			return toSignUp();
+			signinCheck(form, model);
+			return toSignin();
 		} else {
 			userService.insertUser(form);
 			return "redirect:/user/toLogin";
@@ -48,16 +48,23 @@ public class UserController {
 		return "login";
 	}
 
+	@RequestMapping("/reset")
+	public String reset() {
+		return "redirect:/user/toSignin";
+	}
+
 	/**
 	 * @param form
 	 * @param model 「メールアドレスが重複している」か「確認用パスワードがパスワードと一致しない」場合にエラーコメントをスコープに格納するメソッド
 	 */
-	private void signupCheck(UserForm form, Model model) {
+	private void signinCheck(UserForm form, Model model) {
 		if (userService.duplicationCheckOfEmail(form)) {// メールアドレスが重複している場合
 			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
 		}
 		if (!(form.getConfirmPassword().equals(form.getPassword()))) {// 確認用パスワードがパスワードと一致しない場合
-			model.addAttribute("confirmPasswordError", "パスワードと確認用パスワードが不一致です");
+			if (form.getPassword() != "" && form.getConfirmPassword() != "") {// 「パスワード：未入力/確認パスワード:入力」「パスワード：入力/確認パスワード:未入力」の際は以下のメッセージを表示しない。
+				model.addAttribute("confirmPasswordError", "パスワードと確認用パスワードが不一致です");
+			}
 		}
 	}
 }
