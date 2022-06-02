@@ -45,12 +45,13 @@
             id="bs-example-navbar-collapse-1"
           >
             <p class="navbar-text navbar-right">
+              <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
               <a href="cart_list.html" class="navbar-link">ショッピングカート</a
               >&nbsp;&nbsp;
               <a href="order_history.html" th:href="@{/item/orderHistory}" class="navbar-link">注文履歴</a
               >&nbsp;&nbsp;
               <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}">ログイン</a>&nbsp;&nbsp;
-              <a href="item_list_pizza.html" class="navbar-link">ログアウト</a>
+              <a href="item_list_pizza.html" class="navbar-link"  th:href="@{/user/logout}">ログアウト</a>
             </p>
           </div>
           <!-- /.navbar-collapse -->
@@ -71,6 +72,7 @@
             col-xs-12
           "
         >
+        
           <h3 class="text-center">注文内容確認</h3>
           <table class="table table-striped item-list-table">
             <tbody>
@@ -178,13 +180,15 @@
         <div class="col-xs-offset-2 col-xs-8">
           <div class="form-group text-center">
             <span id="total-price">消費税：8,000円</span><br />
+            <input type="hidden" th:value="${totalPrice}">
             <span id="total-price">ご注文金額合計：38,000円 (税込)</span>
           </div>
         </div>
       </div>
 
       <!-- table -->
-      <form action="order_finished.html" >
+
+      <form action="order_finished.html" th:action="@{/order/orderSent}" th:object="${orderForm}">
         <div class="row">
           <div
             class="
@@ -205,7 +209,7 @@
                     <div class="text-center">お名前</div>
                   </td>
                   <td>
-                    <input type="text" />
+                    <input type="text" th:field="*{destinationName}" />
                   </td>
                 </tr>
                 <tr>
@@ -213,7 +217,7 @@
                     <div class="text-center">メールアドレス</div>
                   </td>
                   <td>
-                    <input type="text" />
+                    <input type="text" th:field="*{destinationEmail}"/>
                   </td>
                 </tr>
                 <tr>
@@ -221,7 +225,7 @@
                     <div class="text-center">郵便番号</div>
                   </td>
                   <td>
-                    <input type="text" />&nbsp;&nbsp;<button>住所検索</button>
+                    <input type="text" th:field="*{destinationzipCode}"/>&nbsp;&nbsp;<button>住所検索</button>
                   </td>
                 </tr>
                 <tr>
@@ -229,7 +233,7 @@
                     <div class="text-center">住所</div>
                   </td>
                   <td>
-                    <input type="text" />
+                    <input type="text" th:field="*{destinationAddress}"/>
                   </td>
                 </tr>
                 <tr>
@@ -237,7 +241,7 @@
                     <div class="text-center">電話番号</div>
                   </td>
                   <td>
-                    <input type="text" />
+                    <input type="text" th:field="*{destinationTell}"/>
                   </td>
                 </tr>
                 <tr>
@@ -261,6 +265,7 @@
                             name="name"
                             id="name"
                             class="form-control input-sm"
+                         
                           />
                         </div>
                       </div>
@@ -331,12 +336,20 @@
           >
             <h3 class="text-center">お支払い方法</h3>
             <table class="table table-striped item-list-table">
+             <!--<div th:each="pay:${paymentMap}">
+             	<input type="radio" th:value="${pay.key}">
+                  	<span th:text="${pay.value}"></span>-->
               <tbody>
+             
                 <tr>
                   <td>
                     <div class="text-center">代金引換</div>
                   </td>
                   <td>
+                  
+                  	<!--<input type="radio" th:value="${pay.key}">
+                  	<span th:text="${pay.value}"></span>-->
+                  
                     <div class="row">
                       <div class="col-sm-12">
                         <label class="radio-inline">
@@ -344,6 +357,7 @@
                             type="radio"
                             name="responsibleCompany"
                             checked="checked"
+                            
                           />
                           代金引換
                         </label>
@@ -363,6 +377,7 @@
                             type="radio"
                             name="responsibleCompany"
                             checked="checked"
+                            
                           />
                           クレジットカード </label
                         ><br /><br />
@@ -371,6 +386,7 @@
                   </td>
                 </tr>
               </tbody>
+            </div>
             </table>
           </div>
         </div>

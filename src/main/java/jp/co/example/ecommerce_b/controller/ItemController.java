@@ -53,8 +53,9 @@ public class ItemController {
 //		System.out.println("id:" + );
 //		System.out.println("quantity:" + );
 		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
+		System.out.println(cartList);
 
-		if (cartList == null) {// sessionスコープ内のcartListがからの時、エラーメッセージ表示
+		if (cartList == null || cartList.size() == 0) {// sessionスコープ内のcartListがからの時、エラーメッセージ表示
 			cartList = new ArrayList<OrderItem>();
 			String emptyMessage = "現在、カートに商品はありません。";
 			model.addAttribute("emptyMessage", emptyMessage);
@@ -97,6 +98,7 @@ public class ItemController {
 	public String inCart(OrderItemForm form, Model model) {
 //		System.out.println("id:" + form.getItemId());
 //		System.out.println("quantity:" + form.getQuantity());
+		
 		// ショッピングカートに入れる商品の情報を商品idを元に取得
 		Item item = service.load(Integer.parseInt(form.getItemId()));
 
@@ -113,6 +115,16 @@ public class ItemController {
 			cartList = new ArrayList<>();
 		}
 		cartList.add(orderItem);
+
+		session.setAttribute("cartList", cartList);
+		return cartListShow(model);
+	}
+
+	@RequestMapping("/delete")
+	public String deleteInCartItem(String index, Model model) {
+		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
+		System.out.println(index);
+		cartList.remove(Integer.parseInt(index));
 
 		session.setAttribute("cartList", cartList);
 		return cartListShow(model);
