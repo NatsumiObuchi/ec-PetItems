@@ -1383,7 +1383,7 @@ pre code {
 }
 .container {
   padding-right: 15px;
-  padding-left: 15px;
+  padding-left: 30px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -6323,3 +6323,18 @@ button.close {
     display: none !important;
   }
 }
+
+.pan-list {
+  list-style: none;
+  border-radius: 4px;
+}
+
+.pan-list > .active {
+  color: #777;
+}
+.list-active {
+  list-style: none;
+}
+
+
+

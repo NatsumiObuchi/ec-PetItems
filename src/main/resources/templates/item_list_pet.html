@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ピザ屋のネット注文</title>
+    <title>ペット用品のネット注文</title>
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
     <link th:href="@{/css/piza.css}" rel="stylesheet" />
 
@@ -34,7 +34,7 @@
               <!-- 企業ロゴ -->
               <img
                 alt="main log"
-                src="../static/img_pizza/header_logo.png"
+                th:src="@{/img/タイトルロゴ.png}"
                 height="35"
               />
             </a>
@@ -50,7 +50,7 @@
               >&nbsp;&nbsp;
               <a href="order_history.html" class="navbar-link">注文履歴</a
               >&nbsp;&nbsp;
-              <a href="login.html" class="navbar-link">ログイン</a>&nbsp;&nbsp;
+              <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}">ログイン</a>&nbsp;&nbsp;
               <a href="item_list_pizza.html" class="navbar-link">ログアウト</a>
             </p>
           </div>
@@ -58,6 +58,10 @@
         </div>
         <!-- /.container-fluid -->
       </nav>
+      
+       <p class="pan-list">
+          	<span class="list-active active"><a href="item_list_pizza.html" th:href="@{/item/list}">商品一覧</a></span> 
+	   </p>
 
       <!-- search form -->
       <div class="row">
@@ -76,8 +80,12 @@
               <div class="panel-title">商品を検索する</div>
             </div>
             <div class="panel-body">
-              <form method="post" action="#" class="form-horizontal">
+              <form method="post" class="form-horizontal"
+              	th:action="@{/item/search}">
                 <div class="form-group">
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span th:text="${noItemMessage}" style="color: red;">エラー</span>
+                  <br>
                   <label for="code" class="control-label col-sm-2"
                     >商品名</label
                   >

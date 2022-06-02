@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja"  xmlns:th="http://www.thymleaf.org">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ピザ屋のネット注文</title>
-    <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
-    <link th:href="@{/css/piza.css}" rel="stylesheet" />
+    <title>ペット用品のネット注文</title>
+    <link href="../static/css/bootstrap.css" rel="stylesheet" />
+    <link href="../static/css/piza.css" rel="stylesheet" />
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -33,7 +33,7 @@
               <!-- 企業ロゴ -->
               <img
                 alt="main log"
-                src="../static/img_pizza/header_logo.png"
+                th:src="@{/img/タイトルロゴ.png}"
                 height="35"
               />
             </a>
@@ -49,7 +49,7 @@
               >&nbsp;&nbsp;
               <a href="order_history.html" class="navbar-link">注文履歴</a
               >&nbsp;&nbsp;
-              <a href="login.html" class="navbar-link">ログイン</a>&nbsp;&nbsp;
+              <a href="login.html" class="navbar-link"th:href="@{/user/toLogin}">ログイン</a>&nbsp;&nbsp;
               <a href="item_list_pizza.html" class="navbar-link">ログアウト</a>
             </p>
           </div>

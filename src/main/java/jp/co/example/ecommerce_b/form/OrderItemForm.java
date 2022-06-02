@@ -3,39 +3,48 @@ package jp.co.example.ecommerce_b.form;
 import jp.co.example.ecommerce_b.domain.Item;
 
 public class OrderItemForm {
+	
+
 	/** id */
-	private Integer id;
+	private String id;
 	/** 商品id */
-	private Integer itemId;
+	private String itemId;
 	/** 注文id */
-	private Integer orderId;
+	private String orderId;
 	/** 数量 */
-	private Integer quantity;
+	private String quantity;
 	/** 商品 */
 	private Item item;
-	
-	public Integer getId() {
+
+	public String getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+
+	public void setId(String id) {
 		this.id = id;
 	}
-	public Integer getItemId() {
+
+	public String getItemId() {
 		return itemId;
 	}
-	public void setItemId(Integer itemId) {
+
+	public void setItemId(String itemId) {
 		this.itemId = itemId;
 	}
-	public Integer getOrderId() {
+
+	public String getOrderId() {
 		return orderId;
 	}
-	public void setOrderId(Integer orderId) {
+
+	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
-	public Integer getQuantity() {
+
+	public String getQuantity() {
 		return quantity;
 	}
-	public void setQuantity(Integer quantity) {
+
+	public void setQuantity(String quantity) {
 		this.quantity = quantity;
 	}
 	public Item getItem() {
@@ -49,4 +58,5 @@ public class OrderItemForm {
 		return "OrderItemForm [id=" + id + ", itemId=" + itemId + ", orderId=" + orderId + ", quantity=" + quantity
 				+ ", item=" + item + "]";
 	}
+
 }
