@@ -8,9 +8,12 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Item;
+import jp.co.example.ecommerce_b.domain.OrderItem;
+import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.service.ItemService;
 
 
@@ -24,6 +27,11 @@ public class ItemController {
 	@Autowired
 	private ItemService service;
 
+	@ModelAttribute
+	private OrderItemForm createOrderItemForm() {
+		return new OrderItemForm();
+	}
+
 	/**
 	 * 商品一覧を表示する
 	 */
@@ -31,18 +39,35 @@ public class ItemController {
 	public String itemList(Model model) {
 		List<Item> itemList = service.findAll();
 		model.addAttribute("itemList", itemList);
-		return "item_list_pizza";
+		return "item_list_pet";
 	}
 
+	/**
+	 * カートに入れた商品を全表示する カートに商品がない場合、「カートに商品がありません。」と表示する
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/cartList")
-	public String cartList(Model model) {
-		List<Item> cartList = (List<Item>) session.getAttribute("cartList");
-		if (cartList == null) {
-			cartList = new ArrayList<>();
-			String emptyMessage = "現在、ショッピングカートに商品はありません。";
+	public String cartListShow(Model model) {
+//		System.out.println("id:" + );
+//		System.out.println("quantity:" + );
+		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
+
+		if (cartList == null) {// sessionスコープ内のcartListがからの時、エラーメッセージ表示
+			cartList = new ArrayList<OrderItem>();
+			String emptyMessage = "現在、カートに商品はありません。";
 			model.addAttribute("emptyMessage", emptyMessage);
-			session.setAttribute("cartList", cartList);
 		}
+		System.out.println(cartList);
+		
+		// cartList内の合計金額を計算
+		Integer totalPrice = 0;
+		for (OrderItem ordItem : cartList) {
+			totalPrice += ordItem.getSubTotal();
+		}
+		model.addAttribute("totalPrice", totalPrice);
+
 		return "cart_list";
 	}
 
@@ -55,5 +80,37 @@ public class ItemController {
 		model.addAttribute("item", item);
 		return "item_detail";
 
+	}
+
+	/**
+	 * 商品詳細画面で「カートに入れる」を押した時にショッピングカートに追加する
+	 * 
+	 * @param form
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/inCart")
+	public String inCart(OrderItemForm form, Model model) {
+//		System.out.println("id:" + form.getItemId());
+//		System.out.println("quantity:" + form.getQuantity());
+		// ショッピングカートに入れる商品の情報を商品idを元に取得
+		Item item = service.load(Integer.parseInt(form.getItemId()));
+
+		OrderItem orderItem = new OrderItem();
+		orderItem.setItemId(Integer.parseInt(form.getItemId()));
+		orderItem.setQuantity(Integer.parseInt(form.getQuantity()));
+		orderItem.setItem(item);
+		Integer answer = item.getPrice() * Integer.parseInt(form.getQuantity());
+		orderItem.setSubTotal(answer);
+
+		// cartListの情報を取得
+		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
+		if (cartList == null) {// cartListが空だった場合、新しくリストを追加
+			cartList = new ArrayList<>();
+		}
+		cartList.add(orderItem);
+
+		session.setAttribute("cartList", cartList);
+		return cartListShow(model);
 	}
 }
