@@ -1,12 +1,13 @@
 package jp.co.example.ecommerce_b.controller;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.service.UserService;
 
@@ -27,12 +28,36 @@ public class UserController {
 		return "register_user";
 	}
 
-	@RequestMapping("/signup") // 要修正「ダブルサブミット対策（リダイレクト）」「validationチェック（現時点だと、どんな状態でも登録できてしまう）」
-	public String signup(UserForm form) {
-		User user = new User();
-		BeanUtils.copyProperties(form, user);
-		System.out.println(user);// あとで消す。
-		userService.insertUser(user);
-		return "item_list_pizza";
+	@RequestMapping("/signup")
+	public String signup(@Validated UserForm form, BindingResult result,Model model) {
+		if (result.hasErrors()) {
+			signupCheck(form, model);//
+			return toSignUp();
+		} else if (userService.duplicationCheckOfEmail(form)
+				|| !(form.getConfirmPassword().equals(form.getPassword()))) {// メールアドレスが重複しているか、確認用パスワードがパスワードと一致しない場合
+			signupCheck(form, model);
+			return toSignUp();
+		} else {
+			userService.insertUser(form);
+			return "redirect:/user/toLogin";
+		}
+	}
+
+	@RequestMapping("/toLogin")
+	public String toLogin() {
+		return "login";
+	}
+
+	/**
+	 * @param form
+	 * @param model 「メールアドレスが重複している」か「確認用パスワードがパスワードと一致しない」場合にエラーコメントをスコープに格納するメソッド
+	 */
+	private void signupCheck(UserForm form, Model model) {
+		if (userService.duplicationCheckOfEmail(form)) {// メールアドレスが重複している場合
+			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
+		}
+		if (!(form.getConfirmPassword().equals(form.getPassword()))) {// 確認用パスワードがパスワードと一致しない場合
+			model.addAttribute("confirmPasswordError", "パスワードと確認用パスワードが不一致です");
+		}
 	}
 }
