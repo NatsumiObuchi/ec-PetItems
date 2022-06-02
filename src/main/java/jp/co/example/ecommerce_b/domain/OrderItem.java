@@ -12,11 +12,19 @@ public class OrderItem {
 	private Integer quantity;
 	/** 商品 */
 	private Item item;
+	/** 小計 */
+	private Integer subTotal;
 
-	public int getSubTotal(Item item) {
-//		int subTotal = item.getPrice() * quantity;
-		return 000;
-	}
+	/**
+	 * 商品の小計を計算
+	 * 
+	 * @param item
+	 * @return
+	 */
+//	public int getSubTotal(Item item) {
+//		this.subTotal = item.getPrice() * quantity;
+//		return subTotal;
+//	}
 
 	public Integer getId() {
 		return id;
@@ -56,6 +64,14 @@ public class OrderItem {
 
 	public void setItem(Item item) {
 		this.item = item;
+	}
+
+	public Integer getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(Integer subTotal) {
+		this.subTotal = subTotal;
 	}
 
 	@Override
