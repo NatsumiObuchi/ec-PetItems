@@ -66,12 +66,12 @@
           "
         >
           <div class="well">
-            <form method="post" th:action="@{/user/login}">
+            <form method="post" th:action="@{/user/login}" th:object="${userForm}">
               <fieldset>
                 <legend>ログイン</legend>
-                <label class="control-label" style="color: red" for="inputError"
-                  >メールアドレス、またはパスワードが間違っています</label
-                >
+                <div th:if="${loginErrorMessage}">
+                    <label class="control-label" style="color: red" for="inputError" th:text="${loginErrorMessage}"></label>
+                </div>
                 <div class="form-group">
                   <label for="inputEmail">メールアドレス:</label>
                   <input
@@ -79,15 +79,17 @@
                     id="inputEmail"
                     class="form-control"
                     placeholder="Email"
+                    th:field="*{email}"
                   />
                 </div>
                 <div class="form-group">
                   <label for="inputPassword">パスワード:</label>
                   <input
-                    type="text"
+                    type="password"
                     id="inputPassword"
                     class="form-control"
                     placeholder="Password"
+                    th:field="*{password}"
                   />
                 </div>
                 <div class="form-group">
