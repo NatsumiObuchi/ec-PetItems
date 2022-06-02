@@ -44,7 +44,8 @@
             class="collapse navbar-collapse"
             id="bs-example-navbar-collapse-1"
           >
-            <p class="navbar-text navbar-right">
+            <p class="navbar-text navbar-right"> 
+              <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
               <a href="cart_list.html" class="navbar-link">ショッピングカート</a
               >&nbsp;&nbsp;
               <a href="order_history.html" class="navbar-link">注文履歴</a
