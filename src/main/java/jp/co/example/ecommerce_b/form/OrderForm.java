@@ -32,6 +32,8 @@ public class OrderForm {
 	private Timestamp deliveryTime;
 	/** 支払い方法 */
 	private Integer paymentMethod;
+	/** 支払い方法リスト */
+	private List<Integer> paymentMap;
 	/** ユーザー */
 	private User user;
 	/** 注文商品リスト */
@@ -122,6 +124,12 @@ public class OrderForm {
 	public void setOrderItemList(List<OrderItem> orderItemList) {
 		this.orderItemList = orderItemList;
 	}
+//	public List<Integer> getPaymentMap() {
+//		return paymentMap;
+//	}
+//	public void setPaymentMap(List<Integer> paymentMap) {
+//		this.paymentMap = paymentMap;
+//	}
 	@Override
 	public String toString() {
 		return "OrderForm [id=" + id + ", userId=" + userId + ", status=" + status + ", totalPrice=" + totalPrice
