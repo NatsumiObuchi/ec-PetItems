@@ -48,6 +48,11 @@ public class UserController {
 		return "login";
 	}
 
+	@RequestMapping("/reset")
+	public String reset() {
+		return "redirect:/user/toSignup";
+	}
+
 	/**
 	 * @param form
 	 * @param model 「メールアドレスが重複している」か「確認用パスワードがパスワードと一致しない」場合にエラーコメントをスコープに格納するメソッド
