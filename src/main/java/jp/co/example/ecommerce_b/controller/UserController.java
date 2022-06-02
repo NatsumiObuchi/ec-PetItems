@@ -57,7 +57,9 @@ public class UserController {
 			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
 		}
 		if (!(form.getConfirmPassword().equals(form.getPassword()))) {// 確認用パスワードがパスワードと一致しない場合
-			model.addAttribute("confirmPasswordError", "パスワードと確認用パスワードが不一致です");
+			if (form.getPassword() != "") {// テスト設計書の使用に合わせ、「パスワード：未入力/確認パスワード:入力」の際は以下のメッセージを表示しない。
+				model.addAttribute("confirmPasswordError", "パスワードと確認用パスワードが不一致です");
+			}
 		}
 	}
 }
