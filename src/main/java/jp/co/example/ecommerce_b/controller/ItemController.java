@@ -74,4 +74,16 @@ public class ItemController {
 			return "item_list_pizza";
 		}
 	}
+	
+	
+	/**
+	 * 購入履歴を表示する
+	 */
+	@RequestMapping("/orderHistory")
+	public String orderHistory() {
+		return "order_history";
+	}
+	
+	
+	
 }
