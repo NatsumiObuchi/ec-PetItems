@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.form.OrderForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
+import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
 
@@ -27,7 +30,13 @@ public class OrderController {
 	private OrderService orderservice;
 	
 	@Autowired
+	private HttpSession session;
+	
+	@Autowired
 	private OrderItemService orderitemservice;
+	
+	@Autowired
+	private ItemService service;
 
 	
 	@ModelAttribute
@@ -52,6 +61,10 @@ public class OrderController {
 		paymentMap.put(2, "クレジットカード");
 		
 		model.addAttribute("paymentMap", paymentMap);
+		
+		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
+	
+		
 		return "order_confirm";
 	}
 	
