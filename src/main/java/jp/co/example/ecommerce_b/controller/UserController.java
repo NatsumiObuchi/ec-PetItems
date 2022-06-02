@@ -43,14 +43,19 @@ public class UserController {
 		}
 	}
 
+	@RequestMapping("/reset")
+	public String reset() {
+		return "redirect:/user/toSignin";
+	}
+
 	@RequestMapping("/toLogin")
 	public String toLogin() {
 		return "login";
 	}
 
-	@RequestMapping("/reset")
-	public String reset() {
-		return "redirect:/user/toSignin";
+	@RequestMapping("/login")
+	public String login() {
+		return "forward:/item/list";
 	}
 
 	/**
