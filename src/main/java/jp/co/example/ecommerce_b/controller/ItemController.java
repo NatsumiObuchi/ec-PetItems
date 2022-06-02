@@ -145,10 +145,10 @@ public class ItemController {
 			List<Item> itemList2 = service.findAll();
 			model.addAttribute("itemList", itemList2);
 			model.addAttribute("noItemMessage", "該当の商品がございません。商品一覧を表示します。");
-			return "item_list_pizza";
+			return "item_list_pet";
 		} else {
 			model.addAttribute("itemList", itemList);
-			return "item_list_pizza";
+			return "item_list_pet";
 		}
 	}
 }
