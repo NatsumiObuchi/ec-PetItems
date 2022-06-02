@@ -73,65 +73,69 @@
           "
         >
           <h3 class="text-center">ショッピングカート</h3>
-          <div th:if="${session.cartList==null}" th:text="${emptyMessage}"></div>
-          <div th:unless="${session.cartList==null}">
-            <table class="table table-striped item-list-table">
-              <tbody>
-                <tr>
-                  <th>
-                    <div class="text-center">商品名</div>
-                  </th>
-                  <th>
-                    <div class="text-center">価格(税抜)</div>
-                  </th>
-                  <th>
-                    <div class="text-center">数量</div>
-                  </th>
-                  <th>
-                    <div class="text-center">小計</div>
-                  </th>
-                  <th></th>
-                </tr>
-                <tr th:each="ordItem : ${session.cartList}">
-                  <td>
-                    <div class="center">
-                      <img
-                        th:src="@{/img_dogfood/} + ${ordItem.item.imagePath}"
-                        class="img-responsive img-rounded item-img-center"
-                        width="100"
-                        height="300"
-                      /><br />
-                      じゃがバターベーコン
-                    </div>
-                  </td>
-                  <td>
-                    <span class="" th:text="${ordItem.item.price}">&nbsp;Ｌ</span>
-                  </td>
-                  <td>
-                    <span th:text="${ordItem.quantity}"></span>
-                  </td>
-                  <!-- <td>
-                    <ul>
-                      <li>ピーマン300円</li>
-                      <li>オニオン300円</li>
-                      <li>あらびきソーセージ300円</li>
-                    </ul>
-                  </td> -->
-                  <td>
-                    <div class="text-center" th:text="${ordItem.subTotal}">3,280円</div>
-                  </td>
-                  <td>
-                    <div class="text-center">
-                      <button type="submit" class="btn btn-primary" name="">削除</button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div th:if="${emptyMessage}" th:text="${emptyMessage}"></div>
+          <div th:unless="${emptyMessage}">
+              <table class="table table-striped item-list-table">
+                <tbody>
+                  <tr>
+                    <th>
+                      <div class="text-center">商品名</div>
+                    </th>
+                    <th>
+                      <div class="text-center">価格(税抜)</div>
+                    </th>
+                    <th>
+                      <div class="text-center">数量</div>
+                    </th>
+                    <th>
+                      <div class="text-center">小計</div>
+                    </th>
+                    <th></th>
+                  </tr>
+                  <tr th:each="ordItem,status : ${session.cartList}">
+                    <form th:action="@{/item/delete}" method="post">
+                      <input type="hidden" name="index" th:value="${status.index}">
+                      <td>
+                        <div class="center">
+                          <img
+                            th:src="@{/img_dogfood/} + ${ordItem.item.imagePath}"
+                            class="img-responsive img-rounded item-img-center"
+                            width="100"
+                            height="300"
+                          /><br />
+                          じゃがバターベーコン
+                        </div>
+                      </td>
+                      <td>
+                        <span class="" th:text="${ordItem.item.price}">&nbsp;Ｌ</span>
+                      </td>
+                      <td>
+                        <span th:text="${ordItem.quantity}"></span>
+                      </td>
+                      <!-- <td>
+                        <ul>
+                          <li>ピーマン300円</li>
+                          <li>オニオン300円</li>
+                          <li>あらびきソーセージ300円</li>
+                        </ul>
+                      </td> -->
+                      <td>
+                        <div class="text-center" th:text="${ordItem.subTotal}">3,280円</div>
+                      </td>
+                      <td>
+                        <div class="text-center">
+                          <button type="submit" class="btn btn-primary">削除</button>
+                        </div>
+                      </td>
+                    </form>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
           </div>
       </div>
 
-      <div th:unless="${session.cartList==null}">
+      <div th:unless="${emptyMessage}">
         <div class="row">
           <div class="col-xs-offset-2 col-xs-8">
             <div class="form-group text-center">
