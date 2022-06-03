@@ -3,6 +3,7 @@ package jp.co.example.ecommerce_b.form;
 import jp.co.example.ecommerce_b.domain.Item;
 
 public class OrderItemForm {
+	
 
 	/** id */
 	private String id;

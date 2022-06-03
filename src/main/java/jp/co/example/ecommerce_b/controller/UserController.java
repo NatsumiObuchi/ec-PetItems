@@ -29,11 +29,20 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	/**
+	 * @return ユーザー登録画面に遷移するだけの処理
+	 */
 	@RequestMapping("/toSignin")
 	public String toSignin() {
 		return "register_user";
 	}
 
+	/**
+	 * @param form
+	 * @param result
+	 * @param model
+	 * @return ユーザーを登録する処理
+	 */
 	@RequestMapping("/signin")
 	public String signin(@Validated UserForm form, BindingResult result, Model model) {
 		if (result.hasErrors()) {
@@ -49,16 +58,27 @@ public class UserController {
 		}
 	}
 
+	/**
+	 * @return ユーザー登録において入力フォームを初期値に戻す処理
+	 */
 	@RequestMapping("/reset")
 	public String reset() {
 		return "redirect:/user/toSignin";
 	}
 
+	/**
+	 * @return ログイン画面に遷移するだけの処理
+	 */
 	@RequestMapping("/toLogin")
 	public String toLogin() {
 		return "login";
 	}
 
+	/**
+	 * @param form
+	 * @param model
+	 * @return ログイン処理
+	 */
 	@RequestMapping("/login")
 	public String login(UserForm form, Model model) {
 		User user = userService.loginCheck(form);
@@ -69,6 +89,15 @@ public class UserController {
 			session.setAttribute("user", user);
 			return "forward:/item/list";
 		}
+	}
+
+	/**
+	 * @return ログアウト処理
+	 */
+	@RequestMapping("/logout")
+	public String logout() {
+		session.invalidate();
+		return "forward:/item/list";
 	}
 
 	/**
