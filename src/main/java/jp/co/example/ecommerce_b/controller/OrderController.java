@@ -50,6 +50,12 @@ public class OrderController {
 	@RequestMapping("")
 	public String index() {
 		
+		Integer totalPrice = (Integer) session.getAttribute("totalPrice");
+		session.setAttribute("totalPrice", totalPrice);
+		
+		Integer totalTax = (Integer) session.getAttribute("totalTax");
+		session.setAttribute("totalTax", totalTax);
+		
 		return "order_confirm";
 	}
 	

@@ -59,7 +59,7 @@
         <!-- /.container-fluid -->
       </nav>
 
-      <!-- table -->
+      <table>
       <div class="row">
         <div
           class="
@@ -86,9 +86,9 @@
             col-xs-12
           "
         >
-          <h3 class="text-center">ショッピングカート</h3>
-          <div th:if="${session.cartList==null}" th:text="${emptyMessage}"></div>
-          <div th:unless="${session.cartList==null}">
+ 
+         <!-- <div th:if="${session.cartList==null}" th:text="${emptyMessage}">
+          <div th:unless="${session.cartList==null}">-->
             <table class="table table-striped item-list-table">
               <tbody>
                 <tr>
@@ -115,7 +115,8 @@
                         width="100"
                         height="300"
                       /><br />
-                      じゃがバターベーコン
+                      <span th:text="${ordItem.item.name}"></span>
+                     
                     </div>
                   </td>
                   <td>
@@ -136,13 +137,14 @@
                   </td>
                   <td>
                     <div class="text-center">
-                      <button type="submit" class="btn btn-primary" name="">削除</button>
+                      
                     </div>
                   </td>
                 </tr>
               </tbody>
             </table>
-          </div>
+         <!-- </div>
+          </div>-->
       </div>
 
       <div th:unless="${session.cartList==null}">
@@ -150,15 +152,15 @@
           <div class="col-xs-offset-2 col-xs-8">
             <div class="form-group text-center">
               <span id="total-price">消費税：</span>
-              <span id="total-price" name="totalTax" th:text="${#numbers.formatInteger(totalTax, 2, 'COMMA')} + '円'">消費税：8,000円</span><br />
+              <span id="total-price" name="totalTax" th:text="${#numbers.formatInteger(session.totalTax, 2, 'COMMA')} + '円'">消費税：8,000円</span><br />
               <span id="total-price">ご注文金額合計：</span>
-              <span id="total-price" name="totalPrice" th:text="${#numbers.formatInteger(totalPrice, 2, 'COMMA')} + '円'"></span><br />
+              <span id="total-price" name="totalPrice" th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'"></span><br />
               <!-- <span id="total-price">消費税：8,000円</span><br />
               <span id="total-price">ご注文金額合計：38,000円 (税込)</span> -->
             </div>
           </div>
         </div>
-        <div class="row">
+        <!--<div class="row">
           <div class="col-xs-offset-5 col-xs-3">
             <div class="form-group">
               <form action="order_confirm.html">
@@ -170,7 +172,7 @@
               </form>
             </div>
           </div>
-        </div>
+        </div>-->
       </div>
     </div>
          <!-- <table class="table table-striped item-list-table">
@@ -275,7 +277,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <!--<div class="row">
         <div class="col-xs-offset-2 col-xs-8">
           <div class="form-group text-center">
             <span id="total-price">消費税：8,000円</span><br />
@@ -283,9 +285,9 @@
             <span id="total-price">ご注文金額合計：38,000円 (税込)</span>
           </div>
         </div>
-      </div>
+      </div>-->
 
-      <!-- table -->
+      <table>
 
       <form action="order_finished.html" th:action="@{/order/orderSent}" th:object="${orderForm}">
         <div class="row">
@@ -435,9 +437,6 @@
           >
             <h3 class="text-center">お支払い方法</h3>
             <table class="table table-striped item-list-table">
-             <!--<div th:each="pay:${paymentMap}">
-             	<input type="radio" th:value="${pay.key}">
-                  	<span th:text="${pay.value}"></span>-->
               <tbody>
              
                 <tr>
@@ -445,9 +444,6 @@
                     <div class="text-center">代金引換</div>
                   </td>
                   <td>
-                  
-                  	<!--<input type="radio" th:value="${pay.key}">
-                  	<span th:text="${pay.value}"></span>-->
                   
                     <div class="row">
                       <div class="col-sm-12">
