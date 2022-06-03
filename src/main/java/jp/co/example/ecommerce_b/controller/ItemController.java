@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.swing.plaf.basic.BasicComboBoxUI.KeyHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -77,6 +80,9 @@ public class ItemController {
 		for (OrderItem ordItem : cartList) {
 			totalPrice += (int) (ordItem.getSubTotal() * 1.1);
 		}
+		
+		
+		
 		// 消費税を計算
 		Integer totalTax = (int) (totalPrice * 0.1);
 
@@ -110,7 +116,6 @@ public class ItemController {
 //		System.out.println("quantity:" + form.getQuantity());
 		// ショッピングカートに入れる商品の情報を商品idを元に取得
 		Item item = itemService.load(Integer.parseInt(form.getItemId()));
-		// System.out.println(item);
 
 		OrderItem orderItem = new OrderItem();
 		orderItem.setItemId(Integer.parseInt(form.getItemId()));
@@ -118,9 +123,33 @@ public class ItemController {
 		orderItem.setItem(item);
 		Integer answer = item.getPrice() * Integer.parseInt(form.getQuantity());
 		orderItem.setSubTotal(answer);
+		
+		User user = (User) session.getAttribute("user");
+		Integer userId;
+		if(user==null) {
+			userId=0;
+		}else {
+			userId=user.getId();
+		}
+		checkOrderBeforePayment(userId);
+		Order order = (Order) session.getAttribute("order");
+		
+		if(order.getId()==null) {//からっぽのorderなら
+//			orderテーブルにインサート
+			
+			order = orderService.insertOrder(order);
+		}
+		
+		//100%orderがidを持っている状態になる
 
+		
+//		orderのidをorderItemのorderIdにセット
+		orderItem.setOrderId(order.getId());
+		
 		// orderItemテーブルにインサート
 		orderItemService.insert(orderItem);
+		
+
 
 		// cartListの情報を取得
 		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
@@ -130,8 +159,18 @@ public class ItemController {
 		}
 		// ショッピングカート（cartList）に追加
 		cartList.add(orderItem);
+		
+		order.setOrderItemList(cartList);
+		order.setTotalPrice(order.calcTotalPrice());
+		System.out.println(order);
 
 		session.setAttribute("cartList", cartList);
+		
+		//update
+		orderService.update(order);
+		System.out.println(order);
+		
+		
 		return cartListShow(model);
 	}
 
@@ -179,14 +218,15 @@ public class ItemController {
 	/**
 	 * @param user ログイン中のユーザーの、支払い前のオーダーをセッションスコープに格納する処理。
 	 */
-	public void checkOrderBeforePayment(User user) {
+	public void checkOrderBeforePayment(Integer userId) {
 		// 存在すればそのorderが入り、存在しなければnullがはいる。
-		Order order = orderService.findOrderBeforePayment(user);
+		Order order = orderService.findOrderBeforePayment(userId);
 		if (order == null) {
 			// Orderを新たにインスタンス化
 			order = new Order();
 		}
 		session.setAttribute("order", order);
 	}
+	
 	
 }

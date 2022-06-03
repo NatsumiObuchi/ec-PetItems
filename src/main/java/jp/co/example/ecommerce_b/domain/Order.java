@@ -175,5 +175,14 @@ public class Order {
 				+ destinationAddress + ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTime
 				+ ", paymentMethod=" + paymentMethod + ", user=" + user + ", orderItemList=" + orderItemList + "]";
 	}
+	
+	public int calcTotalPrice() {
+		int total = 0;
+		List<OrderItem> orderItemList = this.getOrderItemList();
+		for(OrderItem orderItem : orderItemList) {
+			total += orderItem.getItem().getPrice() * orderItem.getQuantity();
+		}
+		return (int) (total*1.1);//この合計を代入する。
+	}
 
 }

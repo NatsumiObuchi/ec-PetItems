@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
-import jp.co.example.ecommerce_b.domain.OrderHistory;
 import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.OrderForm;
@@ -22,6 +21,7 @@ import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
+import jp.co.example.ecommerce_b.domain.OrderHistory;
 
 @Controller
 @RequestMapping("/order")
@@ -62,7 +62,7 @@ public class OrderController {
 		Order order = new Order();
 		BeanUtils.copyProperties(orderForm, order);
 		
-		orderservice.update(order);
+//		orderservice.update(order);
 		System.out.println(orderForm);
 		
 		OrderHistory orderHistory = new OrderHistory();
@@ -108,15 +108,25 @@ public class OrderController {
 	/**
 	 * @param user ログイン中のユーザーの、支払い前のオーダーをセッションスコープに格納する処理。
 	 */
-	public void checkOrderBeforePayment(User user) {
+
+	public void checkOrderBeforePayment(Integer userId) {
 		// 存在すればそのorderが入り、存在しなければnullがはいる。
-		Order order = orderservice.findOrderBeforePayment(user);
+		Order order = orderservice.findOrderBeforePayment(userId);
 		if (order == null) {
 			// Orderを新たにインスタンス化
 			order = new Order();
 		}
 		session.setAttribute("order", order);
 	}
+//public void checkOrderBeforePayment(User user) {
+//// 存在すればそのorderが入り、存在しなければnullがはいる。
+//Order order = orderservice.findOrderBeforePayment(user);
+//if (order == null) {
+//	// Orderを新たにインスタンス化
+//	order = new Order();
+//}
+//session.setAttribute("order", order);
+//}
 	
 	
 }
