@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Item;
+import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderItem;
+import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
+import jp.co.example.ecommerce_b.service.OrderService;
 
 
 @Controller
@@ -30,6 +33,9 @@ public class ItemController {
 
 	@Autowired
 	private OrderItemService orderItemService;
+
+	@Autowired
+	private OrderService orderService;
 
 	@ModelAttribute
 	private OrderItemForm createOrderItemForm() {
@@ -170,6 +176,17 @@ public class ItemController {
 		return "order_history";
 	}
 	
-	
+	/**
+	 * @param user ログイン中のユーザーの、支払い前のオーダーをセッションスコープに格納する処理。
+	 */
+	public void checkOrderBeforePayment(User user) {
+		// 存在すればそのorderが入り、存在しなければnullがはいる。
+		Order order = orderService.findOrderBeforePayment(user);
+		if (order == null) {
+			// Orderを新たにインスタンス化
+			order = new Order();
+		}
+		session.setAttribute("order", order);
+	}
 	
 }
