@@ -21,17 +21,18 @@ public class OrderRepository {
 	 * 注文する
 	 *
 	 */
-	public void insert(Order order){
+	public void update(Order order){
 		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 		
-		
-		String sql = "INSERT INTO orders(user_id,status,total_price,order_date,destination_name, "
-					+ "destination_email,destinationzip_code,destination_address,destination_tell, "
-					+ "delivery_time,payment_method)"
-					+ "VALUES(:userId, :status, :totalPrice, :orderDate, :destinationName, :destinationEmail, "
-					+ ":destinationzipCode, :destinationAddress, :destinationTell, :deliveryTime, :paymentMethod)";
-			
-		template.update(sql, param);
+//		if(order.getStatus() == 0 && ) {
+//			String sql= "UPDATE orders SET destination_name = :destinationName, destination_email = :destinationEmail,"
+//					+ "destinationzip_code = :destinationzipCode, destination_address = :destinationAddress, "
+//					+ "destination_tell = :destinationTell, delivery_time = :deliveryTime,"
+//					+ "payment_method = :paymentMethod WHERE order_id = :orderId";
+//			
+//			template.update(sql, param);
+//		}
+	
 	}
 	
 }
