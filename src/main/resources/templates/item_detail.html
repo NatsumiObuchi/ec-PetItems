@@ -65,7 +65,7 @@
           	<span class="list-active active"><a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">商品詳細</a></span>
 	  </p>
 
-      <form action="cart_list.html" th:action="@{/item/inCart}">
+      <form action="cart_list.html" th:action="@{/item/inCart}" method="post">
         <div class="row">
           <div class="col-xs-offset-2 col-xs-8">
             <h3 class="text-center">商品詳細</h3>
