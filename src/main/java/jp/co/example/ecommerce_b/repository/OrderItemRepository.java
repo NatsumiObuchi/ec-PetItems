@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
+
 import jp.co.example.ecommerce_b.domain.OrderItem;
 
 @Repository
@@ -15,8 +16,7 @@ public class OrderItemRepository {
 	public void insert(OrderItem orderItem) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(orderItem);
 
-		String sql = "INSERT INTO orderitems(id, item_id, order_id, quantity)"
-				+ "VALUES(:id, :itemId,: orderId, :quantity)";
+		String sql = "INSERT INTO orderitems(item_id, order_id, quantity)" + "VALUES(:itemId, :orderId, :quantity)";
 
 		template.update(sql, param);
 	}
