@@ -1,11 +1,6 @@
 package jp.co.example.ecommerce_b.controller;
 
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeanUtils;
@@ -16,7 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Order;
-import jp.co.example.ecommerce_b.domain.OrderItem;
+import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.OrderForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.service.ItemService;
@@ -36,7 +31,10 @@ public class OrderController {
 	private OrderItemService orderitemservice;
 	
 	@Autowired
-	private ItemService service;
+	private ItemService itemService;
+
+	@Autowired
+	private OrderService orderService;
 
 	
 	@ModelAttribute
@@ -64,5 +62,13 @@ public class OrderController {
 		System.out.println(orderForm);
 		
 		return "order_finished";
+	}
+
+	/**
+	 * @param user このログイン中のユーザーの、支払い前のオーダーをセッションスコープに格納する処理。
+	 */
+	public void checkOrderBeforePayment(User user) {
+		// 存在すればそのorderが入り、存在しなければnullがはいる。
+		session.setAttribute("order", orderService.findOrderBeforePayment(user));
 	}
 }
