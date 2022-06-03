@@ -1,6 +1,8 @@
 package jp.co.example.ecommerce_b.controller;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeanUtils;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Order;
+import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.OrderForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
@@ -58,7 +61,7 @@ public class OrderController {
 		Order order = new Order();
 		BeanUtils.copyProperties(orderForm, order);
 		
-		orderservice.update(order);
+//		orderservice.update(order);
 		System.out.println(orderForm);
 		
 		return "order_finished";
@@ -67,13 +70,15 @@ public class OrderController {
 	/**
 	 * @param user ログイン中のユーザーの、支払い前のオーダーをセッションスコープに格納する処理。
 	 */
-	public void checkOrderBeforePayment(User user) {
-		// 存在すればそのorderが入り、存在しなければnullがはいる。
-		Order order = orderservice.findOrderBeforePayment(user);
-		if (order == null) {
-			// Orderを新たにインスタンス化
-			order = new Order();
-		}
-		session.setAttribute("order", order);
-	}
+//	public void checkOrderBeforePayment(User user) {
+//		// 存在すればそのorderが入り、存在しなければnullがはいる。
+//		Order order = orderservice.findOrderBeforePayment(user);
+//		if (order == null) {
+//			// Orderを新たにインスタンス化
+//			order = new Order();
+//		}
+//		session.setAttribute("order", order);
+//	}
+	
+	
 }

@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.Order;
@@ -41,6 +43,29 @@ public class OrderRepository {
 	};
 	
 	
+	/**
+	 * orderテーブルに情報を追加する（user_id, status）
+	 */
+	public Order insertOrder(Order order) {
+		
+		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
+		
+		String sql = "INSERT INTO orders(user_id, status) "
+				+ "VALUES(:userId, :status );";
+		
+		template.update(sql, param);
+		
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		System.out.println(keyHolder);
+		Integer id = (Integer) keyHolder.getKey();
+		System.out.println(keyHolder.getKey());
+		order.setId(id);
+		System.out.println(id);
+		
+		System.out.println(order);
+		
+		return order;
+	}
 	
 
 	/**
@@ -50,16 +75,19 @@ public class OrderRepository {
 	public void update(Order order){
 		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 		
-//		if(order.getStatus() == 0 && ) {
-//			String sql= "UPDATE orders SET destination_name = :destinationName, destination_email = :destinationEmail,"
-//					+ "destinationzip_code = :destinationzipCode, destination_address = :destinationAddress, "
-//					+ "destination_tell = :destinationTell, delivery_time = :deliveryTime,"
-//					+ "payment_method = :paymentMethod WHERE order_id = :orderId";
-//			
-//			template.update(sql, param);
-//		}
+		
+			String sql= "UPDATE orders SET user_id = :userId,status = :status ,total_price = :totalPrice, "
+					+ "destination_name = :destinationName, destination_email = :destinationEmail,"
+					+ "destinationzip_code = :destinationzipCode, destination_address = :destinationAddress, "
+					+ "destination_tell = :destinationTell, delivery_time = :deliveryTime,"
+					+ "payment_method = :paymentMethod WHERE id = :id";
+			
+			template.update(sql, param);
+		
 	
 	}
+	
+	
 	
 	/**
 	 * 注文履歴テーブルにインサートする
@@ -74,9 +102,9 @@ public class OrderRepository {
 		template.update(sql, param);
 	}
 	
-	public Order findByIdAndStatusIs0(User user) {
+	public Order findByIdAndStatusIs0(Integer userId) {
 		String sql = "SELECT id,user_id,status,total_price,order_date,destination_name,destinationzip_code,destination_tell,delivery_time,payment_method FROM orders WHERE user_id = :id AND status = 0";
-		SqlParameterSource param = new MapSqlParameterSource().addValue("id", user.getId());
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", userId);
 		List<Order> orders = template.query(sql, param, ORDER_ROW_MAPPER);
 		if (orders.size() == 0) {// レコード（Order）が存在しなかった場合、nullを返す。
 			return null;
