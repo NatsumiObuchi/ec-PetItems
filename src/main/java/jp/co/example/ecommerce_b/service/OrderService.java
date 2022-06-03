@@ -15,6 +15,13 @@ public class OrderService {
 	@Autowired
 	private OrderRepository repository;
 	
+	
+	/**
+	 * orderテーブルに情報を追加する（user_id, status）
+	 */
+	public Order insertOrder(Order order) {
+		return repository.insertOrder(order);
+	}
 	/**
 	 * 注文する
 	 *
@@ -36,8 +43,8 @@ public class OrderService {
 	 * @param user
 	 * @return 当該ユーザーが支払い前のオーダーを持っているか確認する。
 	 */
-	public Order findOrderBeforePayment(User user) {
-		return repository.findByIdAndStatusIs0(user);
+	public Order findOrderBeforePayment(Integer userId) {
+		return repository.findByIdAndStatusIs0(userId);
 	}
 
 }
