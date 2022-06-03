@@ -33,4 +33,12 @@ public class UserService {
 	public User loginCheck(UserForm form) {
 		return userRepository.findByEmailAndPassword(form);
 	}
+
+	/**
+	 * @param form
+	 * @return 入力されたメールアドレスからユーザーを検索する。(パスワード一致確認のため)
+	 */
+	public User findByEmail(UserForm form) {
+		return userRepository.findByEmail(form);
+	}
 }
