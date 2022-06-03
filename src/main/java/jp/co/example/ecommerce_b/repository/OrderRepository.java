@@ -75,7 +75,7 @@ public class OrderRepository {
 	}
 	
 	public Order findByIdAndStatusIs0(User user) {
-		String sql = "SELECT id,user_id,status,total_price,order_date,destination_name,destinationzip_code,destination_tell,delivery_time,payment_method FROM orders WHERE user_id = :id AND payment_method = 0";
+		String sql = "SELECT id,user_id,status,total_price,order_date,destination_name,destinationzip_code,destination_tell,delivery_time,payment_method FROM orders WHERE user_id = :id AND status = 0";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", user.getId());
 		List<Order> orders = template.query(sql, param, ORDER_ROW_MAPPER);
 		if (orders.size() == 0) {// レコード（Order）が存在しなかった場合、nullを返す。
