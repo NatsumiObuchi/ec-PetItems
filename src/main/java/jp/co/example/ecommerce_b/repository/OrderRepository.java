@@ -12,15 +12,33 @@ import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
+import jp.co.example.ecommerce_b.domain.User;
 
 
 
 
 @Repository
 public class OrderRepository {
+
 	@Autowired
 	private NamedParameterJdbcTemplate template;
 	
+	private static final RowMapper<Order> ORDER_ROW_MAPPER = (rs, i) -> {
+		Order order = new Order();
+		order.setId(rs.getInt("id"));
+		order.setUserId(rs.getInt("user_id"));
+		order.setStatus(rs.getInt("status"));
+		order.setTotalPrice(rs.getInt("total_price"));
+		order.setOrderDate(rs.getDate("order_date"));
+		order.setDestinationName(rs.getString("destination_name"));
+		order.setDestinationEmail(rs.getString("destination_email"));
+		order.setDestinationzipCode(rs.getString("destinationzip_code"));
+		order.setDestinationAddress(rs.getString("destination_address"));
+		order.setDestinationTell(rs.getString("destination_tell"));
+		order.setDeliveryTime(rs.getTimestamp("delivery_time"));
+		order.setPaymentMethod(rs.getInt("payment_method"));
+		return order;
+	};
 	
 	private static final RowMapper<OrderHistory> HIS_ROW_MAPPER=(rs,i)->{
 		OrderHistory orderHistory =new OrderHistory();
@@ -41,7 +59,6 @@ public class OrderRepository {
 
 		return orderHistory;
 	};
-	
 
 	/**
 	 * 注文する
@@ -91,13 +108,16 @@ public class OrderRepository {
 		return historyList;
 		
 	}
+
+	public Order findByIdAndStatusIs0(User user) {
+		String sql = "SELECT id,user_id,status,total_price,order_date,destination_name,destinationzip_code,destination_tell,delivery_time,payment_method FROM orders WHERE user_id = :id AND status = 0";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", user.getId());
+		List<Order> orders = template.query(sql, param, ORDER_ROW_MAPPER);
+		if (orders.size() == 0) {// レコード（Order）が存在しなかった場合、nullを返す。
+			return null;
+		}
+		return orders.get(0);// レコード（Order）が存在した場合、そのオーダーを返す。
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

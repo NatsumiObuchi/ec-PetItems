@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
+import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.repository.OrderRepository;
 
 
@@ -34,15 +35,21 @@ public class OrderService {
 	}
 	
 	/**
+	 * @param user
+	 * @return 当該ユーザーが支払い前のオーダーを持っているか確認する。
+	 */
+	public Order findOrderBeforePayment(User user) {
+		return repository.findByIdAndStatusIs0(user);
+	}
+	
+	/**
 	 * orderIdを指定して注文履歴リストを返す
 	 *
 	 */
 	public List<OrderHistory> findOrderHistory(Integer orderId){
 		List<OrderHistory> historyList = repository.findOrderHistory(orderId);
 		return historyList; 
-		
-		
 	}
-	
+
 }
 	

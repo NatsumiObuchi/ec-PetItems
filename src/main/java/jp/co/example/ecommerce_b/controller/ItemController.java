@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Item;
+import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderItem;
+import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.service.ItemService;
+import jp.co.example.ecommerce_b.service.OrderItemService;
+import jp.co.example.ecommerce_b.service.OrderService;
 
 
 @Controller
@@ -25,7 +29,13 @@ public class ItemController {
 	private HttpSession session;
 
 	@Autowired
-	private ItemService service;
+	private ItemService itemService;
+
+	@Autowired
+	private OrderItemService orderItemService;
+
+	@Autowired
+	private OrderService orderService;
 
 	@ModelAttribute
 	private OrderItemForm createOrderItemForm() {
@@ -37,7 +47,7 @@ public class ItemController {
 	 */
 	@RequestMapping("/list")
 	public String itemList(Model model) {
-		List<Item> itemList = service.findAll();
+		List<Item> itemList = itemService.findAll();
 		model.addAttribute("itemList", itemList);
 		return "item_list_pet";
 	}
@@ -81,7 +91,7 @@ public class ItemController {
 	 */
 	@RequestMapping("/itemDetail")
 	public String itemDetail(Integer id,Model model) {
-		Item item = service.load(id);
+		Item item = itemService.load(id);
 		model.addAttribute("item", item);
 		return "item_detail";
 
@@ -99,7 +109,7 @@ public class ItemController {
 //		System.out.println("id:" + form.getItemId());
 //		System.out.println("quantity:" + form.getQuantity());
 		// ショッピングカートに入れる商品の情報を商品idを元に取得
-		Item item = service.load(Integer.parseInt(form.getItemId()));
+		Item item = itemService.load(Integer.parseInt(form.getItemId()));
 		// System.out.println(item);
 
 		OrderItem orderItem = new OrderItem();
@@ -109,12 +119,16 @@ public class ItemController {
 		Integer answer = item.getPrice() * Integer.parseInt(form.getQuantity());
 		orderItem.setSubTotal(answer);
 
+		// orderItemテーブルにインサート
+		orderItemService.insert(orderItem);
+
 		// cartListの情報を取得
 		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
 		// System.out.println(cartList);
 		if (cartList == null) {// cartListが空だった場合、新しくリストを追加
 			cartList = new ArrayList<>();
 		}
+		// ショッピングカート（cartList）に追加
 		cartList.add(orderItem);
 
 		session.setAttribute("cartList", cartList);
@@ -140,10 +154,10 @@ public class ItemController {
 	 */
 	@RequestMapping("/search")
 	public String searchItem(String code, Model model) {
-		List<Item> itemList = service.findByName(code);
+		List<Item> itemList = itemService.findByName(code);
 
 		if (itemList.size() == 0) {
-			List<Item> itemList2 = service.findAll();
+			List<Item> itemList2 = itemService.findAll();
 			model.addAttribute("itemList", itemList2);
 			model.addAttribute("noItemMessage", "該当の商品がございません。商品一覧を表示します。");
 			return "item_list_pet";
@@ -162,6 +176,17 @@ public class ItemController {
 //		return "order_history";
 //	}
 	
-	
+	/**
+	 * @param user ログイン中のユーザーの、支払い前のオーダーをセッションスコープに格納する処理。
+	 */
+	public void checkOrderBeforePayment(User user) {
+		// 存在すればそのorderが入り、存在しなければnullがはいる。
+		Order order = orderService.findOrderBeforePayment(user);
+		if (order == null) {
+			// Orderを新たにインスタンス化
+			order = new Order();
+		}
+		session.setAttribute("order", order);
+	}
 	
 }
