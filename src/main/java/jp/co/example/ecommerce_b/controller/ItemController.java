@@ -207,13 +207,13 @@ public class ItemController {
 	}
 	
 	
-	/**
-	 * 購入履歴を表示する
-	 */
-	@RequestMapping("/orderHistory")
-	public String orderHistory() {
-		return "order_history";
-	}
+//	/**
+//	 * 購入履歴を表示する
+//	 */
+//	@RequestMapping("/orderHistory")
+//	public String orderHistory() {
+//		return "order_history";
+//	}
 	
 	/**
 	 * @param user ログイン中のユーザーの、支払い前のオーダーをセッションスコープに格納する処理。

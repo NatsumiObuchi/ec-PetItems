@@ -42,6 +42,26 @@ public class OrderRepository {
 		return order;
 	};
 	
+	private static final RowMapper<OrderHistory> HIS_ROW_MAPPER=(rs,i)->{
+		OrderHistory orderHistory =new OrderHistory();
+		orderHistory.setId(rs.getInt("id"));
+		orderHistory.setOrderId(rs.getInt("order_id"));
+		orderHistory.setItemName(rs.getString("item_name"));
+		orderHistory.setItemPrice(rs.getInt("item_price"));
+		orderHistory.setQueantity(rs.getInt("quantity"));
+		orderHistory.setTotalPrice(rs.getInt("total_price"));
+		orderHistory.setOrderDate(rs.getDate("order_date"));
+		orderHistory.setDestinationName(rs.getString("destination_name"));
+		orderHistory.setDestinationEmail(rs.getString("destination_email"));
+		orderHistory.setDestinationzipCode(rs.getString("destinationzip_Code"));
+		orderHistory.setDestinationAddress(rs.getString("destination_address"));
+		orderHistory.setDestinationTell(rs.getString("destination_tell"));
+		orderHistory.setDeliveryTime(rs.getTimestamp("delivery_time"));
+		orderHistory.setPaymentMethod(rs.getInt("payment_method"));
+
+		return orderHistory;
+	};
+	
 	
 	/**
 	 * orderテーブルに情報を追加する（user_id, status）
@@ -94,14 +114,33 @@ public class OrderRepository {
 	 *
 	 */
 	public void insertHistory(OrderHistory orderHistory) {
-		String sql="insert into orderhistorys (order_id,item_name,item_price,quantity)"
-				+ " VALUES (:order,:itemName,:itemPrice,:quantity);";
+		String sql="insert into order_histories (order_id,image_path,item_name,item_price,quantity,total_price,order_date,"
+				+ "destination_name,destination_email,destinationzip_Code,destination_address,destination_tell,"
+				+ "delivery_time,delivery_time,payment_method)"
+				+ "VALUES (:orderId,:imagePath,:itemName,:itemPrice,:quantity,:totalPrice,:orderDate,:destinationName"
+				+ ":destinationEmail,:destinationZipcode,:destinationAddress,:destinationTell,"
+				+ ":deliveryTime,:paymentMethod);";
 		
 		SqlParameterSource param = new BeanPropertySqlParameterSource(orderHistory);
 		
 		template.update(sql, param);
 	}
 	
+
+	/**
+	 * 注文履歴をorderIdで取り出す
+	 *
+	 */
+	public List<OrderHistory> findOrderHistory(Integer orderId){
+		String sql="SELECT * FROM order_histories WHERE order_id=:orderId";
+		
+		SqlParameterSource param=new MapSqlParameterSource().addValue("orderId", orderId);	
+		List<OrderHistory> historyList=template.query(sql, param,HIS_ROW_MAPPER);
+		
+		return historyList;
+		
+	}
+
 	public Order findByIdAndStatusIs0(Integer userId) {
 		String sql = "SELECT id,user_id,status,total_price,order_date,destination_name,destinationzip_code,destination_tell,delivery_time,payment_method FROM orders WHERE user_id = :id AND status = 0";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", userId);
@@ -111,5 +150,6 @@ public class OrderRepository {
 		}
 		return orders.get(0);// レコード（Order）が存在した場合、そのオーダーを返す。
 	}
+	
 
 }

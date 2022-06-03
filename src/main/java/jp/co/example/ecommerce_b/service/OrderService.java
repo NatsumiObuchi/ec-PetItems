@@ -1,6 +1,8 @@
 package jp.co.example.ecommerce_b.service;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,15 @@ public class OrderService {
 	 */
 	public Order findOrderBeforePayment(Integer userId) {
 		return repository.findByIdAndStatusIs0(userId);
+	}
+	
+	/**
+	 * orderIdを指定して注文履歴リストを返す
+	 *
+	 */
+	public List<OrderHistory> findOrderHistory(Integer orderId){
+		List<OrderHistory> historyList = repository.findOrderHistory(orderId);
+		return historyList; 
 	}
 
 }
