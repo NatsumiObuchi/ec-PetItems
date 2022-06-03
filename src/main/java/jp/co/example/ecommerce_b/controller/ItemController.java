@@ -83,8 +83,11 @@ public class ItemController {
 		// 消費税を計算
 		Integer totalTax = (int) (totalPrice * 0.1);
 
-		model.addAttribute("totalPrice", totalPrice);
-		model.addAttribute("totalTax", totalTax);
+		session.setAttribute("totalPrice", totalPrice);
+		session.setAttribute("totalTax", totalTax);
+		
+//		model.addAttribute("totalPrice", totalPrice);
+//		model.addAttribute("totalTax", totalTax);
 
 		return "cart_list";
 	}
