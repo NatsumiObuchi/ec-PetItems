@@ -51,7 +51,7 @@ public class OrderRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 		
 		String sql = "INSERT INTO orders(user_id, status) "
-				+ "VALUES(:userId, :status );";
+				+ "VALUES(:userId, :status) returning id";
 		
 		template.update(sql, param);
 		
