@@ -28,7 +28,7 @@
               <span class="icon-bar"></span> <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="item_list_pizza.html">
+            <a class="navbar-brand" th:href="@{/item/list}">
               <!-- 企業ロゴ -->
               <img
                 alt="main log"
@@ -45,7 +45,7 @@
           >
             <p class="navbar-text navbar-right">
               <a href="login.html" class="navbar-link" th:href="@{/user/toLogin}">ログイン</a>&nbsp;&nbsp;
-              <a href="cart_list.html" class="navbar-link">ショッピングカート</a
+              <a href="cart_list.html" class="navbar-link"  th:href="@{/item/cartList}" >ショッピングカート</a
               >&nbsp;&nbsp;
             </p>
           </div>

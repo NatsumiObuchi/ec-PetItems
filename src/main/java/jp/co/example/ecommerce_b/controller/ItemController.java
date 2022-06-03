@@ -53,14 +53,14 @@ public class ItemController {
 //		System.out.println("id:" + );
 //		System.out.println("quantity:" + );
 		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
-		System.out.println(cartList);
+		// System.out.println(cartList);
 
 		if (cartList == null || cartList.size() == 0) {// sessionスコープ内のcartListがからの時、エラーメッセージ表示
 			cartList = new ArrayList<OrderItem>();
 			String emptyMessage = "現在、カートに商品はありません。";
 			model.addAttribute("emptyMessage", emptyMessage);
 		}
-		System.out.println(cartList);
+		// System.out.println(cartList);
 		
 		// cartList内の合計金額を計算
 		Integer totalPrice = 0;
@@ -98,9 +98,9 @@ public class ItemController {
 	public String inCart(OrderItemForm form, Model model) {
 //		System.out.println("id:" + form.getItemId());
 //		System.out.println("quantity:" + form.getQuantity());
-		
 		// ショッピングカートに入れる商品の情報を商品idを元に取得
 		Item item = service.load(Integer.parseInt(form.getItemId()));
+		// System.out.println(item);
 
 		OrderItem orderItem = new OrderItem();
 		orderItem.setItemId(Integer.parseInt(form.getItemId()));
@@ -111,6 +111,7 @@ public class ItemController {
 
 		// cartListの情報を取得
 		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
+		// System.out.println(cartList);
 		if (cartList == null) {// cartListが空だった場合、新しくリストを追加
 			cartList = new ArrayList<>();
 		}
@@ -123,7 +124,7 @@ public class ItemController {
 	@RequestMapping("/delete")
 	public String deleteInCartItem(String index, Model model) {
 		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
-		System.out.println(index);
+		// System.out.println(index);
 		cartList.remove(Integer.parseInt(index));
 
 		session.setAttribute("cartList", cartList);
@@ -145,10 +146,10 @@ public class ItemController {
 			List<Item> itemList2 = service.findAll();
 			model.addAttribute("itemList", itemList2);
 			model.addAttribute("noItemMessage", "該当の商品がございません。商品一覧を表示します。");
-			return "item_list_pizza";
+			return "item_list_pet";
 		} else {
 			model.addAttribute("itemList", itemList);
-			return "item_list_pizza";
+			return "item_list_pet";
 		}
 	}
 }
