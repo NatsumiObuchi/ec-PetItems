@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	h1 {
+  					animation: title-fade-in 0.8s ease 0.5s 1 normal running forwards;
+  					font-size: 50px;
+  					color:white;
+  					text-align:center;
+					}
+
+	@keyframes title-fade-in {
+  				0% {
+    			color: #fff;
+    			border: solid 2px #FFF;
+  				}
+  				100% {
+    			border: solid 2px rgb(255, 0, 0);
+    			color: red;
+  				}
+			}
+	body {
+		text-align:center;
+		}
+</style>
+</head>
+<body>
+
+<h1>
+404 Not Found
+</h1>
+
+申し訳ございません。お探しのページは見つかりませんでした。
+<br>
+
+以下のリンクからログインし直してください。
+<br>
+
+<img src="/img/pose_syazai_sliding_dogeza_woman.png" width="300" height="300">
+<br>
+<a th:href="@{/user/toLogin}">ログイン画面</a>
+<br>
+
+</body>
+</html>
