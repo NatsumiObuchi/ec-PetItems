@@ -48,7 +48,7 @@
               <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
               <a href="cart_list.html" class="navbar-link" th:href="@{/item/cartList}" >ショッピングカート</a
               >&nbsp;&nbsp;
-              <a href="order_history.html" class="navbar-link">注文履歴</a
+              <a href="order_history.html" th:href="@{/item/orderHistory}" class="navbar-link">注文履歴</a
               >&nbsp;&nbsp;
               <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}">ログイン</a>&nbsp;&nbsp;
               <a href="item_list_pizza.html" class="navbar-link"  th:href="@{/user/logout}">ログアウト</a>
@@ -286,6 +286,7 @@
       </div>
 
       <!-- table -->
+
       <form action="order_finished.html" th:action="@{/order/orderSent}" th:object="${orderForm}">
         <div class="row">
           <div
