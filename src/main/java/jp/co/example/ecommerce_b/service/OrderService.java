@@ -18,8 +18,8 @@ public class OrderService {
 	 *
 	 */
 	
-	public void insert(Order order){
-		repository.insert(order);
+	public void update(Order order){
+		repository.update(order);
 	}
 }
 	
