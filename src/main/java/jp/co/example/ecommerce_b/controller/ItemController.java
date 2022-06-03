@@ -4,11 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
-import javax.swing.plaf.basic.BasicComboBoxUI.KeyHandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -125,6 +122,7 @@ public class ItemController {
 		orderItem.setSubTotal(answer);
 		
 		User user = (User) session.getAttribute("user");
+
 		Integer userId;
 		if(user==null) {
 			userId=0;
@@ -133,6 +131,7 @@ public class ItemController {
 		}
 		checkOrderBeforePayment(userId);
 		Order order = (Order) session.getAttribute("order");
+		System.out.println("いまセッションにあるorderのIDは" + order.getId());
 		
 		if(order.getId()==null) {//からっぽのorderなら
 //			orderテーブルにインサート
@@ -162,13 +161,12 @@ public class ItemController {
 		
 		order.setOrderItemList(cartList);
 		order.setTotalPrice(order.calcTotalPrice());
-		System.out.println(order);
 
 		session.setAttribute("cartList", cartList);
 		
+
 		//update
 		orderService.update(order);
-		System.out.println(order);
 		
 		
 		return cartListShow(model);
@@ -222,9 +220,13 @@ public class ItemController {
 		// 存在すればそのorderが入り、存在しなければnullがはいる。
 		Order order = orderService.findOrderBeforePayment(userId);
 		if (order == null) {
-			// Orderを新たにインスタンス化
-			order = new Order();
+			if (session.getAttribute("order") != null) {
+				order = (Order) session.getAttribute("order");
+			} else {
+				order = new Order();
+			}
 		}
+		System.out.println("sessionに格納されるorderのIDは" + order.getId());
 		session.setAttribute("order", order);
 	}
 	
