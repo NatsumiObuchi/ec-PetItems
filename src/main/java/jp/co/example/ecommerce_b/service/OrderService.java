@@ -33,5 +33,16 @@ public class OrderService {
 		repository.insertHistory(orderHistory);
 	}
 	
+	/**
+	 * orderIdを指定して注文履歴リストを返す
+	 *
+	 */
+	public List<OrderHistory> findOrderHistory(Integer orderId){
+		List<OrderHistory> historyList = repository.findOrderHistory(orderId);
+		return historyList; 
+		
+		
+	}
+	
 }
 	
