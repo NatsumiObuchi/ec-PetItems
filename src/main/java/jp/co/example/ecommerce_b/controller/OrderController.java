@@ -65,10 +65,15 @@ public class OrderController {
 	}
 
 	/**
-	 * @param user このログイン中のユーザーの、支払い前のオーダーをセッションスコープに格納する処理。
+	 * @param user ログイン中のユーザーの、支払い前のオーダーをセッションスコープに格納する処理。
 	 */
 	public void checkOrderBeforePayment(User user) {
 		// 存在すればそのorderが入り、存在しなければnullがはいる。
-		session.setAttribute("order", orderService.findOrderBeforePayment(user));
+		Order order = orderservice.findOrderBeforePayment(user);
+		if (order == null) {
+			// Orderを新たにインスタンス化
+			order = new Order();
+		}
+		session.setAttribute("order", order);
 	}
 }
