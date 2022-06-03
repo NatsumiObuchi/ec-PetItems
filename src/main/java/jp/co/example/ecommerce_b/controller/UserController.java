@@ -3,6 +3,8 @@ package jp.co.example.ecommerce_b.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -53,6 +55,10 @@ public class UserController {
 			signinCheck(form, model);
 			return toSignin();
 		} else {
+			String oldPass = form.getPassword();
+			PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			String hashPass = passwordEncoder.encode(oldPass);
+			form.setPassword(hashPass);
 			userService.insertUser(form);
 			return "redirect:/user/toLogin";
 		}
@@ -81,13 +87,21 @@ public class UserController {
 	 */
 	@RequestMapping("/login")
 	public String login(UserForm form, Model model) {
-		User user = userService.loginCheck(form);
-		if(user==null) {
+
+		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
+		String oldPass = form.getPassword();
+		User user = userService.findByEmail(form);
+		
+		if (user == null) {
 			model.addAttribute("loginErrorMessage", "メールアドレス、またはパスワードが間違っています");
 			return "login";
-		}else {
-			session.setAttribute("user", user);
+		} else if (bcpe.matches(oldPass, user.getPassword())) {
+			User user2 = userService.loginCheck(form);
+			session.setAttribute("user", user2);
 			return "forward:/item/list";
+		} else {
+			model.addAttribute("loginErrorMessage", "メールアドレス、またはパスワードが間違っています");
+			return "login";
 		}
 	}
 

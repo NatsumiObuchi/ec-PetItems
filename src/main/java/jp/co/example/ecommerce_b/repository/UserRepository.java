@@ -90,4 +90,18 @@ public class UserRepository {
 		return userList.get(0);
 	}
 
+	/**
+	 * @param form
+	 * @return 入力されたメールアドレスからユーザーを検索する。(パスワード一致確認のため)
+	 */
+	public User findByEmail(UserForm form) {
+		String sql = "SELECT id,name,email,password,zipcode,address,telephone FROM users WHERE email = :email";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("email", form.getEmail());
+		List<User> userList = template.query(sql, param, USER_ROW_MAPPER);
+		if (userList.size() == 0) {
+			return null;
+		}
+		return userList.get(0);
+	}
+
 }
