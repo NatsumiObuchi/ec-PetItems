@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
-import jp.co.example.ecommerce_b.domain.User;
 
 
 
@@ -73,16 +72,13 @@ public class OrderRepository {
 		String sql = "INSERT INTO orders(user_id, status) "
 				+ "VALUES(:userId, :status) returning id";
 		
-		template.update(sql, param);
-		
 		KeyHolder keyHolder = new GeneratedKeyHolder();
-		System.out.println(keyHolder);
+
+		template.update(sql, param, keyHolder);
+
 		Integer id = (Integer) keyHolder.getKey();
-		System.out.println(keyHolder.getKey());
 		order.setId(id);
-		System.out.println(id);
-		
-		System.out.println(order);
+		System.out.println("キーホルダーは" + id);
 		
 		return order;
 	}
