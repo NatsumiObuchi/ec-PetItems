@@ -224,6 +224,7 @@ public class ItemController {
 				order = (Order) session.getAttribute("order");
 			} else {
 				order = new Order();
+				order.setStatus(0);
 			}
 		}
 		System.out.println("sessionに格納されるorderのIDは" + order.getId());
