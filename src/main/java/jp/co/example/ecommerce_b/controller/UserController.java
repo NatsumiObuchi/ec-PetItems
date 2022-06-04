@@ -96,6 +96,7 @@ public class UserController {
 			model.addAttribute("loginErrorMessage", "メールアドレス、またはパスワードが間違っています");
 			return "login";
 		} else if (bcpe.matches(oldPass, user.getPassword())) {
+			form.setPassword(user.getPassword());
 			User user2 = userService.loginCheck(form);
 			session.setAttribute("user", user2);
 			return "forward:/item/list";

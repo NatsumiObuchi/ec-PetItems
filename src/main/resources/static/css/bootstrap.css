@@ -6325,6 +6325,7 @@ button.close {
   }
 }
 
+/*パンくずリストのスタイル調整*/
 .pan-list {
   list-style: none;
   border-radius: 4px;
@@ -6337,5 +6338,17 @@ button.close {
   list-style: none;
 }
 
+/* 商品一覧の表示修正 */
+.table {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+  margin-top: 2px;
+  margin-bottom: 60px;
+}
 
-
+.main {
+	border: dotted 4px #ddd;
+	margin: 5px,1px,1px,1px;
+	padding: 5px,5px,5px,5px; 
+}
