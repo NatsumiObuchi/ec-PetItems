@@ -114,22 +114,8 @@
       </div>
 
       <!-- table -->
-      <div class="row">
-        <div
-          class="
-            table-responsive
-            col-lg-offset-1
-            col-lg-10
-            col-md-offset-1
-            col-md-10
-            col-sm-10
-            col-xs-12
-          "
-        >
-          <table class="table table-striped item-list-table">
-            <tbody>
-              <tr  th:each="item:${itemList}">
-                <th>
+          <div class="table">
+          	<div class="main" th:each="item:${itemList}">
                   <a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
                     <img
 
@@ -146,13 +132,9 @@
                   </a><br />
                   <span th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')}">1,380</span>円(税抜)
                   <br />
-                </th>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+          	</div>
+        </div >
+        
     <!-- end container -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>

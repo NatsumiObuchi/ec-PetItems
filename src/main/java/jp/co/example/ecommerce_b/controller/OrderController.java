@@ -1,6 +1,13 @@
 package jp.co.example.ecommerce_b.controller;
 
 
+
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -59,18 +66,34 @@ public class OrderController {
 		return "order_confirm";
 	}
 	
+	
 	/**
 	 * 注文をする（orderHistoryテーブルに注文履歴を格納）
 	 *
 	 */
 	@RequestMapping("/orderSent")
 	public String orderSent(OrderForm orderForm,OrderItemForm orderItemForm,Model model) {
+		
+//		注文する
 		Order order = new Order();
 		BeanUtils.copyProperties(orderForm, order);
 		
-//		orderservice.update(order);
-		System.out.println(orderForm);
+		LocalDate localdate = LocalDate.now();	
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Date date = simpleDateFormat.parse(localdate.toString());
+			order.setOrderDate(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		orderservice.update(order);
+		System.out.println(order);
+		
+		
+		
+//		orderHistoryテーブルに格納
 		OrderHistory orderHistory = new OrderHistory();
 		List<OrderItem> orderItemList = orderForm.getOrderItemList();
 

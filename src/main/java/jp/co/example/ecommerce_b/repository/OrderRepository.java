@@ -102,8 +102,9 @@ public class OrderRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 		
 		
-		String sql = "UPDATE orders SET user_id = :userId,status = :status ,total_price = :totalPrice, "
-					+ "destination_name = :destinationName, destination_email = :destinationEmail,"
+
+			String sql= "UPDATE orders SET user_id = :userId,status = :status ,total_price = :totalPrice, "
+					+ "order_date = :orderDate, destination_name = :destinationName, destination_email = :destinationEmail,"
 					+ "destinationzip_code = :destinationzipCode, destination_address = :destinationAddress, "
 					+ "destination_tell = :destinationTell, delivery_time = :deliveryTime,"
 					+ "payment_method = :paymentMethod WHERE id = :id";
