@@ -1,6 +1,7 @@
 package jp.co.example.ecommerce_b.controller;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -99,13 +100,16 @@ public class OrderController {
 	public String findOrderHistory(Model model) {
 		if(session.getAttribute("user")!=null) {
 			User user = (User) session.getAttribute("user");
-			List<OrderHistory> historyList=orderservice.findOrderHistory(user.getId());
-			session.setAttribute("historyList", historyList);
-			
-			for(OrderHistory list:historyList) {
-				int shokei=list.getItemPrice()*list.getQueantity();	
-				model.addAttribute("shokei",shokei);
+			List<List<OrderHistory>> historyList=orderservice.findOrderHistory(user.getId());
+			session.setAttribute("historyList", historyList);	
+			if(historyList.size()==0) {
+				model.addAttribute("alert","注文履歴はありません。");
 			}
+			
+//			for(OrderHistory list:historyList) {
+//				int shokei=list.getItemPrice()*list.getQueantity();	
+//				model.addAttribute("shokei",shokei);
+//			}
 			return "order_history";
 		}else {
 			return "redirect:/user/toLogin";

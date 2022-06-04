@@ -1,5 +1,6 @@
 package jp.co.example.ecommerce_b.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class OrderRepository {
 		orderHistory.setDestinationTell(rs.getString("destination_tell"));
 		orderHistory.setDeliveryTime(rs.getTimestamp("delivery_time"));
 		orderHistory.setPaymentMethod(rs.getInt("payment_method"));
-
+		
 		return orderHistory;
 	};
 	
@@ -124,16 +125,27 @@ public class OrderRepository {
 	
 
 	/**
-	 * 注文履歴をorderIdで取り出す
+	 * 注文履歴をuserIdで取り出す (その中でorderIdごとのorderHistoryリストを作る)
 	 *
 	 */
-	public List<OrderHistory> findOrderHistory(Integer userId){
-		String sql="SELECT * FROM order_histories WHERE user_id=:userId";
-		
+	public List<List<OrderHistory>> findOrderHistory(Integer userId){
+		String sql="SELECT * FROM order_histories WHERE user_id=:userId order by order_id";
 		SqlParameterSource param=new MapSqlParameterSource().addValue("userId", userId);	
 		List<OrderHistory> historyList=template.query(sql, param,HIS_ROW_MAPPER);
-		
-		return historyList;
+		List<OrderHistory> histories=new ArrayList<>();
+		List<List<OrderHistory>> listlist=new ArrayList<List<OrderHistory>>();
+		for(OrderHistory orderhistory:historyList) {
+			int beforeOrderId=0;
+			if(orderhistory.getOrderId()!=beforeOrderId) {
+				if(beforeOrderId != 0) {
+					listlist.add(histories);
+				}
+				histories=new ArrayList<>();
+			}
+			histories.add(orderhistory);
+			beforeOrderId = orderhistory.getOrderId();	
+		}
+		return listlist;
 		
 	}
 
