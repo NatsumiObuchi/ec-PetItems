@@ -108,7 +108,7 @@ public class ItemController {
 		// ユーザー情報・オーダーの取得
 		User user = (User) session.getAttribute("user");
 		Integer userId;
-		if (user == null) {// ログイン中のユーザーがいなければ
+		if (user == null || user.getId() == 0) {// ログイン中のユーザーがいなければ
 			userId = 0;
 		} else {// ログイン中のユーザーがいれば
 			userId = user.getId();
