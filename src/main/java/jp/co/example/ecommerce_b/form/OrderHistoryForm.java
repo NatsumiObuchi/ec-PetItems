@@ -20,6 +20,8 @@ public class OrderHistoryForm {
 	private String itemPrice;
 	/** 数量 */
 	private String queantity;
+	/** 小計金額 */
+	private String subTotalPrice;
 	/** 合計金額 */
 	private String totalPrice;
 	/** 注文日 */
@@ -82,6 +84,12 @@ public class OrderHistoryForm {
 	public void setQueantity(String queantity) {
 		this.queantity = queantity;
 	}
+	public String getSubTotalPrice() {
+		return subTotalPrice;
+	}
+	public void setSubTotalPrice(String subTotalPrice) {
+		this.subTotalPrice = subTotalPrice;
+	}
 	public String getTotalPrice() {
 		return totalPrice;
 	}
@@ -139,11 +147,12 @@ public class OrderHistoryForm {
 	@Override
 	public String toString() {
 		return "OrderHistoryForm [Id=" + Id + ", orderId=" + orderId + ", userId=" + userId + ", imagePath=" + imagePath
-				+ ", itemName=" + itemName + ", itemPrice=" + itemPrice + ", queantity=" + queantity + ", totalPrice="
-				+ totalPrice + ", orderDate=" + orderDate + ", destinationName=" + destinationName
-				+ ", destinationEmail=" + destinationEmail + ", destinationzipCode=" + destinationzipCode
-				+ ", destinationAddress=" + destinationAddress + ", destinationTell=" + destinationTell
-				+ ", deliveryTime=" + deliveryTime + ", paymentMethod=" + paymentMethod + "]";
+				+ ", itemName=" + itemName + ", itemPrice=" + itemPrice + ", queantity=" + queantity
+				+ ", subTotalPrice=" + subTotalPrice + ", totalPrice=" + totalPrice + ", orderDate=" + orderDate
+				+ ", destinationName=" + destinationName + ", destinationEmail=" + destinationEmail
+				+ ", destinationzipCode=" + destinationzipCode + ", destinationAddress=" + destinationAddress
+				+ ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTime + ", paymentMethod="
+				+ paymentMethod + "]";
 	}
 
 	

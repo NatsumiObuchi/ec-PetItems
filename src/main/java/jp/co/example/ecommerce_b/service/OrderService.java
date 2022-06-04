@@ -56,6 +56,8 @@ public class OrderService {
 		List<List<OrderHistory>> historyList = repository.findOrderHistory(userId);
 		return historyList; 
 	}
+	
+	
 
 }
 	

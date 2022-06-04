@@ -105,6 +105,7 @@ public class OrderController {
 			orderHistory.setItemName(item.getName());
 			orderHistory.setItemPrice(item.getPrice());
 			orderHistory.setQueantity(orderItem.getQuantity());
+			orderHistory.setSubTotalPrice(orderItem.getSubTotal());
 			BeanUtils.copyProperties(order, orderHistory);
 
 			orderservice.insertHistory(orderHistory);
@@ -121,7 +122,7 @@ public class OrderController {
 		if(session.getAttribute("user")!=null) {
 			User user = (User) session.getAttribute("user");
 			List<List<OrderHistory>> historyList=orderservice.findOrderHistory(user.getId());
-			session.setAttribute("historyList", historyList);	
+			session.setAttribute("historyList", historyList);
 			if(historyList.size()==0) {
 				model.addAttribute("alert","注文履歴はありません。");
 			}
@@ -159,6 +160,5 @@ public class OrderController {
 //}
 //session.setAttribute("order", order);
 //}
-	
 	
 }

@@ -46,9 +46,12 @@ public class OrderRepository {
 		OrderHistory orderHistory =new OrderHistory();
 		orderHistory.setId(rs.getInt("id"));
 		orderHistory.setOrderId(rs.getInt("order_id"));
+		orderHistory.setUserId(rs.getInt("user_id"));
+		orderHistory.setImagePath(rs.getString("image_path"));
 		orderHistory.setItemName(rs.getString("item_name"));
 		orderHistory.setItemPrice(rs.getInt("item_price"));
 		orderHistory.setQueantity(rs.getInt("quantity"));
+		orderHistory.setSubTotalPrice(rs.getInt("sub_totalprice"));
 		orderHistory.setTotalPrice(rs.getInt("total_price"));
 		orderHistory.setOrderDate(rs.getDate("order_date"));
 		orderHistory.setDestinationName(rs.getString("destination_name"));
@@ -111,10 +114,10 @@ public class OrderRepository {
 	 *
 	 */
 	public void insertHistory(OrderHistory orderHistory) {
-		String sql="insert into order_histories (order_id,user_id,image_path,item_name,item_price,quantity,total_price,order_date,"
+		String sql="insert into order_histories (order_id,user_id,image_path,item_name,item_price,quantity,sub_totalprice,total_price,order_date,"
 				+ "destination_name,destination_email,destinationzip_Code,destination_address,destination_tell,"
 				+ "delivery_time,delivery_time,payment_method)"
-				+ "VALUES (:orderId,:userId,:imagePath,:itemName,:itemPrice,:quantity,:totalPrice,:orderDate,:destinationName"
+				+ "VALUES (:orderId,:userId,:imagePath,:itemName,:itemPrice,:quantity,:subTotalPrice,:totalPrice,:orderDate,:destinationName"
 				+ ":destinationEmail,:destinationZipcode,:destinationAddress,:destinationTell,"
 				+ ":deliveryTime,:paymentMethod);";
 		
@@ -130,12 +133,16 @@ public class OrderRepository {
 	 */
 	public List<List<OrderHistory>> findOrderHistory(Integer userId){
 		String sql="SELECT * FROM order_histories WHERE user_id=:userId order by order_id";
+		
 		SqlParameterSource param=new MapSqlParameterSource().addValue("userId", userId);	
+		
 		List<OrderHistory> historyList=template.query(sql, param,HIS_ROW_MAPPER);
+		
+		
 		List<OrderHistory> histories=new ArrayList<>();
 		List<List<OrderHistory>> listlist=new ArrayList<List<OrderHistory>>();
+		int beforeOrderId=0;
 		for(OrderHistory orderhistory:historyList) {
-			int beforeOrderId=0;
 			if(orderhistory.getOrderId()!=beforeOrderId) {
 				if(beforeOrderId != 0) {
 					listlist.add(histories);
@@ -145,9 +152,11 @@ public class OrderRepository {
 			histories.add(orderhistory);
 			beforeOrderId = orderhistory.getOrderId();	
 		}
+		listlist.add(histories);
 		return listlist;
 		
 	}
+	
 
 	public Order findByIdAndStatusIs0(Integer userId) {
 		String sql = "SELECT id,user_id,status,total_price,order_date,destination_name,destinationzip_code,destination_tell,delivery_time,payment_method FROM orders WHERE user_id = :id AND status = 0";
