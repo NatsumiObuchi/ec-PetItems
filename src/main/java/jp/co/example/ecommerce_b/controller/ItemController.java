@@ -132,7 +132,7 @@ public class ItemController {
 		orderItem.setSubTotal(subtotal);
 		orderItem = orderItemService.insert(orderItem);// orderItemテーブルにインサートかつidの取得(idが詰まったorderItem)
 		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");//
-		if (cartList == null) {
+		if (cartList == null || cartList.size() == 0) {
 			cartList = new ArrayList<>();
 		}
 		cartList.add(orderItem);
