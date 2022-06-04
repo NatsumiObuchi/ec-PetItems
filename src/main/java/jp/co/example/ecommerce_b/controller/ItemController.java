@@ -163,7 +163,9 @@ public class ItemController {
 		//オーダーの更新
 		Order order = (Order) session.getAttribute("order");//取得
 		order.setOrderItemList(cartList);//更新
+		order.setTotalPrice(order.calcTotalPrice());
 		session.setAttribute("order", order);//スコープへの格納
+		System.out.println(order);
 		orderService.updateOrdersWhenDeleteOrderItemFromCart(order);// DBの更新
 		return cartListShow(model);
 	}
