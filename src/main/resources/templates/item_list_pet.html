@@ -82,7 +82,7 @@
             </div>
             <div class="panel-body">
               <form method="post" class="form-horizontal"
-              	th:action="@{/item/search}">
+              	th:action="@{/item/search}" name="word">
                 <div class="form-group">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <span th:text="${noItemMessage}" style="color: red;">エラー</span>
@@ -94,6 +94,7 @@
                     <input
                       type="text"
                       name="code"
+                      th:value="${word}"
                       id="code"
                       class="form-control input-sm"
                     />

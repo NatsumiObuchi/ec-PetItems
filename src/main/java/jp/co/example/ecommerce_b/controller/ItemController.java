@@ -196,13 +196,15 @@ public class ItemController {
 	public String searchItem(String code, Model model) {
 		List<Item> itemList = itemService.findByName(code);
 
-		if (itemList.size() == 0) {
+		if (itemList.size() == 0 || code.equals("　") || code.equals(" ")) {
 			List<Item> itemList2 = itemService.findAll();
 			model.addAttribute("itemList", itemList2);
 			model.addAttribute("noItemMessage", "該当の商品がございません。商品一覧を表示します。");
+			model.addAttribute("word", code);
 			return "item_list_pet";
 		} else {
 			model.addAttribute("itemList", itemList);
+			model.addAttribute("word", code);
 			return "item_list_pet";
 		}
 	}
