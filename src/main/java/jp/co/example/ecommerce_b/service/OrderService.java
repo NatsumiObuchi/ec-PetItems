@@ -28,10 +28,18 @@ public class OrderService {
 	 *
 	 */
 	
-	public void update(Order order){
+	public void update(Order order) {
 		repository.update(order);
 	}
+
+	/**
+	 * @param order カートから商品を削除する時
+	 */
+	public void updateOrdersWhenDeleteOrderItemFromCart(Order order) {
+		repository.updateOrdersWhenDeleteOrderItemFromCart(order);
+	}
 	
+
 	/**
 	 * 注文履歴を挿入する
 	 *
