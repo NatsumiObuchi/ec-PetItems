@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
-import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.repository.OrderRepository;
 
 

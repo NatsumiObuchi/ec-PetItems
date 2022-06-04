@@ -77,6 +77,7 @@ public class OrderController {
 		for (OrderItem orderItem : orderItemList) {
 
 			orderHistory.setOrderId(orderItem.getOrderId());
+			orderHistory.setUserId(order.getUser().getId()); 
 
 			Item item = orderItem.getItem();
 			orderHistory.setImagePath(item.getImagePath());
@@ -95,9 +96,10 @@ public class OrderController {
 	 * 購入履歴を表示する
 	 */
 	@RequestMapping("/orderHistory")
-	public String findOrderHistory(Integer orderId,Model model) {
+	public String findOrderHistory(Model model) {
 		if(session.getAttribute("user")!=null) {
-			List<OrderHistory> historyList=orderservice.findOrderHistory(orderId);
+			User user = (User) session.getAttribute("user");
+			List<OrderHistory> historyList=orderservice.findOrderHistory(user.getId());
 			session.setAttribute("historyList", historyList);
 			
 			for(OrderHistory list:historyList) {

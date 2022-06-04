@@ -10,6 +10,8 @@ public class OrderHistoryForm {
 	private String Id;
 	/** 注文ID */
 	private String orderId;
+	/** 購入者ID */
+	private String userId;
 	/** 商品画像 */
 	private String imagePath;
 	/** アイテム名 */
@@ -49,6 +51,12 @@ public class OrderHistoryForm {
 	}
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	public String getImagePath() {
 		return imagePath;
@@ -130,13 +138,14 @@ public class OrderHistoryForm {
 	}
 	@Override
 	public String toString() {
-		return "OrderHistoryForm [Id=" + Id + ", orderId=" + orderId + ", imagePath=" + imagePath + ", itemName="
-				+ itemName + ", itemPrice=" + itemPrice + ", queantity=" + queantity + ", totalPrice=" + totalPrice
-				+ ", orderDate=" + orderDate + ", destinationName=" + destinationName + ", destinationEmail="
-				+ destinationEmail + ", destinationzipCode=" + destinationzipCode + ", destinationAddress="
-				+ destinationAddress + ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTime
-				+ ", paymentMethod=" + paymentMethod + "]";
+		return "OrderHistoryForm [Id=" + Id + ", orderId=" + orderId + ", userId=" + userId + ", imagePath=" + imagePath
+				+ ", itemName=" + itemName + ", itemPrice=" + itemPrice + ", queantity=" + queantity + ", totalPrice="
+				+ totalPrice + ", orderDate=" + orderDate + ", destinationName=" + destinationName
+				+ ", destinationEmail=" + destinationEmail + ", destinationzipCode=" + destinationzipCode
+				+ ", destinationAddress=" + destinationAddress + ", destinationTell=" + destinationTell
+				+ ", deliveryTime=" + deliveryTime + ", paymentMethod=" + paymentMethod + "]";
 	}
+
 	
 	
 
