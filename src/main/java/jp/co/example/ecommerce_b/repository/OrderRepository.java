@@ -63,7 +63,7 @@ public class OrderRepository {
 	
 	
 	/**
-	 * orderテーブルに情報を追加する（user_id, status）
+	 * orderテーブルに情報を追加する（user_id, status） orderの初期化
 	 */
 	public Order insertOrder(Order order) {
 		
@@ -78,33 +78,42 @@ public class OrderRepository {
 
 		Integer id = (Integer) keyHolder.getKey();
 		order.setId(id);
-		System.out.println("キーホルダーは" + id);
 		
 		return order;
 	}
 	
 
 	/**
-	 * 注文する
-	 *
+	 * カートから商品を削除する時 total_priceしか影響がない。
+	 */
+	public void updateOrdersWhenDeleteOrderItemFromCart(Order order) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
+
+		String sql = "UPDATE orders SET total_price = :totalPrice WHERE id = :id";
+
+		template.update(sql, param);
+
+	}
+
+	/**
+	 * @param order 商品を注文するとき
 	 */
 	public void update(Order order){
 		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 		
 		
+
 			String sql= "UPDATE orders SET user_id = :userId,status = :status ,total_price = :totalPrice, "
 					+ "order_date = :orderDate, destination_name = :destinationName, destination_email = :destinationEmail,"
 					+ "destinationzip_code = :destinationzipCode, destination_address = :destinationAddress, "
 					+ "destination_tell = :destinationTell, delivery_time = :deliveryTime,"
 					+ "payment_method = :paymentMethod WHERE id = :id";
 			
-			template.update(sql, param);
-		
+		template.update(sql, param);
 	
 	}
 	
-	
-	
+
 	/**
 	 * 注文履歴テーブルにインサートする
 	 *

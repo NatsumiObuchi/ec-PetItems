@@ -11,7 +11,11 @@ public class OrderItemService {
 	@Autowired
 	private OrderItemRepository repository;
 	
-	public void insert(OrderItem orderItem) {
-		repository.insert(orderItem);
+	public OrderItem insert(OrderItem orderItem) {
+		return repository.insert(orderItem);
+	}
+
+	public void delete(int id) {
+		repository.delete(id);
 	}
 }

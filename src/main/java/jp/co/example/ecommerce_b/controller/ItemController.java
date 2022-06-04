@@ -60,17 +60,13 @@ public class ItemController {
 	 */
 	@RequestMapping("/cartList")
 	public String cartListShow(Model model) {
-//		System.out.println("id:" + );
-//		System.out.println("quantity:" + );
 		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
-		// System.out.println(cartList);
 
 		if (cartList == null || cartList.size() == 0) {// sessionスコープ内のcartListがからの時、エラーメッセージ表示
 			cartList = new ArrayList<OrderItem>();
 			String emptyMessage = "現在、カートに商品はありません。";
 			model.addAttribute("emptyMessage", emptyMessage);
 		}
-		// System.out.println(cartList);
 		
 		// cartList内の合計金額を計算
 		Integer totalPrice = 0;
@@ -85,10 +81,6 @@ public class ItemController {
 
 		session.setAttribute("totalPrice", totalPrice);
 		session.setAttribute("totalTax", totalTax);
-		
-//		model.addAttribute("totalPrice", totalPrice);
-//		model.addAttribute("totalTax", totalTax);
-
 		return "cart_list";
 	}
 
@@ -112,76 +104,69 @@ public class ItemController {
 	 */
 	@RequestMapping("/inCart")
 	public String inCart(OrderItemForm form, Model model) {
-//		System.out.println("id:" + form.getItemId());
-//		System.out.println("quantity:" + form.getQuantity());
-		// ショッピングカートに入れる商品の情報を商品idを元に取得
-		Item item = itemService.load(Integer.parseInt(form.getItemId()));
 
-		OrderItem orderItem = new OrderItem();
-		orderItem.setItemId(Integer.parseInt(form.getItemId()));
-		orderItem.setQuantity(Integer.parseInt(form.getQuantity()));
-		orderItem.setItem(item);
-		Integer answer = item.getPrice() * Integer.parseInt(form.getQuantity());
-		orderItem.setSubTotal(answer);
-		
+		// ユーザー情報・オーダーの取得
 		User user = (User) session.getAttribute("user");
-
 		Integer userId;
-		if(user==null) {
-			userId=0;
-		}else {
-			userId=user.getId();
+		if (user == null || user.getId() == 0) {// ログイン中のユーザーがいなければ
+			userId = 0;
+		} else {// ログイン中のユーザーがいれば
+			userId = user.getId();
 		}
 		checkOrderBeforePayment(userId);
 		Order order = (Order) session.getAttribute("order");
-		System.out.println("いまセッションにあるorderのIDは" + order.getId());
-		
-		if(order.getId()==null) {//からっぽのorderなら
-//			orderテーブルにインサート
-			
+		if (order.getId() == null) {
 			order = orderService.insertOrder(order);
 		}
-		
-		//100%orderがidを持っている状態になる
 
-		
-//		orderのidをorderItemのorderIdにセット
-		orderItem.setOrderId(order.getId());
-		
-		// orderItemテーブルにインサート
-		orderItemService.insert(orderItem);
-		
-
-
-		// cartListの情報を取得
-		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
-		// System.out.println(cartList);
-		if (cartList == null) {// cartListが空だった場合、新しくリストを追加
+		// OrderItem
+		OrderItem orderItem = new OrderItem();
+		int itemId = Integer.parseInt(form.getItemId());
+		orderItem.setItemId(itemId);// itemIdの格納
+		orderItem.setOrderId(order.getId());// orderIdの格納
+		int quantity = Integer.parseInt(form.getQuantity());
+		orderItem.setQuantity(quantity);// quantityの格納
+		Item item = itemService.load(itemId);// itemの格納
+		orderItem.setItem(item);
+		Integer subtotal = item.getPrice() * orderItem.getQuantity();// subTotalの格納
+		orderItem.setSubTotal(subtotal);
+		orderItem = orderItemService.insert(orderItem);// orderItemテーブルにインサートかつidの取得(idが詰まったorderItem)
+		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");//
+		if (cartList == null || cartList.size() == 0) {
 			cartList = new ArrayList<>();
 		}
-		// ショッピングカート（cartList）に追加
 		cartList.add(orderItem);
-		
 		order.setOrderItemList(cartList);
 		order.setTotalPrice(order.calcTotalPrice());
-
 		session.setAttribute("cartList", cartList);
-		
-
-		//update
-		orderService.update(order);
-		
+		session.setAttribute("order", order);// 最新のorderスコープへ格納
+		orderService.update(order);// DB上のorderを最新に更新
 		
 		return cartListShow(model);
 	}
 
+	/**
+	 * @param index
+	 * @param model
+	 * @return カートから商品を削除する時
+	 */
 	@RequestMapping("/delete")
-	public String deleteInCartItem(String index, Model model) {
-		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
-		// System.out.println(index);
-		cartList.remove(Integer.parseInt(index));
-
-		session.setAttribute("cartList", cartList);
+	public String deleteInCartItem(String id, String index, Model model) {
+		Integer id1 = Integer.parseInt(id);
+		int index1 = Integer.parseInt(index);
+		//カートリストの更新
+		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");//現状の取得
+		cartList.remove(index1);// インスタンスの更新
+		session.setAttribute("cartList", cartList);//スコープへの格納
+		orderItemService.delete(id1);// DBの更新
+		
+		//オーダーの更新
+		Order order = (Order) session.getAttribute("order");//取得
+		order.setOrderItemList(cartList);//更新
+		order.setTotalPrice(order.calcTotalPrice());
+		session.setAttribute("order", order);//スコープへの格納
+		System.out.println(order);
+		orderService.updateOrdersWhenDeleteOrderItemFromCart(order);// DBの更新
 		return cartListShow(model);
 	}
 
@@ -217,20 +202,19 @@ public class ItemController {
 //	}
 	
 	/**
-	 * @param user ログイン中のユーザーの、支払い前のオーダーをセッションスコープに格納する処理。
+	 * @param user orderをセッションスコープに格納する処理。
 	 */
 	public void checkOrderBeforePayment(Integer userId) {
-		// 存在すればそのorderが入り、存在しなければnullがはいる。
+		// DBに存在すれば支払い前のorderが入り、DBに存在しなければ新しいオーダーが入る
 		Order order = orderService.findOrderBeforePayment(userId);
 		if (order == null) {
 			if (session.getAttribute("order") != null) {
 				order = (Order) session.getAttribute("order");
 			} else {
-				order = new Order();
+				order = new Order();// 現時点でuserIdはnull。
 				order.setStatus(0);
 			}
 		}
-		System.out.println("sessionに格納されるorderのIDは" + order.getId());
 		session.setAttribute("order", order);
 	}
 	

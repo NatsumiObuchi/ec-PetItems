@@ -103,6 +103,7 @@
                   </tr>
                   <tr th:each="ordItem,status : ${session.cartList}">
                     <form th:action="@{/item/delete}" method="post">
+                      <input type="hidden" name="id" th:value="${ordItem.id}">
                       <input type="hidden" name="index" th:value="${status.index}">
                       <td>
                         <div class="center">
