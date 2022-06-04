@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
-import jp.co.example.ecommerce_b.domain.User;
 
 
 
@@ -114,10 +113,10 @@ public class OrderRepository {
 	 *
 	 */
 	public void insertHistory(OrderHistory orderHistory) {
-		String sql="insert into order_histories (order_id,image_path,item_name,item_price,quantity,total_price,order_date,"
+		String sql="insert into order_histories (order_id,user_id,image_path,item_name,item_price,quantity,total_price,order_date,"
 				+ "destination_name,destination_email,destinationzip_Code,destination_address,destination_tell,"
 				+ "delivery_time,delivery_time,payment_method)"
-				+ "VALUES (:orderId,:imagePath,:itemName,:itemPrice,:quantity,:totalPrice,:orderDate,:destinationName"
+				+ "VALUES (:orderId,:userId,:imagePath,:itemName,:itemPrice,:quantity,:totalPrice,:orderDate,:destinationName"
 				+ ":destinationEmail,:destinationZipcode,:destinationAddress,:destinationTell,"
 				+ ":deliveryTime,:paymentMethod);";
 		
@@ -131,10 +130,10 @@ public class OrderRepository {
 	 * 注文履歴をorderIdで取り出す
 	 *
 	 */
-	public List<OrderHistory> findOrderHistory(Integer orderId){
-		String sql="SELECT * FROM order_histories WHERE order_id=:orderId";
+	public List<OrderHistory> findOrderHistory(Integer userId){
+		String sql="SELECT * FROM order_histories WHERE user_id=:userId";
 		
-		SqlParameterSource param=new MapSqlParameterSource().addValue("orderId", orderId);	
+		SqlParameterSource param=new MapSqlParameterSource().addValue("userId", userId);	
 		List<OrderHistory> historyList=template.query(sql, param,HIS_ROW_MAPPER);
 		
 		return historyList;

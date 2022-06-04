@@ -34,7 +34,7 @@
               <!-- 企業ロゴ -->
               <img
                 alt="main log"
-                src="../static/img_pizza/header_logo.png"
+                th:src="@{/img/タイトルロゴ.png}"
                 height="35"
               />
             </a>
@@ -95,10 +95,10 @@
                 </th>
               </tr>
               <tr>
-                <td th:text="${#dates.format(list.orderDate,'yyyy年MM月dd日'}"> <!-- 注文履歴　注文日-->
+                <td > <!-- 注文履歴　注文日-->
                   <div class="text-center">2022-06-02</div>
                 </td>
-                <td th:text="${list.imagePath}"> <!-- 注文履歴　商品画像 -->
+                <td th:src="@{/img_dogfood/} + ${list.imagePath}"> <!-- 注文履歴　商品画像 -->
                   <div class="center">
                     <img
                       src="../static/img_pizza/1.jpg"
