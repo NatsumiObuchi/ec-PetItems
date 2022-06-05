@@ -202,7 +202,7 @@ public class ItemController {
 //	}
 	
 	/**
-	 * @param user orderをセッションスコープに格納する処理。
+	 * @param userId orderをセッションスコープに格納する処理。
 	 */
 	public void checkOrderBeforePayment(Integer userId) {
 		// DBに存在すれば支払い前のorderが入り、DBに存在しなければ新しいオーダーが入る
@@ -211,8 +211,9 @@ public class ItemController {
 			if (session.getAttribute("order") != null) {
 				order = (Order) session.getAttribute("order");
 			} else {
-				order = new Order();// 現時点でuserIdはnull。
+				order = new Order();
 				order.setStatus(0);
+				order.setUserId(userId);
 			}
 		}
 		session.setAttribute("order", order);
