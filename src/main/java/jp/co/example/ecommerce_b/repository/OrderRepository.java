@@ -115,11 +115,11 @@ public class OrderRepository {
 	 */
 	public void insertHistory(OrderHistory orderHistory) {
 		String sql="insert into order_histories (order_id,user_id,image_path,item_name,item_price,quantity,sub_totalprice,total_price,order_date,"
-				+ "destination_name,destination_email,destinationzip_Code,destination_address,destination_tell,"
-				+ "delivery_time,delivery_time,payment_method)"
-				+ "VALUES (:orderId,:userId,:imagePath,:itemName,:itemPrice,:quantity,:subTotalPrice,:totalPrice,:orderDate,:destinationName"
-				+ ":destinationEmail,:destinationZipcode,:destinationAddress,:destinationTell,"
-				+ ":deliveryTime,:paymentMethod);";
+				+ "	destination_name,destination_email,destinationzip_Code,destination_address,destination_tell,delivery_time,delivery_time,payment_method)"
+				+ "	VALUES (:orderId,:userId,:imagePath,:itemName,:itemPrice,:quantity,:subTotalPrice,:totalPrice,:orderDate,:destinationName"
+				+ "	:destinationEmail,:destinationZipcode,:destinationAddress,:destinationTell,:deliveryTime,"
+				+ "	CASE WHEN:paymentMethod=1 THEN '代金引換'　"
+				+ "	WHEN:paymentMethod=2 THEN 'クレジットカード支払い');";
 		
 		SqlParameterSource param = new BeanPropertySqlParameterSource(orderHistory);
 		
@@ -163,6 +163,4 @@ public class OrderRepository {
 		}
 		return orders.get(0);// レコード（Order）が存在した場合、そのオーダーを返す。
 	}
-	
-
 }
