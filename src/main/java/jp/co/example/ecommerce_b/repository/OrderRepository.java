@@ -135,9 +135,7 @@ public class OrderRepository {
 		String sql="SELECT * FROM order_histories WHERE user_id=:userId order by order_id";
 		
 		SqlParameterSource param=new MapSqlParameterSource().addValue("userId", userId);	
-		
 		List<OrderHistory> historyList=template.query(sql, param,HIS_ROW_MAPPER);
-		
 		
 		List<OrderHistory> histories=new ArrayList<>();
 		List<List<OrderHistory>> listlist=new ArrayList<List<OrderHistory>>();
@@ -154,10 +152,8 @@ public class OrderRepository {
 		}
 		listlist.add(histories);
 		return listlist;
-		
 	}
 	
-
 	public Order findByIdAndStatusIs0(Integer userId) {
 		String sql = "SELECT id,user_id,status,total_price,order_date,destination_name,destinationzip_code,destination_tell,delivery_time,payment_method FROM orders WHERE user_id = :id AND status = 0";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", userId);

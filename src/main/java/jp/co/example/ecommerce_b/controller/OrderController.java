@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
@@ -126,14 +130,9 @@ public class OrderController {
 			if(historyList.size()==0) {
 				model.addAttribute("alert","注文履歴はありません。");
 			}
-			
-//			for(OrderHistory list:historyList) {
-//				int shokei=list.getItemPrice()*list.getQueantity();	
-//				model.addAttribute("shokei",shokei);
-//			}
 			return "order_history";
 		}else {
-			return "redirect:/user/toLogin";
+			return "redirect:/user/toLogin2";
 		}
 	}
 	
