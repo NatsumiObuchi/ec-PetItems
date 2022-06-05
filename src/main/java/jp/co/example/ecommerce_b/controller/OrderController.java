@@ -71,6 +71,8 @@ public class OrderController {
 	 * 注文をする（orderHistoryテーブルに注文履歴を格納）
 	 *
 	 */
+
+	
 	@RequestMapping("/orderSent")
 	public String orderSent(OrderForm orderForm,OrderItemForm orderItemForm,Model model) {
 		
