@@ -45,6 +45,24 @@ public class ItemService {
 
 	/**
 	 * 
+	 * 商品の絞り込み検索用メソッド。(検索値の入力なし)
+	 */
+	public List<Item> findByAnimalId(Integer animalId) {
+
+		return repository.findByAnimalId(animalId);
+	}
+
+	/**
+	 * 
+	 * 商品のあいまい検索と、絞り込みを同時に選択された場合のメソッド
+	 */
+	public List<Item> findByNameAndAnimalId(String name, Integer animalId) {
+
+		return repository.findByNameAndAnimalId(name, animalId);
+	}
+
+	/**
+	 * 
 	 * 商品情報を更新するメソッド。
 	 */
 	public Item save(Item item) {

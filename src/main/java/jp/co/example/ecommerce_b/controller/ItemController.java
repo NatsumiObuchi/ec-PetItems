@@ -186,24 +186,68 @@ public class ItemController {
 	}
 
 	/**
-	 * 商品をあいまい検索する ※該当の商品がない場合は全件表示する。
+	 * 商品を検索する ※該当の商品がない場合は絞り込み選択値によって、結果と表示メッセージを切り替え。
 	 * 
 	 * @param code
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping("/search")
-	public String searchItem(String code, Model model) {
+	public String searchItem(String code, Integer animalId, Model model) {
+
 		List<Item> itemList = itemService.findByName(code);
 
-		if (itemList.size() == 0 || code.equals("　") || code.equals(" ")) {
-			List<Item> itemList2 = itemService.findAll();
-			model.addAttribute("itemList", itemList2);
-			model.addAttribute("noItemMessage", "該当の商品がございません。商品一覧を表示します。");
+//		絞り込み検索のみ操作された場合(検索フォーム入力なし)
+		if (code.equals("")) {
+			List<Item> itemList3 = new ArrayList<>();
+			switch (animalId) {
+			case 0:
+				itemList3 = itemService.findAll();
+				model.addAttribute("noItemMessage", "すべての商品一覧を表示します。");
+				break;
+			case 1:
+				itemList3 = itemService.findByAnimalId(animalId);
+				model.addAttribute("noItemMessage", "絞り込み検索しました。犬用商品一覧を表示します。");
+				break;
+			case 2:
+				itemList3 = itemService.findByAnimalId(animalId);
+				model.addAttribute("noItemMessage", "絞り込み検索しました。猫用商品一覧を表示します。");
+				break;
+			}
+			model.addAttribute("itemList", itemList3);
+			model.addAttribute("word", code);
+			return "item_list_pet";
+
+		}
+//			検索フォームになんらかの入力があった場合。
+		List<Item> itemList2 = itemService.findByNameAndAnimalId(code, animalId);
+
+		if (itemList.size() == 0 || code.equals("　") || code.equals(" ") || itemList2.size() == 0) {
+			List<Item> itemList3 = new ArrayList<>();
+			switch (animalId) {
+			case 0:
+				itemList3 = itemService.findAll();
+				model.addAttribute("noItemMessage", "該当の商品がございません。商品一覧を表示します。");
+				break;
+			case 1:
+				itemList3 = itemService.findByAnimalId(animalId);
+				model.addAttribute("noItemMessage", "該当の商品がございません。犬用商品一覧を表示します。");
+				break;
+			case 2:
+				itemList3 = itemService.findByAnimalId(animalId);
+				model.addAttribute("noItemMessage", "該当の商品がございません。猫用商品一覧を表示します。");
+				break;
+			}
+			model.addAttribute("itemList", itemList3);
 			model.addAttribute("word", code);
 			return "item_list_pet";
 		} else {
-			model.addAttribute("itemList", itemList);
+			if (animalId == 0) {
+				model.addAttribute("itemList", itemList);
+			} else {
+				List<Item> itemList3 = itemService.findByNameAndAnimalId(code, animalId);
+				model.addAttribute("itemList", itemList3);
+			}
 			model.addAttribute("word", code);
 			return "item_list_pet";
 		}
