@@ -37,7 +37,7 @@ public class OrderRepository {
 		order.setDestinationzipCode(rs.getString("destinationzip_code"));
 		order.setDestinationAddress(rs.getString("destination_address"));
 		order.setDestinationTell(rs.getString("destination_tell"));
-		order.setDeliveryTime(rs.getTimestamp("delivery_time"));
+		order.setDeliveryTimestamp(rs.getTimestamp("delivery_time"));
 		order.setPaymentMethod(rs.getInt("payment_method"));
 		return order;
 	};
@@ -50,16 +50,16 @@ public class OrderRepository {
 		orderHistory.setImagePath(rs.getString("image_path"));
 		orderHistory.setItemName(rs.getString("item_name"));
 		orderHistory.setItemPrice(rs.getInt("item_price"));
-		orderHistory.setQueantity(rs.getInt("quantity"));
+		orderHistory.setQuantity(rs.getInt("quantity"));
 		orderHistory.setSubTotalPrice(rs.getInt("sub_totalprice"));
 		orderHistory.setTotalPrice(rs.getInt("total_price"));
 		orderHistory.setOrderDate(rs.getDate("order_date"));
 		orderHistory.setDestinationName(rs.getString("destination_name"));
 		orderHistory.setDestinationEmail(rs.getString("destination_email"));
-		orderHistory.setDestinationzipCode(rs.getString("destinationzip_Code"));
+		orderHistory.setDestinationzipCode(rs.getString("destinationzip_code"));
 		orderHistory.setDestinationAddress(rs.getString("destination_address"));
 		orderHistory.setDestinationTell(rs.getString("destination_tell"));
-		orderHistory.setDeliveryTime(rs.getTimestamp("delivery_time"));
+		orderHistory.setDeliveryTimestamp(rs.getTimestamp("delivery_time"));
 		orderHistory.setPaymentMethod(rs.getInt("payment_method"));
 		
 		return orderHistory;
@@ -110,7 +110,7 @@ public class OrderRepository {
 			String sql= "UPDATE orders SET user_id = :userId,status = :status ,total_price = :totalPrice, "
 					+ "order_date = :orderDate, destination_name = :destinationName, destination_email = :destinationEmail,"
 					+ "destinationzip_code = :destinationzipCode, destination_address = :destinationAddress, "
-					+ "destination_tell = :destinationTell, delivery_time = :deliveryTime,"
+					+ "destination_tell = :destinationTell, delivery_time = :deliveryTimestamp,"
 					+ "payment_method = :paymentMethod WHERE id = :id";
 			
 		template.update(sql, param);
@@ -124,11 +124,10 @@ public class OrderRepository {
 	 */
 	public void insertHistory(OrderHistory orderHistory) {
 		String sql="insert into order_histories (order_id,user_id,image_path,item_name,item_price,quantity,sub_totalprice,total_price,order_date,"
-				+ "	destination_name,destination_email,destinationzip_Code,destination_address,destination_tell,delivery_time,delivery_time,payment_method)"
-				+ "	VALUES (:orderId,:userId,:imagePath,:itemName,:itemPrice,:quantity,:subTotalPrice,:totalPrice,:orderDate,:destinationName"
-				+ "	:destinationEmail,:destinationZipcode,:destinationAddress,:destinationTell,:deliveryTime,"
-				+ "	CASE WHEN:paymentMethod=1 THEN '代金引換'　"
-				+ "	WHEN:paymentMethod=2 THEN 'クレジットカード支払い');";
+				+ "	destination_name,destination_email,destinationzip_code,destination_address,destination_tell,delivery_time,payment_method)"
+				+ "	VALUES (:orderId,:userId,:imagePath,:itemName,:itemPrice,:quantity,:subTotalPrice,:totalPrice,:orderDate,:destinationName,"
+				+ " :destinationEmail,:destinationzipCode,:destinationAddress,:destinationTell,:deliveryTimestamp, :paymentMethod);";
+				
 		
 		SqlParameterSource param = new BeanPropertySqlParameterSource(orderHistory);
 		
@@ -141,7 +140,9 @@ public class OrderRepository {
 	 *
 	 */
 	public List<List<OrderHistory>> findOrderHistory(Integer userId){
-		String sql="SELECT * FROM order_histories WHERE user_id=:userId order by order_id";
+		String sql="SELECT id,order_id,user_id,image_path,item_name,item_price,quantity,sub_totalprice,total_price,order_date,"
+				+ " destination_name,destination_email,destinationzip_code,destination_address,destination_tell, "
+				+ "delivery_time,payment_method from order_histories WHERE user_id=:userId";
 		
 		SqlParameterSource param=new MapSqlParameterSource().addValue("userId", userId);	
 		List<OrderHistory> historyList=template.query(sql, param,HIS_ROW_MAPPER);

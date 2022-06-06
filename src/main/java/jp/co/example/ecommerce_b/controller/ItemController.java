@@ -115,8 +115,12 @@ public class ItemController {
 		}
 		checkOrderBeforePayment(userId);
 		Order order = (Order) session.getAttribute("order");
-		if (order.getId() == null) {
+//		System.out.println("checkOrderBeforePayment:"+order);
+		if (order.getId() == null || order.getId().equals("")) {
 			order = orderService.insertOrder(order);
+//			System.out.println("if:"+order);
+		}else {
+			System.out.println(111);
 		}
 
 		// OrderItem
@@ -141,6 +145,7 @@ public class ItemController {
 		session.setAttribute("cartList", cartList);
 		session.setAttribute("order", order);// 最新のorderスコープへ格納
 		orderService.update(order);// DB上のorderを最新に更新
+//		System.out.println("update:"+order);
 		
 		return cartListShow(model);
 	}
@@ -207,7 +212,7 @@ public class ItemController {
 	public void checkOrderBeforePayment(Integer userId) {
 		// DBに存在すれば支払い前のorderが入り、DBに存在しなければ新しいオーダーが入る
 		Order order = orderService.findOrderBeforePayment(userId);
-		if (order == null) {
+		if (order.getUserId()==0 || order == null) {
 			if (session.getAttribute("order") != null) {
 				order = (Order) session.getAttribute("order");
 			} else {

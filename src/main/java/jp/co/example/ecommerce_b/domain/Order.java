@@ -27,7 +27,7 @@ public class Order {
 	/** 宛先TEL */
 	private String destinationTell;
 	/** 配達時間 */
-	private Timestamp deliveryTime;
+	private Timestamp deliveryTimestamp;
 	/** 支払い方法 */
 	private Integer paymentMethod;
 	/** ユーザー */
@@ -135,12 +135,12 @@ public class Order {
 		this.destinationTell = destinationTell;
 	}
 
-	public Timestamp getDeliveryTime() {
-		return deliveryTime;
+	public Timestamp getDeliveryTimestamp() {
+		return deliveryTimestamp;
 	}
 
-	public void setDeliveryTime(Timestamp deliveryTime) {
-		this.deliveryTime = deliveryTime;
+	public void setDeliveryTimestamp(Timestamp deliveryTimestamp) {
+		this.deliveryTimestamp = deliveryTimestamp;
 	}
 
 	public Integer getPaymentMethod() {
@@ -172,17 +172,17 @@ public class Order {
 		return "Order [id=" + id + ", userId=" + userId + ", status=" + status + ", totalPrice=" + totalPrice
 				+ ", orderDate=" + orderDate + ", destinationName=" + destinationName + ", destinationEmail="
 				+ destinationEmail + ", destinationzipCode=" + destinationzipCode + ", destinationAddress="
-				+ destinationAddress + ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTime
+				+ destinationAddress + ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTimestamp
 				+ ", paymentMethod=" + paymentMethod + ", user=" + user + ", orderItemList=" + orderItemList + "]";
 	}
-	
+
 	public int calcTotalPrice() {
 		int total = 0;
 		List<OrderItem> orderItemList = this.getOrderItemList();
-		for(OrderItem orderItem : orderItemList) {
+		for (OrderItem orderItem : orderItemList) {
 			total += orderItem.getItem().getPrice() * orderItem.getQuantity();
 		}
-		return (int) (total*1.1);//この合計を代入する。
+		return (int) (total * 1.1);// この合計を代入する。
 	}
 
 }
