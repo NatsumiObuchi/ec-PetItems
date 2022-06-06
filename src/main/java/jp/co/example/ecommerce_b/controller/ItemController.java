@@ -60,22 +60,59 @@ public class ItemController {
 	 */
 	@RequestMapping("/cartList")
 	public String cartListShow(Model model) {
-		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
 
-
-		if (cartList == null || cartList.size() == 0) {// sessionスコープ内のcartListがからの時、エラーメッセージ表示
-			cartList = new ArrayList<OrderItem>();
-			String emptyMessage = "現在、カートに商品はありません。";
-			model.addAttribute("emptyMessage", emptyMessage);
+		// ユーザー周り
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			user = new User();
+			user.setId(0);
 		}
-		// cartList内の合計金額を計算
-		Order order = (Order) session.getAttribute("order");
-		session.setAttribute("totalPrice", order.getTotalPrice());
-		
-		// 消費税
-		Integer totalTax = (int) (order.getTotalPrice() * 1 / 11);
-		session.setAttribute("totalTax", totalTax);
+		System.out.println("userId:" + user.getId());
 
+		// カートリスト周り
+		checkOrderBeforePayment(user.getId());// ユーザーの未払いオーダーがあった場合、その「オーダー」をセッションに格納。なくてもuserId=0の「オーダー」を格納。
+		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
+		if (cartList == null || cartList.size() == 0) {// sessionスコープにカートがない時
+			if (user.getId() == 0) {// ユーザーIDが0の場合、過去の他の未登録ユーザーのオーダーがDBにある可能性がある。
+				String emptyMessage = "現在、カートに商品はありません。";
+				model.addAttribute("emptyMessage", emptyMessage);
+				session.setAttribute("cartList", null);
+			} else {
+				Order order = (Order) session.getAttribute("order");
+				System.out.println("order:" + order);
+				Integer orderId = order.getId();
+				System.out.println("orderId:" + orderId);
+				List<OrderItem> orderItemsFromDB = orderItemService.findByOrderId(orderId);
+				System.out.println("orderItemsFromDB:" + orderItemsFromDB);
+
+				if (orderItemsFromDB == null) {
+					String emptyMessage = "現在、カートに商品はありません。";
+					model.addAttribute("emptyMessage", emptyMessage);
+					session.setAttribute("cartList", null);
+				} else if (orderItemsFromDB.size() == 0) {
+					String emptyMessage = "現在、カートに商品はありません。";
+					model.addAttribute("emptyMessage", emptyMessage);
+					session.setAttribute("cartList", null);
+				} else {
+					List<OrderItem> orderItems = new ArrayList<>();
+					for (OrderItem orderItem : orderItemsFromDB) {
+						orderItem.setItem(itemService.load(orderItem.getItemId()));
+						orderItems.add(orderItem);
+					}
+					System.out.println("orderItems:" + orderItems);
+					session.setAttribute("cartList", orderItems);
+					order = (Order) session.getAttribute("order");
+					session.setAttribute("totalPrice", order.getTotalPrice());
+					Integer totalTax = (int) (order.getTotalPrice() * 1 / 11);
+					session.setAttribute("totalTax", totalTax);
+				}
+			}
+		} else {// セッションにカートがあるとき
+			Order order = (Order) session.getAttribute("order");
+			session.setAttribute("totalPrice", order.getTotalPrice());
+			Integer totalTax = (int) (order.getTotalPrice() * 1 / 11);
+			session.setAttribute("totalTax", totalTax);
+		}
 		return "cart_list";
 	}
 
@@ -262,6 +299,7 @@ public class ItemController {
 				order = new Order();
 				order.setStatus(0);
 				order.setUserId(userId);
+				orderService.insertOrder(order);
 			}
 		}
 		session.setAttribute("order", order);

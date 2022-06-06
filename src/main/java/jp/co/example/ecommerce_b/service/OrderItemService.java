@@ -1,5 +1,7 @@
 package jp.co.example.ecommerce_b.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,5 +19,9 @@ public class OrderItemService {
 
 	public void delete(int id) {
 		repository.delete(id);
+	}
+
+	public List<OrderItem> findByOrderId(Integer id) {
+		return repository.findByOrderId(id);
 	}
 }
