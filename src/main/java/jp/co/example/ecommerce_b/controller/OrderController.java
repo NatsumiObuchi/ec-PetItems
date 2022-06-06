@@ -37,7 +37,7 @@ public class OrderController {
 	
 	@Autowired
 	private HttpSession session;
-	
+
 	@Autowired
 	private OrderItemService orderitemservice;
 	
@@ -66,7 +66,7 @@ public class OrderController {
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
 			session.setAttribute("transitionSourcePage", "order");// 遷移元ページの記録
-			return "login";
+			return "forward:/user/toLogin";
 		}
 
 		return "order_confirm";
