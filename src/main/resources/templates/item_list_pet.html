@@ -82,7 +82,7 @@
             </div>
             <div class="panel-body">
               <form method="post" class="form-horizontal"
-              	th:action="@{/item/search}">
+              	th:action="@{/item/search}" name="word">
                 <div class="form-group">
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <span th:text="${noItemMessage}" style="color: red;">エラー</span>
@@ -94,9 +94,21 @@
                     <input
                       type="text"
                       name="code"
+                      th:value="${word}"
                       id="code"
                       class="form-control input-sm"
                     />
+                  </div>
+                  <div class="text-center">
+                  <label for="code" class="control-label">
+                  	絞り込み検索
+                  </label><br>
+                  &nbsp;&nbsp;&nbsp;
+                  <input type="radio"　id="animalId" name="animalId" value="0" checked>すべて
+                  &nbsp;&nbsp;
+                  <input type="radio"　id="animalId" name="animalId" value="1">犬用
+                  &nbsp;&nbsp;
+                  <input type="radio"　id="animalId" name="animalId" value="2">猫用
                   </div>
                 </div>
                 <div class="text-center">
