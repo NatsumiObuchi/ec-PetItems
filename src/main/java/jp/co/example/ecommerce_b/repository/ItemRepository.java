@@ -1,6 +1,8 @@
 package jp.co.example.ecommerce_b.repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -105,4 +107,47 @@ public class ItemRepository {
 	public void deleteById(Integer id) {
 //		6/1　商品情報を削除するメソッドについては一旦未実装
 	}
+
+	public void insertRecordsIntoValues(int user_id, int item_id, int star) {
+		// リスト作成が目的
+		List<Integer> user_ids = new ArrayList<>();
+		List<Integer> item_ids = new ArrayList<>();
+		List<Integer> stars = new ArrayList<>();
+		List<String> contents = new ArrayList<>();
+
+		for (int i = 1; i <= user_id; i++) {
+			user_ids.add(i);
+		}
+
+		for (int i = 1; i <= item_id; i++) {
+			item_ids.add(i);
+		}
+
+		for (int i = 0; i <= star; i++) {
+			stars.add(i);
+		}
+
+		contents.add("コメントA");
+		contents.add("コメントB");
+		contents.add("コメントC");
+
+		System.out.println(user_ids);
+		System.out.println(item_ids);
+		System.out.println(stars);
+		System.out.println(contents);
+
+		// ランダムな整数を4つ生成
+		Random random = new Random();
+		int random1 = random.nextInt(user_ids.size() - 1);
+		int random2 = random.nextInt(item_ids.size() - 1);
+		int random3 = random.nextInt(stars.size() - 1);
+		int random4 = random.nextInt(contents.size() - 1);
+
+		String sql = "INSERT INTO reviews (user_id, item_id, stars, content) VALUES (:user_id, :item_id, :star, :content)";
+		// 配列からランダムにセット
+		SqlParameterSource param = new MapSqlParameterSource().addValue("user_id", user_ids.get(random1))
+				.addValue("item_id", item_ids.get(random2)).addValue("star", stars.get(random3))
+				.addValue("content", contents.get(random4));
+	}
+
 }
