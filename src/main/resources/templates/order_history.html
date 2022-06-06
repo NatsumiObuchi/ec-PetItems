@@ -67,7 +67,7 @@
         <label class="control-label" style="color: black" for="inputError" th:text="${alert}"> </label>
       </div>
 
-      <table class="table table-striped item-list-table" th:each="list:${session.historyList}">
+      <table class="table table-striped item-list-table" th:each="list:${session.historyList}" th:unless="${alert}">
         <!-- 注文履歴オブジェクト -->
         <tbody>
 
