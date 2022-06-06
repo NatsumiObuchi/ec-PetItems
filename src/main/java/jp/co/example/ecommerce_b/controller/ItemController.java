@@ -68,16 +68,7 @@ public class ItemController {
 			model.addAttribute("emptyMessage", emptyMessage);
 		}
 		
-		// cartList内の合計金額を計算
-		Integer totalPrice = 0;
-		for (OrderItem ordItem : cartList) {
-			totalPrice += (int) (ordItem.getSubTotal() * 1.1);
-		}
 		
-		
-		
-		// 消費税を計算
-		Integer totalTax = (int) (totalPrice * 0.1);
 
 		session.setAttribute("totalPrice", totalPrice);
 		session.setAttribute("totalTax", totalTax);
