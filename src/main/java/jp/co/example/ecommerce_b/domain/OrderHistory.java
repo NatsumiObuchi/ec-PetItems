@@ -5,7 +5,8 @@ import java.util.Date;
 
 public class OrderHistory {
 	
-	/** 履歴ID */
+	
+	/** 注文履歴ID */
 	private Integer Id;
 	/** 注文ID */
 	private Integer orderId;
@@ -19,7 +20,7 @@ public class OrderHistory {
 	private Integer itemPrice;
 	/** 数量 */
 	private Integer queantity;
-	/** 小計金額 */
+	/** 小計 */
 	private Integer subTotalPrice;
 	/** 合計金額 */
 	private Integer totalPrice;
@@ -152,9 +153,6 @@ public class OrderHistory {
 				+ ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTime + ", paymentMethod="
 				+ paymentMethod + "]";
 	}
-	
-	
-	
 	
 
 }

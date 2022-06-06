@@ -142,6 +142,7 @@ public class ItemController {
 		session.setAttribute("order", order);// 最新のorderスコープへ格納
 		orderService.update(order);// DB上のorderを最新に更新
 		
+		System.out.println(order.getOrderItemList());
 		return cartListShow(model);
 	}
 

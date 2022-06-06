@@ -4,11 +4,8 @@ package jp.co.example.ecommerce_b.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
@@ -47,9 +42,6 @@ public class OrderController {
 	@Autowired
 	private ItemService itemService;
 
-	@Autowired
-	private OrderService orderService;
-
 	
 	@ModelAttribute
 	public OrderForm setUpForm() {
@@ -73,14 +65,14 @@ public class OrderController {
 	 * 注文をする（orderHistoryテーブルに注文履歴を格納）
 	 *
 	 */
-
-	
 	@RequestMapping("/orderSent")
 	public String orderSent(OrderForm orderForm,OrderItemForm orderItemForm,Model model) {
 		
 //		注文する
 		Order order = new Order();
 		BeanUtils.copyProperties(orderForm, order);
+		System.out.println(orderForm.getOrderItemList());
+		System.out.println(order.getOrderItemList());
 		
 		LocalDate localdate = LocalDate.now();	
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -91,12 +83,8 @@ public class OrderController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 		orderservice.update(order);
 		System.out.println(order);
-		
-		
 		
 //		orderHistoryテーブルに格納
 		OrderHistory orderHistory = new OrderHistory();
@@ -116,6 +104,7 @@ public class OrderController {
 			BeanUtils.copyProperties(order, orderHistory);
 
 			orderservice.insertHistory(orderHistory);
+			System.out.println(orderHistory);
 		}
 		
 		return "order_finished";
