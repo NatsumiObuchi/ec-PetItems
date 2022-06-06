@@ -62,16 +62,20 @@ public class ItemController {
 	public String cartListShow(Model model) {
 		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
 
+
 		if (cartList == null || cartList.size() == 0) {// sessionスコープ内のcartListがからの時、エラーメッセージ表示
 			cartList = new ArrayList<OrderItem>();
 			String emptyMessage = "現在、カートに商品はありません。";
 			model.addAttribute("emptyMessage", emptyMessage);
 		}
+		// cartList内の合計金額を計算
+		Order order = (Order) session.getAttribute("order");
+		session.setAttribute("totalPrice", order.getTotalPrice());
 		
-		
-
-		session.setAttribute("totalPrice", totalPrice);
+		// 消費税
+		Integer totalTax = (int) (order.getTotalPrice() * 1 / 11);
 		session.setAttribute("totalTax", totalTax);
+
 		return "cart_list";
 	}
 
