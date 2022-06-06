@@ -96,9 +96,9 @@ public class OrderController {
 
 		
 		// ログイン中の「ユーザーID」「ユーザーインスタンス」をオーダーに格納
-				User user = (User) session.getAttribute("user");
-				order.setUser(user);
-				order.setUserId(user.getId());
+		User user = (User) session.getAttribute("user");
+		order.setUser(user);
+		order.setUserId(user.getId());
 
 		LocalDate localdate = LocalDate.now();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -109,6 +109,8 @@ public class OrderController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
 
 		orderservice.update(order);
 		System.out.println(order);
@@ -134,7 +136,8 @@ public class OrderController {
 
 			orderservice.insertHistory(orderHistory);
 		}
-
+		session.setAttribute("order", null);
+		session.setAttribute("cartList", null);
 		return "order_finished";
 	}
 
