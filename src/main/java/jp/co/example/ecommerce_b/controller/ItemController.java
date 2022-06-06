@@ -68,7 +68,6 @@ public class ItemController {
 			String emptyMessage = "現在、カートに商品はありません。";
 			model.addAttribute("emptyMessage", emptyMessage);
 		}
-		
 		// cartList内の合計金額を計算
 		Order order = (Order) session.getAttribute("order");
 		session.setAttribute("totalPrice", order.getTotalPrice());
