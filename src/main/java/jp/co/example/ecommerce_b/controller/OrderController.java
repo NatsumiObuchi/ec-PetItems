@@ -5,9 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -17,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
@@ -88,6 +84,11 @@ public class OrderController {
 		Order order = new Order();
 		BeanUtils.copyProperties(orderForm, order);
 		
+		// ログイン中の「ユーザーID」「ユーザーインスタンス」をオーダーに格納
+		User user = (User) session.getAttribute("user");
+		order.setUser(user);
+		order.setUserId(user.getId());
+
 		LocalDate localdate = LocalDate.now();	
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		try {

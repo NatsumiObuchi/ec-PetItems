@@ -70,11 +70,11 @@ public class ItemController {
 		}
 		// cartList内の合計金額を計算
 		Order order = (Order) session.getAttribute("order");
-		session.setAttribute("totalPrice", order.getTotalPrice());
-		
-		// 消費税
-		Integer totalTax = (int) (order.getTotalPrice() * 1 / 11);
-		session.setAttribute("totalTax", totalTax);
+		if (order != null) {
+			session.setAttribute("totalPrice", order.getTotalPrice());
+			Integer totalTax = (int) (order.getTotalPrice() * 1 / 11);
+			session.setAttribute("totalTax", totalTax);
+		}
 
 		return "cart_list";
 	}
