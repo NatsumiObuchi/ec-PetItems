@@ -112,7 +112,7 @@
                   </div>
                 </div>
                 <div class="text-center">
-                  <button type="submit" value="検索" class="btn btn-primary">
+                  <button type="submit" value="検索" class="btn btn-primary" id="animal">
                     検索
                   </button>
                   <button type="reset" value="クリア" class="btn btn-default">
@@ -148,7 +148,8 @@
         </div >
         
     <!-- end container -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="../static/js/bootstrap.min.js"></script>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js}"></script>
+    <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/js/itemSearch.js}"></script>
   </body>
 </html>
