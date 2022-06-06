@@ -78,4 +78,13 @@ public class ItemService {
 	public void deleteById(Integer id) {
 //		6/1　商品情報を削除するメソッドについては一旦未実装
 	}
+	
+	/**
+	 * @param user_id
+	 * @param item_id
+	 * @param star    レビューテーブルにランダムな値を挿入する処理
+	 */
+	public void insertRecordsIntoValues(int user_id, int item_id, int star) {
+		repository.insertRecordsIntoValues(user_id, item_id, star);
+	}
 }

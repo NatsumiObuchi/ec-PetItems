@@ -108,7 +108,15 @@ public class ItemRepository {
 //		6/1　商品情報を削除するメソッドについては一旦未実装
 	}
 
+	/**
+	 * @param user_id
+	 * @param item_id
+	 * @param star    レビューテーブルにランダムな値を挿入する処理
+	 */
 	public void insertRecordsIntoValues(int user_id, int item_id, int star) {
+		// SQL本文
+		String sql = "INSERT INTO reviews (user_id, item_id, stars, content) VALUES (:user_id, :item_id, :star, :content)";
+
 		// リスト作成が目的
 		List<Integer> user_ids = new ArrayList<>();
 		List<Integer> item_ids = new ArrayList<>();
@@ -143,11 +151,14 @@ public class ItemRepository {
 		int random3 = random.nextInt(stars.size() - 1);
 		int random4 = random.nextInt(contents.size() - 1);
 
-		String sql = "INSERT INTO reviews (user_id, item_id, stars, content) VALUES (:user_id, :item_id, :star, :content)";
 		// 配列からランダムにセット
 		SqlParameterSource param = new MapSqlParameterSource().addValue("user_id", user_ids.get(random1))
 				.addValue("item_id", item_ids.get(random2)).addValue("star", stars.get(random3))
 				.addValue("content", contents.get(random4));
+
+		// 実行
+		template.update(sql, param);
+
 	}
 
 }
