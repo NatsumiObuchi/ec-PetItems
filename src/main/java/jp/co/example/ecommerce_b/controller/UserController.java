@@ -102,7 +102,13 @@ public class UserController {
 			form.setPassword(user.getPassword());
 			User user2 = userService.loginCheck(form);
 			session.setAttribute("user", user2);
-			return "forward:/item/list";
+
+			switch (String.valueOf(session.getAttribute("transitionSourcePage"))) {
+			case "order":
+				return "order_confirm";
+			default:
+				return "forward:/item/list";
+			}
 		} else {
 			model.addAttribute("loginErrorMessage", "メールアドレス、またはパスワードが間違っています");
 			return "login";
