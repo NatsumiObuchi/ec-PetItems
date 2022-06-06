@@ -96,7 +96,9 @@ public class ItemController {
 				} else {
 					List<OrderItem> orderItems = new ArrayList<>();
 					for (OrderItem orderItem : orderItemsFromDB) {
-						orderItem.setItem(itemService.load(orderItem.getItemId()));
+						Item item = itemService.load(orderItem.getItemId());
+						orderItem.setItem(item);
+						orderItem.setSubTotal(item.getPrice() * orderItem.getQuantity());
 						orderItems.add(orderItem);
 					}
 					System.out.println("orderItems:" + orderItems);
