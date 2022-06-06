@@ -4,12 +4,12 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -19,11 +19,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
+import jp.co.example.ecommerce_b.domain.OrderHistory;
 import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.OrderForm;
@@ -31,7 +30,6 @@ import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
-import jp.co.example.ecommerce_b.domain.OrderHistory;
 
 @Controller
 @RequestMapping("/order")
@@ -57,7 +55,8 @@ public class OrderController {
 	}
 
 	@RequestMapping("")
-	public String index() {
+
+	public String index() {// 「注文へ進む」を押したときに走る処理
 
 		Integer totalPrice = (Integer) session.getAttribute("totalPrice");
 		session.setAttribute("totalPrice", totalPrice);
@@ -65,7 +64,15 @@ public class OrderController {
 		Integer totalTax = (Integer) session.getAttribute("totalTax");
 		session.setAttribute("totalTax", totalTax);
 
+		// ユーザーがログインしていなければログインページへ遷移する
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			session.setAttribute("transitionSourcePage", "order");// 遷移元ページの記録
+			return "forward:/user/toLogin";
+		}
+
 		return "order_confirm";
+
 	}
 
 	/**
@@ -86,10 +93,17 @@ public class OrderController {
 		Integer userId = order.getUserId();
 
 		BeanUtils.copyProperties(orderForm, order);
+
 		order.setUserId(userId);
 		List<OrderItem> orderList = (List<OrderItem>) session.getAttribute("cartList");
 
 		order.setOrderItemList(orderList);
+
+		
+		// ログイン中の「ユーザーID」「ユーザーインスタンス」をオーダーに格納
+				User user = (User) session.getAttribute("user");
+				order.setUser(user);
+				order.setUserId(user.getId());
 
 		LocalDate localdate = LocalDate.now();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");

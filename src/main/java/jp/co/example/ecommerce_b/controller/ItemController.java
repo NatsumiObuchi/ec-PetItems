@@ -60,27 +60,59 @@ public class ItemController {
 	 */
 	@RequestMapping("/cartList")
 	public String cartListShow(Model model) {
+
+		// ユーザー周り
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			user = new User();
+			user.setId(0);
+		}
+		System.out.println("userId:" + user.getId());
+
+		// カートリスト周り
+		checkOrderBeforePayment(user.getId());// ユーザーの未払いオーダーがあった場合、その「オーダー」をセッションに格納。なくてもuserId=0の「オーダー」を格納。
 		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
+		if (cartList == null || cartList.size() == 0) {// sessionスコープにカートがない時
+			if (user.getId() == 0) {// ユーザーIDが0の場合、過去の他の未登録ユーザーのオーダーがDBにある可能性がある。
+				String emptyMessage = "現在、カートに商品はありません。";
+				model.addAttribute("emptyMessage", emptyMessage);
+				session.setAttribute("cartList", null);
+			} else {
+				Order order = (Order) session.getAttribute("order");
+				System.out.println("order:" + order);
+				Integer orderId = order.getId();
+				System.out.println("orderId:" + orderId);
+				List<OrderItem> orderItemsFromDB = orderItemService.findByOrderId(orderId);
+				System.out.println("orderItemsFromDB:" + orderItemsFromDB);
 
-		if (cartList == null || cartList.size() == 0) {// sessionスコープ内のcartListがからの時、エラーメッセージ表示
-			cartList = new ArrayList<OrderItem>();
-			String emptyMessage = "現在、カートに商品はありません。";
-			model.addAttribute("emptyMessage", emptyMessage);
+				if (orderItemsFromDB == null) {
+					String emptyMessage = "現在、カートに商品はありません。";
+					model.addAttribute("emptyMessage", emptyMessage);
+					session.setAttribute("cartList", null);
+				} else if (orderItemsFromDB.size() == 0) {
+					String emptyMessage = "現在、カートに商品はありません。";
+					model.addAttribute("emptyMessage", emptyMessage);
+					session.setAttribute("cartList", null);
+				} else {
+					List<OrderItem> orderItems = new ArrayList<>();
+					for (OrderItem orderItem : orderItemsFromDB) {
+						orderItem.setItem(itemService.load(orderItem.getItemId()));
+						orderItems.add(orderItem);
+					}
+					System.out.println("orderItems:" + orderItems);
+					session.setAttribute("cartList", orderItems);
+					order = (Order) session.getAttribute("order");
+					session.setAttribute("totalPrice", order.getTotalPrice());
+					Integer totalTax = (int) (order.getTotalPrice() * 1 / 11);
+					session.setAttribute("totalTax", totalTax);
+				}
+			}
+		} else {// セッションにカートがあるとき
+			Order order = (Order) session.getAttribute("order");
+			session.setAttribute("totalPrice", order.getTotalPrice());
+			Integer totalTax = (int) (order.getTotalPrice() * 1 / 11);
+			session.setAttribute("totalTax", totalTax);
 		}
-		
-		// cartList内の合計金額を計算
-		Integer totalPrice = 0;
-		for (OrderItem ordItem : cartList) {
-			totalPrice += (int) (ordItem.getSubTotal() * 1.1);
-		}
-		
-		
-		
-		// 消費税を計算
-		Integer totalTax = (int) (totalPrice * 0.1);
-
-		session.setAttribute("totalPrice", totalPrice);
-		session.setAttribute("totalTax", totalTax);
 		return "cart_list";
 	}
 
@@ -176,23 +208,76 @@ public class ItemController {
 	}
 
 	/**
-	 * 商品をあいまい検索する ※該当の商品がない場合は全件表示する。
+	 * 商品を検索する ※該当の商品がない場合は絞り込み選択値によって、結果と表示メッセージを切り替え。
 	 * 
 	 * @param code
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping("/search")
-	public String searchItem(String code, Model model) {
+	public String searchItem(String code, Integer animalId, Model model) {
+
 		List<Item> itemList = itemService.findByName(code);
 
-		if (itemList.size() == 0) {
-			List<Item> itemList2 = itemService.findAll();
+//		検索結果の該当がない場合＋入力がない場合
+		if (itemList.size() == 0 || code.equals("　") || code.equals(" ") || code.isEmpty()) {
+			List<Item> itemList2 = new ArrayList<>();
+			switch (animalId) {
+			case 0:
+				itemList2 = itemService.findAll();
+				if (code.isEmpty()) {
+					model.addAttribute("noItemMessage", "すべての商品一覧を表示します。");
+				} else {
+					model.addAttribute("noItemMessage", "該当の商品がございません。商品一覧を表示します。");
+				}
+				break;
+			case 1:
+				itemList2 = itemService.findByAnimalId(animalId);
+				if (code.isEmpty()) {
+					model.addAttribute("noItemMessage", "絞り込み検索しました。犬用商品一覧を表示します。");
+				} else {
+					model.addAttribute("noItemMessage", "該当の商品がございません。犬用商品一覧を表示します。");
+				}
+				break;
+			case 2:
+				itemList2 = itemService.findByAnimalId(animalId);
+				if (code.isEmpty()) {
+					model.addAttribute("noItemMessage", "絞り込み検索しました。猫用商品一覧を表示します。");
+				} else {
+					model.addAttribute("noItemMessage", "該当の商品がございません。猫用商品一覧を表示します。");
+				}
+				break;
+			}
 			model.addAttribute("itemList", itemList2);
-			model.addAttribute("noItemMessage", "該当の商品がございません。商品一覧を表示します。");
+			model.addAttribute("word", code);
 			return "item_list_pet";
 		} else {
-			model.addAttribute("itemList", itemList);
+
+//			入力フォームに何かしらの入力があった場合
+			List<Item> itemList3 = itemService.findByNameAndAnimalId(code, animalId);
+			if (animalId == 0) {
+				model.addAttribute("itemList", itemList);
+				model.addAttribute("noItemMessage", "検索結果を表示します。");
+			} else if (itemList3.size() == 0) {
+
+//				何かしら入力があったが、絞り込んだ際には該当の結果がない場合
+				List<Item> itemList2 = new ArrayList<>();
+				switch (animalId) {
+					case 1:
+						itemList2 = itemService.findByAnimalId(animalId);
+						model.addAttribute("noItemMessage", "該当の商品がございません。犬用商品一覧を表示します。");
+						break;
+					case 2:
+						itemList2 = itemService.findByAnimalId(animalId);
+						model.addAttribute("noItemMessage", "該当の商品がございません。猫用商品一覧を表示します。");
+						break;
+					}
+					model.addAttribute("itemList", itemList2);
+				} else {
+					model.addAttribute("itemList", itemList3);
+					model.addAttribute("noItemMessage", "検索結果を表示します。");
+			}
+			model.addAttribute("word", code);
 			return "item_list_pet";
 		}
 	}
@@ -219,6 +304,7 @@ public class ItemController {
 				order = new Order();
 				order.setStatus(0);
 				order.setUserId(userId);
+				orderService.insertOrder(order);
 			}
 		}
 		session.setAttribute("order", order);

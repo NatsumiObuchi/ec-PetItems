@@ -1,7 +1,5 @@
 package jp.co.example.ecommerce_b.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jp.co.example.ecommerce_b.domain.OrderHistory;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
-import jp.co.example.ecommerce_b.service.OrderService;
 import jp.co.example.ecommerce_b.service.UserService;
 
 @Controller
@@ -102,7 +98,14 @@ public class UserController {
 			form.setPassword(user.getPassword());
 			User user2 = userService.loginCheck(form);
 			session.setAttribute("user", user2);
-			return "forward:/item/list";
+
+			switch (String.valueOf(session.getAttribute("transitionSourcePage"))) {
+			case "order":
+				session.setAttribute("transitionSourcePage", null);
+				return "order_confirm";
+			default:
+				return "forward:/item/list";
+			}
 		} else {
 			model.addAttribute("loginErrorMessage", "メールアドレス、またはパスワードが間違っています");
 			return "login";

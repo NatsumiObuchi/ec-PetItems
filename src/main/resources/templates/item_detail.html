@@ -129,8 +129,14 @@
             <div class="row">
               <div class="col-xs-offset-2 col-xs-10">
                 <div class="form-group">
+                	1個あたり：
+                	 <span th:text="${#numbers.formatInteger(item.price, 2, 'COMMA')}">
+                  			38,000
+                  	　</span>
+                  	円(税抜)
+                	<br>
                   <span id="total-price">
-                  	この商品金額：
+                  	小計：
                   		 <span th:text="${item.price}" id="itemPrice">
                   			38,000
                   		 </span>
