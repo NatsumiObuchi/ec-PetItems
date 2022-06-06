@@ -1,14 +1,14 @@
 package jp.co.example.ecommerce_b.controller;
 
 
-
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
@@ -110,6 +112,7 @@ public class OrderController {
 			orderHistory.setItemName(item.getName());
 			orderHistory.setItemPrice(item.getPrice());
 			orderHistory.setQueantity(orderItem.getQuantity());
+			orderHistory.setSubTotalPrice(orderItem.getSubTotal());
 			BeanUtils.copyProperties(order, orderHistory);
 
 			orderservice.insertHistory(orderHistory);
@@ -125,16 +128,14 @@ public class OrderController {
 	public String findOrderHistory(Model model) {
 		if(session.getAttribute("user")!=null) {
 			User user = (User) session.getAttribute("user");
-			List<OrderHistory> historyList=orderservice.findOrderHistory(user.getId());
+			List<List<OrderHistory>> historyList=orderservice.findOrderHistory(user.getId());
 			session.setAttribute("historyList", historyList);
-			
-			for(OrderHistory list:historyList) {
-				int shokei=list.getItemPrice()*list.getQueantity();	
-				model.addAttribute("shokei",shokei);
+			if(historyList.size()==0) {
+				model.addAttribute("alert","注文履歴はありません。");
 			}
 			return "order_history";
 		}else {
-			return "redirect:/user/toLogin";
+			return "redirect:/user/toLogin2";
 		}
 	}
 	
@@ -161,6 +162,5 @@ public class OrderController {
 //}
 //session.setAttribute("order", order);
 //}
-	
 	
 }

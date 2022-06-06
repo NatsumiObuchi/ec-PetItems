@@ -19,6 +19,8 @@ public class OrderHistory {
 	private Integer itemPrice;
 	/** 数量 */
 	private Integer queantity;
+	/** 小計金額 */
+	private Integer subTotalPrice;
 	/** 合計金額 */
 	private Integer totalPrice;
 	/** 注文日 */
@@ -80,6 +82,12 @@ public class OrderHistory {
 	public void setQueantity(Integer queantity) {
 		this.queantity = queantity;
 	}
+	public Integer getSubTotalPrice() {
+		return subTotalPrice;
+	}
+	public void setSubTotalPrice(Integer subTotalPrice) {
+		this.subTotalPrice = subTotalPrice;
+	}
 	public Integer getTotalPrice() {
 		return totalPrice;
 	}
@@ -137,11 +145,12 @@ public class OrderHistory {
 	@Override
 	public String toString() {
 		return "OrderHistory [Id=" + Id + ", orderId=" + orderId + ", userId=" + userId + ", imagePath=" + imagePath
-				+ ", itemName=" + itemName + ", itemPrice=" + itemPrice + ", queantity=" + queantity + ", totalPrice="
-				+ totalPrice + ", orderDate=" + orderDate + ", destinationName=" + destinationName
-				+ ", destinationEmail=" + destinationEmail + ", destinationzipCode=" + destinationzipCode
-				+ ", destinationAddress=" + destinationAddress + ", destinationTell=" + destinationTell
-				+ ", deliveryTime=" + deliveryTime + ", paymentMethod=" + paymentMethod + "]";
+				+ ", itemName=" + itemName + ", itemPrice=" + itemPrice + ", queantity=" + queantity
+				+ ", subTotalPrice=" + subTotalPrice + ", totalPrice=" + totalPrice + ", orderDate=" + orderDate
+				+ ", destinationName=" + destinationName + ", destinationEmail=" + destinationEmail
+				+ ", destinationzipCode=" + destinationzipCode + ", destinationAddress=" + destinationAddress
+				+ ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTime + ", paymentMethod="
+				+ paymentMethod + "]";
 	}
 	
 	

@@ -1,5 +1,6 @@
 package jp.co.example.ecommerce_b.repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +46,12 @@ public class OrderRepository {
 		OrderHistory orderHistory =new OrderHistory();
 		orderHistory.setId(rs.getInt("id"));
 		orderHistory.setOrderId(rs.getInt("order_id"));
+		orderHistory.setUserId(rs.getInt("user_id"));
+		orderHistory.setImagePath(rs.getString("image_path"));
 		orderHistory.setItemName(rs.getString("item_name"));
 		orderHistory.setItemPrice(rs.getInt("item_price"));
 		orderHistory.setQueantity(rs.getInt("quantity"));
+		orderHistory.setSubTotalPrice(rs.getInt("sub_totalprice"));
 		orderHistory.setTotalPrice(rs.getInt("total_price"));
 		orderHistory.setOrderDate(rs.getDate("order_date"));
 		orderHistory.setDestinationName(rs.getString("destination_name"));
@@ -57,7 +61,7 @@ public class OrderRepository {
 		orderHistory.setDestinationTell(rs.getString("destination_tell"));
 		orderHistory.setDeliveryTime(rs.getTimestamp("delivery_time"));
 		orderHistory.setPaymentMethod(rs.getInt("payment_method"));
-
+		
 		return orderHistory;
 	};
 	
@@ -119,12 +123,12 @@ public class OrderRepository {
 	 *
 	 */
 	public void insertHistory(OrderHistory orderHistory) {
-		String sql="insert into order_histories (order_id,user_id,image_path,item_name,item_price,quantity,total_price,order_date,"
-				+ "destination_name,destination_email,destinationzip_Code,destination_address,destination_tell,"
-				+ "delivery_time,delivery_time,payment_method)"
-				+ "VALUES (:orderId,:userId,:imagePath,:itemName,:itemPrice,:quantity,:totalPrice,:orderDate,:destinationName"
-				+ ":destinationEmail,:destinationZipcode,:destinationAddress,:destinationTell,"
-				+ ":deliveryTime,:paymentMethod);";
+		String sql="insert into order_histories (order_id,user_id,image_path,item_name,item_price,quantity,sub_totalprice,total_price,order_date,"
+				+ "	destination_name,destination_email,destinationzip_Code,destination_address,destination_tell,delivery_time,delivery_time,payment_method)"
+				+ "	VALUES (:orderId,:userId,:imagePath,:itemName,:itemPrice,:quantity,:subTotalPrice,:totalPrice,:orderDate,:destinationName"
+				+ "	:destinationEmail,:destinationZipcode,:destinationAddress,:destinationTell,:deliveryTime,"
+				+ "	CASE WHEN:paymentMethod=1 THEN '代金引換'　"
+				+ "	WHEN:paymentMethod=2 THEN 'クレジットカード支払い');";
 		
 		SqlParameterSource param = new BeanPropertySqlParameterSource(orderHistory);
 		
@@ -133,19 +137,32 @@ public class OrderRepository {
 	
 
 	/**
-	 * 注文履歴をorderIdで取り出す
+	 * 注文履歴をuserIdで取り出す (その中でorderIdごとのorderHistoryリストを作る)
 	 *
 	 */
-	public List<OrderHistory> findOrderHistory(Integer userId){
-		String sql="SELECT * FROM order_histories WHERE user_id=:userId";
+	public List<List<OrderHistory>> findOrderHistory(Integer userId){
+		String sql="SELECT * FROM order_histories WHERE user_id=:userId order by order_id";
 		
 		SqlParameterSource param=new MapSqlParameterSource().addValue("userId", userId);	
 		List<OrderHistory> historyList=template.query(sql, param,HIS_ROW_MAPPER);
 		
-		return historyList;
-		
+		List<OrderHistory> histories=new ArrayList<>();
+		List<List<OrderHistory>> listlist=new ArrayList<List<OrderHistory>>();
+		int beforeOrderId=0;
+		for(OrderHistory orderhistory:historyList) {
+			if(orderhistory.getOrderId()!=beforeOrderId) {
+				if(beforeOrderId != 0) {
+					listlist.add(histories);
+				}
+				histories=new ArrayList<>();
+			}
+			histories.add(orderhistory);
+			beforeOrderId = orderhistory.getOrderId();	
+		}
+		listlist.add(histories);
+		return listlist;
 	}
-
+	
 	public Order findByIdAndStatusIs0(Integer userId) {
 		String sql = "SELECT id,user_id,status,total_price,order_date,destination_name,destinationzip_code,destination_tell,delivery_time,payment_method FROM orders WHERE user_id = :id AND status = 0";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", userId);
@@ -155,6 +172,4 @@ public class OrderRepository {
 		}
 		return orders.get(0);// レコード（Order）が存在した場合、そのオーダーを返す。
 	}
-	
-
 }
