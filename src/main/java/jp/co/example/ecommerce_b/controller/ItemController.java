@@ -11,11 +11,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.ecommerce_b.domain.Favorite;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.User;
+import jp.co.example.ecommerce_b.form.FavoriteListRegisterForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
+import jp.co.example.ecommerce_b.service.FavoriteService;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
@@ -37,9 +40,17 @@ public class ItemController {
 	@Autowired
 	private OrderService orderService;
 
+	@Autowired
+	private FavoriteService favoriteService;
+
 	@ModelAttribute
 	private OrderItemForm createOrderItemForm() {
 		return new OrderItemForm();
+	}
+
+	@ModelAttribute
+	private FavoriteListRegisterForm favoriteListRegisterForm() {
+		return new FavoriteListRegisterForm();
 	}
 
 	/**
@@ -284,6 +295,19 @@ public class ItemController {
 		}
 	}
 	
+	/**
+	 * お気に入り登録する処理
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/favorite")
+	public String favorite() {
+		Favorite favorite = new Favorite();
+		favorite.setItemId(null);
+		favorite.setUserId(null);
+		favorite.setFavoriteDate(null);
+		return "redirect:/item/itemDetail";
+	}
 	
 //	/**
 //	 * 購入履歴を表示する
@@ -320,6 +344,4 @@ public class ItemController {
 		}
 		session.setAttribute("order", order);
 	}
-	
-	
 }
