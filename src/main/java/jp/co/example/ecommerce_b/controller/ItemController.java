@@ -285,15 +285,6 @@ public class ItemController {
 		}
 	}
 	
-	
-//	/**
-//	 * 購入履歴を表示する
-//	 */
-//	@RequestMapping("/orderHistory")
-//	public String orderHistory() {
-//		return "order_history";
-//	}
-	
 	/**
 	 * @param userId orderをセッションスコープに格納する処理。
 	 */

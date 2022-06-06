@@ -60,8 +60,8 @@
     <h2 class="text-center">注文履歴</h2>
     <div class="
                 table-responsive
-                col-lg-offset-3
-                col-lg-6
+                col-lg-offset-1
+                col-lg-10
                 col-md-offset-1
                 col-md-10
                 col-sm-10
@@ -113,6 +113,7 @@
               <!-- 注文履歴　商品名 -->
               <div class="text-center"> </div>
             </td>
+            <td>
               <div th:text="${#numbers.formatInteger(li.itemPrice, 3, 'COMMA')}">1,380</div>円
               <!-- 注文履歴　価格（税抜き） -->
               <div class="text-center"> </div>
@@ -127,43 +128,6 @@
             </td>
           </tr>
         </tbody>
-   <!--       <tr>
-            <th>▼注文者情報▼</th>
-          </tr>
-          <tr>
-            <th>
-              <div class="text-center">氏名</div>
-            </th>
-            <th>
-              <div class="text-center">メールアドレス</div>
-            </th>
-            <th>
-              <div class="text-center">住所</div>
-            </th>
-            <th>
-              <div class="text-center">電話番号</div>
-            </th>
-            <th>
-              <div class="text-center">支払情報</div>
-            </th>
-          </tr>
-          <tr th:each="li:${list}">
-            <td th:text="${li.destinationName}">氏名</td>
-            <td th:text="${li.destinationEmail}">アドレス</td>
-            <td th:text="${li.destinationAddress}">住所</td>
-            <td th:text="${li.destinationTell}">電話番号</td>
-            <td th:text="${li.paymentMethod}">支払</td>
-          </tr>-->
-        </tbody>
-<!--        <div class="row" th:each="li:${list}">
-          <div class="col-xs-offset-2 col-xs-8">
-            <div class="form-group text-center">
-              <span id="total-price">ご購入金額合計： (税込)</span>
-              <span id="total-price" name="totalPrice"
-                th:text="${#numbers.formatInteger(li.totalPrice, 2, 'COMMA')} + '円'"> </span><br />
-            </div>
-          </div>
-        </div>-->
       </table>
    </div>
     </div>
