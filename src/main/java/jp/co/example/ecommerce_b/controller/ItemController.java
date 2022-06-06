@@ -96,7 +96,9 @@ public class ItemController {
 				} else {
 					List<OrderItem> orderItems = new ArrayList<>();
 					for (OrderItem orderItem : orderItemsFromDB) {
-						orderItem.setItem(itemService.load(orderItem.getItemId()));
+						Item item = itemService.load(orderItem.getItemId());
+						orderItem.setItem(item);
+						orderItem.setSubTotal(item.getPrice() * orderItem.getQuantity());
 						orderItems.add(orderItem);
 					}
 					System.out.println("orderItems:" + orderItems);
@@ -298,7 +300,16 @@ public class ItemController {
 	public void checkOrderBeforePayment(Integer userId) {
 		// DBに存在すれば支払い前のorderが入り、DBに存在しなければ新しいオーダーが入る
 		Order order = orderService.findOrderBeforePayment(userId);
-		if (order.getUserId()==0 || order == null) {
+		if (order == null) {
+			if (session.getAttribute("order") != null) {
+				order = (Order) session.getAttribute("order");
+			} else {
+				order = new Order();
+				order.setStatus(0);
+				order.setUserId(userId);
+				orderService.insertOrder(order);
+			}
+		} else if (order.getUserId() == 0) {
 			if (session.getAttribute("order") != null) {
 				order = (Order) session.getAttribute("order");
 			} else {

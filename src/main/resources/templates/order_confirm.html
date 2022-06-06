@@ -86,9 +86,6 @@
             col-xs-12
           "
         >
- 
-         <!-- <div th:if="${session.cartList==null}" th:text="${emptyMessage}">
-          <div th:unless="${session.cartList==null}">-->
           
             <table class="table table-striped item-list-table">
               <tbody>
@@ -105,6 +102,7 @@
                   <th>
                     <div class="text-center">小計</div>
                   </th>
+                  <th></th>
                 </tr>
                 <tr th:each="ordItem : ${session.cartList}">
                   <td>
@@ -128,7 +126,7 @@
                   <td>
                     <div class="text-center" th:text="${ordItem.subTotal}">3,280円</div>
                   </td>
-               
+              	<td></td>
                 </tr>
               </tbody>
             </table>
@@ -281,18 +279,22 @@
 
       <form action="order_finished.html" th:action="@{/order/orderSent}" th:object="${orderForm}">
         <div class="row">
-          <div
-            class="
-              table-responsive
-              col-lg-offset-3
-              col-lg-6
-              col-md-offset-1
-              col-md-10
-              col-sm-10
-              col-xs-12
-            "
-          >
+        
+       <div
+          class="
+            table-responsive
+            col-lg-offset-1
+            col-lg-10
+            col-md-offset-1
+            col-md-10
+            col-sm-10
+            col-xs-12
+          "
+        >
+           
             <h3 class="text-center">お届け先情報</h3>
+            
+            
             <table class="table table-striped item-list-table">
               <tbody>
                 <tr>
@@ -411,7 +413,8 @@
                 </tr>
               </tbody>
             </table>
-          </div>
+            
+          </div >
         </div>
 
         <!-- table -->

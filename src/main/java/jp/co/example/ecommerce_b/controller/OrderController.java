@@ -1,13 +1,12 @@
 package jp.co.example.ecommerce_b.controller;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
 
@@ -95,9 +94,9 @@ public class OrderController {
 
 		
 		// ログイン中の「ユーザーID」「ユーザーインスタンス」をオーダーに格納
-				User user = (User) session.getAttribute("user");
-				order.setUser(user);
-				order.setUserId(user.getId());
+		User user = (User) session.getAttribute("user");
+		order.setUser(user);
+		order.setUserId(user.getId());
 
 		LocalDate localdate = LocalDate.now();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -133,7 +132,8 @@ public class OrderController {
 			orderservice.insertHistory(orderHistory);
 			System.out.println(orderHistory);
 		}
-
+		session.setAttribute("order", null);
+		session.setAttribute("cartList", null);
 		return "order_finished";
 	}
 
@@ -146,7 +146,9 @@ public class OrderController {
 			User user = (User) session.getAttribute("user");
 			List<List<OrderHistory>> historyList = orderservice.findOrderHistory(user.getId());
 			session.setAttribute("historyList", historyList);
-			if (historyList.size() == 0) {
+			System.out.println("historyList.size:" + historyList.size());
+			System.out.println("historyList:" + historyList);
+			if (historyList.get(0).size() == 0) {
 				model.addAttribute("alert", "注文履歴はありません。");
 			}
 			return "order_history";

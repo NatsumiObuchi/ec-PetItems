@@ -126,8 +126,8 @@
       </div>
 
       <!-- table -->
-          <div class="table">
-          	<div class="main" th:each="item:${itemList}">
+          <div class="aaa">
+          	<div class="bbb" th:each="item:${itemList}">
                   <a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
                     <img
 
@@ -145,11 +145,11 @@
                   <span th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')}">1,380</span>円(税抜)
                   <br />
           	</div>
-        </div >
+       	 </div >
         
     <!-- end container -->
-    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js}"></script>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
     <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
-    <script th:src="@{/js/itemSearch.js}"></script>
+    <script th:src="@{/js/paginathing.js}"></script>
   </body>
 </html>
