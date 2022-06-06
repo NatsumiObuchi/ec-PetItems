@@ -40,10 +40,10 @@ public class Order {
 	 * 
 	 * @return tax
 	 */
-	public int getTax() {
-		int tax = (int) (totalPrice * 0.1);
-		return tax;
-	}
+//	public int getTax() {
+//		int tax = (int) (totalPrice * 0.1);
+//		return tax;
+//	}
 
 	/**
 	 * 注文金額合計を計算するメソッド
