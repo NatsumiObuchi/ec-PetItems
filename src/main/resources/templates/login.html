@@ -72,30 +72,15 @@
                 <div th:if="${loginErrorMessage}">
                     <label class="control-label" style="color: red" for="inputError" th:text="${loginErrorMessage}"></label>
                 </div>
-                
-                <div th:if="${email}">
-                    <div class="form-group">
-                        <label for="inputEmail">メールアドレス:</label>
-                        <input
-		                    type="text"
-		                    id="inputEmail"
-		                    class="form-control"
-		                    placeholder="Email"
-		                    th:field="*{email}"
-		                />
-                    </div>
-                </div>
-                <div th:unless="${email}">
-                    <div class="form-group">
-                        <label for="inputEmail">メールアドレス:</label>
-                        <input
-                            type="text"
-                            id="inputEmail"
-                            class="form-control"
-                            placeholder="Email"
-                            name="email"
-                        />
-                    </div>
+                <div class="form-group">
+                  <label for="inputEmail">メールアドレス:</label>
+                  <input
+                    type="text"
+                    id="inputEmail"
+                    class="form-control"
+                    placeholder="Email"
+                    th:field="*{email}"
+                  />
                 </div>
                 <div class="form-group">
                   <label for="inputPassword">パスワード:</label>
@@ -104,7 +89,7 @@
                     id="inputPassword"
                     class="form-control"
                     placeholder="Password"
-                    name="password"
+                    th:field="*{password}"
                   />
                 </div>
                 <div class="form-group">
