@@ -95,7 +95,7 @@
                   <th>
                     <div class="text-center">商品名</div>
                   </th>
-                  <th>
+                 <th>
                     <div class="text-center">価格(税抜)</div>
                   </th>
                   <th>
@@ -104,7 +104,6 @@
                   <th>
                     <div class="text-center">小計</div>
                   </th>
-                  <th></th>
                 </tr>
                 <tr th:each="ordItem : ${session.cartList}">
                   <td>
@@ -125,21 +124,10 @@
                   <td>
                     <span th:text="${ordItem.quantity}"></span>
                   </td>
-                  <!-- <td>
-                    <ul>
-                      <li>ピーマン300円</li>
-                      <li>オニオン300円</li>
-                      <li>あらびきソーセージ300円</li>
-                    </ul>
-                  </td> -->
                   <td>
                     <div class="text-center" th:text="${ordItem.subTotal}">3,280円</div>
                   </td>
-                  <td>
-                    <div class="text-center">
-                      
-                    </div>
-                  </td>
+               
                 </tr>
               </tbody>
             </table>
@@ -377,6 +365,7 @@
                               type="radio"
                               name="responsibleCompany"
                               checked="checked"
+                         	  
                             />
                             10時
                           </label>

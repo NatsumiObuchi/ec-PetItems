@@ -72,6 +72,9 @@
                 <div th:if="${loginErrorMessage}">
                     <label class="control-label" style="color: red" for="inputError" th:text="${loginErrorMessage}"></label>
                 </div>
+                <div th:if="${historyMessage}">
+                     <label class="control-label" style="color: red" for="inputError" th:text="${historyMessage}"> </label>
+                </div>
                 <div class="form-group">
                   <label for="inputEmail">メールアドレス:</label>
                   <input

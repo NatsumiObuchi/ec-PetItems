@@ -60,10 +60,10 @@ public class OrderService {
 	 * orderIdを指定して注文履歴リストを返す
 	 *
 	 */
-	public List<OrderHistory> findOrderHistory(Integer orderId){
-		List<OrderHistory> historyList = repository.findOrderHistory(orderId);
+	public List<List<OrderHistory>> findOrderHistory(Integer userId){
+		List<List<OrderHistory>> historyList = repository.findOrderHistory(userId);
 		return historyList; 
 	}
-
+	
 }
 	

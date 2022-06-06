@@ -1,5 +1,7 @@
 package jp.co.example.ecommerce_b.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +14,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.ecommerce_b.domain.OrderHistory;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
+import jp.co.example.ecommerce_b.service.OrderService;
 import jp.co.example.ecommerce_b.service.UserService;
 
 @Controller
@@ -91,7 +95,6 @@ public class UserController {
 		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
 		String oldPass = form.getPassword();
 		User user = userService.findByEmail(form);
-		
 		if (user == null) {
 			model.addAttribute("loginErrorMessage", "メールアドレス、またはパスワードが間違っています");
 			return "login";
@@ -134,5 +137,17 @@ public class UserController {
 				model.addAttribute("confirmPasswordError", "パスワードと確認用パスワードが不一致です");
 			}
 		}
+	}
+	/**
+	 * @param model(ログインしてない人が注文履歴を見ようとした際のメッセージ)
+	 * @return ログイン画面
+	 */
+	@RequestMapping("/toLogin2")
+	public String index2(Model model) {
+		User user = (User) session.getAttribute("user");
+		if(user==null) {
+			model.addAttribute("historyMessage","注文履歴のご確認にはログインが必要です。");
+		}
+		return "login";
 	}
 }
