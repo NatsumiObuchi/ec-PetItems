@@ -61,6 +61,7 @@ public class ItemController {
 	@RequestMapping("/cartList")
 	public String cartListShow(Model model) {
 		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
+		Order order = (Order) session.getAttribute("order");
 
 		if (cartList == null || cartList.size() == 0) {// sessionスコープ内のcartListがからの時、エラーメッセージ表示
 			cartList = new ArrayList<OrderItem>();
@@ -70,10 +71,7 @@ public class ItemController {
 		
 		// cartList内の合計金額を計算
 		Integer totalPrice = 0;
-		for (OrderItem ordItem : cartList) {
-			totalPrice += (int) (ordItem.getSubTotal() * 1.1);
-		}
-		
+		totalPrice = (int) (order.getTotalPrice() * 1.1);
 		
 		
 		// 消費税を計算
