@@ -89,6 +89,7 @@
  
          <!-- <div th:if="${session.cartList==null}" th:text="${emptyMessage}">
           <div th:unless="${session.cartList==null}">-->
+          
             <table class="table table-striped item-list-table">
               <tbody>
                 <tr>
@@ -131,6 +132,7 @@
                 </tr>
               </tbody>
             </table>
+        
          <!-- </div>
           </div>-->
       </div>
@@ -351,10 +353,10 @@
                         <div class="col-sm-5">
                           <input
                             type="date"
-                            name="name"
                             id="name"
+                            name="deliveryDate"
                             class="form-control input-sm"
-                         
+                         	th:field="*{deliveryDate}"
                           />
                         </div>
                       </div>
@@ -363,42 +365,43 @@
                           <label class="radio-inline">
                             <input
                               type="radio"
-                              name="responsibleCompany"
+                              name="deliveryTime"
                               checked="checked"
-                         	  
-                            />
+                              value="10:00:00"
+                         	  th:field="*{deliveryTime}"
+                            >
                             10時
                           </label>
                           <label class="radio-inline">
-                            <input type="radio" name="responsibleCompany" />
+                            <input type="radio" value="11:00:00" name="deliveryTime" th:field="*{deliveryTime}">
                             11時
                           </label>
                           <label class="radio-inline">
-                            <input type="radio" name="responsibleCompany" />
+                            <input type="radio" value="12:00:00" name="deliveryTime" th:field="*{deliveryTime}">
                             12時 </label
                           ><br />
                           <label class="radio-inline">
-                            <input type="radio" name="responsibleCompany" />
+                            <input type="radio" value="13:00:00" name="deliveryTime" th:field="*{deliveryTime}">
                             13時
                           </label>
                           <label class="radio-inline">
-                            <input type="radio" name="responsibleCompany" />
+                            <input type="radio" value="14:00:00" name="deliveryTime" th:field="*{deliveryTime}">
                             14時
                           </label>
                           <label class="radio-inline">
-                            <input type="radio" name="responsibleCompany" />
+                            <input type="radio" value="15:00:00" name="deliveryTime" th:field="*{deliveryTime}">
                             15時 </label
                           ><br />
                           <label class="radio-inline">
-                            <input type="radio" name="responsibleCompany" />
+                            <input type="radio" value="16:00:00" name="deliveryTime" th:field="*{deliveryTime}">
                             16時
                           </label>
                           <label class="radio-inline">
-                            <input type="radio" name="responsibleCompany" />
+                            <input type="radio" value="17:00:00" name="deliveryTime" th:field="*{deliveryTime}">
                             17時
                           </label>
                           <label class="radio-inline">
-                            <input type="radio" name="responsibleCompany" />
+                            <input type="radio" value="18:00:00" name="deliveryTime" th:field="*{deliveryTime}">
                             18時 </label
                           ><br />
                         </div>

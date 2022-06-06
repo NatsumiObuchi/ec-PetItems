@@ -19,7 +19,7 @@ public class OrderHistoryForm {
 	/** 金額 */
 	private String itemPrice;
 	/** 数量 */
-	private String queantity;
+	private String quantity;
 	/** 小計金額 */
 	private String subTotalPrice;
 	/** 合計金額 */
@@ -37,7 +37,7 @@ public class OrderHistoryForm {
 	/** 宛先TEL */
 	private String destinationTell;
 	/** 配達時間 */
-	private Timestamp deliveryTime;
+	private Timestamp deliveryTimestamp;
 	/** 支払い方法 */
 	private String paymentMethod;
 	
@@ -78,11 +78,11 @@ public class OrderHistoryForm {
 	public void setItemPrice(String itemPrice) {
 		this.itemPrice = itemPrice;
 	}
-	public String getQueantity() {
-		return queantity;
+	public String getQuantity() {
+		return quantity;
 	}
-	public void setQueantity(String queantity) {
-		this.queantity = queantity;
+	public void setQuantity(String quantity) {
+		this.quantity = quantity;
 	}
 	public String getSubTotalPrice() {
 		return subTotalPrice;
@@ -133,10 +133,10 @@ public class OrderHistoryForm {
 		this.destinationTell = destinationTell;
 	}
 	public Timestamp getDeliveryTime() {
-		return deliveryTime;
+		return deliveryTimestamp;
 	}
 	public void setDeliveryTime(Timestamp deliveryTime) {
-		this.deliveryTime = deliveryTime;
+		this.deliveryTimestamp = deliveryTime;
 	}
 	public String getPaymentMethod() {
 		return paymentMethod;
@@ -147,11 +147,11 @@ public class OrderHistoryForm {
 	@Override
 	public String toString() {
 		return "OrderHistoryForm [Id=" + Id + ", orderId=" + orderId + ", userId=" + userId + ", imagePath=" + imagePath
-				+ ", itemName=" + itemName + ", itemPrice=" + itemPrice + ", queantity=" + queantity
+				+ ", itemName=" + itemName + ", itemPrice=" + itemPrice + ", queantity=" + quantity
 				+ ", subTotalPrice=" + subTotalPrice + ", totalPrice=" + totalPrice + ", orderDate=" + orderDate
 				+ ", destinationName=" + destinationName + ", destinationEmail=" + destinationEmail
 				+ ", destinationzipCode=" + destinationzipCode + ", destinationAddress=" + destinationAddress
-				+ ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTime + ", paymentMethod="
+				+ ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTimestamp + ", paymentMethod="
 				+ paymentMethod + "]";
 	}
 

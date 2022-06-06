@@ -56,11 +56,34 @@ public class ItemRepository {
 
 	/**
 	 * 
-	 * 商品をあいまい検索するメソッド。
+	 * 商品をあいまい検索するメソッド。(絞り込み：すべて)
 	 */
 	public List<Item> findByName(String name) {
 		String sql = "SELECT id,name,description,price,image_path,deleted FROM items WHERE name LIKE :name ORDER BY price ASC";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
+		List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
+		return itemList;
+	}
+
+	/**
+	 * 
+	 * 商品の絞り込み検索用メソッド。(検索値の入力なし)
+	 */
+	public List<Item> findByAnimalId(Integer animalId) {
+		String sql = "SELECT id,name,description,price,image_path,deleted FROM items WHERE animal_id=:animalId ORDER BY price ASC";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("animalId", animalId);
+		List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
+		return itemList;
+	}
+
+	/**
+	 * 
+	 * 商品のあいまい検索と、絞り込みを同時に選択された場合のメソッド
+	 */
+	public List<Item> findByNameAndAnimalId(String name, Integer animalId) {
+		String sql = "SELECT id,name,description,price,image_path,deleted FROM items WHERE name LIKE :name AND animal_id=:animalId ORDER BY price ASC";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%").addValue("animalId",
+				animalId);
 		List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
 		return itemList;
 	}
