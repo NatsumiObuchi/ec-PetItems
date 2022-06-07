@@ -188,6 +188,7 @@
 	      <div th:if="${reviews}">
 	      <hr>
 	        <h3>レビュー一覧</h3> <br>
+	        <p>最新５件のみ表示(最新順)</p> <br>
 	        <div th:each="review:${reviews}">
 	            評　　価： <span th:text="${review.stars}"></span> <br>
 		        ユーザー： <span th:text="${review.user_id}"></span> <br>
@@ -195,7 +196,7 @@
 		    </div>
 	      </div>
 	      <form th:action="@{/item/insertReview}" th:object="${reviewForm}" method="post">
-             <h3>レビュー投稿</h3>
+             <h3>レビュー投稿</h3> <br>
              評価：<select th:field="*{stars}">
                <option value="0">１〜５で選択してください</option>
                <option value="5">5</option>
