@@ -6355,11 +6355,11 @@ button.close {
 
 /*order_confirm.htmlの修正*/
 
-#zipcode{
+.zipcode{
 	margin-left: 95px;
 }
 
-#addressBtn{
+.addressBtn{
 	margin-left: 10px;
 }
 #deliveryDate{

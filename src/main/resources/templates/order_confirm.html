@@ -307,9 +307,9 @@
 										</td>
 										<td>
 											<div th:errors="*{destinationzipCode}" style="color: red;"></div>
-											<input id="zipcode" type="text"
+											<input id="zipcode" class="zipcode" type="text"
 												th:field="*{destinationzipCode}" />&nbsp;&nbsp;
-												<button type="button" id="addressBtn">住所検索</button>
+												<button type="button" id="addressBtn" class="addressBtn">住所検索</button>
 										</td>
 									</tr>
 									<tr>
@@ -318,7 +318,7 @@
 										</td>
 										<td>
 											<div th:errors="*{destinationAddress}" style="color: red;"></div>
-											<input id="address" type="text" th:field="*{destinationAddress}" />
+											<input id="address" class="address" type="text" th:field="*{destinationAddress}" />
 										</td>
 									</tr>
 									<tr>
