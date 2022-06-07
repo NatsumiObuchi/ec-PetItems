@@ -330,6 +330,11 @@ public class ItemController {
 		return itemDetail(itemId, model);
 	}
 	
+	/**
+	 * お気に入りリストの表示
+	 * 
+	 * @return
+	 */
 	@RequestMapping("/favoriteList")
 	public String favoriteListShow() {
 		User user = (User) session.getAttribute("user");
@@ -346,6 +351,19 @@ public class ItemController {
 		}
 		session.setAttribute("favoriteItemList", favoriteItemList);
 		return "favorite_list";
+	}
+
+	/**
+	 * お気に入りリストの削除
+	 * 
+	 * @param userId
+	 */
+	@RequestMapping("/deleteFavorite")
+	public String deleteFavorite(String itemId) {
+		Integer id = Integer.parseInt(itemId);
+		System.out.println(id);
+		favoriteService.delete(id);
+		return favoriteListShow();
 	}
 
 //	/**

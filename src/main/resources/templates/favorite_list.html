@@ -80,7 +80,7 @@
             col-xs-12
           "
         >
-          <div class="panel panel-default">
+          <!-- <div class="panel panel-default">
             <div class="panel-heading">
               <div class="panel-title">商品を検索する</div>
             </div>
@@ -127,30 +127,36 @@
             </div>
           </div>
         </div>
-      </div>
-
+      </div> -->
+      <h3 class="text-center">お気に入りリスト</h3>
       <!-- table -->
-          <div class="table">
-          	<div class="main" th:each="item:${session.favoriteItemList}">
-                  <a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
-                    <img
-
-                      src="../static/img_pizza/1.jpg"
-                      th:src="@{/img_dogfood/} + ${item.imagePath}"
-                      class="img-responsive img-rounded item-img-center"
-                      width="200"
-                      height="600"
-                    /> </a
-                  ><br />
-                  <a href="item_detail.html"
-                  	th:href="@{/item/itemDetail?id=} + ${item.id}">
-                  	<span th:text="${item.name}">じゃがバターベーコン</span>
-                  </a><br />
-                  <span th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')}">1,380</span>円(税抜)
-                  <br />
+        <div class="aaa">
+          	<div class="bbb" th:each="item:${session.favoriteItemList}">
+                <form th:action="@{/item/deleteFavorite}">
+                    <a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
+                        <img
+    
+                          src="../static/img_pizza/1.jpg"
+                          th:src="@{/img_dogfood/} + ${item.imagePath}"
+                          class="img-responsive img-rounded item-img-center"
+                          width="200"
+                          height="600"
+                        /> </a
+                      ><br />
+                      <a href="item_detail.html"
+                          th:href="@{/item/itemDetail?id=} + ${item.id}">
+                          <span th:text="${item.name}">じゃがバターベーコン</span>
+                      </a><br />
+                      <span th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')}">1,380</span>円(税抜)
+                      <br />
+                      <div class="text-center">
+                          <input type="hidden" th:value="${item.id}" name="itemId">
+                        <button type="submit" class="btn btn-primary">お気に入りから削除</button>
+                      </div>
+                </form>
           	</div>
-       	 </div >
-        
+       	</div >
+    </div >   
     <!-- end container -->
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
     <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
