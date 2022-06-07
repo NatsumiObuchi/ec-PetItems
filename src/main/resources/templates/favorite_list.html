@@ -62,9 +62,11 @@
         <!-- /.container-fluid -->
       </nav>
       
-       <p class="pan-list">
-          	<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span> 
-	   </p>
+      <p class="pan-list">
+        <span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
+        >
+        お気に入りリスト
+     </p>
 
       <!-- search form -->
       <div class="row">
@@ -106,11 +108,11 @@
                   	絞り込み検索
                   </label><br>
                   &nbsp;&nbsp;&nbsp;
-                  <input type="radio" id="animalId" name="animalId" value="0" checked>すべて
+                  <input type="radio"　id="animalId" name="animalId" value="0" checked>すべて
                   &nbsp;&nbsp;
-                  <input type="radio" id="animalId" name="animalId" value="1">犬用
+                  <input type="radio"　id="animalId" name="animalId" value="1">犬用
                   &nbsp;&nbsp;
-                  <input type="radio" id="animalId" name="animalId" value="2">猫用
+                  <input type="radio"　id="animalId" name="animalId" value="2">猫用
                   </div>
                 </div>
                 <div class="text-center">
@@ -128,8 +130,8 @@
       </div>
 
       <!-- table -->
-          <div class="aaa">
-          	<div class="bbb" th:each="item:${itemList}">
+          <div class="table">
+          	<div class="main" th:each="item:${session.favoriteItemList}">
                   <a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
                     <img
 
@@ -148,12 +150,6 @@
                   <br />
           	</div>
        	 </div >
-       	 
-       	   <footer class="copyright navbar navbar-default">
-    <div class="footerinfo"> <a th:href="@{/info}">問い合わせフォーム</a>
-          <p>&copy; 楽々ペット. 2022.</p>
-    </div> 
-  </footer>
         
     <!-- end container -->
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>

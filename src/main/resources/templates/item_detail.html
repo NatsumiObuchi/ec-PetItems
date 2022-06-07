@@ -51,8 +51,9 @@
 
               <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
               <a href="cart_list.html" class="navbar-link"　 th:href="@{/item/cartList}" >ショッピングカート</a
-
               >&nbsp;&nbsp;
+              <a href="order_history.html" th:href="@{/item/favoriteList}" class="navbar-link" >お気に入りリスト</a
+                >&nbsp;&nbsp;
               <a href="practiceHistory.html" th:href="@{/order/orderHistory}" class="navbar-link">注文履歴</a
               >&nbsp;&nbsp;
               <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}">ログイン</a>&nbsp;&nbsp;
@@ -69,7 +70,6 @@
           	商品詳細
 	  </p>
 
-      <form action="cart_list.html" th:action="@{/item/inCart}" method="post">
         <div class="row">
           <div class="col-xs-offset-2 col-xs-8">
             <h3 class="text-center">商品詳細</h3>
@@ -115,7 +115,7 @@
                         for="inputError"
                         >数量を選択してください</label
                       >
-                      <select name="quantity" class="form-control" id="selectItem">
+                      <select name="quantity" class="form-control" id="selectItem" form="cartAdd">
                         <option th:value="1">1</option>
                         <option th:value="2">2</option>
                         <option th:value="3">3</option>
@@ -135,6 +135,13 @@
               </div>
             </div>
             <br />
+            <div>
+              <div th:if="${message}" th:text="${message}"></div>
+              <form th:action="@{/item/favorite}" method="post">
+                <input type="hidden" th:value="${item.id}" name="itemId">
+                <button>お気に入り登録</button>
+              </form>
+            </div>
             <div class="row">
               <div class="col-xs-offset-2 col-xs-10">
                 <div class="form-group">
@@ -157,20 +164,22 @@
             <div class="row">
               <div class="col-xs-offset-2 col-xs-3">
                 <div class="form-group">
-                  <p>
-                    <input
-                      class="form-control btn btn-warning btn-block"
-                      type="submit"
-                      value="カートに入れる"
-                    />
-                    <input type="hidden" name="itemId" th:value="${item.id}">
+                  <form action="cart_list.html" th:action="@{/item/inCart}" method="post" id="cartAdd">
+                    <p>
+                      <input
+                        class="form-control btn btn-warning btn-block"
+                        type="submit"
+                        value="カートに入れる"
+                      />
+                      <input type="hidden" name="itemId" th:value="${item.id}">
+                  </form>
                   </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </form>
+      
     </div>
     <br><br>
       <footer class="copyright navbar navbar-default">

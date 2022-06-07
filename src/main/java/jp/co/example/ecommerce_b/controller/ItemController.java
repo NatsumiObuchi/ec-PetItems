@@ -1,6 +1,7 @@
 package jp.co.example.ecommerce_b.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -11,11 +12,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.ecommerce_b.domain.Favorite;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.User;
+import jp.co.example.ecommerce_b.form.FavoriteListRegisterForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
+import jp.co.example.ecommerce_b.service.FavoriteService;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
@@ -37,9 +41,17 @@ public class ItemController {
 	@Autowired
 	private OrderService orderService;
 
+	@Autowired
+	private FavoriteService favoriteService;
+
 	@ModelAttribute
 	private OrderItemForm createOrderItemForm() {
 		return new OrderItemForm();
+	}
+
+	@ModelAttribute
+	private FavoriteListRegisterForm favoriteListRegisterForm() {
+		return new FavoriteListRegisterForm();
 	}
 
 	/**
@@ -286,6 +298,65 @@ public class ItemController {
 	}
 	
 	/**
+	 * お気に入り登録する処理
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/favorite")
+	public String favorite(FavoriteListRegisterForm favoriteListRegisterForm, Model model) {
+		User user = (User) session.getAttribute("user");
+		Integer userId = user.getId();
+		Favorite favorite = new Favorite();
+		// formのuserIdとitemIdからお気に入り登録情報を取得する
+		Integer itemId = Integer.parseInt(favoriteListRegisterForm.getItemId());
+		System.out.println("userId:" + userId);
+		System.out.println("itemId:" + itemId);
+		favorite = favoriteService.findByUserIdItemId(userId, itemId);
+
+		System.out.println(1111111);
+		System.out.println(favorite);
+		if (favorite == null) {
+			Favorite newFavorite = new Favorite();
+			newFavorite.setItemId(itemId);
+			newFavorite.setUserId(user.getId());
+			Date now = new Date();
+			newFavorite.setFavoriteDate(now);
+			favoriteService.insertFavorite(newFavorite);
+			System.out.println(2222222);
+		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
+			String message = "既にお気に入り登録済です";
+			model.addAttribute("message", message);
+		}
+		return itemDetail(itemId, model);
+	}
+	
+	@RequestMapping("/favoriteList")
+	public String favoriteListShow() {
+		User user = (User) session.getAttribute("user");
+		Integer userId = user.getId();
+		List<Favorite> favoriteList = favoriteService.favoriteAll(userId);
+		session.setAttribute("favoriteList", favoriteList);
+		List<Item> favoriteItemList = new ArrayList<>();
+
+		for (Favorite favorite : favoriteList) {
+			Integer itemId = favorite.getItemId();
+			System.out.println("itemId:" + itemId);
+			Item item = itemService.load(itemId);
+			favoriteItemList.add(0, item);
+		}
+		session.setAttribute("favoriteItemList", favoriteItemList);
+		return "favorite_list";
+	}
+
+//	/**
+//	 * 購入履歴を表示する
+//	 */
+//	@RequestMapping("/orderHistory")
+//	public String orderHistory() {
+//		return "order_history";
+//	}
+	
+	/**
 	 * @param userId orderをセッションスコープに格納する処理。
 	 */
 	public void checkOrderBeforePayment(Integer userId) {
@@ -312,6 +383,4 @@ public class ItemController {
 		}
 		session.setAttribute("order", order);
 	}
-	
-	
 }
