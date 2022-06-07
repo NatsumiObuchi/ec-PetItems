@@ -113,7 +113,8 @@ public class ItemRepository {
 	 * @param item_id
 	 * @param star    レビューテーブルにランダムな値を挿入する処理
 	 */
-	public void insertRecordsIntoValues(int user_id, int item_id, int star) {
+	public void insertRecordsIntoValues(int user_id_min, int user_id_max, int item_id_min, int item_id_max,
+			int star_min, int star_max) {
 		// SQL本文
 		String sql = "INSERT INTO reviews (user_id, item_id, stars, content) VALUES (:user_id, :item_id, :star, :content)";
 
@@ -123,26 +124,21 @@ public class ItemRepository {
 		List<Integer> stars = new ArrayList<>();
 		List<String> contents = new ArrayList<>();
 
-		for (int i = 1; i <= user_id; i++) {
+		for (int i = user_id_min; i <= user_id_max; i++) {
 			user_ids.add(i);
 		}
 
-		for (int i = 1; i <= item_id; i++) {
+		for (int i = item_id_min; i <= item_id_max; i++) {
 			item_ids.add(i);
 		}
 
-		for (int i = 0; i <= star; i++) {
+		for (int i = star_min; i <= star_max; i++) {
 			stars.add(i);
 		}
 
 		contents.add("コメントA");
 		contents.add("コメントB");
 		contents.add("コメントC");
-
-		System.out.println(user_ids);
-		System.out.println(item_ids);
-		System.out.println(stars);
-		System.out.println(contents);
 
 		// ランダムな整数を4つ生成
 		Random random = new Random();

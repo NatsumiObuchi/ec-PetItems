@@ -321,5 +321,18 @@ public class ItemController {
 		session.setAttribute("order", order);
 	}
 	
-	
+	@RequestMapping("/washio1")
+	public String washio() {
+		return "hidden";
+	}
+
+	@RequestMapping("/washio2")
+	public String insertRecordsIntoValues(String times, String user_id_min, String user_id_max, String item_id_min,
+			String item_id_max, String star_min, String star_max) {
+		itemService.insertRecordsIntoValues(Integer.parseInt(times), Integer.parseInt(user_id_min),
+				Integer.parseInt(user_id_max),
+				Integer.parseInt(item_id_min), Integer.parseInt(item_id_max), Integer.parseInt(star_min),
+				Integer.parseInt(star_max));
+		return "forward:/user/login";
+	}
 }
