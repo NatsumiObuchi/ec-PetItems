@@ -30,7 +30,7 @@ public class OrderForm {
 	private String destinationEmail;
 	
 	/** 宛先郵便番号 */
-	@Pattern(regexp="^[0-9]{3}-[0-9]{4}$",message="郵便番号形式にしてください")
+	@Pattern(regexp="^[0-9]{3}-[0-9]{4}$",message="郵便番号は「xxx-xxxx」の形式で入力してください")
 	private String destinationzipCode;
 	
 	/** 宛先住所 */
@@ -38,7 +38,7 @@ public class OrderForm {
 	private String destinationAddress;
 	
 	/** 宛先TEL */
-	@NotBlank(message="電話番号を半角数字で入力してください")
+	@Pattern(regexp="^[0-9]{3}-[0-9]{4}-[0-9]{4}$",message="電話番号は「xxx-xxxx-xxxx」の形式で入力してください")
 	private String destinationTell;
 	
 	/** 配達時間 */
