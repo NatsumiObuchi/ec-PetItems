@@ -24,6 +24,15 @@ public class FavoriteRepository {
 		favorite.setItemId(rs.getInt("item_id"));
 		favorite.setUserId(rs.getInt("user_id"));
 		favorite.setFavoriteDate(rs.getDate("favorite_date"));
+//		Item item = new Item();
+//		item.setId(rs.getInt("id"));
+//		item.setName(rs.getString("name"));
+//		item.setDescription(rs.getString("description"));
+//		item.setPrice(rs.getInt("price"));
+//		item.setImagePath(rs.getString("image_path"));
+//		item.setImagePath(rs.getString("image_path2"));
+//		item.setDeleted(rs.getBoolean("deleted"));
+//		favorite.setItem(item);
 		return favorite;
 	};
 
