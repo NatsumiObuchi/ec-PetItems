@@ -140,12 +140,20 @@
             </div>
             <br />
             <div>
-              <div th:if="${message}" th:text="${message}"></div>
-              <form th:action="@{/item/favorite}" method="post">
-                <input type="hidden" th:value="${item.id}" name="itemId">
-                <button>お気に入り登録</button>
-              </form>
-            </div>
+              <div class="row">
+                <div class="col-xs-offset-2 col-xs-10">
+                  <div class="form-group">
+                    <div th:if="${message}" th:text="${message}" style="color: red"></div>
+                    <form th:action="@{/item/favorite}" method="post">
+                      <input type="hidden" th:value="${item.id}" name="itemId">
+                      <button id="favorite_btn">お気に入り登録</button>
+                      <span th:if="${message1}" th:text="${message1}"></span>
+                      <!-- <p id="msg">お気に入りに登録しました！</p> -->
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div> 
             <div class="row">
               <div class="col-xs-offset-2 col-xs-10">
                 <div class="form-group">
@@ -214,5 +222,6 @@
     <script th:src="@{/js/itemPrice.js}"></script>
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script th:src="@{/js/slick.js}"></script>
+    <!-- <script th:src="@{/js/favoriteButton.js}"></script> -->
   </body>
 </html>
