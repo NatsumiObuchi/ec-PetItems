@@ -168,6 +168,7 @@
                   </a><br />
                   <span th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')}">1,380</span>円(税抜)
                   <br />
+                  平均評価：<span th:text="${item.avgStar}"></span> / 5.00（評価件数：<span th:text="${item.countReview}"></span>件）<br>
           	</div>
        	 </div >
        	 

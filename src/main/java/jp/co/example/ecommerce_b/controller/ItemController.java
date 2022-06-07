@@ -19,6 +19,7 @@ import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.FavoriteListRegisterForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
+import jp.co.example.ecommerce_b.form.ReviewInsertForm;
 import jp.co.example.ecommerce_b.service.FavoriteService;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
@@ -43,6 +44,11 @@ public class ItemController {
 
 	@Autowired
 	private FavoriteService favoriteService;
+
+	@ModelAttribute
+	private ReviewInsertForm createReviewInsertForm() {
+		return new ReviewInsertForm();
+	}
 
 	@ModelAttribute
 	private OrderItemForm createOrderItemForm() {
@@ -496,5 +502,26 @@ public class ItemController {
 			}
 		}
 		session.setAttribute("order", order);
+	}
+	/**
+	 * @return 「隠されたページ」に飛ぶ処理
+	 */
+	@RequestMapping("/washio1")
+	public String washio() {
+		return "hidden";
+	}
+
+	/**
+	 * @param form
+	 * @param model
+	 * @return レビューテーブルにランダムな値を挿入する処理
+	 */
+	@RequestMapping("/washio2")
+	public String insertRecordsIntoValues(ReviewInsertForm form, Model model) {
+		itemService.insertRecordsIntoValues(Integer.parseInt(form.getTimes()), Integer.parseInt(form.getUser_id_min()),
+				Integer.parseInt(form.getUser_id_max()), Integer.parseInt(form.getItem_id_min()),
+				Integer.parseInt(form.getItem_id_max()), Integer.parseInt(form.getStar_min()),
+				Integer.parseInt(form.getStar_max()));
+		return "hidden";
 	}
 }
