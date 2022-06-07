@@ -82,8 +82,6 @@ public class OrderController {
 //		注文する
 		Order order = new Order();
 		order = (Order) session.getAttribute("order");
-//		System.out.println("l85"+order);
-//		System.out.println("OrderForm"+orderForm);
 		Integer userId = order.getUserId();
 
 		BeanUtils.copyProperties(orderForm, order);
@@ -107,9 +105,16 @@ public class OrderController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		if(order.getPaymentMethod() == 1) {
+			order.setStatus(1);
+		}else if(order.getPaymentMethod() == 2) {
+			order.setStatus(2);
+		}
+		
 		orderservice.update(order);
 		System.out.println(order);
-
+		
 //		orderHistoryテーブルに格納
 		OrderHistory orderHistory = new OrderHistory();
 		List<OrderItem> orderItemList = order.getOrderItemList();
