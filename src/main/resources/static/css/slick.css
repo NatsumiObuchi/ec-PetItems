@@ -1,0 +1,31 @@
+.prev{
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	width: 30px;
+	height: 30px;
+	background-color: rgba(255,255,255,0.8);
+	background-image: url(http://keylopment.com/_cms/wp-content/themes/keylopment/images/common/anchor-prev.png);
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: 7px auto;
+	z-index: 1;
+}
+
+.next{
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	width: 30px;
+	height: 30px;
+	background-color: rgba(255,255,255,0.8);
+	background-image: url(http://keylopment.com/_cms/wp-content/themes/keylopment/images/common/anchor-next.png);
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: 7px auto;
+	z-index: 1;
+}
