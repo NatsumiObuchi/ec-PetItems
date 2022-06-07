@@ -327,11 +327,19 @@ public class ItemController {
 		session.setAttribute("order", order);
 	}
 	
+	/**
+	 * @return 「隠されたページ」に飛ぶ処理
+	 */
 	@RequestMapping("/washio1")
 	public String washio() {
 		return "hidden";
 	}
 
+	/**
+	 * @param form
+	 * @param model
+	 * @return レビューテーブルにランダムな値を挿入する処理
+	 */
 	@RequestMapping("/washio2")
 	public String insertRecordsIntoValues(ReviewInsertForm form, Model model) {
 		itemService.insertRecordsIntoValues(Integer.parseInt(form.getTimes()), Integer.parseInt(form.getUser_id_min()),
