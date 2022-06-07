@@ -115,7 +115,7 @@
                 </div>
                 <div class="form-group">
                   <label for="inputZipcode">郵便番号:</label>
-                  <input type="button" value="住所検索" /> <br>
+                  <input type="button" id="addressBtn" value="住所検索" /> <br>
                   <label
                     th:errors="*{zipcode}"
                     class="control-label"
@@ -125,7 +125,7 @@
                   >
                   <input
                     type="text"
-                    id="inputZipcode"
+                    id="zipcode"
                     class="form-control"
                     placeholder="Zipcode"
                     th:field="*{zipcode}"
@@ -142,7 +142,7 @@
                   >
                   <input
                     type="text"
-                    id="inputAddress"
+                    id="address"
                     class="form-control"
                     placeholder="Address"
                     th:field="*{address}"
@@ -221,5 +221,7 @@
     <!-- end container -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script th:src="@{/js/address.js}"></script>
   </body>
 </html>
