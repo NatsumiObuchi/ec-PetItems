@@ -417,13 +417,26 @@ public class ItemController {
 	 * @return
 	 */
 	@RequestMapping("/favoriteList")
-	public String favoriteListShow() {
+	public String favoriteListShow(Model model) {
 		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			String message1 = "お気に入り登録にはユーザー登録が必要です";
+			String message2 = "以下のリンクからユーザー登録を行ってください";
+			model.addAttribute("message1", message1);
+			model.addAttribute("message2", message2);
+			return "favorite_list";
+		}
 		Integer userId = user.getId();
 		List<Favorite> favoriteList = favoriteService.favoriteAll(userId);
+		if (favoriteList == null) {// ユーザ登録済でもお気に入りがゼロの時
+			String message = "お気に入り登録はありません";
+			model.addAttribute("message", message);
+			session.setAttribute("favoriteItemList", null);
+			return "favorite_list";
+		}
+
 		session.setAttribute("favoriteList", favoriteList);
 		List<Item> favoriteItemList = new ArrayList<>();
-
 		for (Favorite favorite : favoriteList) {
 			Integer itemId = favorite.getItemId();
 			System.out.println("itemId:" + itemId);
@@ -441,11 +454,11 @@ public class ItemController {
 	 * @param userId
 	 */
 	@RequestMapping("/deleteFavorite")
-	public String deleteFavorite(String itemId) {
+	public String deleteFavorite(String itemId, Model model) {
 		Integer id = Integer.parseInt(itemId);
 		System.out.println(id);
 		favoriteService.delete(id);
-		return favoriteListShow();
+		return favoriteListShow(model);
 	}
 
 //	/**
