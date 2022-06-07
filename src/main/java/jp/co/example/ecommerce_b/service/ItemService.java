@@ -36,16 +36,7 @@ public class ItemService {
 
 	/**
 	 * 
-	 * 商品をあいまい検索するメソッド。
-	 */
-	public List<Item> findByName(String name) {
-
-		return repository.findByName(name);
-	}
-
-	/**
-	 * 
-	 * 商品の絞り込み検索用メソッド。(検索値の入力なし)
+	 * 商品一覧をanimalIdを絞って取得するメソッド。 (item一覧表示用)
 	 */
 	public List<Item> findByAnimalId(Integer animalId) {
 
@@ -54,11 +45,29 @@ public class ItemService {
 
 	/**
 	 * 
-	 * 商品のあいまい検索と、絞り込みを同時に選択された場合のメソッド
+	 * 商品をあいまい検索するメソッド。(絞り込み：すべて)
 	 */
 	public List<Item> findByNameAndAnimalId(String name, Integer animalId) {
 
 		return repository.findByNameAndAnimalId(name, animalId);
+	}
+
+	/**
+	 * 
+	 * 商品の絞り込み検索用メソッド。(検索値の入力なし)
+	 */
+	public List<Item> findByCategoryId(Integer animalId, Integer categoryId) {
+
+		return repository.findByCategoryId(animalId, categoryId);
+	}
+
+	/**
+	 * 
+	 * 商品のあいまい検索と、絞り込みを同時に選択された場合のメソッド
+	 */
+	public List<Item> findByCategoryIdAndAnimaiIdAndName(String name, Integer animalId, Integer categoryId) {
+
+		return repository.findByCategoryIdAndAnimaiIdAndName(name, animalId, categoryId);
 	}
 
 	/**

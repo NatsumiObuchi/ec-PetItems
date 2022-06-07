@@ -67,7 +67,11 @@
       <p class="pan-list">
           	<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
           	>
-          	商品詳細
+          	<a th:href="@{/item/} + ${access}">
+          	<span class="list-active active" th:text="${link2}">ダミー</span>
+          	</a>
+			>
+			商品詳細
 	  </p>
 
         <div class="row">

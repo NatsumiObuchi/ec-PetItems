@@ -61,6 +61,7 @@ public class ItemController {
 	public String itemList(Model model) {
 		List<Item> itemList = itemService.findAll();
 		model.addAttribute("itemList", itemList);
+		session.setAttribute("animalId", 0);
 		return "item_list_pet";
 	}
 
@@ -135,8 +136,28 @@ public class ItemController {
 	 */
 	@RequestMapping("/itemDetail")
 	public String itemDetail(Integer id,Model model) {
+
+		Integer animalId = (Integer) session.getAttribute("animalId");
+
+		if (animalId == 0) {
+			model.addAttribute("link2", "すべて");
+			model.addAttribute("access", "list");
+		} else {
+			switch (animalId) {
+			case 1:
+				model.addAttribute("link2", "犬用品");
+				model.addAttribute("access", "dog");
+				break;
+			case 2:
+				model.addAttribute("link2", "猫用品");
+				model.addAttribute("access", "cat");
+				break;
+			}
+		}
+
 		Item item = itemService.load(id);
 		model.addAttribute("item", item);
+
 		return "item_detail";
 
 	}
@@ -230,36 +251,67 @@ public class ItemController {
 	 * @return
 	 */
 	@RequestMapping("/search")
-	public String searchItem(String code, Integer animalId, Model model) {
+	public String searchItem(String code, Integer categoryId, Model model) {
 
-		List<Item> itemList = itemService.findByName(code);
+		List<Item> itemList = new ArrayList<>();
+		Integer animalId = (Integer) session.getAttribute("animalId");
+		System.out.println(animalId);
+
+		if (animalId == null || animalId == 0) {
+			itemList = itemService.findByNameAndAnimalId(code, 0);
+			model.addAttribute("link", "すべて");
+		} else {
+			itemList = itemService.findByNameAndAnimalId(code, animalId);
+			switch (animalId) {
+			case 1:
+				model.addAttribute("link", "犬用品");
+				break;
+			case 2:
+				model.addAttribute("link", "猫用品");
+				break;
+			}
+		}
 
 //		検索結果の該当がない場合＋入力がない場合
 		if (itemList.size() == 0 || code.equals("　") || code.equals(" ") || code.isEmpty()) {
 			List<Item> itemList2 = new ArrayList<>();
-			switch (animalId) {
+			switch (categoryId) {
 			case 0:
-				itemList2 = itemService.findAll();
+				if (animalId == null || animalId == 0) {
+					itemList2 = itemService.findAll();
+					System.out.println(itemList);
+				} else {
+					itemList2 = itemService.findByAnimalId(animalId);
+				}
+
 				if (code.isEmpty()) {
-					model.addAttribute("noItemMessage", "すべての商品一覧を表示します。");
+					model.addAttribute("noItemMessage", "商品一覧を表示します。");
 				} else {
 					model.addAttribute("noItemMessage", "該当の商品がございません。商品一覧を表示します。");
 				}
 				break;
 			case 1:
-				itemList2 = itemService.findByAnimalId(animalId);
+				itemList2 = itemService.findByCategoryId(animalId, categoryId);
 				if (code.isEmpty()) {
-					model.addAttribute("noItemMessage", "絞り込み検索しました。犬用商品一覧を表示します。");
+					model.addAttribute("noItemMessage", "絞り込み検索しました。フード一覧を表示します。");
 				} else {
-					model.addAttribute("noItemMessage", "該当の商品がございません。犬用商品一覧を表示します。");
+					model.addAttribute("noItemMessage", "該当の商品がございません。フード一覧を表示します。");
 				}
 				break;
 			case 2:
-				itemList2 = itemService.findByAnimalId(animalId);
+				itemList2 = itemService.findByCategoryId(animalId, categoryId);
 				if (code.isEmpty()) {
-					model.addAttribute("noItemMessage", "絞り込み検索しました。猫用商品一覧を表示します。");
+					model.addAttribute("noItemMessage", "絞り込み検索しました。おもちゃ一覧を表示します。");
 				} else {
-					model.addAttribute("noItemMessage", "該当の商品がございません。猫用商品一覧を表示します。");
+					model.addAttribute("noItemMessage", "該当の商品がございません。おもちゃ一覧を表示します。");
+				}
+				break;
+			case 3:
+				itemList2 = itemService.findByCategoryId(animalId, categoryId);
+				if (code.isEmpty()) {
+					model.addAttribute("noItemMessage", "絞り込み検索しました。その他の商品一覧を表示します。");
+				} else {
+					model.addAttribute("noItemMessage", "該当の商品がございません。その他の商品一覧を表示します。");
 				}
 				break;
 			}
@@ -269,34 +321,63 @@ public class ItemController {
 		} else {
 
 //			入力フォームに何かしらの入力があった場合
-			List<Item> itemList3 = itemService.findByNameAndAnimalId(code, animalId);
-			if (animalId == 0) {
+			List<Item> itemList3 = itemService.findByCategoryIdAndAnimaiIdAndName(code, animalId, categoryId);
+			if (categoryId == 0) {
 				model.addAttribute("itemList", itemList);
 				model.addAttribute("noItemMessage", "検索結果を表示します。");
 			} else if (itemList3.size() == 0) {
 
 //				何かしら入力があったが、絞り込んだ際には該当の結果がない場合
 				List<Item> itemList2 = new ArrayList<>();
-				switch (animalId) {
-					case 1:
-						itemList2 = itemService.findByAnimalId(animalId);
-						model.addAttribute("noItemMessage", "該当の商品がございません。犬用商品一覧を表示します。");
-						break;
-					case 2:
-						itemList2 = itemService.findByAnimalId(animalId);
-						model.addAttribute("noItemMessage", "該当の商品がございません。猫用商品一覧を表示します。");
-						break;
-					}
-					model.addAttribute("itemList", itemList2);
-				} else {
-					model.addAttribute("itemList", itemList3);
-					model.addAttribute("noItemMessage", "検索結果を表示します。");
+				switch (categoryId) {
+				case 1:
+					itemList2 = itemService.findByCategoryId(animalId, categoryId);
+					model.addAttribute("noItemMessage", "該当の商品がございません。フード一覧を表示します。");
+					break;
+				case 2:
+					itemList2 = itemService.findByCategoryId(animalId, categoryId);
+					model.addAttribute("noItemMessage", "該当の商品がございません。おもちゃ一覧を表示します。");
+					break;
+				case 3:
+					itemList2 = itemService.findByCategoryId(animalId, categoryId);
+					model.addAttribute("noItemMessage", "該当の商品がございません。その他の商品一覧を表示します。");
+					break;
+				}
+				model.addAttribute("itemList", itemList2);
+			} else {
+				model.addAttribute("itemList", itemList3);
+				model.addAttribute("noItemMessage", "検索結果を表示します。");
 			}
 			model.addAttribute("word", code);
 			return "item_list_pet";
 		}
 	}
 	
+
+	@RequestMapping("/dog")
+	public String dog(String code, Integer categoryId, Model model) {
+
+		session.setAttribute("animalId", 1);
+		List<Item> itemList = itemService.findByAnimalId(1);
+
+		model.addAttribute("link", "犬用品");
+		model.addAttribute("itemList", itemList);
+
+		return "item_list_pet";
+	}
+	
+	@RequestMapping("/cat")
+	public String cat(Model model) {
+
+		session.setAttribute("animalId", 2);
+		List<Item> itemList = itemService.findByAnimalId(2);
+
+		model.addAttribute("link", "猫用品");
+		model.addAttribute("itemList", itemList);
+
+		return "item_list_pet";
+	}
+
 	/**
 	 * お気に入り登録する処理
 	 * 
@@ -351,6 +432,7 @@ public class ItemController {
 		}
 		session.setAttribute("favoriteItemList", favoriteItemList);
 		return "favorite_list";
+
 	}
 
 	/**

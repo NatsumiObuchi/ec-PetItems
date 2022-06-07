@@ -57,18 +57,7 @@ public class ItemRepository {
 
 	/**
 	 * 
-	 * 商品をあいまい検索するメソッド。(絞り込み：すべて)
-	 */
-	public List<Item> findByName(String name) {
-		String sql = "SELECT id,name,description,price,image_path,image_path2,deleted FROM items WHERE name LIKE :name ORDER BY price ASC";
-		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
-		List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
-		return itemList;
-	}
-
-	/**
-	 * 
-	 * 商品の絞り込み検索用メソッド。(検索値の入力なし)
+	 * 商品一覧をanimalIdを絞って取得するメソッド。 (item一覧表示用)
 	 */
 	public List<Item> findByAnimalId(Integer animalId) {
 		String sql = "SELECT id,name,description,price,image_path,image_path2,deleted FROM items WHERE animal_id=:animalId ORDER BY price ASC";
@@ -79,13 +68,66 @@ public class ItemRepository {
 
 	/**
 	 * 
-	 * 商品のあいまい検索と、絞り込みを同時に選択された場合のメソッド
+	 * 商品をあいまい検索するメソッド。(絞り込み：すべて)
 	 */
 	public List<Item> findByNameAndAnimalId(String name, Integer animalId) {
-		String sql = "SELECT id,name,description,price,image_path,image_path2,deleted FROM items WHERE name LIKE :name AND animal_id=:animalId ORDER BY price ASC";
+		String sql = "SELECT id,name,description,price,image_path,image_path2,deleted FROM items WHERE name LIKE :name ";
+		String sql2 = "ORDER BY price ASC";
+		String sql3 = "AND animal_id = :animalId ORDER BY price ASC";
+		String sqlA = "";
+
+		if (animalId == 0) {
+			sqlA = sql + sql2;
+		} else {
+			sqlA = sql + sql3;
+		}
+
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%").addValue("animalId",
 				animalId);
-		List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
+		List<Item> itemList = template.query(sqlA, param, ITEM_ROW_MAPPER);
+		return itemList;
+	}
+
+	/**
+	 * 
+	 * 商品の絞り込み検索用メソッド。(検索値の入力なし)
+	 */
+	public List<Item> findByCategoryId(Integer animalId, Integer categoryId) {
+		String sql = "SELECT id,name,description,price,image_path,image_path2,deleted FROM items WHERE category_id=:categoryId ";
+		String sql2 = "ORDER BY price ASC";
+		String sql3 = "AND animal_id = :animalId ORDER BY price ASC";
+		String sqlA = "";
+
+		if (animalId == 0) {
+			sqlA = sql + sql2;
+		} else {
+			sqlA = sql + sql3;
+		}
+		SqlParameterSource param = new MapSqlParameterSource().addValue("animalId", animalId).addValue("categoryId",
+				categoryId);
+		List<Item> itemList = template.query(sqlA, param, ITEM_ROW_MAPPER);
+		return itemList;
+	}
+
+	/**
+	 * 
+	 * 商品のあいまい検索と、絞り込みを同時に選択された場合のメソッド
+	 */
+	public List<Item> findByCategoryIdAndAnimaiIdAndName(String name, Integer animalId, Integer categoryId) {
+		String sql = "SELECT id,name,description,price,image_path,image_path2,deleted FROM items WHERE name LIKE :name AND category_id=:categoryId ";
+		String sql2 = "ORDER BY price ASC";
+		String sql3 = "AND animal_id = :animalId ORDER BY price ASC";
+		String sqlA = "";
+
+		if (animalId == 0) {
+			sqlA = sql + sql2;
+		} else {
+			sqlA = sql + sql3;
+		}
+
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%").addValue("animalId",
+				animalId).addValue("categoryId", categoryId);
+		List<Item> itemList = template.query(sqlA, param, ITEM_ROW_MAPPER);
 		return itemList;
 	}
 
