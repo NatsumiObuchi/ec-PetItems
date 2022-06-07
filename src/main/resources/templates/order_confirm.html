@@ -89,7 +89,7 @@
 										<th>
 											<div class="text-center">小計</div>
 										</th>
-										<th></th>
+										
 									</tr>
 									<tr th:each="ordItem : ${session.cartList}">
 										<td>
@@ -110,7 +110,7 @@
 										<td>
 											<div class="text-center" th:text="${ordItem.subTotal}">3,280円</div>
 										</td>
-										<td></td>
+										
 									</tr>
 								</tbody>
 							</table>
@@ -286,7 +286,9 @@
 										<td>
 											<div class="text-center">お名前</div>
 										</td>
+										
 										<td>
+											<div th:errors="*{destinationName}" style="color: red;"></div>
 											<input type="text" th:field="*{destinationName}" />
 										</td>
 									</tr>
@@ -295,6 +297,7 @@
 											<div class="text-center">メールアドレス</div>
 										</td>
 										<td>
+											<div th:errors="*{destinationEmail}" style="color: red;"></div>
 											<input type="text" th:field="*{destinationEmail}" />
 										</td>
 									</tr>
@@ -303,6 +306,7 @@
 											<div class="text-center">郵便番号</div>
 										</td>
 										<td>
+											<div th:errors="*{destinationzipCode}" style="color: red;"></div>
 											<input id="zipcode" type="text"
 												th:field="*{destinationzipCode}" />&nbsp;&nbsp;
 												<button type="button" id="addressBtn">住所検索</button>
@@ -313,6 +317,7 @@
 											<div class="text-center">住所</div>
 										</td>
 										<td>
+											<div th:errors="*{destinationAddress}" style="color: red;"></div>
 											<input id="address" type="text" th:field="*{destinationAddress}" />
 										</td>
 									</tr>
@@ -321,6 +326,7 @@
 											<div class="text-center">電話番号</div>
 										</td>
 										<td>
+											<div th:errors="*{destinationTell}" style="color: red;"></div>
 											<input type="text" th:field="*{destinationTell}" />
 										</td>
 									</tr>
@@ -328,19 +334,18 @@
 										<td>
 											<div class="text-center">配達日時</div>
 										</td>
+										
 										<td>
 											<div class="form-group">
 												<div class="row">
-													<div class="col-sm-12">
-														<label class="control-label" style="color: red"
-															for="inputPeriod">配達日時を入力してください</label>
-													</div>
+													<div th:errors="*{deliveryDate}" style="color: red;"></div>
 													<div class="col-sm-5">
-														<input type="date" id="name" name="deliveryDate"
+														<input type="date" id="deliveryDate" name="deliveryDate"
 															class="form-control input-sm" th:field="*{deliveryDate}" />
 													</div>
 												</div>
 												<div class="row">
+												<div th:errors="*{deliveryTime}" style="color: red;"></div>
 													<div class="col-sm-12">
 														<label class="radio-inline">
 															<input type="radio" name="deliveryTime" checked="checked"
@@ -414,8 +419,8 @@
 										<td>
 											<div class="text-center">代金引換</div>
 										</td>
+										<div id="payError" th:errors="*{paymentMethod}" style="color: red;"></div>
 										<td>
-
 											<div class="row">
 												<div class="col-sm-12">
 													<label class="radio-inline">
