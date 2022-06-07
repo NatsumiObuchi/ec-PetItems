@@ -68,18 +68,23 @@
           	<span th:text="${link}">ダミー</span> 
 	   </p>
 	   
+	   <a th:href="@{/item/dog}">
 	   <img
             alt="main log"
             th:src="@{/img/dog.png}"
             height="55"
         />
-         <a th:href="@{/item/dog}">犬用品</a>
+         犬用品</a>
+         
+         &nbsp;&nbsp;
+        
+        <a th:href="@{/item/cat}">
         <img
             alt="main log"
             th:src="@{/img/cat.png}"
             height="50"
          />
-         <a th:href="@{/item/cat}">猫用品</a>
+         猫用品</a>
 
       <!-- search form -->
       <div class="row">

@@ -255,7 +255,6 @@ public class ItemController {
 
 		List<Item> itemList = new ArrayList<>();
 		Integer animalId = (Integer) session.getAttribute("animalId");
-		System.out.println(animalId);
 
 		if (animalId == null || animalId == 0) {
 			itemList = itemService.findByNameAndAnimalId(code, 0);
@@ -279,7 +278,6 @@ public class ItemController {
 			case 0:
 				if (animalId == null || animalId == 0) {
 					itemList2 = itemService.findAll();
-					System.out.println(itemList);
 				} else {
 					itemList2 = itemService.findByAnimalId(animalId);
 				}
@@ -353,7 +351,9 @@ public class ItemController {
 		}
 	}
 	
-
+	/**
+	 * 犬用品のみのリストへ遷移する際のリンク
+	 */
 	@RequestMapping("/dog")
 	public String dog(String code, Integer categoryId, Model model) {
 
@@ -366,6 +366,9 @@ public class ItemController {
 		return "item_list_pet";
 	}
 	
+	/**
+	 * 猫用品のみのリストへ遷移する際のリンク
+	 */
 	@RequestMapping("/cat")
 	public String cat(Model model) {
 
