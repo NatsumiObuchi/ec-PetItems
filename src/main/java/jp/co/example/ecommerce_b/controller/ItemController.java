@@ -395,6 +395,9 @@ public class ItemController {
 	@RequestMapping("/favorite")
 	public String favorite(FavoriteListRegisterForm favoriteListRegisterForm, Model model) {
 		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			return favoriteListShow(model);
+		}
 		Integer userId = user.getId();
 		Favorite favorite = new Favorite();
 		// formのuserIdとitemIdからお気に入り登録情報を取得する
@@ -413,6 +416,8 @@ public class ItemController {
 			newFavorite.setFavoriteDate(now);
 			favoriteService.insertFavorite(newFavorite);
 			System.out.println(2222222);
+			String message1 = "お気に入り登録が完了しました！";
+			model.addAttribute("message1", message1);
 		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
 			String message = "既にお気に入り登録済です";
 			model.addAttribute("message", message);
@@ -440,7 +445,7 @@ public class ItemController {
 		if (favoriteList == null) {// ユーザ登録済でもお気に入りがゼロの時
 			String message = "お気に入り登録はありません";
 			model.addAttribute("message", message);
-			session.setAttribute("favoriteItemList", null);
+			session.setAttribute("favoriteList", null);
 			return "favorite_list";
 		}
 
@@ -465,6 +470,7 @@ public class ItemController {
 		Integer id = Integer.parseInt(itemId);
 		System.out.println(id);
 		favoriteService.delete(id);
+
 		return favoriteListShow(model);
 	}
 

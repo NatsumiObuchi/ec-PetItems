@@ -1,8 +1,9 @@
 'use strict'
 
 $(function(){
+	$('#msg').hide();
 	$('#favorite_btn').on('click',function(){
-		$('#msg').text("お気に入りに登録しました！");
+		$('#msg').show()
 	});
 });
 
