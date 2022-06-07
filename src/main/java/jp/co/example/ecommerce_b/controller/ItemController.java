@@ -129,12 +129,17 @@ public class ItemController {
 
 		if (animalId == 0) {
 			model.addAttribute("link2", "すべて");
+			model.addAttribute("access", "list");
 		} else {
 			switch (animalId) {
 			case 1:
 				model.addAttribute("link2", "犬用品");
+				model.addAttribute("access", "dog");
+				break;
 			case 2:
 				model.addAttribute("link2", "猫用品");
+				model.addAttribute("access", "cat");
+				break;
 			}
 		}
 
@@ -241,9 +246,17 @@ public class ItemController {
 
 		if (animalId == null || animalId == 0) {
 			itemList = itemService.findByNameAndAnimalId(code, 0);
-			System.out.println(itemList);
+			model.addAttribute("link", "すべて");
 		} else {
 			itemList = itemService.findByNameAndAnimalId(code, animalId);
+			switch (animalId) {
+			case 1:
+				model.addAttribute("link", "犬用品");
+				break;
+			case 2:
+				model.addAttribute("link", "猫用品");
+				break;
+			}
 		}
 
 //		検索結果の該当がない場合＋入力がない場合
