@@ -141,7 +141,7 @@ public class OrderRepository {
 	public List<List<OrderHistory>> findOrderHistory(Integer userId){
 		String sql="SELECT id,order_id,user_id,image_path,item_name,item_price,quantity,sub_totalprice,total_price,order_date,"
 				+ " destination_name,destination_email,destinationzip_code,destination_address,destination_tell, "
-				+ "delivery_time,payment_method from order_histories WHERE user_id=:userId";
+				+ "delivery_time,payment_method from order_histories WHERE user_id=:userId ORDER BY order_id DESC";
 		
 		SqlParameterSource param=new MapSqlParameterSource().addValue("userId", userId);	
 		List<OrderHistory> historyList=template.query(sql, param,HIS_ROW_MAPPER);
@@ -175,12 +175,4 @@ public class OrderRepository {
 		return orders.get(0);// レコード（Order）が存在した場合、そのオーダーを返す。
 	}
 	
-	public List<OrderHistory> findOrderHistory2(Integer userId){
-		String sql="SELECT DISTINCT ON(order_id) id,order_id,user_id,image_path,item_name,item_price,quantity,sub_totalprice,total_price,order_date,"
-				+ "	destination_name,destination_email,destinationzip_Code,destination_address,destination_tell,delivery_time,payment_method"
-				+ " from order_histories where user_id=:userId;";
-		SqlParameterSource param=new MapSqlParameterSource().addValue("userId", userId);	
-		List<OrderHistory> historyList2=template.query(sql, param,HIS_ROW_MAPPER);
-		return historyList2;
-	}
 }
