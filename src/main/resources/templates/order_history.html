@@ -6,8 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>注文履歴の表示</title>
-  <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}" />
-  <link href="../static/css/piza.css" rel="stylesheet" th:href="@{/css/style.css}" />
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+    <link th:href="@{/css/piza.css}" rel="stylesheet" />
 
   <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -142,10 +142,18 @@
       </div>
     </form>
   </div>
+  
+  <footer class="copyright navbar navbar-default">
+    <div class="footerinfo"> <a th:href="@{/info}">問い合わせフォーム</a>
+          <p>&copy; 楽々ペット. 2022.</p>
+    </div> 
+  </footer>
+  
   <!-- end container -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="../static/js/bootstrap.min.js"></script>
   
 </body>
+
 
 </html>
