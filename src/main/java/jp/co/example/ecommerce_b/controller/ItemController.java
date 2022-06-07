@@ -151,6 +151,11 @@ public class ItemController {
 	@RequestMapping("/itemDetail")
 	public String itemDetail(Integer id,Model model) {
 
+		// 検索するitem_idでレビュー集め
+		List<Review> reviews = itemService.findReview(id);
+		model.addAttribute("reviews", reviews);
+		System.out.println(reviews);
+
 		Integer animalId = (Integer) session.getAttribute("animalId");
 
 		if (animalId == 0) {

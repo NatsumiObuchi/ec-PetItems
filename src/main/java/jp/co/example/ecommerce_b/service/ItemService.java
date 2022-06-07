@@ -104,4 +104,8 @@ public class ItemService {
 			repository.insertRecordsIntoValues(user_id_min, user_id_max, item_id_min, item_id_max, star_min, star_max);
 		}
 	}
+
+	public List<Review> findReview(Integer itemId) {
+		return repository.findReview(itemId);
+	}
 }

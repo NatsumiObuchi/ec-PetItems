@@ -185,26 +185,34 @@
         </div>
       </form>
       <div class="col-xs-offset-2 col-xs-8">
-	      <form th:action="@{/item/insertReview}" th:object="${reviewForm}" method="post">
-	         <hr>
-	         <h3>レビュー</h3>
-	         評価：<select th:field="*{stars}">
-	           <option value="0">１〜５で選択してください</option>
-	           <option value="5">5</option>
-	           <option value="4">4</option>
-	           <option value="3">3</option>
-	           <option value="2">2</option>
-	           <option value="1">1</option>
-	        </select> <br><br>
-	        コメント<br>
-	        <textarea rows="8" cols="40" th:field="*{content}"></textarea> <br><br>
-	        <input type="hidden" th:value="${item.id}" name="item_id">
-	        <input type="hidden" th:value="${user.id}" name="user_id" th:if="${user}">
-	        <input type="hidden" value="0" name="user_id" th:unless="${user}">
-	        <button>投稿する</button>
-	      </form>
+	      <div th:if="${reviews}">
 	      <hr>
-	      <br><br><br><br><br>
+	        <h3>レビュー一覧</h3> <br>
+	        <div th:each="review:${reviews}">
+	            評　　価： <span th:text="${review.stars}"></span> <br>
+		        ユーザー： <span th:text="${review.user_id}"></span> <br>
+		        コメント： <span th:text="${review.content}"></span> <hr> 
+		    </div>
+	      </div>
+	      <form th:action="@{/item/insertReview}" th:object="${reviewForm}" method="post">
+             <h3>レビュー投稿</h3>
+             評価：<select th:field="*{stars}">
+               <option value="0">１〜５で選択してください</option>
+               <option value="5">5</option>
+               <option value="4">4</option>
+               <option value="3">3</option>
+               <option value="2">2</option>
+               <option value="1">1</option>
+            </select> <br><br>
+            コメント<br>
+            <textarea rows="8" cols="40" th:field="*{content}"></textarea> <br><br>
+            <input type="hidden" th:value="${item.id}" name="item_id">
+            <input type="hidden" th:value="${user.id}" name="user_id" th:if="${user}">
+            <input type="hidden" value="0" name="user_id" th:unless="${user}">
+            <button>投稿する</button>
+          </form>
+          <hr>
+          <br><br><br><br><br>
 	   </div>
     </div>
     <br><br>

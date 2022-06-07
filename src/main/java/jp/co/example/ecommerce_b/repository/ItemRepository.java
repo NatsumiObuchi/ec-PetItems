@@ -258,4 +258,16 @@ public class ItemRepository {
 		template.update(sql, param);
 	}
 
+	public List<Review> findReview(Integer itemId) {
+		String sql = "select id, user_id, item_id, stars, content from reviews where item_id = :itemId order by id desc";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("itemId", itemId);
+		List<Review> reviews = new ArrayList<>();
+		reviews = template.query(sql, param, REVIEW_ROW_MAPPER);
+		if (reviews.size() == 0) {
+			return null;
+		} else {
+			return reviews;
+		}
+	}
+
 }
