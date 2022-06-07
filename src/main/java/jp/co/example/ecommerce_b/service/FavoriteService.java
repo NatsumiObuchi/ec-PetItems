@@ -26,4 +26,8 @@ public class FavoriteService {
 		return repository.favoriteAll(userId);
 	}
 
+	public void delete(Integer itemId) {
+		repository.deleteFavorite(itemId);
+	}
+
 }

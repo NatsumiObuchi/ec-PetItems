@@ -71,4 +71,15 @@ public class FavoriteRepository {
 		}
 		return favoriteList;
 	}
+
+	/**
+	 * お気に入りリストから削除する
+	 * 
+	 * @param itemId
+	 */
+	public void deleteFavorite(Integer itemId) {
+		String sql = "delete from favorites where item_id = :itemId";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("itemId", itemId);
+		template.update(sql, param);
+	}
 }
