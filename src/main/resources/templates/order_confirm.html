@@ -263,7 +263,8 @@
 
 			<table>
 
-				<form action="order_finished.html" th:action="@{/order/orderSent}" th:object="${orderForm}">
+				<form action="order_finished.html" th:action="@{/order/orderSent}" th:object="${orderForm}"
+					method="post">
 					<div class="row">
 
 						<div class="
@@ -302,8 +303,9 @@
 											<div class="text-center">郵便番号</div>
 										</td>
 										<td>
-											<input id="zipcode" type="text" th:field="*{destinationzipCode}" />&nbsp;&nbsp;<button
-												id="addressBtn">住所検索</button>
+											<input id="zipcode" type="text"
+												th:field="*{destinationzipCode}" />&nbsp;&nbsp;
+												<button type="button" id="addressBtn">住所検索</button>
 										</td>
 									</tr>
 									<tr>
@@ -453,12 +455,15 @@
 		</div>
 	</div>
 	</form>
+
+	<iframe name="sendPhoto" style="width:0px;height:0px;border:0px;"></iframe>
 	</div>
 	<!-- end container -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="../static/js/bootstrap.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script th:src="@{/js/address.js}"></script>
+	
 </body>
 
 </html>
