@@ -139,7 +139,8 @@
             </form>
         </div>
       </div>
-      <div th:unless="${message1}" th:text="${message1}">
+      <div th:if="${message}" th:text="${message}" class="text-center"></div>
+      <!-- <div th:unless="${message}" th:text="${message}"> -->
         <div class="aaa">
             <div class="bbb" th:each="item:${session.favoriteItemList}">
               <form th:action="@{/item/deleteFavorite}">
@@ -165,12 +166,12 @@
                     </div>
               </form>
             </div>
-         </div >
-      </div>
+        </div >
+      <!-- </div> -->
     </div >   
     <!-- end container -->
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
-    <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
-    <script th:src="@{/js/paginathing.js}"></script>
+    <!-- <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script> -->
+    <!-- <script th:src="@{/js/paginathing.js}"></script> -->
   </body>
 </html>

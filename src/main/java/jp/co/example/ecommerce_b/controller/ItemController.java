@@ -428,9 +428,15 @@ public class ItemController {
 		}
 		Integer userId = user.getId();
 		List<Favorite> favoriteList = favoriteService.favoriteAll(userId);
+		if (favoriteList == null) {// ユーザ登録済でもお気に入りがゼロの時
+			String message = "お気に入り登録はありません";
+			model.addAttribute("message", message);
+			session.setAttribute("favoriteItemList", null);
+			return "favorite_list";
+		}
+
 		session.setAttribute("favoriteList", favoriteList);
 		List<Item> favoriteItemList = new ArrayList<>();
-
 		for (Favorite favorite : favoriteList) {
 			Integer itemId = favorite.getItemId();
 			System.out.println("itemId:" + itemId);
