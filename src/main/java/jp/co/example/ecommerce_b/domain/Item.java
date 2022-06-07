@@ -12,9 +12,11 @@ public class Item {
 	private Integer price;
 	/** 画像パス */
 	private String imagePath;
+	/** 画像パス2 */
 	private String imagePath2;
-
+	/** アニマルID */
 	private Integer animal_id;
+	/** カテゴリID */
 	private Integer category_id;
 	/** 削除フラグ */
 	private Boolean deleted;
@@ -62,7 +64,15 @@ public class Item {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
+	
+	public String getImagePath2() {
+		return imagePath2;
+	}
 
+	public void setImagePath2(String imagePath2) {
+		this.imagePath2 = imagePath2;
+	}
+	
 	public Boolean getDeleted() {
 		return deleted;
 	}
@@ -112,14 +122,9 @@ public class Item {
 
 	public void setCategory_id(Integer category_id) {
 		this.category_id = category_id;
+
 	}
 
-	public String getImagePath2() {
-		return imagePath2;
-	}
 
-	public void setImagePath2(String imagePath2) {
-		this.imagePath2 = imagePath2;
-	}
 
 }

@@ -1,6 +1,7 @@
 package jp.co.example.ecommerce_b.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -11,12 +12,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.ecommerce_b.domain.Favorite;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.User;
+import jp.co.example.ecommerce_b.form.FavoriteListRegisterForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.form.ReviewInsertForm;
+import jp.co.example.ecommerce_b.service.FavoriteService;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
@@ -38,6 +42,9 @@ public class ItemController {
 	@Autowired
 	private OrderService orderService;
 
+	@Autowired
+	private FavoriteService favoriteService;
+
 	@ModelAttribute
 	private ReviewInsertForm createReviewInsertForm() {
 		return new ReviewInsertForm();
@@ -48,6 +55,11 @@ public class ItemController {
 		return new OrderItemForm();
 	}
 
+	@ModelAttribute
+	private FavoriteListRegisterForm favoriteListRegisterForm() {
+		return new FavoriteListRegisterForm();
+	}
+
 	/**
 	 * 商品一覧を表示する
 	 */
@@ -55,6 +67,7 @@ public class ItemController {
 	public String itemList(Model model) {
 		List<Item> itemList = itemService.findAll();
 		model.addAttribute("itemList", itemList);
+		session.setAttribute("animalId", 0);
 		return "item_list_pet";
 	}
 
@@ -129,8 +142,28 @@ public class ItemController {
 	 */
 	@RequestMapping("/itemDetail")
 	public String itemDetail(Integer id,Model model) {
+
+		Integer animalId = (Integer) session.getAttribute("animalId");
+
+		if (animalId == 0) {
+			model.addAttribute("link2", "すべて");
+			model.addAttribute("access", "list");
+		} else {
+			switch (animalId) {
+			case 1:
+				model.addAttribute("link2", "犬用品");
+				model.addAttribute("access", "dog");
+				break;
+			case 2:
+				model.addAttribute("link2", "猫用品");
+				model.addAttribute("access", "cat");
+				break;
+			}
+		}
+
 		Item item = itemService.load(id);
 		model.addAttribute("item", item);
+
 		return "item_detail";
 
 	}
@@ -187,6 +220,7 @@ public class ItemController {
 		orderService.update(order);// DB上のorderを最新に更新
 //		System.out.println("update:"+order);
 		
+		System.out.println(order.getOrderItemList());
 		return cartListShow(model);
 	}
 
@@ -223,36 +257,65 @@ public class ItemController {
 	 * @return
 	 */
 	@RequestMapping("/search")
-	public String searchItem(String code, Integer animalId, Model model) {
+	public String searchItem(String code, Integer categoryId, Model model) {
 
-		List<Item> itemList = itemService.findByName(code);
+		List<Item> itemList = new ArrayList<>();
+		Integer animalId = (Integer) session.getAttribute("animalId");
+
+		if (animalId == null || animalId == 0) {
+			itemList = itemService.findByNameAndAnimalId(code, 0);
+			model.addAttribute("link", "すべて");
+		} else {
+			itemList = itemService.findByNameAndAnimalId(code, animalId);
+			switch (animalId) {
+			case 1:
+				model.addAttribute("link", "犬用品");
+				break;
+			case 2:
+				model.addAttribute("link", "猫用品");
+				break;
+			}
+		}
 
 //		検索結果の該当がない場合＋入力がない場合
 		if (itemList.size() == 0 || code.equals("　") || code.equals(" ") || code.isEmpty()) {
 			List<Item> itemList2 = new ArrayList<>();
-			switch (animalId) {
+			switch (categoryId) {
 			case 0:
-				itemList2 = itemService.findAll();
+				if (animalId == null || animalId == 0) {
+					itemList2 = itemService.findAll();
+				} else {
+					itemList2 = itemService.findByAnimalId(animalId);
+				}
+
 				if (code.isEmpty()) {
-					model.addAttribute("noItemMessage", "すべての商品一覧を表示します。");
+					model.addAttribute("noItemMessage", "商品一覧を表示します。");
 				} else {
 					model.addAttribute("noItemMessage", "該当の商品がございません。商品一覧を表示します。");
 				}
 				break;
 			case 1:
-				itemList2 = itemService.findByAnimalId(animalId);
+				itemList2 = itemService.findByCategoryId(animalId, categoryId);
 				if (code.isEmpty()) {
-					model.addAttribute("noItemMessage", "絞り込み検索しました。犬用商品一覧を表示します。");
+					model.addAttribute("noItemMessage", "絞り込み検索しました。フード一覧を表示します。");
 				} else {
-					model.addAttribute("noItemMessage", "該当の商品がございません。犬用商品一覧を表示します。");
+					model.addAttribute("noItemMessage", "該当の商品がございません。フード一覧を表示します。");
 				}
 				break;
 			case 2:
-				itemList2 = itemService.findByAnimalId(animalId);
+				itemList2 = itemService.findByCategoryId(animalId, categoryId);
 				if (code.isEmpty()) {
-					model.addAttribute("noItemMessage", "絞り込み検索しました。猫用商品一覧を表示します。");
+					model.addAttribute("noItemMessage", "絞り込み検索しました。おもちゃ一覧を表示します。");
 				} else {
-					model.addAttribute("noItemMessage", "該当の商品がございません。猫用商品一覧を表示します。");
+					model.addAttribute("noItemMessage", "該当の商品がございません。おもちゃ一覧を表示します。");
+				}
+				break;
+			case 3:
+				itemList2 = itemService.findByCategoryId(animalId, categoryId);
+				if (code.isEmpty()) {
+					model.addAttribute("noItemMessage", "絞り込み検索しました。その他の商品一覧を表示します。");
+				} else {
+					model.addAttribute("noItemMessage", "該当の商品がございません。その他の商品一覧を表示します。");
 				}
 				break;
 			}
@@ -262,35 +325,151 @@ public class ItemController {
 		} else {
 
 //			入力フォームに何かしらの入力があった場合
-			List<Item> itemList3 = itemService.findByNameAndAnimalId(code, animalId);
-			if (animalId == 0) {
+			List<Item> itemList3 = itemService.findByCategoryIdAndAnimaiIdAndName(code, animalId, categoryId);
+			if (categoryId == 0) {
 				model.addAttribute("itemList", itemList);
 				model.addAttribute("noItemMessage", "検索結果を表示します。");
 			} else if (itemList3.size() == 0) {
 
 //				何かしら入力があったが、絞り込んだ際には該当の結果がない場合
 				List<Item> itemList2 = new ArrayList<>();
-				switch (animalId) {
-					case 1:
-						itemList2 = itemService.findByAnimalId(animalId);
-						model.addAttribute("noItemMessage", "該当の商品がございません。犬用商品一覧を表示します。");
-						break;
-					case 2:
-						itemList2 = itemService.findByAnimalId(animalId);
-						model.addAttribute("noItemMessage", "該当の商品がございません。猫用商品一覧を表示します。");
-						break;
-					}
-					model.addAttribute("itemList", itemList2);
-				} else {
-					model.addAttribute("itemList", itemList3);
-					model.addAttribute("noItemMessage", "検索結果を表示します。");
+				switch (categoryId) {
+				case 1:
+					itemList2 = itemService.findByCategoryId(animalId, categoryId);
+					model.addAttribute("noItemMessage", "該当の商品がございません。フード一覧を表示します。");
+					break;
+				case 2:
+					itemList2 = itemService.findByCategoryId(animalId, categoryId);
+					model.addAttribute("noItemMessage", "該当の商品がございません。おもちゃ一覧を表示します。");
+					break;
+				case 3:
+					itemList2 = itemService.findByCategoryId(animalId, categoryId);
+					model.addAttribute("noItemMessage", "該当の商品がございません。その他の商品一覧を表示します。");
+					break;
+				}
+				model.addAttribute("itemList", itemList2);
+			} else {
+				model.addAttribute("itemList", itemList3);
+				model.addAttribute("noItemMessage", "検索結果を表示します。");
 			}
 			model.addAttribute("word", code);
 			return "item_list_pet";
 		}
 	}
 	
+	/**
+	 * 犬用品のみのリストへ遷移する際のリンク
+	 */
+	@RequestMapping("/dog")
+	public String dog(String code, Integer categoryId, Model model) {
+
+		session.setAttribute("animalId", 1);
+		List<Item> itemList = itemService.findByAnimalId(1);
+
+		model.addAttribute("link", "犬用品");
+		model.addAttribute("itemList", itemList);
+
+		return "item_list_pet";
+	}
 	
+	/**
+	 * 猫用品のみのリストへ遷移する際のリンク
+	 */
+	@RequestMapping("/cat")
+	public String cat(Model model) {
+
+		session.setAttribute("animalId", 2);
+		List<Item> itemList = itemService.findByAnimalId(2);
+
+		model.addAttribute("link", "猫用品");
+		model.addAttribute("itemList", itemList);
+
+		return "item_list_pet";
+	}
+
+	/**
+	 * お気に入り登録する処理
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/favorite")
+	public String favorite(FavoriteListRegisterForm favoriteListRegisterForm, Model model) {
+		User user = (User) session.getAttribute("user");
+		Integer userId = user.getId();
+		Favorite favorite = new Favorite();
+		// formのuserIdとitemIdからお気に入り登録情報を取得する
+		Integer itemId = Integer.parseInt(favoriteListRegisterForm.getItemId());
+		System.out.println("userId:" + userId);
+		System.out.println("itemId:" + itemId);
+		favorite = favoriteService.findByUserIdItemId(userId, itemId);
+
+		System.out.println(1111111);
+		System.out.println(favorite);
+		if (favorite == null) {
+			Favorite newFavorite = new Favorite();
+			newFavorite.setItemId(itemId);
+			newFavorite.setUserId(user.getId());
+			Date now = new Date();
+			newFavorite.setFavoriteDate(now);
+			favoriteService.insertFavorite(newFavorite);
+			System.out.println(2222222);
+		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
+			String message = "既にお気に入り登録済です";
+			model.addAttribute("message", message);
+		}
+		return itemDetail(itemId, model);
+	}
+	
+	/**
+	 * お気に入りリストの表示
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/favoriteList")
+	public String favoriteListShow(Model model) {
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			String message1 = "お気に入り登録にはユーザー登録が必要です";
+			String message2 = "以下のリンクからユーザー登録を行ってください";
+			model.addAttribute("message1", message1);
+			model.addAttribute("message2", message2);
+			return "favorite_list";
+		}
+		Integer userId = user.getId();
+		List<Favorite> favoriteList = favoriteService.favoriteAll(userId);
+		if (favoriteList == null) {// ユーザ登録済でもお気に入りがゼロの時
+			String message = "お気に入り登録はありません";
+			model.addAttribute("message", message);
+			session.setAttribute("favoriteItemList", null);
+			return "favorite_list";
+		}
+
+		session.setAttribute("favoriteList", favoriteList);
+		List<Item> favoriteItemList = new ArrayList<>();
+		for (Favorite favorite : favoriteList) {
+			Integer itemId = favorite.getItemId();
+			System.out.println("itemId:" + itemId);
+			Item item = itemService.load(itemId);
+			favoriteItemList.add(0, item);
+		}
+		session.setAttribute("favoriteItemList", favoriteItemList);
+		return "favorite_list";
+
+	}
+
+	/**
+	 * お気に入りリストの削除
+	 * 
+	 * @param userId
+	 */
+	@RequestMapping("/deleteFavorite")
+	public String deleteFavorite(String itemId, Model model) {
+		Integer id = Integer.parseInt(itemId);
+		System.out.println(id);
+		favoriteService.delete(id);
+		return favoriteListShow(model);
+	}
+
 //	/**
 //	 * 購入履歴を表示する
 //	 */
@@ -326,7 +505,6 @@ public class ItemController {
 		}
 		session.setAttribute("order", order);
 	}
-	
 	/**
 	 * @return 「隠されたページ」に飛ぶ処理
 	 */

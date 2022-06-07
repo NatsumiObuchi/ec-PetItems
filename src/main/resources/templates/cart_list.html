@@ -48,8 +48,9 @@
 
               <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
               <a href="cart_list.html" class="navbar-link" th:href="@{/item/cartList}" >ショッピングカート</a
-
               >&nbsp;&nbsp;
+              <a href="order_history.html" th:href="@{/item/favoriteList}" class="navbar-link" >お気に入りリスト</a
+                >&nbsp;&nbsp;
               <a href="order_history.html" th:href="@{/order/orderHistory}" class="navbar-link">注文履歴</a
               >&nbsp;&nbsp;
               <a href="login.html" class="navbar-link" th:href="@{/user/toLogin}">ログイン</a>&nbsp;&nbsp;
@@ -174,6 +175,12 @@
         </div>
       </div>
     </div>
+    <br>
+      <footer class="copyright navbar navbar-default">
+    <div> <a th:href="@{/info}">問い合わせフォーム</a>
+          <p>&copy; 楽々ペット. 2022.</p>
+    </div> 
+  </footer>
     <!-- end container -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>

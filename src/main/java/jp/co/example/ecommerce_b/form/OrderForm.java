@@ -6,6 +6,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.User;
 
@@ -13,22 +19,38 @@ public class OrderForm {
 
 	/** 注文日 */
 	private Date orderDate;
+	
 	/** 宛先氏名 */
+	@NotBlank(message="名前を入力してください")
 	private String destinationName;
+
 	/** 宛先Eメール */
+	@NotBlank(message = "メールアドレスを入力してください")
+	@Email(message = "メールアドレスの形式が不正です")
 	private String destinationEmail;
+	
 	/** 宛先郵便番号 */
+	@Pattern(regexp="^[0-9]{3}-[0-9]{4}$",message="郵便番号形式にしてください")
 	private String destinationzipCode;
+	
 	/** 宛先住所 */
+	@NotBlank(message="住所を入力してください")
 	private String destinationAddress;
+	
 	/** 宛先TEL */
+	@NotBlank(message="電話番号を半角数字で入力してください")
 	private String destinationTell;
+	
 	/** 配達時間 */
+	@NotEmpty(message="配達時間を選択してください")
 	private String deliveryTime;
+	
 	/** 配達日にち */
+	@NotEmpty(message="配達日を選択してください")
 	private String deliveryDate;
 
 	/** 支払い方法 */
+	@NotNull(message="支払方法を選択してください")
 	private Integer paymentMethod;
 	
 	public Timestamp getDeliveryTimestamp() {

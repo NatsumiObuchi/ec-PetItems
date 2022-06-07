@@ -6352,3 +6352,20 @@ button.close {
 	margin: 5px,1px,1px,1px;
 	padding: 5px,5px,5px,5px; 
 }
+
+/*order_confirm.htmlの修正*/
+
+.zipcode{
+	margin-left: 95px;
+}
+
+.addressBtn{
+	margin-left: 10px;
+}
+#deliveryDate{
+	margin-left: 200px;
+	margin-bottom: 10px;
+}
+#payError{
+	margin-left: 400px;
+}

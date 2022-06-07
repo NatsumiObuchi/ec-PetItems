@@ -49,6 +49,8 @@
               <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
               <a th:href="@{/item/cartList}" href="cart_list.html" class="navbar-link">ショッピングカート</a
               >&nbsp;&nbsp;
+              <a href="order_history.html" th:href="@{/item/favoriteList}" class="navbar-link" >お気に入りリスト</a
+                >&nbsp;&nbsp;
               <a href="order_history.html" th:href="@{/order/orderHistory}" class="navbar-link" >注文履歴</a
               >&nbsp;&nbsp;
               <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}">ログイン</a>&nbsp;&nbsp;
@@ -61,8 +63,28 @@
       </nav>
       
        <p class="pan-list">
-          	<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span> 
+          	<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
+          	>
+          	<span th:text="${link}">ダミー</span> 
 	   </p>
+	   
+	   <a th:href="@{/item/dog}">
+	   <img
+            alt="main log"
+            th:src="@{/img/dog.png}"
+            height="55"
+        />
+         犬用品</a>
+         
+         &nbsp;&nbsp;
+        
+        <a th:href="@{/item/cat}">
+        <img
+            alt="main log"
+            th:src="@{/img/cat.png}"
+            height="50"
+         />
+         猫用品</a>
 
       <!-- search form -->
       <div class="row">
@@ -104,11 +126,13 @@
                   	絞り込み検索
                   </label><br>
                   &nbsp;&nbsp;&nbsp;
-                  <input type="radio"　id="animalId" name="animalId" value="0" checked>すべて
+                  <input type="radio"　id="categoryId" name="categoryId" value="0" checked>すべて
                   &nbsp;&nbsp;
-                  <input type="radio"　id="animalId" name="animalId" value="1">犬用
+                  <input type="radio"　id="categoryId" name="categoryId" value="1">フード
                   &nbsp;&nbsp;
-                  <input type="radio"　id="animalId" name="animalId" value="2">猫用
+                  <input type="radio"　id="categoryId" name="categoryId" value="2">おもちゃ
+                  &nbsp;&nbsp;
+                  <input type="radio"　id="categoryId" name="categoryId" value="3">その他
                   </div>
                 </div>
                 <div class="text-center">
@@ -147,6 +171,12 @@
                   平均評価：<span th:text="${item.avgStar}"></span> / 5.00（評価件数：<span th:text="${item.countReview}"></span>件）<br>
           	</div>
        	 </div >
+       	 
+       	   <footer class="copyright navbar navbar-default">
+    <div class="footerinfo"> <a th:href="@{/info}">問い合わせフォーム</a>
+          <p>&copy; 楽々ペット. 2022.</p>
+    </div> 
+  </footer>
         
     <!-- end container -->
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>

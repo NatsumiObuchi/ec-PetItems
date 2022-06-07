@@ -102,7 +102,7 @@ public class UserController {
 			switch (String.valueOf(session.getAttribute("transitionSourcePage"))) {
 			case "order":
 				session.setAttribute("transitionSourcePage", null);
-				return "order_confirm";
+				return "forward:/order";
 			default:
 				return "forward:/item/list";
 			}

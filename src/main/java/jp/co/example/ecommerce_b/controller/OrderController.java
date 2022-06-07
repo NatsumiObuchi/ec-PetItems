@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +14,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -40,9 +44,6 @@ public class OrderController {
 
 	@Autowired
 	private ItemService itemService;
-
-	@Autowired
-	private OrderService orderService;
 
 	@ModelAttribute
 	public OrderForm setUpForm() {
@@ -76,29 +77,28 @@ public class OrderController {
 	 */
 
 	@RequestMapping("/orderSent")
-	public String orderSent(OrderForm orderForm, OrderItemForm orderItemForm, Model model) {
+	public String orderSent(@Validated OrderForm orderForm, BindingResult rs, OrderItemForm orderItemForm) {
 
-		System.out.println(orderForm);
+		if(rs.hasErrors()) {
+			return index();
+		}
 
 //		注文する
 		Order order = new Order();
 		order = (Order) session.getAttribute("order");
-//		System.out.println("l85"+order);
-//		System.out.println("OrderForm"+orderForm);
 		Integer userId = order.getUserId();
 
 		BeanUtils.copyProperties(orderForm, order);
 
 		order.setUserId(userId);
 		List<OrderItem> orderList = (List<OrderItem>) session.getAttribute("cartList");
-
 		order.setOrderItemList(orderList);
 
 		
 		// ログイン中の「ユーザーID」「ユーザーインスタンス」をオーダーに格納
-				User user = (User) session.getAttribute("user");
-				order.setUser(user);
-				order.setUserId(user.getId());
+		User user = (User) session.getAttribute("user");
+		order.setUser(user);
+		order.setUserId(user.getId());
 
 		LocalDate localdate = LocalDate.now();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -109,10 +109,16 @@ public class OrderController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		if(order.getPaymentMethod() == 1) {
+			order.setStatus(1);
+		}else if(order.getPaymentMethod() == 2) {
+			order.setStatus(2);
+		}
+		
 		orderservice.update(order);
 		System.out.println(order);
-
+		
 //		orderHistoryテーブルに格納
 		OrderHistory orderHistory = new OrderHistory();
 		List<OrderItem> orderItemList = order.getOrderItemList();
@@ -133,8 +139,10 @@ public class OrderController {
 			BeanUtils.copyProperties(order, orderHistory);
 
 			orderservice.insertHistory(orderHistory);
+			System.out.println(orderHistory);
 		}
-
+		session.setAttribute("order", null);
+		session.setAttribute("cartList", null);
 		return "order_finished";
 	}
 

@@ -74,12 +74,13 @@
         >
           <h3 class="text-center">決済が完了しました！</h3>
           <div class="text-center">
-            <p>この度はご注文ありがとうございます。</p>
-            <p>
-              お支払い先は、お送りしたメールに記載してありますのでご確認ください。
-            </p>
-            <p>メールが届かない場合は「注文履歴」からご確認ください。</p>
+            <p>お買い上げありがとうございます！</p>
+            
+            <p>お買い上げ情報は「注文履歴」からご確認ください。</p>
+            <img alt="main log" th:src="@{/img/dogCat_finish.jpeg}">
           </div>
+          
+         
         </div>
       </div>
 
@@ -87,7 +88,7 @@
       <div class="row">
         <div class="col-xs-offset-5 col-xs-2">
           <div class="form-group">
-            <form action="order_finished.html">
+            <form th:action="@{/item/list}">
               <input
                 class="form-control btn btn-warning btn-block"
                 type="submit"
@@ -98,6 +99,12 @@
         </div>
       </div>
     </div>
+    <br><br>
+      <footer class="copyright navbar navbar-default">
+    <div class="footerinfo"> <a th:href="@{/info}">問い合わせフォーム</a>
+          <p>&copy; 楽々ペット. 2022.</p>
+    </div> 
+  </footer>
     <!-- end container -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>
