@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.Item;
+import jp.co.example.ecommerce_b.domain.Review;
 
 @Repository
 public class ItemRepository {
@@ -50,6 +51,16 @@ public class ItemRepository {
 		}
 		item.setCountReview(rs.getInt("count_review"));
 		return item;
+	};
+
+	private static final RowMapper<Review> REVIEW_ROW_MAPPER = (rs, i) -> {
+		Review review = new Review();
+		review.setId(rs.getInt("id"));
+		review.setUser_id(rs.getInt("user_id"));
+		review.setItem_id(rs.getInt("item_id"));
+		review.setStars(rs.getInt("stars"));
+		review.setContent(rs.getString("content"));
+		return review;
 	};
 
 	/**
@@ -237,6 +248,14 @@ public class ItemRepository {
 		// 実行
 		template.update(sql, param);
 
+	}
+
+	public void insertReview(Review review) {
+		String sql = "insert into reviews (user_id, item_id, stars, content) VALUES (:userId, :itemId, :stars, :content)";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", review.getUser_id())
+				.addValue("itemId", review.getItem_id()).addValue("stars", review.getStars())
+				.addValue("content", review.getContent());
+		template.update(sql, param);
 	}
 
 }

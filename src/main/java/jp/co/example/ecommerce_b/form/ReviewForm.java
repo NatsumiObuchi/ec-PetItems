@@ -4,7 +4,7 @@ public class ReviewForm {
 	private Integer item_id;// value
 	private Integer user_id;// value
 	private Integer stars;// value
-	private String contents;// text
+	private String content;// text
 
 	public Integer getItem_Id() {
 		return item_id;
@@ -18,8 +18,8 @@ public class ReviewForm {
 		return stars;
 	}
 
-	public String getContents() {
-		return contents;
+	public String getContent() {
+		return content;
 	}
 
 	public void setId(Integer item_id) {
@@ -34,8 +34,14 @@ public class ReviewForm {
 		this.stars = stars;
 	}
 
-	public void setContents(String contents) {
-		this.contents = contents;
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	@Override
+	public String toString() {
+		return "ReviewForm [item_id=" + item_id + ", user_id=" + user_id + ", stars=" + stars + ", content=" + content
+				+ "]";
 	}
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jp.co.example.ecommerce_b.domain.Item;
+import jp.co.example.ecommerce_b.domain.Review;
 import jp.co.example.ecommerce_b.repository.ItemRepository;
 
 @Service
@@ -68,6 +69,10 @@ public class ItemService {
 	public List<Item> findByCategoryIdAndAnimaiIdAndName(String name, Integer animalId, Integer categoryId) {
 
 		return repository.findByCategoryIdAndAnimaiIdAndName(name, animalId, categoryId);
+	}
+
+	public void insertReview(Review review) {
+		repository.insertReview(review);
 	}
 
 	/**
