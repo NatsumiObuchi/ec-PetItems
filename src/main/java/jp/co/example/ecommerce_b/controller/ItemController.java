@@ -193,6 +193,7 @@ public class ItemController {
 		orderService.update(order);// DB上のorderを最新に更新
 //		System.out.println("update:"+order);
 		
+		System.out.println(order.getOrderItemList());
 		return cartListShow(model);
 	}
 
