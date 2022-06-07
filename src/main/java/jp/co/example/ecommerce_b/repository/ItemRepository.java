@@ -228,9 +228,9 @@ public class ItemRepository {
 			stars.add(i);
 		}
 
-		contents.add("コメントA");
-		contents.add("コメントB");
-		contents.add("コメントC");
+		contents.add("めっちゃおいしかった！");
+		contents.add("手に入りにくかったのにあって嬉しかった！");
+		contents.add("いいね！");
 
 		// ランダムな整数を4つ生成
 		Random random = new Random();
