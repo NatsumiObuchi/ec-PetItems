@@ -514,15 +514,10 @@ public class ItemController {
 
 	@RequestMapping("/insertReview")
 	public String insertReview(ReviewForm form, Integer item_id, Model model) {
-		System.out.println("xxx");
-		System.out.println("item_id:" + item_id);
-		System.out.println(form);
 		Review review = new Review();
 		BeanUtils.copyProperties(form, review);
 		review.setItem_id(item_id);
-		System.out.println(review);
 		itemService.insertReview(review);
-		System.out.println("yyy");
 		return itemDetail(item_id, model);
 	}
 
