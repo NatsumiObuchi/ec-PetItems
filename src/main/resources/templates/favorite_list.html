@@ -142,26 +142,27 @@
       <div th:if="${message}" th:text="${message}" class="text-center"></div>
       <!-- <div th:unless="${message}" th:text="${message}"> -->
         <div class="aaa">
-            <div class="bbb" th:each="item:${session.favoriteItemList}">
+            <div class="bbb" th:each="favorite:${session.favoriteList}">
               <form th:action="@{/item/deleteFavorite}">
-                  <a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
+                  <a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${favorite.item.id}">
                       <img
   
                         src="../static/img_pizza/1.jpg"
-                        th:src="@{/img_dogfood/} + ${item.imagePath}"
+                        th:src="@{/img_dogfood/} + ${favorite.item.imagePath}"
                         class="img-responsive img-rounded item-img-center"
                         width="200"
                         height="600"
                       /> </a
                     ><br />
                     <a href="item_detail.html"
-                        th:href="@{/item/itemDetail?id=} + ${item.id}">
-                        <span th:text="${item.name}">じゃがバターベーコン</span>
+                        th:href="@{/item/itemDetail?id=} + ${favorite.item.id}">
+                        <span th:text="${favorite.item.name}">じゃがバターベーコン</span>
                     </a><br />
-                    <span th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')}">1,380</span>円(税抜)
+                    <span th:text="${#numbers.formatInteger(favorite.item.price, 3, 'COMMA')}">1,380</span>円(税抜)
                     <br />
+                    <div th:text="${#dates.format(favorite.favoriteDate, 'yyyy年MM月dd日')} + 'に登録済'"></div>
                     <div class="text-center">
-                        <input type="hidden" th:value="${item.id}" name="itemId">
+                        <input type="hidden" th:value="${favorite.item.id}" name="itemId">
                       <button type="submit" class="btn btn-primary">お気に入りから削除</button>
                     </div>
               </form>

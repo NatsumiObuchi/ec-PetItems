@@ -12,6 +12,7 @@ public class Favorite {
 	private Integer itemId;
 	/** 注文日 */
 	private Date favoriteDate;
+	private Item item;
 
 	public Integer getId() {
 		return id;
@@ -45,10 +46,18 @@ public class Favorite {
 		this.favoriteDate = favoriteDate;
 	}
 
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
 	@Override
 	public String toString() {
 		return "Favorite [id=" + id + ", userId=" + userId + ", itemId=" + itemId + ", favoriteDate=" + favoriteDate
-				+ "]";
+				+ ", item=" + item + "]";
 	}
 
 }

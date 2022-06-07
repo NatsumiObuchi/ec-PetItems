@@ -439,14 +439,12 @@ public class ItemController {
 		}
 
 		session.setAttribute("favoriteList", favoriteList);
-		List<Item> favoriteItemList = new ArrayList<>();
 		for (Favorite favorite : favoriteList) {
 			Integer itemId = favorite.getItemId();
 			System.out.println("itemId:" + itemId);
 			Item item = itemService.load(itemId);
-			favoriteItemList.add(0, item);
+			favorite.setItem(item);
 		}
-		session.setAttribute("favoriteItemList", favoriteItemList);
 		return "favorite_list";
 
 	}
