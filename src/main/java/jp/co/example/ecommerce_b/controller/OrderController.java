@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpSession;
 
@@ -40,9 +42,6 @@ public class OrderController {
 
 	@Autowired
 	private ItemService itemService;
-
-	@Autowired
-	private OrderService orderService;
 
 	@ModelAttribute
 	public OrderForm setUpForm() {
@@ -91,7 +90,6 @@ public class OrderController {
 
 		order.setUserId(userId);
 		List<OrderItem> orderList = (List<OrderItem>) session.getAttribute("cartList");
-
 		order.setOrderItemList(orderList);
 
 		
@@ -109,9 +107,6 @@ public class OrderController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-
 		orderservice.update(order);
 		System.out.println(order);
 
@@ -135,6 +130,7 @@ public class OrderController {
 			BeanUtils.copyProperties(order, orderHistory);
 
 			orderservice.insertHistory(orderHistory);
+			System.out.println(orderHistory);
 		}
 		session.setAttribute("order", null);
 		session.setAttribute("cartList", null);

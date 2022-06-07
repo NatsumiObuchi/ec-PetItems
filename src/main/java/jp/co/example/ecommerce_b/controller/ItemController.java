@@ -181,6 +181,7 @@ public class ItemController {
 		orderService.update(order);// DB上のorderを最新に更新
 //		System.out.println("update:"+order);
 		
+		System.out.println(order.getOrderItemList());
 		return cartListShow(model);
 	}
 
@@ -283,15 +284,6 @@ public class ItemController {
 			return "item_list_pet";
 		}
 	}
-	
-	
-//	/**
-//	 * 購入履歴を表示する
-//	 */
-//	@RequestMapping("/orderHistory")
-//	public String orderHistory() {
-//		return "order_history";
-//	}
 	
 	/**
 	 * @param userId orderをセッションスコープに格納する処理。

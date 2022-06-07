@@ -12,6 +12,8 @@ public class Item {
 	private Integer price;
 	/** 画像パス */
 	private String imagePath;
+	/** 画像パス2 */
+	private String imagePath2;
 	/** 削除フラグ */
 	private Boolean deleted;
 
@@ -54,7 +56,15 @@ public class Item {
 	public void setImagePath(String imagePath) {
 		this.imagePath = imagePath;
 	}
+	
+	public String getImagePath2() {
+		return imagePath2;
+	}
 
+	public void setImagePath2(String imagePath2) {
+		this.imagePath2 = imagePath2;
+	}
+	
 	public Boolean getDeleted() {
 		return deleted;
 	}
@@ -66,8 +76,9 @@ public class Item {
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price
-				+ ", imagePath=" + imagePath + ", deleted=" + deleted + "]";
+				+ ", imagePath=" + imagePath + ", imagePath2=" + imagePath2 + ", deleted=" + deleted + "]";
 	}
+
 
 
 }
