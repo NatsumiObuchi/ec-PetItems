@@ -130,9 +130,9 @@
       </div> -->
       <h3 class="text-center">お気に入りリスト</h3>
       <!-- table -->
-          <div class="table">
-          	<div class="main" th:each="item:${session.favoriteItemList}">
-                  <form th:action="@{/item/deleteFavorite}">
+        <div class="aaa">
+          	<div class="bbb" th:each="item:${session.favoriteItemList}">
+                <form th:action="@{/item/deleteFavorite}">
                     <a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
                         <img
     
@@ -153,10 +153,10 @@
                           <input type="hidden" th:value="${item.id}" name="itemId">
                         <button type="submit" class="btn btn-primary">お気に入りから削除</button>
                       </div>
-                  </form>
+                </form>
           	</div>
-       	 </div >
-        
+       	</div >
+    </div >   
     <!-- end container -->
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
     <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
