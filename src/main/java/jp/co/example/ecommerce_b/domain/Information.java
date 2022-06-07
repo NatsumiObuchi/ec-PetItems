@@ -6,7 +6,7 @@ public class Information {
 	private Integer userId;
 	private String nickName;
 	private String email;
-	private Integer age;
+	private String gender;
 	private String comment;
 	
 	public Integer getId() {
@@ -33,11 +33,11 @@ public class Information {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Integer getAge() {
-		return age;
+	public String getGender() {
+		return gender;
 	}
-	public void setAge(Integer age) {
-		this.age = age;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	public String getComment() {
 		return comment;
@@ -47,7 +47,8 @@ public class Information {
 	}
 	@Override
 	public String toString() {
-		return "Information [id=" + id + ", userId=" + userId + ", nickName=" + nickName + ", email=" + email + ", age="
-				+ age + ", comment=" + comment + "]";
+		return "Information [id=" + id + ", userId=" + userId + ", nickName=" + nickName + ", email=" + email
+				+ ", gender=" + gender + ", comment=" + comment + "]";
 	}
+
 }

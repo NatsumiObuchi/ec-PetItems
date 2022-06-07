@@ -95,12 +95,19 @@
                             </div>
                             <div class="form-group">
                                 
-                                    <div class="text-center">年齢：</div>
+                                    <div class="text-center">性別：</div>
+                                   <div th:errors="*{gender}"
+                                    class="control-label"
+                                    style="color: red"
+                                    for="inputError"
+                                    >性別を選択してください</div>
                                 
                                 
-                                    <input type="text" th:field="*{age}" />
-                                
+                                    <input type="radio" name="men" class="gender" value="men" th:field="*{gender}">男性
+                                    <input type="radio" name="women" class="gender" value="women" th:field="*{gender}">女性
+
                             </div>
+                            <br>
                             <div class="form-group">
                                 
                                     <div class="text-center">お問い合わせ内容：</div>

@@ -21,19 +21,17 @@ public class InformationRepository {
 //		information.setId(rs.getInt("id"));
 //		information.setUserId(rs.getInt("user_id"));
 //		information.setNickName(rs.getString("nick_name"));
+//		information.setGender(rs.getString("gender"));
 //		information.setEmail(rs.getString("email"));
-//		information.setAge(rs.getInt("age"));
 //		information.setComment(rs.getString("comment"));
 //		return information;
 //	};
 	
-	
 //	入力されたお問合せフォームをDBにINSERT(ログインしているuserはuserIdを保存、ログインしていない人はnull)
 	public void insertInfo(Information information) {
-		String sql="insert into informations (user_id,nick_name,email,age,comment) VALUES (:userId,:nickName,:email,:age,:comment);";
+		String sql="insert into informations (user_id,nick_name,gender,email,comment) VALUES (:userId,:nickName,:gender,:email,:comment);";
 		SqlParameterSource param=new BeanPropertySqlParameterSource(information);
 		template.update(sql, param);
-		
 	}
 
 }

@@ -2,6 +2,7 @@ package jp.co.example.ecommerce_b.form;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 public class InformationForm {
 	
@@ -12,10 +13,11 @@ public class InformationForm {
 	@NotBlank(message="メールアドレスをご入力ください")
 	@Email(message="正しい形式でご入力ください")
 	private String email;
-	private Integer age;
+	@NotEmpty(message="性別を選択してください")
+	private String gender;
 	@NotBlank(message="お問い合わせ内容をご入力ください")
 	private String comment;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -40,11 +42,11 @@ public class InformationForm {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Integer getAge() {
-		return age;
+	public String getGender() {
+		return gender;
 	}
-	public void setAge(Integer age) {
-		this.age = age;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 	public String getComment() {
 		return comment;
@@ -55,6 +57,8 @@ public class InformationForm {
 	@Override
 	public String toString() {
 		return "InformationForm [id=" + id + ", userId=" + userId + ", nickName=" + nickName + ", email=" + email
-				+ ", age=" + age + ", comment=" + comment + "]";
+				+ ", gender=" + gender + ", comment=" + comment + "]";
 	}
+	
+
 }
