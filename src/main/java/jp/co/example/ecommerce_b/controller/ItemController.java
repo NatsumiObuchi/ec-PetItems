@@ -16,6 +16,7 @@ import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
+import jp.co.example.ecommerce_b.form.ReviewInsertForm;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
@@ -36,6 +37,11 @@ public class ItemController {
 
 	@Autowired
 	private OrderService orderService;
+
+	@ModelAttribute
+	private ReviewInsertForm createReviewInsertForm() {
+		return new ReviewInsertForm();
+	}
 
 	@ModelAttribute
 	private OrderItemForm createOrderItemForm() {
@@ -327,12 +333,11 @@ public class ItemController {
 	}
 
 	@RequestMapping("/washio2")
-	public String insertRecordsIntoValues(String times, String user_id_min, String user_id_max, String item_id_min,
-			String item_id_max, String star_min, String star_max) {
-		itemService.insertRecordsIntoValues(Integer.parseInt(times), Integer.parseInt(user_id_min),
-				Integer.parseInt(user_id_max),
-				Integer.parseInt(item_id_min), Integer.parseInt(item_id_max), Integer.parseInt(star_min),
-				Integer.parseInt(star_max));
-		return "forward:/user/login";
+	public String insertRecordsIntoValues(ReviewInsertForm form, Model model) {
+		itemService.insertRecordsIntoValues(Integer.parseInt(form.getTimes()), Integer.parseInt(form.getUser_id_min()),
+				Integer.parseInt(form.getUser_id_max()), Integer.parseInt(form.getItem_id_min()),
+				Integer.parseInt(form.getItem_id_max()), Integer.parseInt(form.getStar_min()),
+				Integer.parseInt(form.getStar_max()));
+		return "hidden";
 	}
 }

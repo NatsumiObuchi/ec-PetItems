@@ -67,14 +67,14 @@
         >
         </div>
       </div>
-      <form th:action="@{/item/washio2}" method="post">
-          何件インサートするか: <input type="text" name="times">件 <br> <hr>
+      <form th:action="@{/item/washio2}" method="get" th:object="${reviewInsertForm}">
+          何件インサートするか: <input type="text" th:field="*{times}">件 <br> <hr>
 	      user_id: <br>
-	      最小:<input type="text" name="user_id_min">   ~   最大:<input type="text" name="user_id_max"> <br><br>
+	      最小:<input type="text" th:field="*{user_id_min}">   ~   最大:<input type="text" th:field="*{user_id_max}"> <br><br>
 	      item_id:<br>
-	      最小:<input type="text" name="item_id_min">   ~   最大:<input type="text" name="item_id_max"> <br><br>
+	      最小:<input type="text" th:field="*{item_id_min}">   ~   最大:<input type="text" th:field="*{item_id_max}"> <br><br>
 	      star:<br>
-          最小:<input type="text" name="star_min">   ~   最大:<input type="text" name="star_max"> <br> <br> <hr>
+          最小:<input type="text" th:field="*{star_min}">   ~   最大:<input type="text" th:field="*{star_max}"> <br> <br> <hr>
 	      <button>SQL実行</button>
       </form>
 
