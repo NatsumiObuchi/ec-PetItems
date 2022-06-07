@@ -1,6 +1,7 @@
 package jp.co.example.ecommerce_b.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -301,14 +302,51 @@ public class ItemController {
 	 * @return
 	 */
 	@RequestMapping("/favorite")
-	public String favorite() {
+	public String favorite(FavoriteListRegisterForm favoriteListRegisterForm, Model model) {
+		User user = (User) session.getAttribute("user");
+		Integer userId = user.getId();
 		Favorite favorite = new Favorite();
-		favorite.setItemId(null);
-		favorite.setUserId(null);
-		favorite.setFavoriteDate(null);
-		return "redirect:/item/itemDetail";
+		// formのuserIdとitemIdからお気に入り登録情報を取得する
+		Integer itemId = Integer.parseInt(favoriteListRegisterForm.getItemId());
+		System.out.println("userId:" + userId);
+		System.out.println("itemId:" + itemId);
+		favorite = favoriteService.findByUserIdItemId(userId, itemId);
+
+		System.out.println(1111111);
+		System.out.println(favorite);
+		if (favorite == null) {
+			Favorite newFavorite = new Favorite();
+			newFavorite.setItemId(itemId);
+			newFavorite.setUserId(user.getId());
+			Date now = new Date();
+			newFavorite.setFavoriteDate(now);
+			favoriteService.insertFavorite(newFavorite);
+			System.out.println(2222222);
+		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
+			String message = "既にお気に入り登録済です";
+			model.addAttribute("message", message);
+		}
+		return itemDetail(itemId, model);
 	}
 	
+	@RequestMapping("/favoriteList")
+	public String favoriteListShow() {
+		User user = (User) session.getAttribute("user");
+		Integer userId = user.getId();
+		List<Favorite> favoriteList = favoriteService.favoriteAll(userId);
+		session.setAttribute("favoriteList", favoriteList);
+		List<Item> favoriteItemList = new ArrayList<>();
+
+		for (Favorite favorite : favoriteList) {
+			Integer itemId = favorite.getItemId();
+			System.out.println("itemId:" + itemId);
+			Item item = itemService.load(itemId);
+			favoriteItemList.add(0, item);
+		}
+		session.setAttribute("favoriteItemList", favoriteItemList);
+		return "favorite_list";
+	}
+
 //	/**
 //	 * 購入履歴を表示する
 //	 */

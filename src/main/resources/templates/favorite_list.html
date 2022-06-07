@@ -62,9 +62,11 @@
         <!-- /.container-fluid -->
       </nav>
       
-       <p class="pan-list">
-          	<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span> 
-	   </p>
+      <p class="pan-list">
+        <span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
+        >
+        お気に入りリスト
+     </p>
 
       <!-- search form -->
       <div class="row">
@@ -129,7 +131,7 @@
 
       <!-- table -->
           <div class="table">
-          	<div class="main" th:each="item:${itemList}">
+          	<div class="main" th:each="item:${session.favoriteItemList}">
                   <a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
                     <img
 
