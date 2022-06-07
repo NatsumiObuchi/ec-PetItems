@@ -58,7 +58,7 @@ public class ItemRepository {
 	 */
 	public Item load(Integer id) {
 		String sql = "select id, name, description, price, image_path, image_path2,animal_id,category_id, deleted, avg(star) avg_star ,count(star) count_review "
-				+ "from(select i.id id, i.name name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
+				+ "from(select i.id id, i.name as name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
 				+ "from items as i left join reviews as r on i.id = r.item_id where i.deleted is false order by r.stars desc) as new_table "
 				+ "WHERE id=:id "
 				+ "group by id, name , description, price, image_path, image_path2,animal_id,category_id, deleted order by avg_star desc NULLS LAST, count_review desc, id desc";
@@ -75,7 +75,7 @@ public class ItemRepository {
 	 */
 	public List<Item> findAll() {
 		String sql = "select id, name, description, price, image_path, image_path2,animal_id,category_id, deleted, avg(star) avg_star ,count(star) count_review "
-				+ "from(select i.id id, i.name name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
+				+ "from(select i.id id, i.name as name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
 				+ "from items as i left join reviews as r on i.id = r.item_id where i.deleted is false order by r.stars desc) as new_table "
 				+ "group by id, name , description, price, image_path, image_path2, animal_id, category_id, deleted order by avg_star desc NULLS LAST, count_review desc, id desc";
 		List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
@@ -89,7 +89,7 @@ public class ItemRepository {
 
 	public List<Item> findByAnimalId(Integer animalId) {
 	String sql = "select id, name, description, price, image_path, image_path2,animal_id,category_id, deleted, avg(star) avg_star ,count(star) count_review "
-			+ "from(select i.id id, i.name name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
+			+ "from(select i.id id, i.name as name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
 			+ "from items as i left join reviews as r on i.id = r.item_id where i.deleted is false order by r.stars desc) as new_table "
 			+ "WHERE animal_id=:animalId "
 			+ "group by id, name , description, price, image_path, image_path2, animal_id, category_id, deleted order by avg_star desc NULLS LAST, count_review desc, id desc";
@@ -104,7 +104,7 @@ public class ItemRepository {
 	 */
 	public List<Item> findByNameAndAnimalId(String name, Integer animalId) {
 		String sql = "select id, name, description, price, image_path, image_path2,animal_id,category_id, deleted, avg(star) avg_star ,count(star) count_review "
-				+ "from(select i.id id, i.name name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
+				+ "from(select i.id id, i.name as name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
 				+ "from items as i left join reviews as r on i.id = r.item_id where i.deleted is false order by r.stars desc) as new_table "
 				+ "WHERE name LIKE :name ";
 		String sql2 = "AND animal_id=:animalId ";//
@@ -129,7 +129,7 @@ public class ItemRepository {
 	 */
 	public List<Item> findByCategoryId(Integer animalId, Integer categoryId) {
 		String sql = "select id, name, description, price, image_path, image_path2,animal_id,category_id, deleted, avg(star) avg_star ,count(star) count_review "
-				+ "from(select i.id id, i.name name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
+				+ "from(select i.id id, i.name as name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
 				+ "from items as i left join reviews as r on i.id = r.item_id where i.deleted is false order by r.stars desc) as new_table WHERE category_id=:categoryId ";
 		String sql2 = "AND animal_id=:animalId ";//
 		String sql3 = "group by id, name , description, price, image_path2, animal_id,category_id, image_path, deleted order by avg_star desc NULLS LAST, count_review desc, id desc";
@@ -153,7 +153,7 @@ public class ItemRepository {
 
 	public List<Item> findByCategoryIdAndAnimaiIdAndName(String name, Integer animalId, Integer categoryId) {
 		String sql = "select id, name, description, price, image_path, image_path2,animal_id,category_id, deleted, avg(star) avg_star ,count(star) count_review "
-				+ "from(select i.id id, i.name name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
+				+ "from(select i.id id, i.name as name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
 				+ "from items as i left join reviews as r on i.id = r.item_id where i.deleted is false order by r.stars desc) as new_table WHERE category_id=:categoryId ";
 		String sql2 = "AND animal_id=:animalId ";//
 		String sql3 = "group by id, name , description, price, image_path2, animal_id,category_id, image_path, deleted order by avg_star desc NULLS LAST, count_review desc, id desc";
