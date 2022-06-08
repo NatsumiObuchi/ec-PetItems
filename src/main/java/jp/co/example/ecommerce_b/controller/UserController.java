@@ -103,9 +103,9 @@ public class UserController {
 			case "order":
 				session.setAttribute("transitionSourcePage", null);
 				return "forward:/order";
-//			case "favoriteList":
-//				session.setAttribute("transitionSourcePage", null);
-//				return "forward:/item/favorite";
+			case "favoriteList":
+				session.setAttribute("transitionSourcePage", null);
+				return "forward:/item/favorite2";
 			case "orderHistory":
 				session.setAttribute("transitionSourcePage", null);
 				return "forward:/order/orderHistory";
