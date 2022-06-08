@@ -413,15 +413,19 @@ public class ItemController {
 	@RequestMapping("/favorite")
 	public String favorite(FavoriteListRegisterForm favoriteListRegisterForm, Model model) {
 		User user = (User) session.getAttribute("user");
-		if (user == null) {
+		Integer itemId = Integer.parseInt(favoriteListRegisterForm.getItemId());
+		if (user == null) {// ユーザの情報はないのでuserIdはセットできない
+			Favorite newFavorite = new Favorite();
+			newFavorite.setItemId(itemId);
+			Date now = new Date();
+			newFavorite.setFavoriteDate(now);
+			session.setAttribute("newFavorite", newFavorite);
+			System.out.println(newFavorite);
 			return favoriteListShow(model);
 		}
 		Integer userId = user.getId();
 		Favorite favorite = new Favorite();
 		// formのuserIdとitemIdからお気に入り登録情報を取得する
-		Integer itemId = Integer.parseInt(favoriteListRegisterForm.getItemId());
-		System.out.println("userId:" + userId);
-		System.out.println("itemId:" + itemId);
 		favorite = favoriteService.findByUserIdItemId(userId, itemId);
 
 		System.out.println(1111111);
@@ -444,6 +448,33 @@ public class ItemController {
 	}
 	
 	/**
+	 * ユーザ情報を取得できた後、 元々ユーザ登録していなかったユーザがログインした後にお気に入り登録される処理 &
+	 * 登録済ユーザがログインした際に追加でお気に入り登録される処理
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/favorite2")
+	public String favorite2(Model model) {
+		User user = (User) session.getAttribute("user");
+		Favorite newFavorite = (Favorite) session.getAttribute("newFavorite");
+		if (newFavorite == null) {
+			return favoriteListShow(model);
+		}
+		Favorite oldFavorite = favoriteService.findByUserIdItemId(user.getId(), newFavorite.getItemId());
+		newFavorite.setUserId(user.getId());// 取得できたuserIdをここでやっとセット
+
+		if (oldFavorite == null) {
+			favoriteService.insertFavorite(newFavorite);
+		} else {// 既に登録済であったユーザの処理
+			String message = "既に登録済の商品です";
+			model.addAttribute("message", message);
+		}
+
+		return favoriteListShow(model);
+	}
+
+	/**
 	 * お気に入りリストの表示
 	 * 
 	 * @return
@@ -452,10 +483,6 @@ public class ItemController {
 	public String favoriteListShow(Model model) {
 		User user = (User) session.getAttribute("user");
 		if (user == null) {
-//			String message1 = "お気に入り登録にはユーザー登録が必要です";
-//			String message2 = "以下のリンクからユーザー登録を行ってください";
-//			model.addAttribute("message1", message1);
-//			model.addAttribute("message2", message2);
 			session.setAttribute("transitionSourcePage", "favoriteList");
 			return "forward:/user/toLogin3";
 		}
@@ -477,7 +504,6 @@ public class ItemController {
 			favorite.setItem(item);
 		}
 		return "favorite_list";
-
 	}
 
 	/**
