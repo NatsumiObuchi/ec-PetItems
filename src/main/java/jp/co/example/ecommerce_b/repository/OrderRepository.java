@@ -39,6 +39,7 @@ public class OrderRepository {
 		order.setDestinationTell(rs.getString("destination_tell"));
 		order.setDeliveryTimestamp(rs.getTimestamp("delivery_time"));
 		order.setPaymentMethod(rs.getInt("payment_method"));
+		order.setCardNumber(rs.getString("card_number"));
 		return order;
 	};
 	
@@ -105,13 +106,12 @@ public class OrderRepository {
 	public void update(Order order){
 		SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 		
-		
-
 			String sql= "UPDATE orders SET user_id = :userId,status = :status ,total_price = :totalPrice, "
 					+ "order_date = :orderDate, destination_name = :destinationName, destination_email = :destinationEmail,"
 					+ "destinationzip_code = :destinationzipCode, destination_address = :destinationAddress, "
 					+ "destination_tell = :destinationTell, delivery_time = :deliveryTimestamp,"
-					+ "payment_method = :paymentMethod WHERE id = :id";
+					+ "payment_method = :paymentMethod, card_brand = :cardBrand, "
+					+ "card_number = :cardNumber WHERE id = :id";
 			
 		template.update(sql, param);
 	
@@ -166,7 +166,7 @@ public class OrderRepository {
 	public Order findByIdAndStatusIs0(Integer userId) {
 		String sql = "SELECT id,user_id,status,total_price,order_date,destination_name,destination_email,"
 				+ "destinationzip_code,destination_address,destination_tell,delivery_time,"
-				+ "payment_method FROM orders WHERE user_id = :id AND status = 0";
+				+ "payment_method,card_brand,card_number FROM orders WHERE user_id = :id AND status = 0";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", userId);
 		List<Order> orders = template.query(sql, param, ORDER_ROW_MAPPER);
 		if (orders.size() == 0) {// レコード（Order）が存在しなかった場合、nullを返す。

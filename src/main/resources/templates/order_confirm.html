@@ -424,7 +424,7 @@
 											<div class="row">
 												<div class="col-sm-12">
 													<label class="radio-inline">
-														<input type="radio" name="responsibleCompany" value="1"
+														<input type="radio" id="payMoney" name="responsibleCompany" value="1"
 															checked="checked" th:field="*{paymentMethod}" />
 														代金引換
 													</label>
@@ -440,9 +440,27 @@
 											<div class="row">
 												<div class="col-sm-12">
 													<label class="radio-inline">
-														<input type="radio" name="responsibleCompany" value="2"
+														<input type="radio" id="creCard" name="responsibleCompany" value="2"
 															checked="checked" th:field="*{paymentMethod}" />
 														クレジットカード </label><br /><br />
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr id="cardNumber" style="display: none;">
+									<td>カードブランド/カード番号入力</td>
+									<td align="center">
+											<div class="row">
+												<div class="col-sm-12">
+												<input type="radio" name="cardBrand" value="1"
+															checked="checked" th:field="*{cardBrand}" />
+														VISA/Master </label>&nbsp;&nbsp;
+												<input type="radio" name="cardBrand" value="2"
+															checked="checked" th:field="*{cardBrand}" />
+														JCB </label><br /><br />
+														<input type="text" name="cardNumber" 
+															th:field="*{cardNumber}" />
+														<br /><br />
 												</div>
 											</div>
 										</td>
