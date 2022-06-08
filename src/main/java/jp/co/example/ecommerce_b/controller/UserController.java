@@ -103,6 +103,9 @@ public class UserController {
 			case "order":
 				session.setAttribute("transitionSourcePage", null);
 				return "forward:/order";
+//			case "favoriteList":
+//				session.setAttribute("transitionSourcePage", null);
+//				return "forward:/item/favorite";
 			case "orderHistory":
 				session.setAttribute("transitionSourcePage", null);
 				return "forward:/order/orderHistory";
@@ -149,5 +152,20 @@ public class UserController {
 			model.addAttribute("historyMessage","注文履歴のご確認にはログインもしくはユーザー登録が必要です。");
 		}
 		return "redirect:/user/login";
+	}
+
+	/**
+	 * ログインしてない人がお気に入り登録、もしくはお気に入りリストを見ようとした際に入ってくる処理
+	 * 
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/toLogin3")
+	public String index3(Model model) {
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			model.addAttribute("favoriteMessage", "お気に入り登録にはログイン、もしくはユーザ登録が必要です。");
+		}
+		return "login";
 	}
 }
