@@ -24,6 +24,8 @@ public class Item {
 	private String avgStar;
 	/** 評価件数 */
 	private Integer countReview;
+	/** 評価件数 */
+	private String avgstar2;
 
 	public Integer getId() {
 		return id;
@@ -84,8 +86,9 @@ public class Item {
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price
-				+ ", imagePath=" + imagePath + ", deleted=" + deleted + ", avgStar=" + avgStar + ", countReview="
-				+ countReview + "]";
+				+ ", imagePath=" + imagePath + ", imagePath2=" + imagePath2 + ", animal_id=" + animal_id
+				+ ", category_id=" + category_id + ", deleted=" + deleted + ", avgStar=" + avgStar + ", countReview="
+				+ countReview + ", avgstar2=" + avgstar2 + "]";
 	}
 
 
@@ -125,6 +128,13 @@ public class Item {
 
 	}
 
+	public String getAvgstar2() {
+		return avgstar2;
+	}
+
+	public void setAvgstar2(String avgstar2) {
+		this.avgstar2 = avgstar2;
+	}
 
 
 }
