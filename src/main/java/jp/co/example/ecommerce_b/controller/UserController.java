@@ -147,4 +147,13 @@ public class UserController {
 		}
 		return "login";
 	}
+
+	@RequestMapping("/toLogin3")
+	public String index3(Model model) {
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			model.addAttribute("favoriteMessage", "お気に入り登録にはログイン、もしくはユーザ登録が必要です。");
+		}
+		return "login";
+	}
 }
