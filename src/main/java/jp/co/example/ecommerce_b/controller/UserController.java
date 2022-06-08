@@ -103,6 +103,9 @@ public class UserController {
 			case "order":
 				session.setAttribute("transitionSourcePage", null);
 				return "forward:/order";
+//			case "favoriteList":
+//				session.setAttribute("transitionSourcePage", null);
+//				return "forward:/item/favorite";
 			default:
 				return "forward:/item/list";
 			}
@@ -148,6 +151,12 @@ public class UserController {
 		return "login";
 	}
 
+	/**
+	 * ログインしてない人がお気に入り登録、もしくはお気に入りリストを見ようとした際に入ってくる処理
+	 * 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/toLogin3")
 	public String index3(Model model) {
 		User user = (User) session.getAttribute("user");
