@@ -162,6 +162,7 @@ public class OrderController {
 			}
 			return "order_history";
 		} else {
+			session.setAttribute("transitionSourcePage", "orderHistory");
 			return "redirect:/user/toLogin2";
 		}
 	}
