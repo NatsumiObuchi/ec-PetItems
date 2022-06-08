@@ -143,7 +143,7 @@ public class UserController {
 	public String index2(Model model) {
 		User user = (User) session.getAttribute("user");
 		if(user==null) {
-			model.addAttribute("historyMessage","注文履歴のご確認にはログインが必要です。");
+			model.addAttribute("historyMessage","注文履歴のご確認にはログインもしくはユーザー登録が必要です。");
 		}
 		return "login";
 	}
