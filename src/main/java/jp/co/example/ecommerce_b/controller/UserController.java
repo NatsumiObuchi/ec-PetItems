@@ -103,6 +103,9 @@ public class UserController {
 			case "order":
 				session.setAttribute("transitionSourcePage", null);
 				return "forward:/order";
+			case "orderHistory":
+				session.setAttribute("transitionSourcePage", null);
+				return "forward:/order/orderHistory";
 			default:
 				return "forward:/item/list";
 			}
@@ -145,6 +148,6 @@ public class UserController {
 		if(user==null) {
 			model.addAttribute("historyMessage","注文履歴のご確認にはログインもしくはユーザー登録が必要です。");
 		}
-		return "login";
+		return "redirect:/user/login";
 	}
 }
