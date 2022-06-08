@@ -6,6 +6,7 @@ public class Review {
 	private Integer user_id;// value
 	private Integer stars;// value
 	private String content;// text
+	private String user_name;// text
 
 	public Integer getId() {
 		return id;
@@ -44,7 +45,15 @@ public class Review {
 	@Override
 	public String toString() {
 		return "Review [id=" + id + ", item_id=" + item_id + ", user_id=" + user_id + ", stars=" + stars + ", content="
-				+ content + "]";
+				+ content + ", user_name=" + user_name + "]";
+	}
+
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
 	}
 
 

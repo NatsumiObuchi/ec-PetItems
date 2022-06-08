@@ -189,9 +189,9 @@
 	      <div th:if="${reviews}">
 	      <hr>
 	        <h3>レビュー一覧</h3> <br>
-	        <p>最大５件のみ表示(最新順)</p> <br>
 	        <div th:each="review:${reviews}">
 	            評　　価： <span th:text="${review.stars}"></span> <br>
+	            ユーザー： <span th:text="${review.user_name}"></span> <br>
 		        コメント： <span th:text="${review.content}"></span> <hr> 
 		    </div>
 	      </div>

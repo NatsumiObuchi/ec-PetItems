@@ -60,6 +60,11 @@ public class ItemRepository {
 		review.setItem_id(rs.getInt("item_id"));
 		review.setStars(rs.getInt("stars"));
 		review.setContent(rs.getString("content"));
+		if (rs.getInt("user_id") == 0) {
+			review.setUser_name("未登録ユーザーさん");
+		} else {
+			review.setUser_name(rs.getString("user_name") + "さん");
+		}
 		return review;
 	};
 
@@ -259,10 +264,12 @@ public class ItemRepository {
 	}
 
 	public List<Review> findReview(Integer itemId) {
-		String sql = "select id, user_id, item_id, stars, content from reviews where item_id = :itemId order by id desc";
+//		String sql = "select reviews.id as id, user_id, item_id, stars, content from reviews where item_id = :itemId order by id desc";
+		String sql = "select reviews.id as id, user_id, item_id, stars, content , users.name as user_name from reviews join users on reviews.user_id = users.id where item_id = :itemId order by id desc";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("itemId", itemId);
 		List<Review> reviews = new ArrayList<>();
 		reviews = template.query(sql, param, REVIEW_ROW_MAPPER);
+		System.out.println(reviews);
 		if (reviews.size() == 0) {
 			return null;
 		} else {
