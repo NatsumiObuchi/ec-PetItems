@@ -245,3 +245,45 @@ $(function() {
 		activeClass: 'navi-active',//現在のページ番号に任意のclassを付与できます
 	})
 });
+
+/*$(function() {
+	
+	var category;
+	window.addEventListener('click', function(){
+		console.log('ここまで');
+		
+		$('#animal').on('click',function(){
+			var category = $('#categoryId').val();
+			console.log(category);
+		})
+		
+	});
+	
+	window.addEventListener('DOMContentLoaded', function(){
+	console.log('ここまで2');
+		
+		if (category == 0){
+			$('input[value="0"]').prop('checked', false);
+		}
+		
+		switch(category){
+			case '0':
+				$('input[value="0"]').prop('checked', true);
+				console.log(animalId);
+				break;
+			case '1':
+				$('input[value="1"]').prop('checked', true);
+				console.log(animalId);
+				break;
+			case '2':
+				$('input[value="2"]').prop('checked', true);
+				console.log(animalId);
+				break;
+			case '3':
+				$('input[value="3"]').prop('checked', true);
+				console.log(animalId);
+				break;
+			}
+		});
+});*/
+
