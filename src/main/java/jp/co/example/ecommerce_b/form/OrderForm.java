@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,8 +11,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import jp.co.example.ecommerce_b.domain.OrderItem;
-import jp.co.example.ecommerce_b.domain.User;
 
 public class OrderForm {
 
@@ -38,7 +35,7 @@ public class OrderForm {
 	private String destinationAddress;
 	
 	/** 宛先TEL */
-	@Pattern(regexp="^[0-9]{2,4}-[0-9]{2,4}-[0-9]{4}$",message="電話番号は「xxx×-xxxx-xxxx」の形式で入力してください")
+	@Pattern(regexp="^[0-9]{2,4}-[0-9]{2,4}-[0-9]{4}$",message="電話番号は「xxxx-xxxx-xxxx」の形式で入力してください")
 	private String destinationTell;
 	
 	/** 配達時間 */
@@ -53,6 +50,20 @@ public class OrderForm {
 	@NotNull(message="支払方法を選択してください")
 	private Integer paymentMethod;
 	
+	/** カードブランド */
+	private Integer cardBrand;
+	
+	/** カード番号 */
+	private String cardNumber;
+	
+	public String getCardNumber() {
+		return cardNumber;
+	}
+
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+
 	public Timestamp getDeliveryTimestamp() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String deliveryDateTime = deliveryDate + " " +deliveryTime;
@@ -131,12 +142,20 @@ public class OrderForm {
 		this.deliveryDate = deliveryDate;
 	}
 
+	public Integer getCardBrand() {
+		return cardBrand;
+	}
+
+	public void setCardBrand(Integer cardBrand) {
+		this.cardBrand = cardBrand;
+	}
+
 	@Override
 	public String toString() {
 		return "OrderForm [orderDate=" + orderDate + ", destinationName=" + destinationName + ", destinationEmail="
 				+ destinationEmail + ", destinationzipCode=" + destinationzipCode + ", destinationAddress="
 				+ destinationAddress + ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTime
-				+ ", deliveryDate=" + deliveryDate + ", paymentMethod=" + paymentMethod + "]";
+				+ ", deliveryDate=" + deliveryDate + ", paymentMethod=" + paymentMethod + ", cardBrand=" + cardBrand
+				+ ", cardNumber=" + cardNumber + "]";
 	}
-
 }

@@ -100,6 +100,7 @@ public class OrderController {
 		order.setUser(user);
 		order.setUserId(user.getId());
 
+//		注文日の実装
 		LocalDate localdate = LocalDate.now();
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		try {
@@ -110,12 +111,17 @@ public class OrderController {
 			e.printStackTrace();
 		}
 		
+		
+//		代金引換orクレジットカード
 		if(order.getPaymentMethod() == 1) {
 			order.setStatus(1);
 		}else if(order.getPaymentMethod() == 2) {
 			order.setStatus(2);
+			order.setCardNumber(order.getCardNumber());
+			order.setCardBrand(order.getCardBrand());
 		}
 		
+//		orderテーブルに格納
 		orderservice.update(order);
 		System.out.println(order);
 		

@@ -4,6 +4,10 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author erika
+ *
+ */
 public class Order {
 
 	/** 注文id */
@@ -30,6 +34,10 @@ public class Order {
 	private Timestamp deliveryTimestamp;
 	/** 支払い方法 */
 	private Integer paymentMethod;
+	/** カード番号 */
+	private String cardNumber;
+	/** カードブランド */
+	private Integer cardBrand;
 	/** ユーザー */
 	private User user;
 	/** 注文商品リスト */
@@ -53,6 +61,14 @@ public class Order {
 	public int getCalcTotal(OrderItem orderItem) {
 //		totalPrice = orderItem.getSubTotal();
 		return totalPrice;
+	}
+
+	public String getCardNumber() {
+		return cardNumber;
+	}
+
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
 	}
 
 	public Integer getId() {
@@ -167,15 +183,14 @@ public class Order {
 		this.orderItemList = orderItemList;
 	}
 
-	@Override
-	public String toString() {
-		return "Order [id=" + id + ", userId=" + userId + ", status=" + status + ", totalPrice=" + totalPrice
-				+ ", orderDate=" + orderDate + ", destinationName=" + destinationName + ", destinationEmail="
-				+ destinationEmail + ", destinationzipCode=" + destinationzipCode + ", destinationAddress="
-				+ destinationAddress + ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTimestamp
-				+ ", paymentMethod=" + paymentMethod + ", user=" + user + ", orderItemList=" + orderItemList + "]";
+	public Integer getCardBrand() {
+		return cardBrand;
 	}
 
+	public void setCardBrand(Integer cardBrand) {
+		this.cardBrand = cardBrand;
+	}
+	
 	public int calcTotalPrice() {
 		int total = 0;
 		List<OrderItem> orderItemList = this.getOrderItemList();
@@ -183,6 +198,16 @@ public class Order {
 			total += orderItem.getItem().getPrice() * orderItem.getQuantity();
 		}
 		return (int) (total * 1.1);// この合計を代入する。
+	}
+
+	@Override
+	public String toString() {
+		return "Order [id=" + id + ", userId=" + userId + ", status=" + status + ", totalPrice=" + totalPrice
+				+ ", orderDate=" + orderDate + ", destinationName=" + destinationName + ", destinationEmail="
+				+ destinationEmail + ", destinationzipCode=" + destinationzipCode + ", destinationAddress="
+				+ destinationAddress + ", destinationTell=" + destinationTell + ", deliveryTimestamp="
+				+ deliveryTimestamp + ", paymentMethod=" + paymentMethod + ", cardNumber=" + cardNumber + ", cardBrand="
+				+ cardBrand + ", user=" + user + ", orderItemList=" + orderItemList + "]";
 	}
 
 }

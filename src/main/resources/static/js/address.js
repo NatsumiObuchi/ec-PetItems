@@ -19,5 +19,14 @@ $(function(){
 			console.log('errorThrown   :' + errorThrown);
 		});
 	});
+	/*クレジットカードの挙動*/
+	$("#creCard").on('click',function(){
+		$("#cardNumber").show();
+	});
+	$("#payMoney").on("click",function(){
+		$("#cardNumber").hide();
+	});
 });
+
+
 
