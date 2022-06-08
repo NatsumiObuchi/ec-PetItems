@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jp.co.example.ecommerce_b.domain.Item;
+import jp.co.example.ecommerce_b.domain.Review;
 import jp.co.example.ecommerce_b.repository.ItemRepository;
 
 @Service
@@ -70,6 +71,10 @@ public class ItemService {
 		return repository.findByCategoryIdAndAnimaiIdAndName(name, animalId, categoryId);
 	}
 
+	public void insertReview(Review review) {
+		repository.insertReview(review);
+	}
+
 	/**
 	 * 
 	 * 商品情報を更新するメソッド。
@@ -98,5 +103,9 @@ public class ItemService {
 		for (int i = 1; i <= times; i++) {
 			repository.insertRecordsIntoValues(user_id_min, user_id_max, item_id_min, item_id_max, star_min, star_max);
 		}
+	}
+
+	public List<Review> findReview(Integer itemId) {
+		return repository.findReview(itemId);
 	}
 }

@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.Item;
+import jp.co.example.ecommerce_b.domain.Review;
 
 @Repository
 public class ItemRepository {
@@ -50,6 +51,21 @@ public class ItemRepository {
 		}
 		item.setCountReview(rs.getInt("count_review"));
 		return item;
+	};
+
+	private static final RowMapper<Review> REVIEW_ROW_MAPPER = (rs, i) -> {
+		Review review = new Review();
+		review.setId(rs.getInt("id"));
+		review.setUser_id(rs.getInt("user_id"));
+		review.setItem_id(rs.getInt("item_id"));
+		review.setStars(rs.getInt("stars"));
+		review.setContent(rs.getString("content"));
+		if (rs.getInt("user_id") == 0) {
+			review.setUser_name("未登録ユーザーさん");
+		} else {
+			review.setUser_name(rs.getString("user_name") + "さん");
+		}
+		return review;
 	};
 
 	/**
@@ -217,9 +233,9 @@ public class ItemRepository {
 			stars.add(i);
 		}
 
-		contents.add("コメントA");
-		contents.add("コメントB");
-		contents.add("コメントC");
+		contents.add("めっちゃおいしかった！");
+		contents.add("手に入りにくかったのにあって嬉しかった！");
+		contents.add("いいね！");
 
 		// ランダムな整数を4つ生成
 		Random random = new Random();
@@ -237,6 +253,29 @@ public class ItemRepository {
 		// 実行
 		template.update(sql, param);
 
+	}
+
+	public void insertReview(Review review) {
+		System.out.println(review);
+		String sql = "insert into reviews (user_id, item_id, stars, content) VALUES (:userId, :itemId, :stars, :content)";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", review.getUser_id())
+				.addValue("itemId", review.getItem_id()).addValue("stars", review.getStars())
+				.addValue("content", review.getContent());
+		template.update(sql, param);
+	}
+
+	public List<Review> findReview(Integer itemId) {
+//		String sql = "select reviews.id as id, user_id, item_id, stars, content from reviews where item_id = :itemId order by id desc";
+		String sql = "select reviews.id as id, user_id, item_id, stars, content , users.name as user_name from reviews left join users on reviews.user_id = users.id where item_id = :itemId order by id desc";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("itemId", itemId);
+		List<Review> reviews = new ArrayList<>();
+		reviews = template.query(sql, param, REVIEW_ROW_MAPPER);
+		System.out.println(reviews);
+		if (reviews.size() == 0) {
+			return null;
+		} else {
+			return reviews;
+		}
 	}
 
 }

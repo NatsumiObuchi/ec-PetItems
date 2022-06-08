@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +17,11 @@ import jp.co.example.ecommerce_b.domain.Favorite;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderItem;
+import jp.co.example.ecommerce_b.domain.Review;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.FavoriteListRegisterForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
+import jp.co.example.ecommerce_b.form.ReviewForm;
 import jp.co.example.ecommerce_b.form.ReviewInsertForm;
 import jp.co.example.ecommerce_b.service.FavoriteService;
 import jp.co.example.ecommerce_b.service.ItemService;
@@ -58,6 +61,11 @@ public class ItemController {
 	@ModelAttribute
 	private FavoriteListRegisterForm favoriteListRegisterForm() {
 		return new FavoriteListRegisterForm();
+	}
+
+	@ModelAttribute
+	private ReviewForm createReviewForm() {
+		return new ReviewForm();
 	}
 
 	/**
@@ -142,6 +150,11 @@ public class ItemController {
 	 */
 	@RequestMapping("/itemDetail")
 	public String itemDetail(Integer id,Model model) {
+
+		// 検索するitem_idでレビュー集め
+		List<Review> reviews = itemService.findReview(id);
+		model.addAttribute("reviews", reviews);
+		System.out.println(reviews);
 
 		Integer animalId = (Integer) session.getAttribute("animalId");
 
@@ -510,6 +523,20 @@ public class ItemController {
 		}
 		session.setAttribute("order", order);
 	}
+
+	@RequestMapping("/insertReview")
+	public String insertReview(ReviewForm form, Integer item_id, Model model) {
+		User user = (User) session.getAttribute("user");
+		Review review = new Review();
+		BeanUtils.copyProperties(form, review);
+		if (user != null) {
+			review.setUser_id(user.getId());
+		}
+		review.setItem_id(item_id);
+		itemService.insertReview(review);
+		return itemDetail(item_id, model);
+	}
+
 	/**
 	 * @return 「隠されたページ」に飛ぶ処理
 	 */
