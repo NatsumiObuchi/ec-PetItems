@@ -99,6 +99,7 @@
                   	<span th:text="${item.name}">じゃがバターベーコン</span>
 				  </h4>
                   <br />
+                  <span><img th:src="@{/img_star/s} + ${item.avgstar2} +.png" width="100" height="20"></span> <br>
                   平均評価：<span th:text="${item.avgStar}"></span> / 5.00（評価件数：<span th:text="${item.countReview}"></span>件）<br>
                   <br />
                   <p th:text="${item.description}">
@@ -198,9 +199,9 @@
 	      <hr>
 	        <h3>レビュー一覧</h3> <br>
 	        <div th:each="review:${reviews}">
-	            評　　価： <span th:text="${review.stars}"></span> <br>
+	            評　　価：<img th:src="@{/img_star/s} + ${review.stars} +.0.png" width="100" height="20"><span th:text="${review.stars}"></span><br>
 	            ユーザー： <span th:text="${review.user_name}"></span> <br>
-		        コメント： <span th:text="${review.content}"></span> <hr> 
+		        コメント： <pre th:text="${review.content}"></pre> <hr> 
 		    </div>
 	      </div>
 	      <form th:action="@{/item/insertReview}" th:object="${reviewForm}" method="post">

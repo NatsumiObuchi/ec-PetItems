@@ -50,6 +50,20 @@ public class ItemRepository {
 			item.setAvgStar(xx);
 		}
 		item.setCountReview(rs.getInt("count_review"));
+
+		Double avgStar = Double.valueOf(item.getAvgStar());// 1.23,0.00
+		avgStar *= 10;// 12.3,0.0
+		long avgSTAR = Math.round(avgStar);// 13,0
+		long avgSTAR10 = avgSTAR / 10;// 1
+		long avgSTAR1 = avgSTAR % 10;// 3
+		if (avgSTAR1 < 5) {
+			avgSTAR1 = 0;
+		} else if (avgSTAR1 <= 9) {
+			avgSTAR1 = 5;
+		}
+		String a = avgSTAR10 + "." + avgSTAR1;
+		item.setAvgstar2(a);
+
 		return item;
 	};
 
