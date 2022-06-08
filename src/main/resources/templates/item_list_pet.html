@@ -126,13 +126,17 @@
                   	絞り込み検索
                   </label><br>
                   &nbsp;&nbsp;&nbsp;
-                  <input type="radio"　id="categoryId" name="categoryId" value="0" checked>すべて
+                  <input type="radio"　th:if="${categoryId==0}" id="categoryId" name="categoryId" value="0" checked>
+                  <input type="radio"　th:unless="${categoryId==0}" id="categoryId" name="categoryId" value="0">すべて
                   &nbsp;&nbsp;
-                  <input type="radio"　id="categoryId" name="categoryId" value="1">フード
+                  <input type="radio"　th:if="${categoryId==1}" id="categoryId" name="categoryId" value="1" checked>
+                  <input type="radio"　th:unless="${categoryId==1}" id="categoryId" name="categoryId" value="1">フード
                   &nbsp;&nbsp;
-                  <input type="radio"　id="categoryId" name="categoryId" value="2">おもちゃ
+                  <input type="radio"　th:if="${categoryId==2}" id="categoryId" name="categoryId" value="2" checked>
+                  <input type="radio"　th:unless="${categoryId==2}" id="categoryId" name="categoryId" value="2">おもちゃ
                   &nbsp;&nbsp;
-                  <input type="radio"　id="categoryId" name="categoryId" value="3">その他
+                  <input type="radio"　th:if="${categoryId==3}" id="categoryId" name="categoryId" value="3" checked>
+                  <input type="radio"　th:unless="${categoryId==3}" id="categoryId" name="categoryId" value="3">その他
                   </div>
                 </div>
                 <div class="text-center">

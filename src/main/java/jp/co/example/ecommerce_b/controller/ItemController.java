@@ -76,6 +76,7 @@ public class ItemController {
 		List<Item> itemList = itemService.findAll();
 		model.addAttribute("itemList", itemList);
 		session.setAttribute("animalId", 0);
+		model.addAttribute("categoryId", 0);
 		return "item_list_pet";
 	}
 
@@ -332,6 +333,7 @@ public class ItemController {
 				}
 				break;
 			}
+			model.addAttribute("categoryId", categoryId);
 			model.addAttribute("itemList", itemList2);
 			model.addAttribute("word", code);
 			return "item_list_pet";
@@ -365,6 +367,7 @@ public class ItemController {
 				model.addAttribute("itemList", itemList3);
 				model.addAttribute("noItemMessage", "検索結果を表示します。");
 			}
+			model.addAttribute("categoryId", categoryId);
 			model.addAttribute("word", code);
 			return "item_list_pet";
 		}
@@ -374,11 +377,12 @@ public class ItemController {
 	 * 犬用品のみのリストへ遷移する際のリンク
 	 */
 	@RequestMapping("/dog")
-	public String dog(String code, Integer categoryId, Model model) {
+	public String dog(Model model) {
 
 		session.setAttribute("animalId", 1);
 		List<Item> itemList = itemService.findByAnimalId(1);
 
+		model.addAttribute("categoryId", 0);
 		model.addAttribute("link", "犬用品");
 		model.addAttribute("itemList", itemList);
 
@@ -394,6 +398,7 @@ public class ItemController {
 		session.setAttribute("animalId", 2);
 		List<Item> itemList = itemService.findByAnimalId(2);
 
+		model.addAttribute("categoryId", 0);
 		model.addAttribute("link", "猫用品");
 		model.addAttribute("itemList", itemList);
 
