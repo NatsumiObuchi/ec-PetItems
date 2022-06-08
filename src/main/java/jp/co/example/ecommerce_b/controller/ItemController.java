@@ -519,8 +519,12 @@ public class ItemController {
 
 	@RequestMapping("/insertReview")
 	public String insertReview(ReviewForm form, Integer item_id, Model model) {
+		User user = (User) session.getAttribute("user");
 		Review review = new Review();
 		BeanUtils.copyProperties(form, review);
+		if (user != null) {
+			review.setUser_id(user.getId());
+		}
 		review.setItem_id(item_id);
 		itemService.insertReview(review);
 		return itemDetail(item_id, model);

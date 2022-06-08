@@ -256,6 +256,7 @@ public class ItemRepository {
 	}
 
 	public void insertReview(Review review) {
+		System.out.println(review);
 		String sql = "insert into reviews (user_id, item_id, stars, content) VALUES (:userId, :itemId, :stars, :content)";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", review.getUser_id())
 				.addValue("itemId", review.getItem_id()).addValue("stars", review.getStars())
@@ -265,7 +266,7 @@ public class ItemRepository {
 
 	public List<Review> findReview(Integer itemId) {
 //		String sql = "select reviews.id as id, user_id, item_id, stars, content from reviews where item_id = :itemId order by id desc";
-		String sql = "select reviews.id as id, user_id, item_id, stars, content , users.name as user_name from reviews join users on reviews.user_id = users.id where item_id = :itemId order by id desc";
+		String sql = "select reviews.id as id, user_id, item_id, stars, content , users.name as user_name from reviews left join users on reviews.user_id = users.id where item_id = :itemId order by id desc";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("itemId", itemId);
 		List<Review> reviews = new ArrayList<>();
 		reviews = template.query(sql, param, REVIEW_ROW_MAPPER);
