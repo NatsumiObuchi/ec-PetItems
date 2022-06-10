@@ -53,7 +53,7 @@
                 >&nbsp;&nbsp;
               <a href="order_history.html" th:href="@{/order/orderHistory}" class="navbar-link" >注文履歴</a
               >&nbsp;&nbsp;
-              <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}">ログイン</a>&nbsp;&nbsp;
+              <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}" th:styleappend="${session.user != null} ? 'display:none'">ログイン</a>&nbsp;&nbsp;
               <a href="item_list_pizza.html" class="navbar-link" th:href="@{/user/logout}" th:styleappend="${session.user == null} ? 'display:none'">ログアウト</a>
             </p>
           </div>
