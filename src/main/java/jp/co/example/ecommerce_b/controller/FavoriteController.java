@@ -101,13 +101,13 @@ public class FavoriteController {
 			newFavorite.setFavoriteDate(now);
 			favoriteService.insertFavorite(newFavorite);
 			System.out.println(2222222);
-			String message1 = "お気に入り登録が完了しました！";
-			model.addAttribute("message1", message1);
+			String message = "お気に入り登録が完了しました！";
+			model.addAttribute("message", message);
 		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
 			String message = "既にお気に入り登録済です";
 			model.addAttribute("message", message);
 		}
-		return "forward:/item/itemDetail";
+		return "redirect:/favorite/favoriteList";
 	}
 
 	/**

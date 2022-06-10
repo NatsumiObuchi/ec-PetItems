@@ -140,7 +140,7 @@
               <div class="row">
                 <div class="col-xs-offset-2 col-xs-10">
                   <div class="form-group">
-                    <div th:if="${message}" th:text="${message}" style="color: red"></div>
+                    <div th:if="${message}" th:text="${message}" th:object="${favoriteListRegisterForm}" style="color: red"></div>
                     <form th:action="@{/favorite/insert}" method="post">
                       <input type="hidden" th:value="${item.id}" name="itemId">
                       <button id="favorite_btn">お気に入り登録</button>
@@ -173,7 +173,7 @@
             <div class="row">
               <div class="col-xs-offset-2 col-xs-3">
                 <div class="form-group">
-                  <form action="cart_list.html" th:action="@{/shopping/inCart}" method="post" id="cartAdd">
+                  <form action="cart_list.html" th:action="@{/shopping/inCart}" th:object="${orderItemForm}" method="post" id="cartAdd">
                     <p>
                       <input
                         class="form-control btn btn-warning btn-block"
