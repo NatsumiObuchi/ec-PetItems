@@ -47,7 +47,7 @@
           >
             <p class="navbar-text navbar-right">
               <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
-              <a th:href="@{/item/cartList}" href="cart_list.html" class="navbar-link">ショッピングカート</a
+              <a th:href="@{/shopping/cartList}" href="cart_list.html" class="navbar-link">ショッピングカート</a
               >&nbsp;&nbsp;
               <a href="order_history.html" th:href="@{/item/favoriteList}" class="navbar-link" >お気に入りリスト</a
                 >&nbsp;&nbsp;
