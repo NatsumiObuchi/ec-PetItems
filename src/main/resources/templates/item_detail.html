@@ -52,7 +52,7 @@
               <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
               <a href="cart_list.html" class="navbar-link"　 th:href="@{/item/cartList}" >ショッピングカート</a
               >&nbsp;&nbsp;
-              <a href="order_history.html" th:href="@{/item/favoriteList}" class="navbar-link" >お気に入りリスト</a
+              <a href="order_history.html" th:href="@{/favorite/favoriteList}" class="navbar-link" >お気に入りリスト</a
                 >&nbsp;&nbsp;
               <a href="practiceHistory.html" th:href="@{/order/orderHistory}" class="navbar-link">注文履歴</a
               >&nbsp;&nbsp;
@@ -141,7 +141,7 @@
                 <div class="col-xs-offset-2 col-xs-10">
                   <div class="form-group">
                     <div th:if="${message}" th:text="${message}" style="color: red"></div>
-                    <form th:action="@{/item/favorite}" method="post">
+                    <form th:action="@{/favorite/insert}" method="post">
                       <input type="hidden" th:value="${item.id}" name="itemId">
                       <button id="favorite_btn">お気に入り登録</button>
                       <span th:if="${message1}" th:text="${message1}"></span>
