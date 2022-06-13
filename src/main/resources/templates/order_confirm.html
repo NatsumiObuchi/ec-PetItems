@@ -466,32 +466,36 @@
 																</div>
 																<div class="col-sm-8 controls">
 																  <label class="control-label">クレジットカード番号</label>
+																  <div th:errors="*{cardNumber}" style="color: red;"></div>
 																  <input class="number credit-card-number form-control"
-																	type="text" name="number"
+																	type="text" name="number" th:field="*{cardNumber}"
 																	pattern="\d*"
 																	inputmode="numeric" autocomplete="cc-number" autocompletetype="cc-number" x-autocompletetype="cc-number"
 																	placeholder="•••• •••• •••• ••••">
 																</div>
 																<div class="col-sm-4 controls">
 																  <label class="control-label">セキュリティコード</label>
+																  <div th:errors="*{securityCode}" style="color: red;"></div>
 																  <input class="security-code form-control"·
 																	inputmode="numeric"
 																	pattern="\d*"
-																	type="text" name="security-code"
+																	type="text" name="security-code" th:field="*{securityCode}"
 																	placeholder="•••">
 																</div>
 															  </div>
 															  <div class="second-row form-group">
 																<div class="col-sm-8 controls">
 																  <label class="control-label">カード名義</label>
+																  <div th:errors="*{cardName}" style="color: red;"></div>
 																  <input class="billing-address-name form-control"
-																	type="text" name="name"
+																	type="text" name="name" th:field="*{cardName}"
 																	placeholder="TARO YAMADA">
 																</div>
 																<div class="col-sm-4 controls">
 																  <label class="control-label">有効期限（月/年）</label>
+																  <div th:errors="*{dateOfExpiry}" style="color: red;"></div>
 																  <input class="expiration-month-and-year form-control"
-																	type="text" name="expiration-month-and-year"
+																	type="text" name="expiration-month-and-year" th:field="*{dateOfExpiry}"
 																	placeholder="01 / 14">
 																</div>
 															  </div>
