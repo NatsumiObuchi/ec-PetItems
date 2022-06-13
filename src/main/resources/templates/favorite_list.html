@@ -47,14 +47,14 @@
           >
             <p class="navbar-text navbar-right">
               <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
-              <a th:href="@{/item/cartList}" href="cart_list.html" class="navbar-link">ショッピングカート</a
+              <a th:href="@{/shopping/cartList}" href="cart_list.html" class="navbar-link">ショッピングカート</a
               >&nbsp;&nbsp;
-              <a href="order_history.html" th:href="@{/item/favoriteList}" class="navbar-link" >お気に入りリスト</a
+              <a href="order_history.html" th:href="@{/favorite/favoriteList}" class="navbar-link" >お気に入りリスト</a
                 >&nbsp;&nbsp;
               <a href="order_history.html" th:href="@{/order/orderHistory}" class="navbar-link" >注文履歴</a
               >&nbsp;&nbsp;
-              <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}">ログイン</a>&nbsp;&nbsp;
-              <a href="item_list_pizza.html" class="navbar-link" th:href="@{/user/logout}">ログアウト</a>
+              <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}" th:styleappend="${session.user != null} ? 'display:none'">ログイン</a>&nbsp;&nbsp;
+              <a href="item_list_pizza.html" class="navbar-link" th:href="@{/user/logout}" th:styleappend="${session.user == null} ? 'display:none'">ログアウト</a>
             </p>
           </div>
           <!-- /.navbar-collapse -->
@@ -143,7 +143,7 @@
       <!-- <div th:unless="${message}" th:text="${message}"> -->
         <div class="aaa">
             <div class="bbb" th:each="favorite:${session.favoriteList}">
-              <form th:action="@{/item/deleteFavorite}">
+              <form th:action="@{/favorite/deleteFavorite}">
                   <a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${favorite.item.id}">
                       <img
   

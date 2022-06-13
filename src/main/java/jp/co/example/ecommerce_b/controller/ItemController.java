@@ -1,7 +1,6 @@
 package jp.co.example.ecommerce_b.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -13,10 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jp.co.example.ecommerce_b.domain.Favorite;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
-import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.Review;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.FavoriteListRegisterForm;
@@ -84,77 +81,6 @@ public class ItemController {
 	}
 
 	/**
-	 * カートに入れた商品を全表示する カートに商品がない場合、「カートに商品がありません。」と表示する
-	 * 
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping("/cartList")
-	public String cartListShow(Model model) {
-
-		// ユーザー周り
-		User user = (User) session.getAttribute("user");
-		if (user == null) {
-			user = new User();
-			user.setId(0);
-		}
-		System.out.println("userId:" + user.getId());
-
-		// カートリスト周り
-		checkOrderBeforePayment(user.getId());// ユーザーの未払いオーダーがあった場合、その「オーダー」をセッションに格納。なくてもuserId=0の「オーダー」を格納。
-		
-		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
-		
-		if (cartList == null || cartList.size() == 0) {// sessionスコープにカートがない時
-			if (user.getId() == 0) {
-				// ユーザーIDが0の場合、過去の他の未登録ユーザーのオーダーがDBにある可能性がある。
-				String emptyMessage = "現在、カートに商品はありません。";
-				model.addAttribute("emptyMessage", emptyMessage);
-				session.setAttribute("cartList", null);
-				
-				//ユーザーIDが0以外の状態（ログインしている状態）
-			} else {
-				Order order = (Order) session.getAttribute("order");
-				System.out.println("order:" + order);
-				Integer orderId = order.getId();
-				System.out.println("orderId:" + orderId);
-				List<OrderItem> orderItemsFromDB = orderItemService.findByOrderId(orderId);
-				System.out.println("orderItemsFromDB:" + orderItemsFromDB);
-
-				if (orderItemsFromDB == null) {
-					String emptyMessage = "現在、カートに商品はありません。";
-					model.addAttribute("emptyMessage", emptyMessage);
-					session.setAttribute("cartList", null);
-				} else if (orderItemsFromDB.size() == 0) {
-					String emptyMessage = "現在、カートに商品はありません。";
-					model.addAttribute("emptyMessage", emptyMessage);
-					session.setAttribute("cartList", null);
-				} else {
-					List<OrderItem> orderItems = new ArrayList<>();
-					for (OrderItem orderItem : orderItemsFromDB) {
-						Item item = itemService.load(orderItem.getItemId());
-						orderItem.setItem(item);
-						orderItem.setSubTotal(item.getPrice() * orderItem.getQuantity());
-						orderItems.add(orderItem);
-					}
-					System.out.println("orderItems:" + orderItems);
-					session.setAttribute("cartList", orderItems);
-					order = (Order) session.getAttribute("order");
-					session.setAttribute("totalPrice", order.getTotalPrice());
-					Integer totalTax = (int) (order.getTotalPrice() * 1 / 11);
-					session.setAttribute("totalTax", totalTax);
-				}
-			}
-		} else {// セッションにカートがあるとき
-			Order order = (Order) session.getAttribute("order");
-			session.setAttribute("totalPrice", order.getTotalPrice());
-			Integer totalTax = (int) (order.getTotalPrice() * 1 / 11);
-			session.setAttribute("totalTax", totalTax);
-		}
-		return "cart_list";
-	}
-
-	/**
 	 * 商品詳細を表示する
 	 */
 	@RequestMapping("/itemDetail")
@@ -188,87 +114,6 @@ public class ItemController {
 
 		return "item_detail";
 
-	}
-
-	/**
-	 * 商品詳細画面で「カートに入れる」を押した時にショッピングカートに追加する
-	 * 
-	 * @param form
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping("/inCart")
-	public String inCart(OrderItemForm form, Model model) {
-
-		// ユーザー情報・オーダーの取得
-		User user = (User) session.getAttribute("user");
-		Integer userId;
-		if (user == null || user.getId() == 0) {// ログイン中のユーザーがいなければ
-			userId = 0;
-		} else {// ログイン中のユーザーがいれば
-			userId = user.getId();
-		}
-		checkOrderBeforePayment(userId);
-		Order order = (Order) session.getAttribute("order");
-//		System.out.println("checkOrderBeforePayment:"+order);
-		if (order.getId() == null || order.getId().equals("")) {
-			order = orderService.insertOrder(order);
-//			System.out.println("if:"+order);
-		}else {
-			System.out.println(111);
-		}
-
-		// OrderItem
-		OrderItem orderItem = new OrderItem();
-		int itemId = Integer.parseInt(form.getItemId());
-		orderItem.setItemId(itemId);// itemIdの格納
-		orderItem.setOrderId(order.getId());// orderIdの格納
-		int quantity = Integer.parseInt(form.getQuantity());
-		orderItem.setQuantity(quantity);// quantityの格納
-		Item item = itemService.load(itemId);// itemの格納
-		orderItem.setItem(item);
-		Integer subtotal = item.getPrice() * orderItem.getQuantity();// subTotalの格納
-		orderItem.setSubTotal(subtotal);
-		orderItem = orderItemService.insert(orderItem);// orderItemテーブルにインサートかつidの取得(idが詰まったorderItem)
-		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");//
-		if (cartList == null || cartList.size() == 0) {
-			cartList = new ArrayList<>();
-		}
-		cartList.add(orderItem);
-		order.setOrderItemList(cartList);
-		order.setTotalPrice(order.calcTotalPrice());
-		session.setAttribute("cartList", cartList);
-		session.setAttribute("order", order);// 最新のorderスコープへ格納
-		orderService.update(order);// DB上のorderを最新に更新
-//		System.out.println("update:"+order);
-		
-		System.out.println(order.getOrderItemList());
-		return cartListShow(model);
-	}
-
-	/**
-	 * @param index
-	 * @param model
-	 * @return カートから商品を削除する時
-	 */
-	@RequestMapping("/delete")
-	public String deleteInCartItem(String id, String index, Model model) {
-		Integer id1 = Integer.parseInt(id);
-		int index1 = Integer.parseInt(index);
-		//カートリストの更新
-		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");//現状の取得
-		cartList.remove(index1);// インスタンスの更新
-		session.setAttribute("cartList", cartList);//スコープへの格納
-		orderItemService.delete(id1);// DBの更新
-		
-		//オーダーの更新
-		Order order = (Order) session.getAttribute("order");//取得
-		order.setOrderItemList(cartList);//更新
-		order.setTotalPrice(order.calcTotalPrice());
-		session.setAttribute("order", order);//スコープへの格納
-		System.out.println(order);
-		orderService.updateOrdersWhenDeleteOrderItemFromCart(order);// DBの更新
-		return cartListShow(model);
 	}
 
 	/**
@@ -412,129 +257,6 @@ public class ItemController {
 
 		return "item_list_pet";
 	}
-
-	/**
-	 * お気に入り登録する処理
-	 * 
-	 * @return
-	 */
-	@RequestMapping("/favorite")
-	public String favorite(FavoriteListRegisterForm favoriteListRegisterForm, Model model) {
-		User user = (User) session.getAttribute("user");
-		Integer itemId = Integer.parseInt(favoriteListRegisterForm.getItemId());
-		if (user == null) {// ユーザの情報はないのでuserIdはセットできない
-			Favorite newFavorite = new Favorite();
-			newFavorite.setItemId(itemId);
-			Date now = new Date();
-			newFavorite.setFavoriteDate(now);
-			session.setAttribute("newFavorite", newFavorite);
-			System.out.println(newFavorite);
-			return favoriteListShow(model);
-		}
-		Integer userId = user.getId();
-		Favorite favorite = new Favorite();
-		// formのuserIdとitemIdからお気に入り登録情報を取得する
-		favorite = favoriteService.findByUserIdItemId(userId, itemId);
-
-		System.out.println(1111111);
-		System.out.println(favorite);
-		if (favorite == null) {
-			Favorite newFavorite = new Favorite();
-			newFavorite.setItemId(itemId);
-			newFavorite.setUserId(user.getId());
-			Date now = new Date();
-			newFavorite.setFavoriteDate(now);
-			favoriteService.insertFavorite(newFavorite);
-			System.out.println(2222222);
-			String message1 = "お気に入り登録が完了しました！";
-			model.addAttribute("message1", message1);
-		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
-			String message = "既にお気に入り登録済です";
-			model.addAttribute("message", message);
-		}
-		return itemDetail(itemId, model);
-	}
-	
-	/**
-	 * ユーザ情報を取得できた後、 元々ユーザ登録していなかったユーザがログインした後にお気に入り登録される処理 &
-	 * 登録済ユーザがログインした際に追加でお気に入り登録される処理
-	 * 
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping("/favorite2")
-	public String favorite2(Model model) {
-		User user = (User) session.getAttribute("user");
-		Favorite newFavorite = (Favorite) session.getAttribute("newFavorite");
-		if (newFavorite == null) {
-			return favoriteListShow(model);
-		}
-		Favorite oldFavorite = favoriteService.findByUserIdItemId(user.getId(), newFavorite.getItemId());
-		newFavorite.setUserId(user.getId());// 取得できたuserIdをここでやっとセット
-
-		if (oldFavorite == null) {
-			favoriteService.insertFavorite(newFavorite);
-		} else {// 既に登録済であったユーザの処理
-			String message = "既に登録済の商品です";
-			model.addAttribute("message", message);
-		}
-
-		return favoriteListShow(model);
-	}
-
-	/**
-	 * お気に入りリストの表示
-	 * 
-	 * @return
-	 */
-	@RequestMapping("/favoriteList")
-	public String favoriteListShow(Model model) {
-		User user = (User) session.getAttribute("user");
-		if (user == null) {
-			session.setAttribute("transitionSourcePage", "favoriteList");
-			return "forward:/user/toLogin3";
-		}
-		Integer userId = user.getId();
-		List<Favorite> favoriteList = favoriteService.favoriteAll(userId);
-
-		if (favoriteList == null) {// ユーザ登録済でもお気に入りがゼロの時
-			String message = "お気に入り登録はありません";
-			model.addAttribute("message", message);
-			session.setAttribute("favoriteList", null);
-			return "favorite_list";
-		}
-
-		session.setAttribute("favoriteList", favoriteList);
-		for (Favorite favorite : favoriteList) {
-			Integer itemId = favorite.getItemId();
-			System.out.println("itemId:" + itemId);
-			Item item = itemService.load(itemId);
-			favorite.setItem(item);
-		}
-		return "favorite_list";
-	}
-
-	/**
-	 * お気に入りリストの削除
-	 * 
-	 * @param userId
-	 */
-	@RequestMapping("/deleteFavorite")
-	public String deleteFavorite(String itemId, Model model) {
-		Integer id = Integer.parseInt(itemId);
-		System.out.println(id);
-		favoriteService.delete(id);
-
-		return favoriteListShow(model);
-	}
-
-//	/**
-//	 * 購入履歴を表示する
-//	 */
-//	@RequestMapping("/orderHistory")
-//	public String orderHistory() {
-//		return "order_history";
-//	}
 	
 	/**
 	 * @param userId orderをセッションスコープに格納する処理。

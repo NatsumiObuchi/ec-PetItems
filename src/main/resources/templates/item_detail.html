@@ -52,12 +52,12 @@
               <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
               <a href="cart_list.html" class="navbar-link"　 th:href="@{/item/cartList}" >ショッピングカート</a
               >&nbsp;&nbsp;
-              <a href="order_history.html" th:href="@{/item/favoriteList}" class="navbar-link" >お気に入りリスト</a
+              <a href="order_history.html" th:href="@{/favorite/favoriteList}" class="navbar-link" >お気に入りリスト</a
                 >&nbsp;&nbsp;
               <a href="practiceHistory.html" th:href="@{/order/orderHistory}" class="navbar-link">注文履歴</a
               >&nbsp;&nbsp;
-              <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}">ログイン</a>&nbsp;&nbsp;
-              <a href="item_list_pizza.html" class="navbar-link"  th:href="@{/user/logout}">ログアウト</a>
+              <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}" th:styleappend="${session.user != null} ? 'display:none'">ログイン</a>&nbsp;&nbsp;
+              <a href="item_list_pizza.html" class="navbar-link"  th:href="@{/user/logout}" th:styleappend="${session.user == null} ? 'display:none'">ログアウト</a>
             </p>
           </div>
           <!-- /.navbar-collapse -->
@@ -140,8 +140,8 @@
               <div class="row">
                 <div class="col-xs-offset-2 col-xs-10">
                   <div class="form-group">
-                    <div th:if="${message}" th:text="${message}" style="color: red"></div>
-                    <form th:action="@{/item/favorite}" method="post">
+                    <div th:if="${message}" th:text="${message}" th:object="${favoriteListRegisterForm}" style="color: red"></div>
+                    <form th:action="@{/favorite/insert}" method="post">
                       <input type="hidden" th:value="${item.id}" name="itemId">
                       <button id="favorite_btn">お気に入り登録</button>
                       <span th:if="${message1}" th:text="${message1}"></span>
@@ -173,7 +173,7 @@
             <div class="row">
               <div class="col-xs-offset-2 col-xs-3">
                 <div class="form-group">
-                  <form action="cart_list.html" th:action="@{/item/inCart}" method="post" id="cartAdd">
+                  <form action="cart_list.html" th:action="@{/shopping/inCart}" th:object="${orderItemForm}" method="post" id="cartAdd">
                     <p>
                       <input
                         class="form-control btn btn-warning btn-block"

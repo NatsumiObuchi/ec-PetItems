@@ -34,42 +34,53 @@
 						<img alt="main log" th:src="@{/img/タイトルロゴ.png}" height="35" />
 					</a>
 				</div>
+				
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div
+            class="collapse navbar-collapse"
+            id="bs-example-navbar-collapse-1"
+          >
+            <p class="navbar-text navbar-right">
+              <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
+              <a th:href="@{/shopping/cartList}" href="cart_list.html" class="navbar-link">ショッピングカート</a
+              >&nbsp;&nbsp;
+              <a href="order_history.html" th:href="@{/favorite/favoriteList}" class="navbar-link" >お気に入りリスト</a
+                >&nbsp;&nbsp;
+              <a href="order_history.html" th:href="@{/order/orderHistory}" class="navbar-link" >注文履歴</a
+              >&nbsp;&nbsp;
+              <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}" th:styleappend="${session.user != null} ? 'display:none'">ログイン</a>&nbsp;&nbsp;
+              <a href="item_list_pizza.html" class="navbar-link" th:href="@{/user/logout}" th:styleappend="${session.user == null} ? 'display:none'">ログアウト</a>
+            </p>
+          </div>
+          <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+      </nav>
+      
+       <p class="pan-list">
+          	<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
+          	>
+          	<span th:text="${link}">ダミー</span> 
+	   </p>
+	   
+	   <a th:href="@{/item/dog}">
+	   <img
+            alt="main log"
+            th:src="@{/img/dog.png}"
+            height="55"
+        />
+         犬用品</a>
+         
+         &nbsp;&nbsp;
+        
+        <a th:href="@{/item/cat}">
+        <img
+            alt="main log"
+            th:src="@{/img/cat.png}"
+            height="50"
+         />
+         猫用品</a>
 
-				<!-- Collect the nav links, forms, and other content for toggling -->
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					<p class="navbar-text navbar-right">
-						<span th:if="${session.user}"><span
-								th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
-						<a th:href="@{/item/cartList}" href="cart_list.html"
-							class="navbar-link">ショッピングカート</a>&nbsp;&nbsp;
-						<a href="order_history.html" th:href="@{/item/favoriteList}"
-							class="navbar-link">お気に入りリスト</a>&nbsp;&nbsp;
-						<a href="order_history.html" th:href="@{/order/orderHistory}"
-							class="navbar-link">注文履歴</a>&nbsp;&nbsp;
-						<a href="login.html" class="navbar-link" th:href="@{/user/toLogin}">ログイン</a>&nbsp;&nbsp;
-						<a href="item_list_pizza.html" class="navbar-link" th:href="@{/user/logout}">ログアウト</a>
-					</p>
-				</div>
-				<!-- /.navbar-collapse -->
-			</div>
-			<!-- /.container-fluid -->
-		</nav>
-
-		<p class="pan-list">
-			<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
-			>
-			<span th:text="${link}">ダミー</span>
-		</p>
-
-		<a th:href="@{/item/dog}">
-			<img alt="main log" th:src="@{/img/dog.png}" height="55" />
-			犬用品</a>
-
-		&nbsp;&nbsp;
-
-		<a th:href="@{/item/cat}">
-			<img alt="main log" th:src="@{/img/cat.png}" height="50" />
-			猫用品</a>
 
 		<!-- search form -->
 		<div class="row">
