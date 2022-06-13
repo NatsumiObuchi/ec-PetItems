@@ -4,20 +4,25 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Charge;
 
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
@@ -77,7 +82,14 @@ public class OrderController {
 	 */
 
 	@RequestMapping("/orderSent")
-	public String orderSent(@Validated OrderForm orderForm, BindingResult rs, OrderItemForm orderItemForm) {
+	public String orderSent(@Validated OrderForm orderForm, BindingResult rs, OrderItemForm orderItemForm,
+//			@RequestParam("stripeToken")
+			String stripeToken,
+//	        @RequestParam("stripeTokenType")
+			String stripeTokenType,
+//	        @RequestParam("stripeEmial")
+			String stripeEmail
+			) {
 
 		if(rs.hasErrors()) {
 			return index();
@@ -119,6 +131,24 @@ public class OrderController {
 			order.setStatus(2);
 			order.setCardNumber(order.getCardNumber());
 			order.setCardBrand(order.getCardBrand());
+
+			// 以下クレジットカードメソッド
+			Stripe.apiKey = "sk_test_51LA6lgEM1Eja88iZuJf4dKIA2zP1aXLbUnjHNVd013Tgob9l5SPMcbGZhkeRFiQ9z3qJgr8crduiKOMcwuBtyU1E00DikrfI8S";
+			Integer price = order.getTotalPrice();
+
+			Map<String, Object> chargeMap = new HashMap<String, Object>();
+			chargeMap.put("aomunt", price);
+			chargeMap.put("description", "合計金額");
+			chargeMap.put("currency", "jpy");
+			chargeMap.put("source", stripeToken);
+
+			try {
+				Charge charge = Charge.create(chargeMap);
+				System.out.println(charge);
+			} catch (StripeException e) {
+				e.printStackTrace();
+			}
+			ResponseEntity response = ResponseEntity.ok().build();
 		}
 		
 //		orderテーブルに格納
