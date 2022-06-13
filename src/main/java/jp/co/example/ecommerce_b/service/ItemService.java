@@ -43,7 +43,15 @@ public class ItemService {
 
 		return repository.findByAnimalId(animalId);
 	}
-
+	
+	/*
+	 * オートコンプリート機能用
+	 */
+	public List<String> findItemName(){
+		return repository.findItemName();
+	}
+	
+	
 	/**
 	 * 
 	 * 商品をあいまい検索するメソッド。(絞り込み：すべて)

@@ -15,6 +15,10 @@ import org.springframework.stereotype.Repository;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Review;
 
+/**
+ * @author 81906
+ *
+ */
 @Repository
 public class ItemRepository {
 
@@ -127,6 +131,23 @@ public class ItemRepository {
 		List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
 		return itemList;
 	}
+	
+	
+	/*
+	 * オートコンプリート機能用、名前全検索
+	 */
+	private static final RowMapper<String> ITEMNAME_ROW_MAPPER =(rs,i)->{
+		String itemName = rs.getString("name");
+		return itemName;
+	};
+	
+	public List<String> findItemName(){
+		String sql = "SELECT name FROM items ORDER BY id";
+		List<String> nameList = template.query(sql, ITEMNAME_ROW_MAPPER);
+		return nameList;
+	}
+	
+	
 
 	/**
 	 * 

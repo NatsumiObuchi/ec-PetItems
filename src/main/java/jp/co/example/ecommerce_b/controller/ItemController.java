@@ -77,6 +77,9 @@ public class ItemController {
 		model.addAttribute("itemList", itemList);
 		session.setAttribute("animalId", 0);
 		model.addAttribute("categoryId", 0);
+		List<String> nameList = itemService.findItemName();
+		//オートコンプリート用。名前の全件検索をsessionに格納。
+		session.setAttribute("nameList", nameList);
 		return "item_list_pet";
 	}
 
@@ -99,12 +102,17 @@ public class ItemController {
 
 		// カートリスト周り
 		checkOrderBeforePayment(user.getId());// ユーザーの未払いオーダーがあった場合、その「オーダー」をセッションに格納。なくてもuserId=0の「オーダー」を格納。
+		
 		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
+		
 		if (cartList == null || cartList.size() == 0) {// sessionスコープにカートがない時
-			if (user.getId() == 0) {// ユーザーIDが0の場合、過去の他の未登録ユーザーのオーダーがDBにある可能性がある。
+			if (user.getId() == 0) {
+				// ユーザーIDが0の場合、過去の他の未登録ユーザーのオーダーがDBにある可能性がある。
 				String emptyMessage = "現在、カートに商品はありません。";
 				model.addAttribute("emptyMessage", emptyMessage);
 				session.setAttribute("cartList", null);
+				
+				//ユーザーIDが0以外の状態（ログインしている状態）
 			} else {
 				Order order = (Order) session.getAttribute("order");
 				System.out.println("order:" + order);
@@ -534,15 +542,18 @@ public class ItemController {
 	public void checkOrderBeforePayment(Integer userId) {
 		// DBに存在すれば支払い前のorderが入り、DBに存在しなければ新しいオーダーが入る
 		Order order = orderService.findOrderBeforePayment(userId);
+		
 		if (order == null) {
 			if (session.getAttribute("order") != null) {
 				order = (Order) session.getAttribute("order");
+				//支払い前のorderがDBになければ（ショッピングカートに商品が入っていなければ）新しくインサートする。
 			} else {
 				order = new Order();
 				order.setStatus(0);
 				order.setUserId(userId);
 				orderService.insertOrder(order);
 			}
+			//userIdが０の場合（ログインしていない場合）新しくDBにインサートする。
 		} else if (order.getUserId() == 0) {
 			if (session.getAttribute("order") != null) {
 				order = (Order) session.getAttribute("order");
