@@ -452,7 +452,56 @@
 									<td align="center">
 											<div class="row">
 												<div class="col-sm-12">
-												<input type="radio" name="cardBrand" value="1"
+													<!-- <form class="creditly-card-form"> -->
+														<div class="top-level-wrapper gray-theme-wrapper">
+														  <section class="creditly-wrapper gray-theme">
+															<h3>クレジットカード</h3>
+															<i>
+															  <div class="card-type" style="text-align:right;margin-top:10px;margin-right:10px;min-height:20px;margin-bottom:-15px"></div>
+															</i>
+															<div class="credit-card-wrapper">
+															  <div class="first-row form-group">
+																<div class="col-sm-8 controls">
+																	<img th:src="@{/img_credit/medium_creca_brand.png}" alt="">
+																</div>
+																<div class="col-sm-8 controls">
+																  <label class="control-label">クレジットカード番号</label>
+																  <input class="number credit-card-number form-control"
+																	type="text" name="number"
+																	pattern="\d*"
+																	inputmode="numeric" autocomplete="cc-number" autocompletetype="cc-number" x-autocompletetype="cc-number"
+																	placeholder="•••• •••• •••• ••••">
+																</div>
+																<div class="col-sm-4 controls">
+																  <label class="control-label">セキュリティコード</label>
+																  <input class="security-code form-control"·
+																	inputmode="numeric"
+																	pattern="\d*"
+																	type="text" name="security-code"
+																	placeholder="•••">
+																</div>
+															  </div>
+															  <div class="second-row form-group">
+																<div class="col-sm-8 controls">
+																  <label class="control-label">カード名義</label>
+																  <input class="billing-address-name form-control"
+																	type="text" name="name"
+																	placeholder="TARO YAMADA">
+																</div>
+																<div class="col-sm-4 controls">
+																  <label class="control-label">有効期限（月/年）</label>
+																  <input class="expiration-month-and-year form-control"
+																	type="text" name="expiration-month-and-year"
+																	placeholder="01 / 14">
+																</div>
+															  </div>
+															</div>
+														  </section>
+														  <!-- <button class="creditly-gray-theme-submit"><span>Submit</span></button> -->
+														</div>
+												
+													  <!-- </form> -->
+												<!-- <input type="radio" name="cardBrand" value="1"
 															checked="checked" th:field="*{cardBrand}" />
 														VISA/Master </label>&nbsp;&nbsp;
 												<input type="radio" name="cardBrand" value="2"
@@ -460,7 +509,7 @@
 														JCB </label><br /><br />
 														<input type="text" name="cardNumber" 
 															th:field="*{cardNumber}" />
-														<br /><br />
+														<br /><br /> -->
 												</div>
 											</div>
 										</td>
