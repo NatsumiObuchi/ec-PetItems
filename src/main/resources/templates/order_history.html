@@ -26,6 +26,18 @@
 			<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
 			>購入履歴
 		</p>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <p class="navbar-text navbar-right">
+            <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
+            <a href="cart_list.html" class="navbar-link" th:href="@{/shopping/cartList}">ショッピングカート</a>&nbsp;&nbsp;
+            <a href="login.html" class="navbar-link" th:href="@{/user/toLogin}" th:styleappend="${session.user != null} ? 'display:none'">ログイン</a>&nbsp;&nbsp;
+            <a href="item_list_pet.html" class="navbar-link" th:href="@{/user/logout}" th:styleappend="${session.user == null} ? 'display:none'">ログアウト</a>
+          </p>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+      <!-- /.container-fluid -->
 
 		<span th:if="${session.user}"><span class="navbar-text navbar-right"
 				th:text="${session.user.name}+さんの購入履歴"></span></span>
