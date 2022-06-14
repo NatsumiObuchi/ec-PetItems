@@ -40,6 +40,8 @@
 							<span th:if="${session.user}!=null">
 								<span　th:text="${session.user.name}+さんこんにちは！">&nbsp;&nbsp;</span>
 							</span>
+							<a href="login.html" class="navbar-link" th:href="@{/myPage}"
+								th:styleappend="${session.user == null} ? 'display:none'">マイページ&nbsp;&nbsp;</a>
 							<a href="item_list_pet.html" class="navbar-link"
 								th:href="@{/item/list}">商品一覧&nbsp;&nbsp;</a>
 							<a href="cart_list.html" class="navbar-link"
