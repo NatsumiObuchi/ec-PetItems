@@ -18,68 +18,26 @@
 </head>
 
 <body>
+	<header>
+		<div th:insert="header :: frag_header"></div>
+	</header>
+
 	<div class="container">
-		<nav class="navbar navbar-default">
-			<div class="container-fluid">
-				<!-- Brand and toggle get grouped for better mobile display -->
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-						data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span> <span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" th:href="@{/item/list}">
-						<!-- 企業ロゴ -->
-						<img alt="main log" th:src="@{/img/タイトルロゴ.png}" height="35" />
-					</a>
-				</div>
-				
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <div
-            class="collapse navbar-collapse"
-            id="bs-example-navbar-collapse-1"
-          >
-            <p class="navbar-text navbar-right">
-              <span th:if="${session.user}"><span th:text="${session.user.name}+さんこんにちは！"></span></span>&nbsp;&nbsp;
-              <a th:href="@{/shopping/cartList}" href="cart_list.html" class="navbar-link">ショッピングカート</a
-              >&nbsp;&nbsp;
-              <a href="order_history.html" th:href="@{/favorite/favoriteList}" class="navbar-link" >お気に入りリスト</a
-                >&nbsp;&nbsp;
-              <a href="order_history.html" th:href="@{/order/orderHistory}" class="navbar-link" >注文履歴</a
-              >&nbsp;&nbsp;
-              <a href="login.html" class="navbar-link"  th:href="@{/user/toLogin}" th:styleappend="${session.user != null} ? 'display:none'">ログイン</a>&nbsp;&nbsp;
-              <a href="item_list_pizza.html" class="navbar-link" th:href="@{/user/logout}" th:styleappend="${session.user == null} ? 'display:none'">ログアウト</a>
-            </p>
-          </div>
-          <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container-fluid -->
-      </nav>
-      
-       <p class="pan-list">
-          	<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
-          	>
-          	<span th:text="${link}">ダミー</span> 
-	   </p>
-	   
-	   <a th:href="@{/item/dog}">
-	   <img
-            alt="main log"
-            th:src="@{/img/dog.png}"
-            height="55"
-        />
-         犬用品</a>
-         
-         &nbsp;&nbsp;
-        
-        <a th:href="@{/item/cat}">
-        <img
-            alt="main log"
-            th:src="@{/img/cat.png}"
-            height="50"
-         />
-         猫用品</a>
+		<p class="pan-list">
+			<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
+			>
+			<span th:text="${link}">ダミー</span>
+		</p>
+
+		<a th:href="@{/item/dog}">
+			<img alt="main log" th:src="@{/img/dog.png}" height="55" />
+			犬用品</a>
+
+		&nbsp;&nbsp;
+
+		<a th:href="@{/item/cat}">
+			<img alt="main log" th:src="@{/img/cat.png}" height="50" />
+			猫用品</a>
 
 
 		<!-- search form -->
@@ -105,7 +63,7 @@
 								<label for="code" class="control-label col-sm-2">商品名</label>
 								<div class="col-sm-9">
 									<input type="text" name="code" th:value="${word}" id="code"
-										class="form-control input-sm" autocomplete="on"/>
+										class="form-control input-sm" autocomplete="on" />
 								</div>
 								<div class="text-center">
 									<label for="code" class="control-label">
@@ -151,7 +109,7 @@
 		<div class="aaa">
 			<div class="bbb" th:each="item:${itemList}">
 				<!-- ↓オートコンプリート用。ブラウザには表示されませんされません-->
-			    <span id="autoComplete" class="autoComplete" th:text="${session.nameList}" style="display:none;"></span>
+				<span id="autoComplete" class="autoComplete" th:text="${session.nameList}" style="display:none;"></span>
 				<a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
 					<img src="../static/img_pizza/1.jpg" th:src="@{/img_dogfood/} + ${item.imagePath}"
 						class="img-responsive img-rounded item-img-center" width="200" height="600" /> </a><br />
@@ -166,11 +124,8 @@
 			</div>
 		</div>
 
-		<footer class="copyright navbar navbar-default">
-			<div class="footerinfo"> <a th:href="@{/info}">問い合わせフォーム</a>
-				<p>&copy; 楽々ペット. 2022.</p>
-			</div>
-		</footer>
+		<!-- フッター/インクルード化しているので、編集する際はfooter.htmlから -->
+			<div th:insert="footer :: frag_footer"></div>
 
 		<!-- end container -->
 		<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
