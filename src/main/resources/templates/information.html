@@ -15,9 +15,8 @@
 </head>
 
 <body>
-	<header>
-		<div th:insert="header :: frag_header"></div>
-	</header>
+	<!-- ヘッダー/インクルード化しているので、編集する際はheader.htmlから -->
+	<div th:insert="header :: frag_header"></div>
 
 	<div class="container">
 		<div class="row">
@@ -88,7 +87,7 @@
 		</div>
 
 		<!-- フッター/インクルード化しているので、編集する際はfooter.htmlから -->
-			<div th:insert="footer :: frag_footer"></div>
+		<div th:insert="footer :: frag_footer"></div>
 
 	</div>
 	<!-- end container -->

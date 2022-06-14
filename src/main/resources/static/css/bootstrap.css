@@ -191,7 +191,7 @@ th {
 
 textarea {
 	resize:none;
-	width:70%;
+	width:600px !important;
 	height:100px;	
 	border: 1px solid #cccccc;
 	border-radius: 4px;
@@ -1057,6 +1057,8 @@ h3 .small,
 .h3 .small {
   font-size: 65%;
 }
+footer,
+.area,
 h4,
 .h4,
 h5,
