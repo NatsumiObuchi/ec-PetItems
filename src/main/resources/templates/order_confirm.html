@@ -12,6 +12,9 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 </head>
 
 <body>
@@ -452,7 +455,67 @@
 									<td align="center">
 											<div class="row">
 												<div class="col-sm-12">
-												<input type="radio" name="cardBrand" value="1"
+													<!-- クレジットカード登録ボタン -->
+													<div class="creditPay-btn" id="creditPayBtn">
+														<script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+														data-key="pk_test_51LA6lgEM1Eja88iZjQhH1JbgdsRaD0KsSRauG59LHg14YzqUT3UhTkOLYckvBZyJzPVnDGLI1rqGjgGxGGT2YGX000InVJnYeF"
+														data-name="RakuRakuペット" data-description="" data-amount="" data-currency="jpy"
+														data-label="この内容で注文する"></script>
+														<div>クレジットカード登録と同時に決済が完了します。</div>
+													</div>
+													<!-- <form class="creditly-card-form">
+														<div class="top-level-wrapper gray-theme-wrapper">
+														  <section class="creditly-wrapper gray-theme">
+															<h3>クレジットカード</h3>
+															<i>
+															  <div class="card-type" style="text-align:right;margin-top:10px;margin-right:10px;min-height:20px;margin-bottom:-15px"></div>
+															</i>
+															<div class="credit-card-wrapper">
+															  <div class="first-row form-group">
+																<div class="col-sm-8 controls">
+																	<img th:src="@{/img_credit/medium_creca_brand.png}" alt="">
+																</div>
+																<div class="col-sm-8 controls">
+																  <label class="control-label">クレジットカード番号</label>
+																  <div th:errors="*{cardNumber}" style="color: red;"></div>
+																  <input class="number credit-card-number form-control"
+																	type="text" name="number" th:field="*{cardNumber}"
+																	pattern="\d*"
+																	inputmode="numeric" autocomplete="cc-number" autocompletetype="cc-number" x-autocompletetype="cc-number"
+																	placeholder="•••• •••• •••• ••••">
+																</div>
+																<div class="col-sm-4 controls">
+																  <label class="control-label">セキュリティコード</label>
+																  <div th:errors="*{securityCode}" style="color: red;"></div>
+																  <input class="security-code form-control"·
+																	inputmode="numeric"
+																	pattern="\d*"
+																	type="text" name="security-code" th:field="*{securityCode}"
+																	placeholder="•••">
+																</div>
+															  </div>
+															  <div class="second-row form-group">
+																<div class="col-sm-8 controls">
+																  <label class="control-label">カード名義</label>
+																  <div th:errors="*{cardName}" style="color: red;"></div>
+																  <input class="billing-address-name form-control"
+																	type="text" name="name" th:field="*{cardName}"
+																	placeholder="TARO YAMADA">
+																</div>
+																<div class="col-sm-4 controls">
+																  <label class="control-label">有効期限（月/年）</label>
+																  <div th:errors="*{dateOfExpiry}" style="color: red;"></div>
+																  <input class="expiration-month-and-year form-control"
+																	type="text" name="expiration-month-and-year" th:field="*{dateOfExpiry}"
+																	placeholder="01 / 14">
+																</div>
+															  </div>
+															</div>
+														  </section>
+														  <button class="creditly-gray-theme-submit"><span>Submit</span></button>
+														</div>
+													  </form> -->
+												<!-- <input type="radio" name="cardBrand" value="1"
 															checked="checked" th:field="*{cardBrand}" />
 														VISA/Master </label>&nbsp;&nbsp;
 												<input type="radio" name="cardBrand" value="2"
@@ -460,7 +523,7 @@
 														JCB </label><br /><br />
 														<input type="text" name="cardNumber" 
 															th:field="*{cardNumber}" />
-														<br /><br />
+														<br /><br /> -->
 												</div>
 											</div>
 										</td>

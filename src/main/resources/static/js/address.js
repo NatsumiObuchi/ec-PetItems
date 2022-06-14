@@ -20,11 +20,25 @@ $(function(){
 		});
 	});
 	/*クレジットカードの挙動*/
-	$("#creCard").on('click',function(){
-		$("#cardNumber").show();
-	});
-	$("#payMoney").on("click",function(){
-		$("#cardNumber").hide();
+	 $("#creCard").on('click',function(){
+	 	$("#cardNumber").show();
+	 });
+	 $("#payMoney").on("click",function(){
+	 	$("#cardNumber").hide();
+	 });
+
+	var grayThemeCreditly = Creditly.initialize(
+		'.creditly-wrapper.gray-theme .expiration-month-and-yaer',
+		'.creditly-wrapper.gray-theme .credit-card-number',
+		'.creditly-wrapper.gray-theme .security-code',
+		'.creditly-wrapper.gray-theme .card-type');
+
+	$(".creditly-gray-theme-submit").click(function(e) {
+		e.preventDefault();
+		var output = grayThemeCreditly.validate();
+		if (output) {
+			console.log(output);
+		}
 	});
 });
 

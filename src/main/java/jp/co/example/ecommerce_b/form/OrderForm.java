@@ -54,15 +54,20 @@ public class OrderForm {
 	private Integer cardBrand;
 	
 	/** カード番号 */
+//	@Pattern(regexp = "^[0-9]{4}[0-9]{4}[0-9]{4}[0-9]{4}$", message = "カード番号は「xxxx xxxx xxxx xxxx」の形式で入力してください")
 	private String cardNumber;
 	
-	public String getCardNumber() {
-		return cardNumber;
-	}
+	/** セキュリティコード */
+//	@Pattern(regexp = "^[0-9]{3}$", message = "セキュリティコードを入力してください")
+	private String securityCode;
 
-	public void setCardNumber(String cardNumber) {
-		this.cardNumber = cardNumber;
-	}
+	/** カード名義 */
+//	@NotBlank(message = "カード名義を入力してください")
+	private String cardName;
+
+	/** 有効期限 */
+//	@Pattern(regexp = "^[0-9]{2}/[0-9]{2}$", message = "有効期限を入力してください")
+	private String dateOfExpiry;
 
 	public Timestamp getDeliveryTimestamp() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -150,12 +155,46 @@ public class OrderForm {
 		this.cardBrand = cardBrand;
 	}
 
+	public String getCardNumber() {
+		return cardNumber;
+	}
+
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+
+	public String getSecurityCode() {
+		return securityCode;
+	}
+
+	public void setSecurityCode(String securityCode) {
+		this.securityCode = securityCode;
+	}
+
+	public String getCardName() {
+		return cardName;
+	}
+
+	public void setCardName(String cardName) {
+		this.cardName = cardName;
+	}
+
+	public String getDateOfExpiry() {
+		return dateOfExpiry;
+	}
+
+	public void setDateOfExpiry(String dateOfExpiry) {
+		this.dateOfExpiry = dateOfExpiry;
+	}
+
 	@Override
 	public String toString() {
 		return "OrderForm [orderDate=" + orderDate + ", destinationName=" + destinationName + ", destinationEmail="
 				+ destinationEmail + ", destinationzipCode=" + destinationzipCode + ", destinationAddress="
 				+ destinationAddress + ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTime
 				+ ", deliveryDate=" + deliveryDate + ", paymentMethod=" + paymentMethod + ", cardBrand=" + cardBrand
-				+ ", cardNumber=" + cardNumber + "]";
+				+ ", cardNumber=" + cardNumber + ", securityCode=" + securityCode + ", cardName=" + cardName
+				+ ", dateOfExpiry=" + dateOfExpiry + "]";
 	}
+
 }
