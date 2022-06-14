@@ -188,6 +188,14 @@ td,
 th {
   padding: 0;
 }
+
+textarea {
+	resize:none;
+	width:70%;
+	height:100px;	
+	border: 1px solid #cccccc;
+	border-radius: 4px;
+}
 /*! Source: https://github.com/h5bp/html5-boilerplate/blob/master/src/css/main.css */
 @media print {
   *,
