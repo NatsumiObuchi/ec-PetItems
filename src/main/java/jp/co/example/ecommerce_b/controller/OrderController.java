@@ -13,6 +13,8 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,6 +40,7 @@ import jp.co.example.ecommerce_b.service.OrderService;
 @Controller
 @RequestMapping("/order")
 public class OrderController {
+
 	@Autowired
 	private OrderService orderservice;
 
@@ -49,6 +52,9 @@ public class OrderController {
 
 	@Autowired
 	private ItemService itemService;
+
+	@Autowired
+	private MailSender sender;
 
 	@ModelAttribute
 	public OrderForm setUpForm() {
@@ -155,6 +161,9 @@ public class OrderController {
 		orderservice.update(order);
 		System.out.println(order);
 		
+		// メール送信用のメソッド
+		sendEmail(orderForm.getDestinationEmail());
+
 //		orderHistoryテーブルに格納
 		OrderHistory orderHistory = new OrderHistory();
 		List<OrderItem> orderItemList = order.getOrderItemList();
@@ -216,6 +225,31 @@ public class OrderController {
 		}
 		session.setAttribute("order", order);
 	}
+
+	/**
+	 * 注文確定用のメールを送信するメソッド
+	 * 
+	 * @param email
+	 */
+	public void sendEmail(String email) {
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+		mailMessage.setFrom("rakuraku.pet@gmail.com");
+		mailMessage.setTo(email);
+		mailMessage.setSubject("注文内容の確認");
+		mailMessage.setText("" + "　---------------------------------------\n" + "　この度は、らくらくペットをご利用いただきありがとうございました。\n"
+				+ "　ご注文番号「XXXX-XXXX-XXXX」で受け付けいたしました。\n" + "　本メール到着後は、商品や本サービスにおけるご注文はキャンセル・変更できません。\n"
+				+ "　ご不明な点がございましたら、下記からお問い合わせください。\n" + "　連絡先：XXX-XXXX-XXXX\n"
+				+ " ---------------------------------------");
+
+		try {
+			sender.send(mailMessage);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
 //public void checkOrderBeforePayment(User user) {
 //// 存在すればそのorderが入り、存在しなければnullがはいる。
 //Order order = orderservice.findOrderBeforePayment(user);
