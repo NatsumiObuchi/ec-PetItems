@@ -74,6 +74,9 @@ public class ItemController {
 		model.addAttribute("itemList", itemList);
 		session.setAttribute("animalId", 0);
 		model.addAttribute("categoryId", 0);
+		List<String> nameList = itemService.findItemName();
+		//オートコンプリート用。名前の全件検索をsessionに格納。
+		session.setAttribute("nameList", nameList);
 		return "item_list_pet";
 	}
 
@@ -261,15 +264,18 @@ public class ItemController {
 	public void checkOrderBeforePayment(Integer userId) {
 		// DBに存在すれば支払い前のorderが入り、DBに存在しなければ新しいオーダーが入る
 		Order order = orderService.findOrderBeforePayment(userId);
+		
 		if (order == null) {
 			if (session.getAttribute("order") != null) {
 				order = (Order) session.getAttribute("order");
+				//支払い前のorderがDBになければ（ショッピングカートに商品が入っていなければ）新しくインサートする。
 			} else {
 				order = new Order();
 				order.setStatus(0);
 				order.setUserId(userId);
 				orderService.insertOrder(order);
 			}
+			//userIdが０の場合（ログインしていない場合）新しくDBにインサートする。
 		} else if (order.getUserId() == 0) {
 			if (session.getAttribute("order") != null) {
 				order = (Order) session.getAttribute("order");
