@@ -234,13 +234,55 @@ public class ItemController {
 
 		session.setAttribute("animalId", 1);
 		List<Item> itemList = itemService.findByAnimalId(1);
-
 		model.addAttribute("categoryId", 0);
 		model.addAttribute("link", "犬用品");
 		model.addAttribute("itemList", itemList);
 
 		return "item_list_pet";
 	}
+	/**
+	 * 犬用品(フード)のリストへ遷移する際のリンク
+	 */
+	@RequestMapping("/dogFood")
+	public String dogFood(Model model) {
+
+		session.setAttribute("animalId", 1);
+		List<Item> itemList = itemService.findByCategoryId(1, 1);
+		model.addAttribute("categoryId", 1);
+		model.addAttribute("link", "犬用品");
+		model.addAttribute("itemList", itemList);
+		
+		return "item_list_pet";
+	}
+	/**
+	 * 犬用品(おもちゃ)のリストへ遷移する際のリンク
+	 */
+	@RequestMapping("/dogToy")
+	public String dogToy(Model model) {
+
+		session.setAttribute("animalId", 1);
+		List<Item> itemList = itemService.findByCategoryId(1, 2);
+		model.addAttribute("categoryId", 2);
+		model.addAttribute("link", "犬用品");
+		model.addAttribute("itemList", itemList);
+
+		return "item_list_pet";
+	}
+	/**
+	 * 犬用品(その他)のリストへ遷移する際のリンク
+	 */
+	@RequestMapping("/dogOther")
+	public String dogOther(Model model) {
+
+		session.setAttribute("animalId", 1);
+		List<Item> itemList = itemService.findByCategoryId(1, 3);
+		model.addAttribute("categoryId", 3);
+		model.addAttribute("link", "犬用品");
+		model.addAttribute("itemList", itemList);
+
+		return "item_list_pet";
+	}
+	
 	
 	/**
 	 * 猫用品のみのリストへ遷移する際のリンク
@@ -250,13 +292,55 @@ public class ItemController {
 
 		session.setAttribute("animalId", 2);
 		List<Item> itemList = itemService.findByAnimalId(2);
-
 		model.addAttribute("categoryId", 0);
 		model.addAttribute("link", "猫用品");
 		model.addAttribute("itemList", itemList);
 
 		return "item_list_pet";
 	}
+	/**
+	 * 猫用品(フード)のリストへ遷移する際のリンク
+	 */
+	@RequestMapping("/catFood")
+	public String catFood(Model model) {
+
+		session.setAttribute("animalId", 2);
+		List<Item> itemList = itemService.findByCategoryId(2, 1);
+		model.addAttribute("categoryId", 1);
+		model.addAttribute("link", "猫用品");
+		model.addAttribute("itemList", itemList);
+		
+		return "item_list_pet";
+	}
+	/**
+	 * 猫用品(おもちゃ)のリストへ遷移する際のリンク
+	 */
+	@RequestMapping("/catToy")
+	public String catToy(Model model) {
+
+		session.setAttribute("animalId", 2);
+		List<Item> itemList = itemService.findByCategoryId(2, 2);
+		model.addAttribute("categoryId", 2);
+		model.addAttribute("link", "猫用品");
+		model.addAttribute("itemList", itemList);
+
+		return "item_list_pet";
+	}
+	/**
+	 * 猫用品(その他)のリストへ遷移する際のリンク
+	 */
+	@RequestMapping("/catOther")
+	public String catOther(Model model) {
+
+		session.setAttribute("animalId", 2);
+		List<Item> itemList = itemService.findByCategoryId(2, 3);
+		model.addAttribute("categoryId", 3);
+		model.addAttribute("link", "猫用品");
+		model.addAttribute("itemList", itemList);
+
+		return "item_list_pet";
+	}
+	
 	
 	/**
 	 * @param userId orderをセッションスコープに格納する処理。
