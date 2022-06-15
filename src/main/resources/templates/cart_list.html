@@ -15,9 +15,8 @@
 </head>
 
 <body>
-	<header>
-		<div th:insert="header :: frag_header"></div>
-	</header>
+	<!-- ヘッダー/インクルード化しているので、編集する際はheader.htmlから -->
+	<div th:insert="header :: frag_header"></div>
 
 	<div class="container">
 		<!--パンくずリスト-->
@@ -71,20 +70,15 @@
 										</div>
 									</td>
 									<td>
-										<span class="text-center" th:text="${ordItem.item.price}">&nbsp;Ｌ</span>
+										<span class="text-center"
+											th:text="${#numbers.formatInteger(ordItem.item.price, 2, 'COMMA')}">&nbsp;Ｌ</span>
 									</td>
 									<td>
 										<span class="text-center" th:text="${ordItem.quantity}"></span>
 									</td>
-									<!-- <td>
-                        <ul>
-                          <li>ピーマン300円</li>
-                          <li>オニオン300円</li>
-                          <li>あらびきソーセージ300円</li>
-                        </ul>
-                      </td> -->
+
 									<td>
-										<div class="text-center" th:text="${ordItem.subTotal}">3,280円</div>
+										<div class="text-center" th:text="${#numbers.formatInteger(ordItem.subTotal, 2, 'COMMA')}">3,280円</div>
 									</td>
 									<td>
 										<div class="text-center">
@@ -129,8 +123,8 @@
 		<br>
 
 		<!-- フッター/インクルード化しているので、編集する際はfooter.htmlから -->
-			<div th:insert="footer :: frag_footer"></div>
-		
+		<div th:insert="footer :: frag_footer"></div>
+
 	</div>
 	<!-- end container -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
