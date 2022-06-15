@@ -17,9 +17,8 @@
 </head>
 
 <body>
-	<header>
-		<div th:insert="header :: frag_header"></div>
-	</header>
+	<!-- ヘッダー/インクルード化しているので、編集する際はheader.htmlから -->
+	<div th:insert="header :: frag_header"></div>
 
 	<div class="container">
 		<!--パンくずリスト-->
@@ -114,10 +113,9 @@
 					<div class="col-xs-offset-2 col-xs-10">
 						<div class="form-group">
 							1個あたり：
-							<span th:text="${#numbers.formatInteger(item.price, 2, 'COMMA')}">
+							<span th:text="${#numbers.formatInteger(item.price, 2, 'COMMA')}+'円(税抜)'">
 								38,000
 								　</span>
-							円(税抜)
 							<br>
 							<span id="total-price">
 								小計：
@@ -149,7 +147,7 @@
 				<div th:if="${reviews}">
 					<hr>
 					<h3 class="text-center">レビュー一覧</h3> <br>
-					<div th:each="review:${reviews}">
+					<div th:each="review:${reviews}" class="area">
 						評　　価：<img th:src="@{/img_star/s} + ${review.stars} +.0.png" width="100" height="20"><span
 							th:text="${review.stars}"></span><br>
 						ユーザー： <span th:text="${review.user_name}"></span> <br>
@@ -160,7 +158,7 @@
 				<form th:action="@{/item/insertReview}" th:object="${reviewForm}" method="post">
 					<hr>
 					<h3 class="text-center">レビュー投稿</h3>
-					<div class="row">
+					<div class="row area">
 						<div class="col-xs-5 col-sm-5">
 							<label for="">評価:</label>
 							<select th:field="*{stars}" class="form-control" id="selectItem">
@@ -174,18 +172,19 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-xs-5 col-sm-5">
+						<div class="col-xs-5 col-sm-5 area">
 							<label for="">コメント:</label><br>
-							<textarea　th:field="*{content}"></textarea>
+							<textarea th:field="*{content}"></textarea>
 							<input type="hidden" th:value="${item.id}" name="item_id">
 							<input type="hidden" th:value="${user.id}" name="user_id" th:if="${user}">
 							<input type="hidden" value="0" name="user_id" th:unless="${user}">
 						</div>
 					</div>
-					<div class="col-xs-offset-2 col-xs-3">
-						<button class="form-control btn btn-warning btn-block">投稿する</button>
+					<div class="row">
+						<div class="col-xs-3 col-sm-3 area">
+							<button class="form-control btn btn-warning btn-block">投稿する</button>
+						</div>
 					</div>
-
 				</form>
 			</div>
 		</div>
