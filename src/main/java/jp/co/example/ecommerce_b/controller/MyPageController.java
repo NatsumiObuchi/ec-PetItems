@@ -12,4 +12,9 @@ public class MyPageController {
 		return "myPage";
 	}
 
+	@RequestMapping("/userConfirm")
+	public String confirm() {
+		return "userInfo_confirm";
+	}
+
 }

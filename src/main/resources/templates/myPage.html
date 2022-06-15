@@ -32,48 +32,63 @@
                     col-sm-10
                     col-xs-12
                   ">
-				<div class="well text-center">
-					<h2><div th:text="'こんにちは' + ${session.user.name} + 'さん'"></div></h2>
-                    <p class="rank">あなたは◯◯会員です</p>
-				</div>
+				<div class="section1 text-center">
+					<h3><div th:text="'こんにちは' + ${session.user.name} + 'さん'"></div></h3>
+                    <h4><p class="rank">あなたは◯◯会員です</p></h4>
+                    <h5><span>利用可能ポイント：◯◯pt</span></h5>
+                </div>
                 <!-- <div class="well text-center"> -->
                     <table class="table table-striped item-list-table">
                         <div id="members_info" class="">
                             <tr>
-                                <th colspan="3">
+                                <th colspan="4">
                                     <span>よく使われている項目</span>
                                 </th>
                             </tr>
                             <tr class="mypagelist">
-                                <td class="mypage_content">
+                                <td>
                                     <i class="fa-regular fa-user fa-3x"></i>
-                                    <img class="icon mypage_icon" alt="">
-                                    <a href="#">会員情報確認・変更・退会手続き</a>
                                 </td>
                                 <td class="mypage_content">
+                                    <img class="icon mypage_icon" alt="">
+                                    <a th:href="@{/myPage/userConfirm?id=} + ${session.user.id}">会員情報確認・変更・退会手続き</a>
+                                </td>
+                                <td>
                                     <i class="fa-regular fa-heart fa-3x"></i>
+                                </td>
+                                <td class="mypage_content">
                                     <img class="icon mypage_icon" alt="">
                                     <a th:href="@{/favorite/favoriteList}">お気に入りリスト</a>
                                 </td>
-                                <td class="mypage_content">
+                            </tr>
+                            <tr class="mypagelist">
+                                <td>
                                     <i class="fa-solid fa-clock-rotate-left fa-3x" ></i>
+                                </td>
+                                <td class="mypage_content">
                                     <img class="icon mypage_icon" alt="">
                                     <a th:href="@{/order/orderHistory}">購入履歴</a>
                                 </td>
-                            </tr>
-                            <tr class="mypagelist">
-                                <td class="mypage_content">
+                                <td>
                                     <i class="fa-regular fa-comment fa-3x"></i>
+                                </td>
+                                <td class="mypage_content">
                                     <img class="icon mypage_icon" alt="">
                                     <a href="#">マイレビュー</a>
                                 </td>
-                                <td class="mypage_content">
+                            </tr>
+                            <tr>
+                                <td>
                                     <i class="fa-solid fa-house-chimney-user fa-3x"></i>
+                                </td>
+                                <td class="mypage_content">
                                     <img class="icon mypage_icon" alt="">
                                     <a href="#">お届け先情報</a>
                                 </td>
-                                <td class="mypage_content">
+                                <td>
                                     <i class="fa-solid fa-ticket fa-3x"></i>
+                                </td>
+                                <td class="mypage_content">
                                     <img class="icon mypage_icon" alt="">
                                     <a href="#">マイクーポン</a>
                                 </td>
