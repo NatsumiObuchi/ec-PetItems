@@ -34,9 +34,9 @@
 					<form method="post" th:action="@{/myPage/changePermission}" th:object="${userForm}">
 						<fieldset>
 							<legend>ユーザ認証</legend>
-                            <div th:if="${loginErrorMessage}">
+                            <div th:if="${AuthenticationFailureMessage}">
 								<label class="control-label" style="color: red" for="inputError"
-									th:text="${loginErrorMessage}"></label>
+									th:text="${AuthenticationFailureMessage}"></label>
 							</div>
 							<div class="form-group">
 								<label for="inputEmail">メールアドレス:</label>

@@ -67,13 +67,16 @@ public class MyPageController {
 		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
 		String oldPass = form.getPassword();
 		User user = userService.findByEmail(form);
-		if (user == null) {
-			model.addAttribute("loginErrorMessage", "メールアドレス、またはパスワードが間違っています");
+		if (user == null) {// メールアドレスで探しデータが存在しなかった場合
+			model.addAttribute("AuthenticationFailureMessage", "メールアドレス、またはパスワードが間違っています");
 			return "change_permission";
 		} else if (bcpe.matches(oldPass, user.getPassword())) {
 			form.setPassword(user.getPassword());
 			User user2 = userService.loginCheck(form);
 			session.setAttribute("user", user2);
+		} else {
+			model.addAttribute("AuthenticationFailureMessage", "メールアドレス、またはパスワードが間違っています");
+			return "change_permission";
 		}
 		return "confirm_userInfo";
 	}
