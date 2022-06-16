@@ -54,14 +54,13 @@
                                 <label for="">電話番号:</label>
                                 <input name="name" type="text" th:value="${session.user.telephone}" disabled="disabled"/>
                             </div>
-                            <div class="control-label form-group">
-                                <label for="">パスワード:</label>
-                                <input name="name" type="text" th:value="${session.user.password}" disabled="disabled"/>
+                            <div class="form-group">
+                                <a th:href="@{/myPage/change}" class="myPage-link">変更</a>
+                                <a href="#" class="myPage-link">退会</a>
+                                <a href="#" class="myPage-link">パスワードの変更はこちら</a>
                             </div>
-                            <div class="form-group form-group">
-                                <button type="submit" class="btn btn-primary flexbox-left"><a href="#">戻る</a></button>
-                                <button type="submit" class="btn btn-primary flexbox-right"><a href="#">変更</a></button>
-                                <button type="submit" class="btn btn-primary flexbox-right"><a href="#">退会</a></button>
+                            <div>
+                                <a th:href="@{/myPage}" class="myPage-link">マイページへ戻る</a>
                             </div>
                         </fieldset>
                     </div>
