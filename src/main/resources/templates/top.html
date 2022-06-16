@@ -10,7 +10,7 @@
 	<!--<link rel="stylesheet" th:href="@{/resources/demos/style.css}">-->
 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
 	<link th:href="@{/css/piza.css}" rel="stylesheet" />
-	<link th:href="@{/css/menu.css}" rel="stylesheet" />
+	<link th:href="@{/css/top.css}" rel="stylesheet" />
 
 	<!-- スライドショー用CSS -->
 	<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css}">
@@ -27,32 +27,18 @@
 
 	<div class="container">
 		<!-- 検索欄 -->
-		<form method="post" class="form-horizontal" th:action="@{/item/search}" name="word">
-			<div class="form-group">
-				<select name="genre" id="genre">
+		<span th:text="${noItemMessage}" style="color: red;">エラー</span>
+		<form id="form1" method="post" th:action="@{/item/search}" name="word">
+			<select name="genre" id="genre">
 				<span th:each="genre:${genreMap}">
 					<option th:value="${genre.key}" th:text="${genre.value}">ジャンル名</option>
 				</span>
-				</select>
-				<span th:text="${noItemMessage}" style="color: red;">エラー</span>
-				<div id="right-column">
-					<button type="submit" value="検索" class="btn btn-primary" id="animal">
-						検索
-					</button>
-					<button type="reset" value="クリア" class="btn btn-default">
-						クリア
-					</button>
-				</div>
-				<div id="right">
-					<input type="text" name="code" th:value="${word}" id="code" class="form-control input-sm"
-						autocomplete="on" />
-					<!-- オートコンプリート用（ブラウザ非表示） -->
-					<span id="autoComplete" class="autoComplete" th:text="${session.nameList}"
-						style="display:none;"></span>
-				</div>
-			</div>
+			</select>
+			<input type="text" name="code" th:value="${word}" id="code" autocomplete="on" placeholder="商品名を入力" />
+			<!-- オートコンプリート用（ブラウザ非表示） -->
+			<span id="autoComplete" class="autoComplete" th:text="${session.nameList}" style="display:none;"></span>
+			<input id="sbtn" type="submit" value="検索"/>
 		</form>
-
 
 		<!-- メニューバー -->
 		<nav class="menu-bar">
