@@ -29,6 +29,11 @@
 		<!-- 検索欄 -->
 		<form method="post" class="form-horizontal" th:action="@{/item/search}" name="word">
 			<div class="form-group">
+				<select name="genre" id="genre">
+				<span th:each="genre:${genreMap}">
+					<option th:value="${genre.key}" th:text="${genre.value}">ジャンル名</option>
+				</span>
+				</select>
 				<span th:text="${noItemMessage}" style="color: red;">エラー</span>
 				<div id="right-column">
 					<button type="submit" value="検索" class="btn btn-primary" id="animal">
@@ -102,18 +107,19 @@
 	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
 	<script th:src="@{/js/autocomplete.js}"></script>
 	
-	<!-- これをjQueryの後に読み込ませる--><!--
+	<!-- これをjQueryの後に読み込ませる-->
+	<!--
 	<script th:src="@{https://code.jquery.com/ui/1.12.1/jquery-ui.js}"></script>
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	-->
 	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
-		<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
-		<script th:src="@{https://code.jquery.com/ui/1.13.1/jquery-ui.js}"></script>
-		<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
-		<script th:src="@{/js/autocomplete.js}"></script>
+	<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+	<script th:src="@{https://code.jquery.com/ui/1.13.1/jquery-ui.js}"></script>
+	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
+	<script th:src="@{/js/autocomplete.js}"></script>
 
-	
+
 	<!-- スライドショー -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
