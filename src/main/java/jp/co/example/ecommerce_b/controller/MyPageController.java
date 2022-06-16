@@ -208,6 +208,18 @@ public class MyPageController {
 	}
 
 	/**
+	 * 退会処理を完了する
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/withdrawal")
+	public String withdrawal(Integer id) {
+		userService.delete(id);
+		session.removeAttribute("user");// sessionスコープ内にあるuserの情報を削除
+		return "withdrawal";
+	}
+
+	/**
 	 * ※UserControllerにも存在するため省略できるならしたい...
 	 * 
 	 * @param form

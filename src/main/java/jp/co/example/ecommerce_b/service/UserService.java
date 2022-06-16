@@ -14,10 +14,10 @@ public class UserService {
 	private UserRepository userRepository;
 
 	/**
-	 * @param form ユーザーを追加
+	 * @param user ユーザーを追加
 	 */
-	public void insertUser(UserForm form) {
-		userRepository.insertUser(form);
+	public void insertUser(User user) {
+		userRepository.insertUser(user);
 	}
 
 	/**
@@ -66,5 +66,14 @@ public class UserService {
 	 */
 	public void updatePassword(User user) {
 		userRepository.updatePassword(user);
+	}
+
+	/**
+	 * ユーザ情報を削除する
+	 * 
+	 * @param id
+	 */
+	public void delete(Integer id) {
+		userRepository.delete(id);
 	}
 }

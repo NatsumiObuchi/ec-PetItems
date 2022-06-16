@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.service.ItemService;
@@ -73,11 +72,17 @@ public class UserController {
 			signinCheck(form, model);
 			return toSignin();
 		} else {
+			User user = new User();
 			String oldPass = form.getPassword();
 			PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 			String hashPass = passwordEncoder.encode(oldPass);
-			form.setPassword(hashPass);
-			userService.insertUser(form);
+			user.setName(form.getName());
+			user.setEmail(form.getEmail());
+			user.setZipcode(form.getZipcode());
+			user.setAddress(form.getAddress());
+			user.setTelephone(form.getTelephone());
+			user.setPassword(hashPass);
+			userService.insertUser(user);
 			return "redirect:/user/toLogin";
 		}
 	}
