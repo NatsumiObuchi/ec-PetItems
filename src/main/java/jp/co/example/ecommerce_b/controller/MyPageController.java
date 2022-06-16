@@ -75,7 +75,7 @@ public class MyPageController {
 			User user2 = userService.loginCheck(form);
 			session.setAttribute("user", user2);
 		}
-		return "userInfo_confirm";
+		return "confirm_userInfo";
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class MyPageController {
 	 */
 	@RequestMapping("/userConfirm")
 	public String confirm() {
-		return "userInfo_confirm";
+		return "confirm_userInfo";
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class MyPageController {
 		} else {
 			model.addAttribute("form", form);
 		}
-		return "userInfo_change";
+		return "change_userInfo";
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class MyPageController {
 	 */
 	@RequestMapping("/finish")
 	public String finish() {
-		return "update_finish";
+		return "change_finish";
 	}
 
 	/**
