@@ -27,7 +27,7 @@ span#total-price {
   table-layout: fixed;
 }
 
-th {
+th ,#topimg {
   text-align: center;
 }
 
@@ -38,3 +38,8 @@ footer{
   background-color: rgb(242, 242, 242);
 }
 
+
+#search{
+  text-align:right;
+
+}
