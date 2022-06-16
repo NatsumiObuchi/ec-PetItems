@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
+import jp.co.example.ecommerce_b.form.UserUpdateForm;
 import jp.co.example.ecommerce_b.repository.UserRepository;
 
 @Service
@@ -27,6 +28,13 @@ public class UserService {
 	}
 	
 	/**
+	 * @param form メールアドレスが既に登録されているか確認（ユーザ情報変更時）
+	 */
+	public Boolean duplicationCheckOfEmail(UserUpdateForm form) {
+		return userRepository.findByMailAddress2(form);// メールアドレスが重複していればtrue
+	}
+
+	/**
 	 * @param form
 	 * @return 入力されたメールアドレスとパスワードからユーザーを検索する。
 	 */
@@ -40,5 +48,14 @@ public class UserService {
 	 */
 	public User findByEmail(UserForm form) {
 		return userRepository.findByEmail(form);
+	}
+
+	/**
+	 * ユーザ情報を更新する
+	 * 
+	 * @param user
+	 */
+	public void update(User user) {
+		userRepository.update(user);
 	}
 }
