@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
+import jp.co.example.ecommerce_b.form.UserPasswordUpdateForm;
 import jp.co.example.ecommerce_b.form.UserUpdateForm;
 import jp.co.example.ecommerce_b.service.UserService;
 
@@ -35,6 +37,11 @@ public class MyPageController {
 	@ModelAttribute
 	private UserForm userForm() {
 		return new UserForm();
+	}
+
+	@ModelAttribute
+	private UserPasswordUpdateForm userPasswordUpdateForm() {
+		return new UserPasswordUpdateForm();
 	}
 
 	/**
@@ -67,15 +74,18 @@ public class MyPageController {
 		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
 		String oldPass = form.getPassword();
 		User user = userService.findByEmail(form);
-		if (user == null) {
-			model.addAttribute("loginErrorMessage", "メールアドレス、またはパスワードが間違っています");
+		if (user == null) {// メールアドレスで探しデータが存在しなかった場合
+			model.addAttribute("AuthenticationFailureMessage", "メールアドレス、またはパスワードが間違っています");
 			return "change_permission";
-		} else if (bcpe.matches(oldPass, user.getPassword())) {
+		} else if (bcpe.matches(oldPass, user.getPassword())) {// 入力されたパスワードとハッシュ化されたデータベース内のパスワードが合っているか照合
 			form.setPassword(user.getPassword());
 			User user2 = userService.loginCheck(form);
 			session.setAttribute("user", user2);
+		} else {
+			model.addAttribute("AuthenticationFailureMessage", "メールアドレス、またはパスワードが間違っています");
+			return "change_permission";
 		}
-		return "userInfo_confirm";
+		return "confirm_userInfo";
 	}
 
 	/**
@@ -85,7 +95,7 @@ public class MyPageController {
 	 */
 	@RequestMapping("/userConfirm")
 	public String confirm() {
-		return "userInfo_confirm";
+		return "confirm_userInfo";
 	}
 
 	/**
@@ -107,7 +117,7 @@ public class MyPageController {
 		} else {
 			model.addAttribute("form", form);
 		}
-		return "userInfo_change";
+		return "change_userInfo";
 	}
 
 	/**
@@ -156,13 +166,45 @@ public class MyPageController {
 	}
 
 	/**
+	 * パスワード変更を行う画面の表示
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/changePassDisplay")
+	public String changePassDisplay() {
+		return "change_password";
+	}
+
+	@RequestMapping("/changePass")
+	public String changePass(@Validated UserPasswordUpdateForm form, BindingResult result, Model model) {
+		User user = (User) session.getAttribute("user");
+		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
+		if (result.hasErrors()) {
+			return changePassDisplay();
+		} else if (!(form.getConfirmPassword().equals(form.getPassword()))) {// 確認用パスワードがパスワードと一致しない場合
+			model.addAttribute("confirmPasswordError", "確認用パスワードとパスワードが一致していません");
+			return changePassDisplay();
+		} else if (bcpe.matches(form.getPassword(), user.getPassword())) {// 入力されたパスワードが以前のものと同じ場合、エラー
+			model.addAttribute("duplicatePasswordError", "以前のパスワードと同じ場合、変更できません");
+			return changePassDisplay();
+		} else {
+			String oldPass = form.getPassword();
+			PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+			String hashPass = passwordEncoder.encode(oldPass);// パスワードのハッシュ化
+			user.setPassword(hashPass);
+			userService.updatePassword(user);
+			return "redirect:/myPage/finish";
+		}
+	}
+
+	/**
 	 * ユーザ情報の変更を完了した際に表示する画面
 	 * 
 	 * @return
 	 */
 	@RequestMapping("/finish")
 	public String finish() {
-		return "update_finish";
+		return "change_finish";
 	}
 
 	/**

@@ -58,4 +58,13 @@ public class UserService {
 	public void update(User user) {
 		userRepository.update(user);
 	}
+
+	/**
+	 * パスワードを変更する
+	 * 
+	 * @param user
+	 */
+	public void updatePassword(User user) {
+		userRepository.updatePassword(user);
+	}
 }

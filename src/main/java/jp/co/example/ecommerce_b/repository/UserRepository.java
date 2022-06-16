@@ -134,4 +134,15 @@ public class UserRepository {
 		template.update(sql, param);
 	}
 
+	/**
+	 * ユーザのパスワードを変更する
+	 * 
+	 * @param user
+	 */
+	public void updatePassword(User user) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
+		String sql = "update users set password = :password where id = :id";
+		template.update(sql, param);
+	}
+
 }
