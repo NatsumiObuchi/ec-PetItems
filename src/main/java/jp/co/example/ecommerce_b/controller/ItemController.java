@@ -65,12 +65,12 @@ public class ItemController {
 	private ReviewForm createReviewForm() {
 		return new ReviewForm();
 	}
-
+	
 	/**
 	 * @return トップに遷移するだけの処理
 	 */
 	@RequestMapping("/top")
-	public String top(Model model) {
+	public String top() {
 		Map<Integer, String> genreMap = new HashMap<>();
 		genreMap.put(0, "すべてのカテゴリー");
 		genreMap.put(1, "犬｜すべて");
@@ -81,7 +81,7 @@ public class ItemController {
 		genreMap.put(6, "猫｜フード");
 		genreMap.put(7, "猫｜おもちゃ");
 		genreMap.put(8, "猫｜その他");
-		model.addAttribute("genreMap", genreMap);
+		session.setAttribute("genreMap", genreMap);
 
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		List<String> nameList = itemService.findItemName();
@@ -98,6 +98,9 @@ public class ItemController {
 		model.addAttribute("itemList", itemList);
 		session.setAttribute("animalId", 0);
 		model.addAttribute("categoryId", 0);
+		//パンくずリスト用
+		model.addAttribute("link", "すべて");
+		model.addAttribute("access", "list");
 		List<String> nameList = itemService.findItemName();
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		session.setAttribute("nameList", nameList);
@@ -273,7 +276,7 @@ public class ItemController {
 			List<Item> itemList3 = itemService.findByCategoryIdAndAnimaiIdAndName(code, animalId, categoryId);
 			if (categoryId == 0) {
 				model.addAttribute("itemList", itemList);
-				model.addAttribute("noItemMessage", "検索結果を表示します。");
+				model.addAttribute("noItemMessage", "「"+ code +"」の検索結果を表示します。");
 			} else if (itemList3.size() == 0) {
 
 //				何かしら入力があったが、絞り込んだ際には該当の結果がない場合

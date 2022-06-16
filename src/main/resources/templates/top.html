@@ -6,8 +6,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>ペット用品のネット注文</title>
-	<link rel="stylesheet" th:href="@{//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css}">
-	<!--<link rel="stylesheet" th:href="@{/resources/demos/style.css}">-->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="/resources/demos/style.css">
 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
 	<link th:href="@{/css/piza.css}" rel="stylesheet" />
 	<link th:href="@{/css/top.css}" rel="stylesheet" />
@@ -30,7 +30,7 @@
 		<span th:text="${noItemMessage}" style="color: red;">エラー</span>
 		<form id="form1" method="post" th:action="@{/item/search}" name="word">
 			<select name="genre" id="genre">
-				<span th:each="genre:${genreMap}">
+				<span th:each="genre:${session.genreMap}">
 					<option th:value="${genre.key}" th:text="${genre.value}">ジャンル名</option>
 				</span>
 			</select>
