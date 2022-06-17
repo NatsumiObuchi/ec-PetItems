@@ -37,9 +37,9 @@
             col-sm-10
             col-xs-12
           ">
-				<h3 class="text-center">ショッピングカート</h3>
+				<h3 class="text-center">ショッピングカート</h3><br>
 
-				<div th:if="${emptyMessage}" th:text="${emptyMessage}"></div>
+				<div th:if="${emptyMessage}" th:text="${emptyMessage}" class="text-center"></div>
 				<div th:unless="${emptyMessage}">
 					<table class="table table-striped item-list-table">
 						<tbody>

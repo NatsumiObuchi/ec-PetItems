@@ -61,7 +61,16 @@ public class MyPageController {
 	 */
 	@RequestMapping("/changePermissionDisplay")
 	public String permissionDisplay() {
-		return "change_permission";
+		Integer count = (Integer) session.getAttribute("count");
+		System.out.println(count);
+		if (count == null) {
+			count = 1;// 1回目のユーザ認証
+			session.setAttribute("count", count);
+			return "change_permission";
+		}
+		count++;// 2回目以降のログイン(countが加算される)
+		session.setAttribute("count", count);
+		return "confirm_userInfo";
 	}
 
 	/**
@@ -205,6 +214,18 @@ public class MyPageController {
 	@RequestMapping("/finish")
 	public String finish() {
 		return "change_finish";
+	}
+
+	/**
+	 * 退会処理を完了する
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/withdrawal")
+	public String withdrawal(Integer id) {
+		userService.delete(id);
+		session.removeAttribute("user");// sessionスコープ内にあるuserの情報を削除
+		return "withdrawal";
 	}
 
 	/**

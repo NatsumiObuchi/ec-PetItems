@@ -34,7 +34,7 @@
 	
 		<!-- table -->
 		<div class="row">
-			<h2 class="text-center">注文履歴</h2>
+			<h2 class="text-center">注文履歴</h2><br>
 			<div class="
                 table-responsive
                 col-lg-offset-1
@@ -44,7 +44,7 @@
                 col-sm-10
                 col-xs-12
               ">
-				<div th:if="${alert}">
+				<div th:if="${alert}" class="text-center">
 					<label class="control-label" style="color: black" for="inputError" th:text="${alert}"> </label>
 				</div>
 

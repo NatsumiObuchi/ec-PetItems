@@ -52,13 +52,13 @@ public class UserRepository {
 	/**
 	 * @param user ユーザーを追加する
 	 */
-	public void insertUser(UserForm form) {
-		form = modifyZipcode(form);
+	public void insertUser(User user) {
+//		user = modifyZipcode(user);
 		String sql = "INSERT INTO users (name,email,password,zipcode,address,telephone) VALUES (:name,:email,:password,:zipcode,:address,:telephone)";
-		SqlParameterSource param = new MapSqlParameterSource().addValue("name", form.getName())
-				.addValue("email", form.getEmail()).addValue("password", form.getPassword())
-				.addValue("zipcode", form.getZipcode()).addValue("address", form.getAddress())
-				.addValue("telephone", form.getTelephone());
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", user.getName())
+				.addValue("email", user.getEmail()).addValue("password", user.getPassword())
+				.addValue("zipcode", user.getZipcode()).addValue("address", user.getAddress())
+				.addValue("telephone", user.getTelephone());
 		template.update(sql, param);
 	}
 
@@ -142,6 +142,17 @@ public class UserRepository {
 	public void updatePassword(User user) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
 		String sql = "update users set password = :password where id = :id";
+		template.update(sql, param);
+	}
+
+	/**
+	 * ユーザ情報を削除する
+	 * 
+	 * @param id
+	 */
+	public void delete(Integer id) {
+		String sql = "delete from users where id = :id";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		template.update(sql, param);
 	}
 

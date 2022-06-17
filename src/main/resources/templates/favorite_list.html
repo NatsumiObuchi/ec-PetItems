@@ -36,17 +36,8 @@
             col-sm-10
             col-xs-12">
 
-				<h3 class="text-center">お気に入りリスト</h3>
+				<h3 class="text-center">お気に入りリスト</h3><br>
 				<!-- table -->
-				<div class="text-center">
-					<div th:if="${message1}" th:text="${message1}"></div>
-					<div th:if="${message2}" th:text="${message2}"></div><br><br>
-					<div th:if="${message1}">
-						<form th:action="@{/user/toSignin}" method="post">
-							<button>ユーザ登録へ</button>
-						</form>
-					</div>
-				</div>
 				<div th:if="${message}" th:text="${message}" class="text-center"></div>
 				<!-- <div th:unless="${message}" th:text="${message}"> -->
 				<div class="aaa">
