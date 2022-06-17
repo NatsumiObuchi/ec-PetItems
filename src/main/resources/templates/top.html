@@ -6,11 +6,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>ペット用品のネット注文</title>
-	<link rel="stylesheet" th:href="@{//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css}">
-	<!--<link rel="stylesheet" th:href="@{/resources/demos/style.css}">-->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="/resources/demos/style.css">
 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
 	<link th:href="@{/css/piza.css}" rel="stylesheet" />
-	<link th:href="@{/css/menu.css}" rel="stylesheet" />
+	<link th:href="@{/css/top.css}" rel="stylesheet" />
 
 	<!-- スライドショー用CSS -->
 	<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css}">
@@ -27,27 +27,18 @@
 
 	<div class="container">
 		<!-- 検索欄 -->
-		<form method="post" class="form-horizontal" th:action="@{/item/search}" name="word">
-			<div class="form-group">
-				<span th:text="${noItemMessage}" style="color: red;">エラー</span>
-				<div id="right-column">
-					<button type="submit" value="検索" class="btn btn-primary" id="animal">
-						検索
-					</button>
-					<button type="reset" value="クリア" class="btn btn-default">
-						クリア
-					</button>
-				</div>
-				<div id="right">
-					<input type="text" name="code" th:value="${word}" id="code" class="form-control input-sm"
-						autocomplete="on" />
-					<!-- オートコンプリート用（ブラウザ非表示） -->
-					<span id="autoComplete" class="autoComplete" th:text="${session.nameList}"
-						style="display:none;"></span>
-				</div>
-			</div>
+		<span th:text="${noItemMessage}" style="color: red;">エラー</span>
+		<form id="form1" method="post" th:action="@{/item/search}" name="word">
+			<select name="genre" id="genre">
+				<span th:each="genre:${session.genreMap}">
+					<option th:value="${genre.key}" th:text="${genre.value}">ジャンル名</option>
+				</span>
+			</select>
+			<input type="text" name="code" th:value="${word}" id="code" autocomplete="on" placeholder="商品名を入力" />
+			<!-- オートコンプリート用（ブラウザ非表示） -->
+			<span id="autoComplete" class="autoComplete" th:text="${session.nameList}" style="display:none;"></span>
+			<input id="sbtn" type="submit" value="検索"/>
 		</form>
-
 
 		<!-- メニューバー -->
 		<nav class="menu-bar">
@@ -102,18 +93,19 @@
 	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
 	<script th:src="@{/js/autocomplete.js}"></script>
 	
-	<!-- これをjQueryの後に読み込ませる--><!--
+	<!-- これをjQueryの後に読み込ませる-->
+	<!--
 	<script th:src="@{https://code.jquery.com/ui/1.12.1/jquery-ui.js}"></script>
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	-->
 	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
-		<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
-		<script th:src="@{https://code.jquery.com/ui/1.13.1/jquery-ui.js}"></script>
-		<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
-		<script th:src="@{/js/autocomplete.js}"></script>
+	<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+	<script th:src="@{https://code.jquery.com/ui/1.13.1/jquery-ui.js}"></script>
+	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
+	<script th:src="@{/js/autocomplete.js}"></script>
 
-	
+
 	<!-- スライドショー -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>

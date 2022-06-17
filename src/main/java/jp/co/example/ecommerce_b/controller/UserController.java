@@ -1,6 +1,5 @@
 package jp.co.example.ecommerce_b.controller;
 
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,10 +13,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
-import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.UserService;
 
 @Controller
@@ -34,20 +31,7 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private ItemService itemService;
 	
-	/**
-	 * @return トップに遷移するだけの処理
-	 */
-	@RequestMapping("/top")
-	public String top() {
-		//オートコンプリート用。名前の全件検索をsessionに格納。
-		List<String> nameList = itemService.findItemName();
-		session.setAttribute("nameList", nameList);
-		return "top";
-	}
 	
 	/**
 	 * @return ユーザー登録画面に遷移するだけの処理

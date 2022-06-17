@@ -132,6 +132,23 @@ public class ItemRepository {
 		return itemList;
 	}
 	
+	/**
+	 * 
+	 * 商品一覧をanimalId・categoryIdを絞って取得するメソッド。 (item一覧表示用)
+	 */
+
+	public List<Item> findByAnimalIdAndCategoryId(Integer animalId, Integer categoryId) {
+	String sql = "select id, name, description, price, image_path, image_path2,animal_id,category_id, deleted, avg(star) avg_star ,count(star) count_review "
+			+ "from(select i.id id, i.name as name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
+			+ "from items as i left join reviews as r on i.id = r.item_id where i.deleted is false order by r.stars desc) as new_table "
+			+ "WHERE animal_id=:animalId AND category_id=:categoryId "
+			+ "group by id, name, description, price, image_path, image_path2, animal_id, category_id, deleted order by avg_star desc NULLS LAST, count_review desc, id desc";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("animalId", animalId).addValue("categoryId", categoryId);
+		List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
+		return itemList;
+	}
+	
+	
 	
 	/*
 	 * オートコンプリート機能用、名前全検索

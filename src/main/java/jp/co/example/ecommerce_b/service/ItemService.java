@@ -44,6 +44,15 @@ public class ItemService {
 		return repository.findByAnimalId(animalId);
 	}
 	
+	/**
+	 * 
+	 * 商品一覧をanimalIdとcategoryIdで絞って取得するメソッド。 (item一覧表示用)
+	 */
+	public List<Item> findByAnimalIdAndCategoryId(Integer animalId,Integer categoryId) {
+
+		return repository.findByAnimalIdAndCategoryId(animalId, categoryId);
+	}
+	
 	/*
 	 * オートコンプリート機能用
 	 */

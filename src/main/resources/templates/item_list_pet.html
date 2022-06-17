@@ -10,6 +10,8 @@
 	<link rel="stylesheet" href="/resources/demos/style.css">
 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
 	<link th:href="@{/css/piza.css}" rel="stylesheet" />
+	<link th:href="@{/css/top.css}" rel="stylesheet" />
+
 
 	<!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
@@ -24,11 +26,51 @@
 	<div class="container">
 		<p class="pan-list">
 			<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
-			>
-			<span th:text="${link}">ダミー</span>
+			><span th:text="${link}">ダミー</span>
 		</p>
 
-		<a th:href="@{/item/dog}">
+		<!-- 検索欄 -->
+		<form id="form1" method="post" th:action="@{/item/search}" name="word">
+			<select name="genre" id="genre">
+				<span th:each="genre:${session.genreMap}">
+					<option th:value="${genre.key}" th:text="${genre.value}">ジャンル名</option>
+				</span>
+			</select>
+			<input type="text" name="code" th:value="${word}" id="code" autocomplete="on" placeholder="商品名を入力" />
+			<!-- オートコンプリート用（ブラウザ非表示） -->
+			<span id="autoComplete" class="autoComplete" th:text="${session.nameList}" style="display:none;"></span>
+			<input id="sbtn" type="submit" value="検索" />
+		</form>
+
+		<!-- メニューバー -->
+		<nav class="menu-bar">
+			<ul class="menu-lists">
+				<li class="menu-list">
+					<a th:href="@{/item/dog}">犬用品</a>
+					<ul class="dropdown-lists">
+						<li class="dropdown-list"><a th:href="@{/item/dog}">すべて</a></li>
+						<li class="dropdown-list"><a th:href="@{/item/dogFood}">フード</a></li>
+						<li class="dropdown-list"><a th:href="@{/item/dogToy}">おもちゃ</a></li>
+						<li class="dropdown-list"><a th:href="@{/item/dogOther}">その他</a></li>
+					</ul>
+				</li>
+				<li class="menu-list">
+					<a th:href="@{/item/cat}">猫用品</a>
+					<ul class="dropdown-lists">
+						<li class="dropdown-list"><a th:href="@{/item/cat}">すべて</a></li>
+						<li class="dropdown-list"><a th:href="@{/item/catFood}">フード</a></li>
+						<li class="dropdown-list"><a th:href="@{/item/catToy}">おもちゃ</a></li>
+						<li class="dropdown-list"><a th:href="@{/item/catOther}">その他</a></li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+
+		<h3>
+			<span th:text="${noItemMessage}">エラー</span>
+		</h3>
+
+	<!--	<a th:href="@{/item/dog}">
 			<img alt="main log" th:src="@{/img/dog.png}" height="55" />
 			犬用品</a>
 
@@ -36,73 +78,8 @@
 
 		<a th:href="@{/item/cat}">
 			<img alt="main log" th:src="@{/img/cat.png}" height="50" />
-			猫用品</a>
+			猫用品</a>-->
 
-
-		<!-- search form -->
-		<div class="row">
-			<div class="
-            col-lg-offset-3
-            col-lg-6
-            col-md-offset-2
-            col-md-8
-            col-sm-10
-            col-xs-12
-          ">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<div class="panel-title">商品を検索する</div>
-					</div>
-					<div class="panel-body">
-						<form method="post" class="form-horizontal" th:action="@{/item/search}" name="word">
-							<div class="form-group">
-								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-								<span th:text="${noItemMessage}" style="color: red;">エラー</span>
-								<br>
-								<label for="code" class="control-label col-sm-2">商品名</label>
-								<div class="col-sm-9">
-									<input type="text" name="code" th:value="${word}" id="code"
-										class="form-control input-sm" autocomplete="on" />
-								</div>
-								<div class="text-center">
-									<label for="code" class="control-label">
-										絞り込み検索
-									</label><br>
-									&nbsp;&nbsp;&nbsp;
-									<input type="radio" 　th:if="${categoryId==0}" id="categoryId" name="categoryId"
-										value="0" checked>
-									<input type="radio" 　th:unless="${categoryId==0}" id="categoryId" name="categoryId"
-										value="0">すべて
-									&nbsp;&nbsp;
-									<input type="radio" 　th:if="${categoryId==1}" id="categoryId" name="categoryId"
-										value="1" checked>
-									<input type="radio" 　th:unless="${categoryId==1}" id="categoryId" name="categoryId"
-										value="1">フード
-									&nbsp;&nbsp;
-									<input type="radio" 　th:if="${categoryId==2}" id="categoryId" name="categoryId"
-										value="2" checked>
-									<input type="radio" 　th:unless="${categoryId==2}" id="categoryId" name="categoryId"
-										value="2">おもちゃ
-									&nbsp;&nbsp;
-									<input type="radio" 　th:if="${categoryId==3}" id="categoryId" name="categoryId"
-										value="3" checked>
-									<input type="radio" 　th:unless="${categoryId==3}" id="categoryId" name="categoryId"
-										value="3">その他
-								</div>
-							</div>
-							<div class="text-center">
-								<button type="submit" value="検索" class="btn btn-primary" id="animal">
-									検索
-								</button>
-								<button type="reset" value="クリア" class="btn btn-default">
-									クリア
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
 
 		<!-- table -->
 		<div class="aaa">
@@ -111,7 +88,8 @@
 				<span id="autoComplete" class="autoComplete" th:text="${session.nameList}" style="display:none;"></span>
 				<a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
 					<img src="../static/img_pizza/1.jpg" th:src="@{/img_dogfood/} + ${item.imagePath}"
-						class="img-responsive img-rounded item-img-center" width="200" height="600" /> </a><br />
+						class="img-responsive img-rounded item-img-center" width="200" height="600" />
+				</a><br />
 				<a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
 					<span th:text="${item.name}">じゃがバターベーコン</span>
 				</a><br />
@@ -123,16 +101,18 @@
 			</div>
 		</div>
 
+
 		<!-- フッター/インクルード化しているので、編集する際はfooter.htmlから -->
 		<div th:insert="footer :: frag_footer"></div>
 
-		<!-- end container -->
-		<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
-		<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
-		<script th:src="@{https://code.jquery.com/ui/1.13.1/jquery-ui.js}"></script>
-		<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
-		<script th:src="@{/js/paginathing.js}"></script>
-		<script th:src="@{/js/autocomplete.js}"></script>
+	</div>
+	<!-- end container -->
+	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
+	<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+	<script th:src="@{https://code.jquery.com/ui/1.13.1/jquery-ui.js}"></script>
+	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
+	<script th:src="@{/js/paginathing.js}"></script>
+	<script th:src="@{/js/autocomplete.js}"></script>
 
 </body>
 
