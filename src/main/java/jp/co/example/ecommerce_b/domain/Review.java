@@ -6,6 +6,7 @@ public class Review {
 	private Integer user_id;// value
 	private Integer stars;// value
 	private String content;// text
+	private Item item;
 	private String user_name;// text
 
 	public Integer getId() {
@@ -42,11 +43,15 @@ public class Review {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	@Override
-	public String toString() {
-		return "Review [id=" + id + ", item_id=" + item_id + ", user_id=" + user_id + ", stars=" + stars + ", content="
-				+ content + ", user_name=" + user_name + "]";
+
+	public Item getItem() {
+		return item;
 	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+
 
 	public String getUser_name() {
 		return user_name;
@@ -56,5 +61,10 @@ public class Review {
 		this.user_name = user_name;
 	}
 
+	@Override
+	public String toString() {
+		return "Review [id=" + id + ", item_id=" + item_id + ", user_id=" + user_id + ", stars=" + stars + ", content="
+				+ content + ", item=" + item + ", user_name=" + user_name + "]";
+	}
 
 }
