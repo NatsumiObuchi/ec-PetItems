@@ -6,7 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>ペット用品のネット注文</title>
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+	<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">-->
 	<link rel="stylesheet" href="/resources/demos/style.css">
 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
 	<link th:href="@{/css/piza.css}" rel="stylesheet" />
@@ -25,45 +25,14 @@
 	<!-- ヘッダー/インクルード化しているので、編集する際はheader.htmlから -->
 	<div th:insert="header :: frag_header"></div>
 
+	<!-- 検索欄/インクルード化しているので、編集する際はheader.htmlから -->
+	<div th:insert="header :: frag_search"></div>
+	
+	<!-- カテゴリーメニューバー/インクルード化しているので、編集する際はheader.htmlから -->
+	<div th:insert="header :: frag_category"></div>
+
 	<div class="container">
-		<!-- 検索欄 -->
-		<span th:text="${noItemMessage}" style="color: red;">エラー</span>
-		<form id="form1" method="post" th:action="@{/item/search}" name="word">
-			<select name="genre" id="genre">
-				<span th:each="genre:${session.genreMap}">
-					<option th:value="${genre.key}" th:text="${genre.value}">ジャンル名</option>
-				</span>
-			</select>
-			<input type="text" name="code" th:value="${word}" id="code" autocomplete="on" placeholder="商品名を入力" />
-			<!-- オートコンプリート用（ブラウザ非表示） -->
-			<span id="autoComplete" class="autoComplete" th:text="${session.nameList}" style="display:none;"></span>
-			<input id="sbtn" type="submit" value="検索"/>
-		</form>
-
-		<!-- メニューバー -->
-		<nav class="menu-bar">
-			<ul class="menu-lists">
-				<li class="menu-list">
-					<a th:href="@{/item/dog}">犬用品</a>
-					<ul class="dropdown-lists">
-						<li class="dropdown-list"><a th:href="@{/item/dog}">すべて</a></li>
-						<li class="dropdown-list"><a th:href="@{/item/dogFood}">フード</a></li>
-						<li class="dropdown-list"><a th:href="@{/item/dogToy}">おもちゃ</a></li>
-						<li class="dropdown-list"><a th:href="@{/item/dogOther}">その他</a></li>
-					</ul>
-				</li>
-				<li class="menu-list">
-					<a th:href="@{/item/cat}">猫用品</a>
-					<ul class="dropdown-lists">
-						<li class="dropdown-list"><a th:href="@{/item/cat}">すべて</a></li>
-						<li class="dropdown-list"><a th:href="@{/item/catFood}">フード</a></li>
-						<li class="dropdown-list"><a th:href="@{/item/catToy}">おもちゃ</a></li>
-						<li class="dropdown-list"><a th:href="@{/item/catOther}">その他</a></li>
-					</ul>
-				</li>
-			</ul>
-		</nav>
-
+	
 		<div class="text-center">
 			<h1 class="font">ようこそRakuRakuペットへ</h1>
 			<p>私たちRakuRakuペットは、犬・猫たちの小さな声に耳を傾けて</p>
@@ -80,37 +49,19 @@
 				<img th:src="@{/img/top4.jpg}">
 			</div>
 		</div>
-		<!-- スライドショー -->
 
 		<!-- フッター/インクルード化しているので、編集する際はfooter.htmlから -->
 		<div th:insert="footer :: frag_footer"></div>
 
 	</div>
 	<!-- end container -->
-	<!--
-	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
-	<script th:src="@{https://code.jquery.com/ui/1.13.1/jquery-ui.js}"></script>
 	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
-	<script th:src="@{/js/autocomplete.js}"></script>
-	
-	<!-- これをjQueryの後に読み込ませる-->
-	<!--
-	<script th:src="@{https://code.jquery.com/ui/1.12.1/jquery-ui.js}"></script>
-
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	-->
-	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
-	<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
-	<script th:src="@{https://code.jquery.com/ui/1.13.1/jquery-ui.js}"></script>
-	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
-	<script th:src="@{/js/autocomplete.js}"></script>
 
 
 	<!-- スライドショー -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 	<script th:src="@{/js/slide.js}"></script>
-	<!-- スライドショー -->
 
 </body>
 

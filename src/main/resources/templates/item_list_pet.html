@@ -6,7 +6,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>ペット用品のネット注文</title>
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+	<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">-->
 	<link rel="stylesheet" href="/resources/demos/style.css">
 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
 	<link th:href="@{/css/piza.css}" rel="stylesheet" />
@@ -27,65 +27,23 @@
 		<p class="pan-list">
 			<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
 			><span th:text="${link}">ダミー</span>
+			><span th:text="${link2}">ダミー</span>
 		</p>
 
-		<!-- 検索欄 -->
-		<form id="form1" method="post" th:action="@{/item/search}" name="word">
-			<select name="genre" id="genre">
-				<span th:each="genre:${session.genreMap}">
-					<option th:value="${genre.key}" th:text="${genre.value}">ジャンル名</option>
-				</span>
-			</select>
-			<input type="text" name="code" th:value="${word}" id="code" autocomplete="on" placeholder="商品名を入力" />
-			<!-- オートコンプリート用（ブラウザ非表示） -->
-			<span id="autoComplete" class="autoComplete" th:text="${session.nameList}" style="display:none;"></span>
-			<input id="sbtn" type="submit" value="検索" />
-		</form>
+		<!-- 検索欄/インクルード化しているので、編集する際はheader.htmlから -->
+		<div th:insert="header :: frag_search"></div>
 
-		<!-- メニューバー -->
-		<nav class="menu-bar">
-			<ul class="menu-lists">
-				<li class="menu-list">
-					<a th:href="@{/item/dog}">犬用品</a>
-					<ul class="dropdown-lists">
-						<li class="dropdown-list"><a th:href="@{/item/dog}">すべて</a></li>
-						<li class="dropdown-list"><a th:href="@{/item/dogFood}">フード</a></li>
-						<li class="dropdown-list"><a th:href="@{/item/dogToy}">おもちゃ</a></li>
-						<li class="dropdown-list"><a th:href="@{/item/dogOther}">その他</a></li>
-					</ul>
-				</li>
-				<li class="menu-list">
-					<a th:href="@{/item/cat}">猫用品</a>
-					<ul class="dropdown-lists">
-						<li class="dropdown-list"><a th:href="@{/item/cat}">すべて</a></li>
-						<li class="dropdown-list"><a th:href="@{/item/catFood}">フード</a></li>
-						<li class="dropdown-list"><a th:href="@{/item/catToy}">おもちゃ</a></li>
-						<li class="dropdown-list"><a th:href="@{/item/catOther}">その他</a></li>
-					</ul>
-				</li>
-			</ul>
-		</nav>
+		<!-- カテゴリーメニューバー/インクルード化しているので、編集する際はheader.htmlから -->
+		<div th:insert="header :: frag_category"></div>
 
 		<h3>
-			<span th:text="${noItemMessage}">エラー</span>
+			<span th:text="${noItemMessage}">検索結果メッセージ</span>
 		</h3>
-
-	<!--	<a th:href="@{/item/dog}">
-			<img alt="main log" th:src="@{/img/dog.png}" height="55" />
-			犬用品</a>
-
-		&nbsp;&nbsp;
-
-		<a th:href="@{/item/cat}">
-			<img alt="main log" th:src="@{/img/cat.png}" height="50" />
-			猫用品</a>-->
 
 
 		<!-- table -->
 		<div class="aaa">
 			<div class="bbb" th:each="item:${itemList}">
-				<!-- ↓オートコンプリート用。ブラウザには表示されませんされません-->
-				<span id="autoComplete" class="autoComplete" th:text="${session.nameList}" style="display:none;"></span>
 				<a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
 					<img src="../static/img_pizza/1.jpg" th:src="@{/img_dogfood/} + ${item.imagePath}"
 						class="img-responsive img-rounded item-img-center" width="200" height="600" />
@@ -107,12 +65,13 @@
 
 	</div>
 	<!-- end container -->
+	<!-- ページング機能用 -->
 	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
 	<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
-	<script th:src="@{https://code.jquery.com/ui/1.13.1/jquery-ui.js}"></script>
-	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
 	<script th:src="@{/js/paginathing.js}"></script>
-	<script th:src="@{/js/autocomplete.js}"></script>
+
+	<!-- オートコンプリート機能用（インクルード化しているが、これを消すとなぜかオートコンプリートが消えるので残しといて） -->
+	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
 
 </body>
 

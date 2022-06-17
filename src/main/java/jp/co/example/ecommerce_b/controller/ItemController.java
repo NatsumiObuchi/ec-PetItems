@@ -101,8 +101,8 @@ public class ItemController {
 		//パンくずリスト用
 		model.addAttribute("link", "すべて");
 		model.addAttribute("access", "list");
-		List<String> nameList = itemService.findItemName();
 		// オートコンプリート用。名前の全件検索をsessionに格納。
+		List<String> nameList = itemService.findItemName();
 		session.setAttribute("nameList", nameList);
 		return "item_list_pet";
 	}
@@ -413,6 +413,7 @@ public class ItemController {
 		List<Item> itemList = itemService.findByCategoryId(1, 1);
 		model.addAttribute("categoryId", 1);
 		model.addAttribute("link", "犬用品");
+		model.addAttribute("link2", "フード");
 		model.addAttribute("itemList", itemList);
 
 		return "item_list_pet";
