@@ -147,6 +147,7 @@ public class UserController {
 	@RequestMapping("/logout")
 	public String logout() {
 		session.invalidate();
+		session.removeAttribute("count");
 		return "forward:/item/list";
 	}
 
