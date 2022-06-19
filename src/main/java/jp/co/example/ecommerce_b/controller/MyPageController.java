@@ -16,8 +16,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.ecommerce_b.domain.Addressee;
 import jp.co.example.ecommerce_b.domain.Review;
 import jp.co.example.ecommerce_b.domain.User;
+import jp.co.example.ecommerce_b.form.InsertAddresseeForm;
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.form.UserPasswordUpdateForm;
 import jp.co.example.ecommerce_b.form.UserUpdateForm;
@@ -40,6 +42,11 @@ public class MyPageController {
 	@ModelAttribute
 	private UserUpdateForm userUpdateForm() {
 		return new UserUpdateForm();
+	}
+
+	@ModelAttribute
+	private InsertAddresseeForm insertAddresseeForm() {
+		return new InsertAddresseeForm();
 	}
 
 	@ModelAttribute
@@ -237,6 +244,99 @@ public class MyPageController {
 	}
 
 	/**
+	 * マイレビューを表示する
+	 * 
+	 * @param id userId
+	 * @return
+	 */
+	@RequestMapping("/myReview")
+	public String myReviewShow(Integer id, Model model) {
+		List<Review> reviewList = new ArrayList<>();
+		reviewList = itemService.findReviewByUserId(id);
+		if (reviewList == null) {
+			model.addAttribute("non", "これまでのレビュー投稿はありません。");
+		}
+		session.setAttribute("reviewList", reviewList);
+		return "my_review";
+	}
+
+	/**
+	 * お届け先情報を変更・登録する画面を表示する
+	 * 
+	 * @param id userId
+	 * @return
+	 */
+	@RequestMapping("/addressee")
+	public String addressee(Integer id, Model model) {
+		List<Addressee> addresseeList = userService.findAddresseeByUserId(id);
+		if (addresseeList == null || addresseeList.size() == 0) {
+			model.addAttribute("non", "お届け先情報は現在登録されていません。追加してください。");
+		}
+		session.setAttribute("addresseeList", addresseeList);
+		return "addressee";
+	}
+
+	/**
+	 * お届け先情報追加画面
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/registerShow")
+	public String registerShow(Integer id, Model model) {
+		List<Addressee> addresseeList = userService.findAddresseeByUserId(id);
+		if (addresseeList.size() == 3) {
+			model.addAttribute("full", "お届け先情報の登録は3件までです。追加するにはどれかを削除してください。");
+			return addressee(id, model);
+		}
+		return "addressee_register";
+	}
+
+	/**
+	 * ユーザのお届け先を新規追加する
+	 * 
+	 * @param id          userId
+	 * @param addresseeId
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/addresseeRegister")
+	public String addresseeRegister(@Validated InsertAddresseeForm insertAddresseeForm, BindingResult result,
+			Model model) {
+		if (result.hasErrors()) {
+			return "addressee_register";
+		}
+		// 値のコピー
+		Addressee newAddressee = new Addressee();
+		BeanUtils.copyProperties(insertAddresseeForm, newAddressee);
+
+		// ログインユーザが最後に登録したaddresseeIdを取得
+		Addressee addressee = userService.lastAddlesseeId(insertAddresseeForm.getUserId());
+		if (addressee == null) {// 初めてお届け先情報を登録する人はaddresseeIdに1をセット
+			newAddressee.setAddresseeId(1);
+		} else {// それ以外の人（既に登録済のお届け先が存在する）
+			Integer lastAddresseeId = addressee.getAddresseeId();
+			newAddressee.setAddresseeId(lastAddresseeId + 1);// 新しいaddresseeIdを手動でセット
+		}
+
+		userService.addresseeRegister(newAddressee);
+		return addressee(insertAddresseeForm.getUserId(), model);
+	}
+
+	/**
+	 * お届け先情報を削除する
+	 * 
+	 * @param id          userId
+	 * @param addresseeId
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/addresseeDelete")
+	public String addresseeDelete(Integer id, Integer addresseeId, Model model) {
+		userService.deleteAddressee(id, addresseeId);
+		return addressee(id, model);
+	}
+
+	/**
 	 * ※UserControllerにも存在するため省略できるならしたい...
 	 * 
 	 * @param form
@@ -246,13 +346,5 @@ public class MyPageController {
 		if (userService.duplicationCheckOfEmail(form)) {// メールアドレスが重複している場合
 			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
 		}
-	}
-
-	@RequestMapping("/myReview")
-	public String myReviewShow(Integer id) {
-		List<Review> reviewList = new ArrayList<>();
-		reviewList = itemService.findReviewByUserId(id);
-		session.setAttribute("reviewList", reviewList);
-		return "my_review";
 	}
 }

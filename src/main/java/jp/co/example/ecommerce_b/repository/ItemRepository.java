@@ -363,7 +363,6 @@ public class ItemRepository {
 				+ " where r.user_id = :user_id order by r.id desc;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("user_id", id);
 		List<Review> reviewList = template.query(sql, param, MYREVIEW_ROW_MAPPER);
-		System.out.println(reviewList);
 		if (reviewList.size() == 0) {
 			return null;
 		}

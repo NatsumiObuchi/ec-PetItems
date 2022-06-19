@@ -84,7 +84,7 @@
                                 </td>
                                 <td class="mypage_content">
                                     <img class="icon mypage_icon" alt="">
-                                    <a href="#">お届け先情報</a>
+                                    <a th:href="@{/myPage/addressee?id=} + ${session.user.id}">お届け先情報</a>
                                 </td>
                                 <td>
                                     <i class="fa-solid fa-ticket fa-3x"></i>
