@@ -125,4 +125,14 @@ public class ItemService {
 	public List<Review> findReview(Integer itemId) {
 		return repository.findReview(itemId);
 	}
+
+	/**
+	 * ユーザーIDからマイレビューを取得する
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<Review> findReviewByUserId(Integer id) {
+		return repository.myReview(id);
+	}
 }

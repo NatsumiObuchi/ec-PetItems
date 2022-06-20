@@ -86,6 +86,25 @@ public class ItemRepository {
 		return review;
 	};
 
+	private static final RowMapper<Review> MYREVIEW_ROW_MAPPER = (rs, i) -> {
+		Review review = new Review();
+		review.setId(rs.getInt("id"));
+		review.setUser_id(rs.getInt("user_id"));
+		review.setItem_id(rs.getInt("item_id"));
+		review.setStars(rs.getInt("stars"));
+		review.setContent(rs.getString("content"));
+		Item item = new Item();
+		item.setId(rs.getInt("item_id"));
+		item.setName(rs.getString("item_name"));
+		item.setDescription(rs.getString("item_description"));
+		item.setPrice(rs.getInt("item_price"));
+		item.setImagePath(rs.getString("item_image_path"));
+		item.setImagePath2(rs.getString("item_image_path2"));
+		item.setDeleted(rs.getBoolean("item_deleted"));
+		review.setItem(item);
+		return review;
+	};
+
 	/**
 	 * 
 	 * idでitemを検索するメソッド。 (item詳細表示用)
@@ -330,4 +349,24 @@ public class ItemRepository {
 		}
 	}
 
+	/**
+	 * マイレビュー一覧を取得する
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<Review> myReview(Integer id) {
+		String sql = "select r.id, r.user_id, r.item_id, r.stars, r.content "
+				+ ", i.id item_id, i.name item_name, i.description item_description, i.price item_price,"
+				+ " i.image_path item_image_path, i.image_path2 item_image_path2, i.deleted item_deleted"
+				+ " from reviews as r" + " inner join" + " items as i" + " on r.item_id = i.id"
+				+ " where r.user_id = :user_id order by r.id desc;";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("user_id", id);
+		List<Review> reviewList = template.query(sql, param, MYREVIEW_ROW_MAPPER);
+		System.out.println(reviewList);
+		if (reviewList.size() == 0) {
+			return null;
+		}
+		return reviewList;
+	}
 }

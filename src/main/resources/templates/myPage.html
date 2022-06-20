@@ -75,7 +75,7 @@
                                 </td>
                                 <td class="mypage_content">
                                     <img class="icon mypage_icon" alt="">
-                                    <a href="#">マイレビュー</a>
+                                    <a th:href="@{/myPage/myReview?id=} + ${session.user.id}">マイレビュー</a>
                                 </td>
                             </tr>
                             <tr>

@@ -1,5 +1,8 @@
 package jp.co.example.ecommerce_b.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.BeanUtils;
@@ -13,10 +16,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.ecommerce_b.domain.Review;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.form.UserPasswordUpdateForm;
 import jp.co.example.ecommerce_b.form.UserUpdateForm;
+import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.UserService;
 
 @Controller
@@ -25,6 +30,9 @@ public class MyPageController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private ItemService itemService;
 
 	@Autowired
 	private HttpSession session;
@@ -238,5 +246,13 @@ public class MyPageController {
 		if (userService.duplicationCheckOfEmail(form)) {// メールアドレスが重複している場合
 			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
 		}
+	}
+
+	@RequestMapping("/myReview")
+	public String myReviewShow(Integer id) {
+		List<Review> reviewList = new ArrayList<>();
+		reviewList = itemService.findReviewByUserId(id);
+		session.setAttribute("reviewList", reviewList);
+		return "my_review";
 	}
 }
