@@ -5,15 +5,30 @@ public class SearchForm {
 	private String code;
 	private Integer genre;
 	private Integer sortId;
+	private Integer animalId;
 	
 	public SearchForm() {}
 	
-	public SearchForm(String code, Integer genre, Integer sortId) {
+	public SearchForm(String code, Integer genre, Integer sortId, Integer animalId) {
 		super();
 		this.code = code;
 		this.genre = genre;
 		this.sortId = sortId;
+		this.animalId = animalId;
 	}
+
+
+
+	public Integer getAnimalId() {
+		return animalId;
+	}
+
+
+	public void setAnimalId(Integer animalId) {
+		this.animalId = animalId;
+	}
+
+
 	public String getCode() {
 		return code;
 	}
@@ -32,10 +47,13 @@ public class SearchForm {
 	public void setSortId(Integer sortId) {
 		this.sortId = sortId;
 	}
-	
+
 
 	@Override
 	public String toString() {
-		return "SearchForm [code=" + code + ", genre=" + genre + ", sortId=" + sortId + "]";
+		return "SearchForm [code=" + code + ", genre=" + genre + ", sortId=" + sortId + ", animalId=" + animalId + "]";
 	}
+	
+
+	
 }

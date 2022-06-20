@@ -130,28 +130,28 @@ public class ItemController {
 	 */
 	@RequestMapping("/itemDetail")
 	public String itemDetail(Integer id, Integer animalId, Model model) {
-		System.out.println("id:" + id + "animalId" + animalId);
+		System.out.println("id:" + id + "  animalId" + animalId);
 		// 検索するitem_idでレビュー集め
 		List<Review> reviews = itemService.findReview(id);
 		model.addAttribute("reviews", reviews);
 		System.out.println(reviews);
 
 		if (animalId == 0) {
-			model.addAttribute("link2", "すべて");
+			model.addAttribute("link", "すべて");
 			model.addAttribute("access", "list");
 		} else {
 			switch (animalId) {
 			case 1:
-				model.addAttribute("link2", "犬用品");
-				model.addAttribute("access", "dog");
+				model.addAttribute("link", "犬用品");
+				model.addAttribute("access", "/");
 				break;
 			case 2:
-				model.addAttribute("link2", "猫用品");
+				model.addAttribute("link", "猫用品");
 				model.addAttribute("access", "cat");
 				break;
 			}
 		}
-
+		model.addAttribute("animalId", animalId);
 		Item item = itemService.load(id);
 		model.addAttribute("item", item);
 
@@ -169,14 +169,23 @@ public class ItemController {
 	@RequestMapping("/search")
 	public String searchItem(SearchForm form, Model model) {
 		String code = form.getCode();
-		Integer genre = form.getGenre();
+		Integer genre = (Integer)(form.getGenre());
 		Integer sortId = form.getSortId();
+		Integer animalId = form.getAnimalId();
 		System.out.println(form);
 		// カテゴリーメニューバーからこのメソッドに飛んできたとき、エラーが起きないようにする。
 		if (code == null) {
 			code = "";
 		}
-
+		if(genre==null){
+			if(animalId==1) {
+				genre=1;
+			}else if(animalId==2) {
+				genre=5;
+			}
+		}
+		System.out.println("genre = "+ genre);
+		
 		// genreの値からcategoryIdとanimalIdを定義する。
 		Integer categoryId = 0;
 		if (genre == 2 || genre == 6) {
@@ -186,12 +195,16 @@ public class ItemController {
 		} else if (genre == 4 || genre == 8) {
 			categoryId = 3;
 		}
-		Integer animalId = 0;
+		System.out.println("categoryId = "+categoryId);
+		
+		if(animalId==null) {
 		if (genre == 1 || genre == 2 || genre == 3 || genre == 4) {
 			animalId = 1;
 		} else if (genre == 5 || genre == 6 || genre == 7 || genre == 8) {
 			animalId = 2;
 		}
+		}
+		System.out.println("animalId = "+animalId);
 		List<Item> itemList = new ArrayList<>();
 
 		// Integer animalId = (Integer) session.getAttribute("animalId");
@@ -213,6 +226,7 @@ public class ItemController {
 			}
 		}
 
+		System.out.println("itemList = "+itemList);
 		// 検索結果の該当がない場合＋入力がない場合
 		if (itemList.size() == 0 || code.equals("　") || code.equals(" ") || code.isEmpty()) {
 			List<Item> itemList2 = new ArrayList<>();
