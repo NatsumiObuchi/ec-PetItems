@@ -74,7 +74,7 @@
 	<!-- 検索欄 -->
 	<div th:fragment="frag_search">
 		<div class="container">
-			<form id="form1" method="post" th:action="@{/item/search}" name="word">
+			<form id="form1" th:action="@{/item/search}" name="word">
 				<select name="genre" id="genre">
 					<span th:each="genre:${session.genreMap}">
 						<option th:value="${genre.key}" th:text="${genre.value}">ジャンル名</option>
@@ -100,21 +100,22 @@
 			<nav class="menu-bar">
 				<ul class="menu-lists">
 					<li class="menu-list">
-						<a th:href="@{/item/dog}">犬用品</a>
-						<ul class="dropdown-lists">
-							<li class="dropdown-list"><a th:href="@{/item/dog}">すべて</a></li>
-							<li class="dropdown-list"><a th:href="@{/item/dogFood}">フード</a></li>
-							<li class="dropdown-list"><a th:href="@{/item/dogToy}">おもちゃ</a></li>
-							<li class="dropdown-list"><a th:href="@{/item/dogOther}">その他</a></li>
+						<a th:href="@{/item/search?genre=1}">犬用品</a>
+						<ul class="dropdown-lists">							
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=1}">すべて</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=2}">フード</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=3}">おもちゃ</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=4}">その他</a></li>
 						</ul>
+						</form>
 					</li>
 					<li class="menu-list">
-						<a th:href="@{/item/cat}">猫用品</a>
+						<a th:href="@{/item/search?genre=5}">猫用品</a>
 						<ul class="dropdown-lists">
-							<li class="dropdown-list"><a th:href="@{/item/cat}">すべて</a></li>
-							<li class="dropdown-list"><a th:href="@{/item/catFood}">フード</a></li>
-							<li class="dropdown-list"><a th:href="@{/item/catToy}">おもちゃ</a></li>
-							<li class="dropdown-list"><a th:href="@{/item/catOther}">その他</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=5}">すべて</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=6}">フード</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=7}">おもちゃ</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=8}">その他</a></li>
 						</ul>
 					</li>
 				</ul>

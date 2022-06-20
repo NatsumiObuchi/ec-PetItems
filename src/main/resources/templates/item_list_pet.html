@@ -7,7 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>ペット用品のネット注文</title>
 	<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">-->
-	<link rel="stylesheet" href="/resources/demos/style.css">
+	<!--<link rel="stylesheet" href="/resources/demos/style.css">-->
 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
 	<link th:href="@{/css/piza.css}" rel="stylesheet" />
 	<link th:href="@{/css/top.css}" rel="stylesheet" />
@@ -41,14 +41,24 @@
 		</h3>
 
 
+		【並び替え】
+		<form th:object="${searchForm}">
+		<a th:href="@{/item/search?sortId=0&genre=}+*{genre}+@{&code=}+*{code}">新着順</a>｜
+		<a th:href="@{/item/search?sortId=1&genre=}+*{genre}+@{&code=}+*{code}">レビューが多い順</a>｜
+		<a th:href="@{/item/search?sortId=2&genre=}+*{genre}+@{&code=}+*{code}">レビューが高い順</a>｜
+		<a th:href="@{/item/search?sortId=3&genre=}+*{genre}+@{&code=}+*{code}">価格が高い順</a>｜
+		<a th:href="@{/item/search?sortId=4&genre=}+*{genre}+@{&code=}+*{code}">価格が低い順</a>
+		</form>
+		<br><br>
+
 		<!-- table -->
 		<div class="aaa">
 			<div class="bbb" th:each="item:${itemList}">
-				<a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
+				<a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id} + @{&animalId=} + ${item.animalId}">
 					<img src="../static/img_pizza/1.jpg" th:src="@{/img_dogfood/} + ${item.imagePath}"
 						class="img-responsive img-rounded item-img-center" width="200" height="600" />
 				</a><br />
-				<a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id}">
+				<a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id} + @{&animalId=} + ${item.animalId}">
 					<span th:text="${item.name}">じゃがバターベーコン</span>
 				</a><br />
 				<span th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')}">1,380</span>円(税抜)
