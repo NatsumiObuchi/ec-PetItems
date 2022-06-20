@@ -48,7 +48,7 @@
 									th:src="@{/img_dogfood/} + ${favorite.item.imagePath}"
 									class="img-responsive img-rounded item-img-center" width="200" height="600" />
 							</a><br />
-							<a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${favorite.item.id}">
+							<a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${favorite.item.id} + @{&animalId=} + ${favorite.item.animalId}">
 								<span th:text="${favorite.item.name}">じゃがバターベーコン</span>
 							</a><br />
 							<span th:text="${#numbers.formatInteger(favorite.item.price, 3, 'COMMA')}">1,380</span>円(税抜)
