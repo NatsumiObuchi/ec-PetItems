@@ -77,7 +77,6 @@ public class MyPageController {
 	@RequestMapping("/changePermissionDisplay")
 	public String permissionDisplay() {
 		Integer count = (Integer) session.getAttribute("count");
-		System.out.println(count);
 		if (count == null) {
 			count = 1;// 1回目のユーザ認証
 			session.setAttribute("count", count);
@@ -95,20 +94,23 @@ public class MyPageController {
 	 */
 	@RequestMapping("/changePermission")
 	public String permission(UserForm form, Model model) {
+		User user = (User) session.getAttribute("user");
 		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
 		String oldPass = form.getPassword();
-		User user = userService.findByEmail(form);
-		if (user == null) {// メールアドレスで探しデータが存在しなかった場合
-			model.addAttribute("AuthenticationFailureMessage", "メールアドレス、またはパスワードが間違っています");
-			return "change_permission";
-		} else if (bcpe.matches(oldPass, user.getPassword())) {// 入力されたパスワードとハッシュ化されたデータベース内のパスワードが合っているか照合
-			form.setPassword(user.getPassword());
-			User user2 = userService.loginCheck(form);
-			session.setAttribute("user", user2);
-		} else {
+		System.out.println(user);
+		if (bcpe.matches(oldPass, user.getPassword())) {// ハッシュ化されたパスワードと入力されたパスワードがマッチしても...
+			if (!(form.getEmail().equals(user.getEmail()))) {// 今ログインしているユーザのメールアドレスでなければエラー
+				model.addAttribute("AuthenticationFailureMessage", "メールアドレス、またはパスワードが間違っています");
+				return "change_permission";
+			} else {// ログインしてるユーザのメールアドレスであればユーザ認証成功
+				session.setAttribute("user", user);
+				System.out.println(user);
+			}
+		} else {// そもそもハッシュ化されたパスワードと入力されたパスワードが一致していない
 			model.addAttribute("AuthenticationFailureMessage", "メールアドレス、またはパスワードが間違っています");
 			return "change_permission";
 		}
+
 		return "confirm_userInfo";
 	}
 
