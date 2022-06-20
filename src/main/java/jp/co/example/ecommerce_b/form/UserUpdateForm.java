@@ -18,7 +18,7 @@ public class UserUpdateForm {
 	String address;
 	@NotBlank(message = "電話番号を入力してください")
 	// 市外局番や機種（携帯・固定）によって区切りの桁数が異なるため、桁数に遊びを持たせた。
-	@Pattern(regexp = "^[0-9]{2,4}-[0-9]{2,4}-[0-9]{4}$", message = "電話番号はXXXX-XXXX-XXXXの形式で入力してください")
+	@Pattern(regexp = "^[0-9]{2,4}[0-9]{2,4}[0-9]{4}$", message = "電話番号はハイフンなしの形式で入力してください")
 	String telephone;
 
 	public UserUpdateForm() {

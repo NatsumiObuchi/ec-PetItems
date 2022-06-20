@@ -40,6 +40,7 @@ public class UserRepository {
 		addressee.setAddresseeId(rs.getInt("addressee_id"));
 		addressee.setZipCode(rs.getString("zipCode"));
 		addressee.setAddress(rs.getString("address"));
+		addressee.setSettingAddressee(rs.getBoolean("setting_addressee"));
 		return addressee;
 	};
 
@@ -174,7 +175,7 @@ public class UserRepository {
 	 * @return
 	 */
 	public List<Addressee> addressees(Integer id) {
-		String sql = "select id, user_id, addressee_id, zipCode, address"
+		String sql = "select id, user_id, addressee_id, zipCode, address, setting_addressee"
 				+ " from addressees where user_id = :userId order by id desc";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", id);
 		List<Addressee> addresseeList = template.query(sql, param, ADDRESSEE_ROW_MAPPER);
@@ -192,7 +193,7 @@ public class UserRepository {
 	 * @return
 	 */
 	public Addressee addressee(Integer userId, Integer addreseeId) {
-		String sql = "select id, user_id, addressee_id, zipCode, address"
+		String sql = "select id, user_id, addressee_id, zipCode, address, setting_addressee"
 				+ " from addressees where user_id = :userId and addressee_id = :addresseeId";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId).addValue("addresseeId",
 				addreseeId);
@@ -210,7 +211,7 @@ public class UserRepository {
 	 * @return
 	 */
 	public Addressee lastAddreseeId(Integer userId) {
-		String sql = "select id, user_id, addressee_id, zipCode, address" + " from addressees"
+		String sql = "select id, user_id, addressee_id, zipCode, address, setting_addressee" + " from addressees"
 				+ " where user_id = :userId"
 				+ " order by addressee_id desc limit 1;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
@@ -248,6 +249,19 @@ public class UserRepository {
 		String sql = "delete from addressees where user_id = :userId and addressee_id = :addresseeId;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId).addValue("addresseeId",
 				addreseeId);
+		template.update(sql, param);
+	}
+
+	/**
+	 * お届け先情報として設定する(setting_addresseeをtrueにする)
+	 * 
+	 * @param userId
+	 * @param addreseeId
+	 */
+	public void settingAddrssee(Integer userId, Integer addreseeId, boolean setting) {
+		String sql = "update addressees set setting_addressee = :settingAddressee where user_id = :userId and addressee_id = :addresseeId;";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId).addValue("addresseeId",
+				addreseeId).addValue("settingAddressee", setting);
 		template.update(sql, param);
 	}
 

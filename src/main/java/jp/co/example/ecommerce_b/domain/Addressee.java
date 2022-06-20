@@ -12,6 +12,8 @@ public class Addressee {
 	private String zipCode;
 	/** お届け先住所 */
 	private String address;
+	/** お届け先設定 */
+	private boolean settingAddressee;
 
 	public Integer getId() {
 		return id;
@@ -44,10 +46,18 @@ public class Addressee {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
+	public boolean isSettingAddressee() {
+		return settingAddressee;
+	}
+
+	public void setSettingAddressee(boolean settingAddressee) {
+		this.settingAddressee = settingAddressee;
+	}
+
 	@Override
 	public String toString() {
 		return "Addressee [id=" + id + ", userId=" + userId + ", addresseeId=" + addresseeId + ", zipCode=" + zipCode
-				+ ", address=" + address + "]";
+				+ ", address=" + address + ", settingAddressee=" + settingAddressee + "]";
 	}
-
 }

@@ -104,7 +104,6 @@ public class MyPageController {
 				return "change_permission";
 			} else {// ログインしてるユーザのメールアドレスであればユーザ認証成功
 				session.setAttribute("user", user);
-				System.out.println(user);
 			}
 		} else {// そもそもハッシュ化されたパスワードと入力されたパスワードが一致していない
 			model.addAttribute("AuthenticationFailureMessage", "メールアドレス、またはパスワードが間違っています");
@@ -335,6 +334,34 @@ public class MyPageController {
 	@RequestMapping("/addresseeDelete")
 	public String addresseeDelete(Integer id, Integer addresseeId, Model model) {
 		userService.deleteAddressee(id, addresseeId);
+		return addressee(id, model);
+	}
+
+	@RequestMapping("/settingAddressee")
+	public String settingAddressee(Integer id, Integer addresseeId, boolean setting, Model model) {
+		if (addresseeId == null) {
+			model.addAttribute("nonRadio", "お届け先を設定してください。");
+			return addressee(addresseeId, model);
+		}
+		switch (addresseeId) {// お届け先として設定したいaddresseeIdと、それ以外のsetting_addresseeはfalse
+		case 1:
+			userService.setting(id, addresseeId, setting);
+			userService.setting(id, 2, false);
+			userService.setting(id, 3, false);
+			break;
+		case 2:
+			userService.setting(id, addresseeId, setting);
+			userService.setting(id, 1, false);
+			userService.setting(id, 3, false);
+			break;
+		case 3:
+			userService.setting(id, addresseeId, setting);
+			userService.setting(id, 1, false);
+			userService.setting(id, 2, false);
+			break;
+		}
+		Addressee addressee = userService.addressee(id, addresseeId);
+		session.setAttribute("addressee", addressee);// 今設定されているお届け先から最新のお届け先として上書き
 		return addressee(id, model);
 	}
 
