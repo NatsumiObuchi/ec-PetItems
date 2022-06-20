@@ -15,7 +15,7 @@ public class Item {
 	/** 画像パス2 */
 	private String imagePath2;
 	/** アニマルID */
-	private Integer animal_id;
+	private Integer animalId;
 	/** カテゴリID */
 	private Integer category_id;
 	/** 削除フラグ */
@@ -83,15 +83,6 @@ public class Item {
 		this.deleted = deleted;
 	}
 
-	@Override
-	public String toString() {
-		return "Item [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price
-				+ ", imagePath=" + imagePath + ", imagePath2=" + imagePath2 + ", animal_id=" + animal_id
-				+ ", category_id=" + category_id + ", deleted=" + deleted + ", avgStar=" + avgStar + ", countReview="
-				+ countReview + ", avgstar2=" + avgstar2 + "]";
-	}
-
-
 
 	public Integer getCountReview() {
 		return countReview;
@@ -111,16 +102,16 @@ public class Item {
 		this.avgStar = avgStar;
 	}
 
-	public Integer getAnimal_id() {
-		return animal_id;
+	public Integer getAnimalId() {
+		return animalId;
 	}
 
 	public Integer getCategory_id() {
 		return category_id;
 	}
 
-	public void setAnimal_id(Integer animal_id) {
-		this.animal_id = animal_id;
+	public void setAnimal_id(Integer animalId) {
+		this.animalId = animalId;
 	}
 
 	public void setCategory_id(Integer category_id) {
@@ -136,5 +127,14 @@ public class Item {
 		this.avgstar2 = avgstar2;
 	}
 
+	@Override
+	public String toString() {
+		return "Item [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price
+				+ ", imagePath=" + imagePath + ", imagePath2=" + imagePath2 + ", animalId=" + animalId
+				+ ", category_id=" + category_id + ", deleted=" + deleted + ", avgStar=" + avgStar + ", countReview="
+				+ countReview + ", avgstar2=" + avgstar2 + "]";
+	}
+
+	
 
 }
