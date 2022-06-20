@@ -11,9 +11,9 @@ $(function(){
 		nameList[index] = nameList[index].replace(' ','');
 	})
 	console.log(nameList);
-	
 	//nameListをsorceにオートコンプリート	
 	$('#code').autocomplete({
 		source : nameList
 	});
+	
 });
