@@ -355,8 +355,8 @@ public class MyPageController {
 	@RequestMapping("/settingAddressee")
 	public String settingAddressee(Integer id, Integer addresseeId, boolean setting, Model model) {
 		if (addresseeId == null) {
-			model.addAttribute("nonRadio", "お届け先を設定してください。");
-			return addressee(addresseeId, model);
+			model.addAttribute("nonRadio", "お届け先が選択されていません！");
+			return addressee(id, model);
 		}
 		List<Addressee> addresseeList = (List<Addressee>) session.getAttribute("addresseeList");
 		switch (addresseeId) {// お届け先として設定したいaddresseeIdと、それ以外のsetting_addresseeはfalse
@@ -386,8 +386,8 @@ public class MyPageController {
 			addresseeService.setting(id, 2, false);
 			break;
 		}
-		Addressee addressee = addresseeService.addressee(id, addresseeId);
-		session.setAttribute("addressee", addressee);// 今設定されているお届け先から最新のお届け先として上書き
+		model.addAttribute("update", "更新しました！");
+		model.addAttribute("updateText", "※複数お届け先情報がある方は、一番上のお届け先が「注文確認画面」のデフォルトで表示されます");
 		return addressee(id, model);
 	}
 
