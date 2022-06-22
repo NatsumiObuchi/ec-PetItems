@@ -84,4 +84,14 @@ public class AddresseeService {
 	public Addressee findByUserIdandSettingAddresseeTrue(Integer userId) {
 		return repository.findByUserIdandSettingAddresseeTrue(userId);
 	}
+
+	/**
+	 * お届け先情報の更新
+	 * 
+	 * @param userId
+	 * @param addreseeId
+	 */
+	public void updateAddressee(Addressee addressee) {
+		repository.updateAddressee(addressee);
+	}
 }

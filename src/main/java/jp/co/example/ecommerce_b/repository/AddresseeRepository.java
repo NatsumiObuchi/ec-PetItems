@@ -37,7 +37,7 @@ public class AddresseeRepository {
 	 */
 	public List<Addressee> addressees(Integer id) {
 		String sql = "select id, user_id, addressee_id, zipCode, address, setting_addressee"
-				+ " from addressees where user_id = :userId order by id desc";
+				+ " from addressees where user_id = :userId";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", id);
 		List<Addressee> addresseeList = template.query(sql, param, ADDRESSEE_ROW_MAPPER);
 		if (addresseeList == null) {
@@ -109,6 +109,20 @@ public class AddresseeRepository {
 		String sql = "delete from addressees where user_id = :userId and addressee_id = :addresseeId;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId).addValue("addresseeId",
 				addreseeId);
+		template.update(sql, param);
+	}
+
+	/**
+	 * お届け先情報の更新
+	 * 
+	 * @param userId
+	 * @param addreseeId
+	 */
+	public void updateAddressee(Addressee addressee) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(addressee);
+		String sql = "update addressees set addressee_id = :addresseeId,"
+				+ " zipCode = :zipCode, address = :address, setting_addressee = :settingAddressee"
+				+ " where id = :id and user_id = :userId;";
 		template.update(sql, param);
 	}
 
