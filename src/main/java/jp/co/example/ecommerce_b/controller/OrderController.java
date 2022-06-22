@@ -26,6 +26,7 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 
+import jp.co.example.ecommerce_b.domain.Addressee;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
@@ -36,13 +37,11 @@ import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
+import jp.co.example.ecommerce_b.service.UserService;
 
 @Controller
 @RequestMapping("/order")
 public class OrderController {
-
-	@Autowired
-	private OrderService orderservice;
 
 	@Autowired
 	private HttpSession session;
@@ -54,6 +53,12 @@ public class OrderController {
 	private ItemService itemService;
 
 	@Autowired
+	private OrderService orderservice;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
 	private MailSender sender;
 
 	@ModelAttribute
@@ -63,8 +68,7 @@ public class OrderController {
 
 	@RequestMapping("")
 
-	public String index() {// 「注文へ進む」を押したときに走る処理
-
+	public String index(OrderForm orderForm) {// 「注文へ進む」を押したときに走る処理
 		Integer totalPrice = (Integer) session.getAttribute("totalPrice");
 		session.setAttribute("totalPrice", totalPrice);
 
@@ -77,6 +81,16 @@ public class OrderController {
 			session.setAttribute("transitionSourcePage", "order");// 遷移元ページの記録
 			return "forward:/user/toLogin";
 		}
+
+		// 宛先氏名、宛先Eメール、電話番号はデフォルトでユーザ情報を反映
+		orderForm.setDestinationName(user.getName());
+		orderForm.setDestinationEmail(user.getEmail());
+		orderForm.setDestinationTell(user.getTelephone());
+
+		// ユーザが登録済のお届け先一覧を表示(modal表示)
+		List<Addressee> addresseeList = userService.findAddresseeByUserId(user.getId());
+		session.setAttribute("addresseeList", addresseeList);
+
 
 		return "order_confirm";
 
@@ -98,7 +112,7 @@ public class OrderController {
 			) {
 
 		if(rs.hasErrors()) {
-			return index();
+			return index(orderForm);
 		}
 
 //		注文する
