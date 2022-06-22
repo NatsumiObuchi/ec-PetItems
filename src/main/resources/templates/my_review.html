@@ -93,7 +93,7 @@
 							<td>
 								<!-- 注文履歴　商品名 -->
 								<div class="text-center">
-                                    <a th:href="@{/item/itemDetail?id=} + ${li.item.id}">
+                                    <a th:href="@{/item/itemDetail?id=} + ${li.item.id} + @{&animalId=} + ${li.item.animalId}">
                                         <span th:text="${li.item.name}"></span>
                                     </a>
                                 </div>

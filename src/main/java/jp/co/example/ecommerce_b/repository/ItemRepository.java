@@ -36,8 +36,8 @@ public class ItemRepository {
 		item.setPrice(rs.getInt("price"));
 		item.setImagePath(rs.getString("image_path"));
 		item.setImagePath2(rs.getString("image_path2"));//
-		item.setAnimal_id(rs.getInt("animal_id"));
-		item.setCategory_id(rs.getInt("category_id"));
+		item.setAnimalId(rs.getInt("animal_id"));
+		item.setCategoryId(rs.getInt("category_id"));
 		item.setDeleted(rs.getBoolean("deleted"));
 		if (rs.getBigDecimal("avg_star") == null) {
 			item.setAvgStar("0.00");
@@ -100,6 +100,8 @@ public class ItemRepository {
 		item.setPrice(rs.getInt("item_price"));
 		item.setImagePath(rs.getString("item_image_path"));
 		item.setImagePath2(rs.getString("item_image_path2"));
+		item.setAnimalId(rs.getInt("animal_id"));
+		item.setCategoryId(rs.getInt("category_id"));
 		item.setDeleted(rs.getBoolean("item_deleted"));
 		review.setItem(item);
 		return review;
@@ -358,7 +360,7 @@ public class ItemRepository {
 	public List<Review> myReview(Integer id) {
 		String sql = "select r.id, r.user_id, r.item_id, r.stars, r.content "
 				+ ", i.id item_id, i.name item_name, i.description item_description, i.price item_price,"
-				+ " i.image_path item_image_path, i.image_path2 item_image_path2, i.deleted item_deleted"
+				+ " i.image_path item_image_path, i.image_path2 item_image_path2, i.animal_id, i.category_id, i.deleted item_deleted"
 				+ " from reviews as r" + " inner join" + " items as i" + " on r.item_id = i.id"
 				+ " where r.user_id = :user_id order by r.id desc;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("user_id", id);

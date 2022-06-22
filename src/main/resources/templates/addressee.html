@@ -35,13 +35,15 @@
                 <div class="well text-center">
                     <legend>お届け先情報設定・削除</legend>
                     <div th:if="${full}" th:text="${full}" style="color: red;"></div>
-                    <div th:if="${non}" th:text="${non}" class="text-center" style="color: red;"></div>
+                    <div th:if="${non}" th:text="${non}" class="text-center" style="color: red;"></div><br>
                     <div th:unless="${non}">
                         <table class="table table-striped">
                             <tr class="form-group" th:each="address : ${session.addresseeList}">
                                 <td>
                                     <!-- 選択用 -->
-                                    <input type="radio" name="addresseeId" th:value="${address.addresseeId}">
+                                    <input type="radio" name="addresseeId" th:value="${address.addresseeId}" form="settingId" checked>
+                                    <input type="hidden" name="id" th:value="${session.user.id}" form="settingId">
+                                    <input type="hidden" name="setting" th:value="true" form="settingId">
                                 </td>
                                 <td>
                                     <div th:text="'〒 ' + ${address.zipCode}"></div>
@@ -61,8 +63,18 @@
                             </tr>
                         </table>
                     </div>
-                    <!-- 新規追加リンク -->
-                    <a th:href="@{/myPage/registerShow?id=} + ${session.user.id}">お届け先情報新規追加</a>
+                    <!-- 新規追加form -->
+                    <div class="form-group">
+                        <form th:action="@{/myPage/registerShow}">
+                            <input type="hidden" name="id" th:value="${session.user.id}">
+                            <button type="submit" class="btn btn-primary">お届け先情報新規追加</button>
+                        </form><br>
+                        <div th:unless="${non}">
+                            <form th:action="@{/myPage/settingAddressee}" id="settingId">
+                                <button type="submit" class="btn btn-primary">お届け先に設定</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

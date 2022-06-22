@@ -120,7 +120,23 @@ public class UserService {
 		userRepository.deleteAddressee(userId, addresseeId);
 	}
 
+	/**
+	 * 最後に追加したお届け先情報を取得する
+	 * 
+	 * @param userId
+	 * @return
+	 */
 	public Addressee lastAddlesseeId(Integer userId) {
 		return userRepository.lastAddreseeId(userId);
+	}
+
+	/**
+	 * お届け先情報として設定する(setting_addresseeをtrueにする)
+	 * 
+	 * @param userId
+	 * @param addreseeId
+	 */
+	public void setting(Integer userId, Integer addresseeId, boolean setting) {
+		userRepository.settingAddrssee(userId, addresseeId, setting);
 	}
 }
