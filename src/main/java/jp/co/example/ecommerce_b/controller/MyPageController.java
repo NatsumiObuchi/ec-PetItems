@@ -358,16 +358,27 @@ public class MyPageController {
 			model.addAttribute("nonRadio", "お届け先を設定してください。");
 			return addressee(addresseeId, model);
 		}
+		List<Addressee> addresseeList = (List<Addressee>) session.getAttribute("addresseeList");
 		switch (addresseeId) {// お届け先として設定したいaddresseeIdと、それ以外のsetting_addresseeはfalse
 		case 1:
 			addresseeService.setting(id, addresseeId, setting);
-			addresseeService.setting(id, 2, false);
-			addresseeService.setting(id, 3, false);
+			if (addresseeList.size() >= 2) {
+				if (addresseeList.get(1) != null) {// addresseeIdの2番目があれば
+					addresseeService.setting(id, 2, false);
+				}
+				if (addresseeList.get(2) != null) {// addresseeIdの3番目があれば
+					addresseeService.setting(id, 3, false);
+				}
+			}
 			break;
 		case 2:
 			addresseeService.setting(id, addresseeId, setting);
 			addresseeService.setting(id, 1, false);
-			addresseeService.setting(id, 3, false);
+			if (addresseeList.size() >= 3) {
+				if (addresseeList.get(2) != null) {// addresseeIdの3番目があれば
+					addresseeService.setting(id, 3, false);
+				}
+			}
 			break;
 		case 3:
 			addresseeService.setting(id, addresseeId, setting);

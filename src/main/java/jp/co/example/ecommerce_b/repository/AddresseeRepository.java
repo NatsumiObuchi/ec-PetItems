@@ -150,11 +150,14 @@ public class AddresseeRepository {
 		String sql = "select id, user_id, addressee_id, zipCode, address, setting_addressee"
 				+ " from addressees where user_id = :userId and setting_addressee = true;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
-		Addressee addressee = template.queryForObject(sql, param, ADDRESSEE_ROW_MAPPER);
-		if (addressee == null) {
+		try {
+			Addressee addressee = template.queryForObject(sql, param, ADDRESSEE_ROW_MAPPER);
+			return addressee;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
 			return null;
 		}
-		return addressee;
 	}
 
 }
