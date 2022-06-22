@@ -23,6 +23,7 @@ import jp.co.example.ecommerce_b.form.InsertAddresseeForm;
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.form.UserPasswordUpdateForm;
 import jp.co.example.ecommerce_b.form.UserUpdateForm;
+import jp.co.example.ecommerce_b.service.AddresseeService;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.UserService;
 
@@ -35,6 +36,9 @@ public class MyPageController {
 
 	@Autowired
 	private ItemService itemService;
+
+	@Autowired
+	private AddresseeService addresseeService;
 
 	@Autowired
 	private HttpSession session;
@@ -269,7 +273,7 @@ public class MyPageController {
 	 */
 	@RequestMapping("/addressee")
 	public String addressee(Integer id, Model model) {
-		List<Addressee> addresseeList = userService.findAddresseeByUserId(id);
+		List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(id);
 		if (addresseeList == null || addresseeList.size() == 0) {
 			model.addAttribute("non", "お届け先情報は現在登録されていません。追加してください。");
 		}
@@ -284,7 +288,7 @@ public class MyPageController {
 	 */
 	@RequestMapping("/registerShow")
 	public String registerShow(Integer id, Model model) {
-		List<Addressee> addresseeList = userService.findAddresseeByUserId(id);
+		List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(id);
 		if (addresseeList.size() == 3) {
 			model.addAttribute("full", "お届け先情報の登録は3件までです。追加するにはどれかを削除してください。");
 			return addressee(id, model);
@@ -311,7 +315,7 @@ public class MyPageController {
 		BeanUtils.copyProperties(insertAddresseeForm, newAddressee);
 
 		// ログインユーザが最後に登録したaddresseeIdを取得
-		Addressee addressee = userService.lastAddlesseeId(insertAddresseeForm.getUserId());
+		Addressee addressee = addresseeService.lastAddlesseeId(insertAddresseeForm.getUserId());
 		if (addressee == null) {// 初めてお届け先情報を登録する人はaddresseeIdに1をセット
 			newAddressee.setAddresseeId(1);
 		} else {// それ以外の人（既に登録済のお届け先が存在する）
@@ -319,7 +323,7 @@ public class MyPageController {
 			newAddressee.setAddresseeId(lastAddresseeId + 1);// 新しいaddresseeIdを手動でセット
 		}
 
-		userService.addresseeRegister(newAddressee);
+		addresseeService.addresseeRegister(newAddressee);
 		return addressee(insertAddresseeForm.getUserId(), model);
 	}
 
@@ -333,7 +337,7 @@ public class MyPageController {
 	 */
 	@RequestMapping("/addresseeDelete")
 	public String addresseeDelete(Integer id, Integer addresseeId, Model model) {
-		userService.deleteAddressee(id, addresseeId);
+		addresseeService.deleteAddressee(id, addresseeId);
 		return addressee(id, model);
 	}
 
@@ -345,22 +349,22 @@ public class MyPageController {
 		}
 		switch (addresseeId) {// お届け先として設定したいaddresseeIdと、それ以外のsetting_addresseeはfalse
 		case 1:
-			userService.setting(id, addresseeId, setting);
-			userService.setting(id, 2, false);
-			userService.setting(id, 3, false);
+			addresseeService.setting(id, addresseeId, setting);
+			addresseeService.setting(id, 2, false);
+			addresseeService.setting(id, 3, false);
 			break;
 		case 2:
-			userService.setting(id, addresseeId, setting);
-			userService.setting(id, 1, false);
-			userService.setting(id, 3, false);
+			addresseeService.setting(id, addresseeId, setting);
+			addresseeService.setting(id, 1, false);
+			addresseeService.setting(id, 3, false);
 			break;
 		case 3:
-			userService.setting(id, addresseeId, setting);
-			userService.setting(id, 1, false);
-			userService.setting(id, 2, false);
+			addresseeService.setting(id, addresseeId, setting);
+			addresseeService.setting(id, 1, false);
+			addresseeService.setting(id, 2, false);
 			break;
 		}
-		Addressee addressee = userService.addressee(id, addresseeId);
+		Addressee addressee = addresseeService.addressee(id, addresseeId);
 		session.setAttribute("addressee", addressee);// 今設定されているお届け先から最新のお届け先として上書き
 		return addressee(id, model);
 	}

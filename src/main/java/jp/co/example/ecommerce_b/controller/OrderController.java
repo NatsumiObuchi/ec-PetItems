@@ -34,6 +34,7 @@ import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.OrderForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
+import jp.co.example.ecommerce_b.service.AddresseeService;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
@@ -57,6 +58,9 @@ public class OrderController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private AddresseeService addresseeService;
 
 	@Autowired
 	private MailSender sender;
@@ -88,7 +92,7 @@ public class OrderController {
 		orderForm.setDestinationTell(user.getTelephone());
 
 		// ユーザが登録済のお届け先一覧を表示(modal表示)
-		List<Addressee> addresseeList = userService.findAddresseeByUserId(user.getId());
+		List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(user.getId());
 		session.setAttribute("addresseeList", addresseeList);
 
 
