@@ -24,257 +24,316 @@
 	<div th:insert="header :: frag_header"></div>
 
 	<div class="container">
-		<table>
+		<div class="row">
+			<div class="table-responsive
+			col-lg-offset-1
+			col-lg-10
+	        col-md-offset-1
+			col-md-10
+			col-sm-10
+			col-xs-12">
+			<h3 class="text-center">注文内容確認</h3>
+				<table class="table table-striped item-list-table">
+					<tbody>
+						<tr>
+							<th>
+								<div class="text-center">商品名</div>
+							</th>
+							<th>
+								<div class="text-center">価格(税抜)</div>
+							</th>
+							<th>
+								<div class="text-center">数量</div>
+							</th>
+							<th>
+								<div class="text-center">小計</div>
+							</th>
+						</tr>
+						<tr th:each="ordItem : ${session.cartList}">
+							<td>
+								<div class="center">
+									<img th:src="@{/img_dogfood/} + ${ordItem.item.imagePath}"
+										class="img-responsive img-rounded item-img-center" width="100"
+										height="300" /><br />
+									<span th:text="${ordItem.item.name}"></span>
+								</div>
+							</td>
+							<td>
+								<span class="" th:text="${#numbers.formatInteger(ordItem.item.price, 2, 'COMMA')}">&nbsp;Ｌ</span>
+							</td>
+							<td>
+								<span th:text="${ordItem.quantity}"></span>
+							</td>
+							<td>
+								<div class="text-center" th:text="${#numbers.formatInteger(ordItem.subTotal, 2, 'COMMA')}">3,280円</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-offset-2 col-xs-8">
+				<div class="form-group text-center">
+					<span id="total-price">消費税：</span>
+					<span id="total-price" name="totalTax"
+						th:text="${#numbers.formatInteger(session.totalTax, 2, 'COMMA')} + '円'">消費税：8,000円</span><br />
+					<span id="total-price">ご注文金額合計：</span>
+					<span id="total-price" name="totalPrice"
+						th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'"></span><br />
+				</div>
+			</div>
+		</div>
+		
+		<!-- ここからorderForm -->
+		<form th:action="@{/order/orderSent}" th:object="${orderForm}" method="post">
+		  <!-- table -->
 			<div class="row">
-				<div class="table-responsive
-				            col-lg-offset-1
-				            col-lg-10
-				            col-md-offset-1
-				            col-md-10
-				            col-sm-10
-				            col-xs-12">
-
-					<h3 class="text-center">注文内容確認</h3>
-					<div class="row">
-						<div class="table-responsive
-						            col-lg-offset-1
-						            col-lg-10
-						            col-md-offset-1
-						            col-md-10
-						            col-sm-10
-						            col-xs-12">
-
-							<table class="table table-striped item-list-table">
-								<tbody>
-									<tr>
-										<th>
-											<div class="text-center">商品名</div>
-										</th>
-										<th>
-											<div class="text-center">価格(税抜)</div>
-										</th>
-										<th>
-											<div class="text-center">数量</div>
-										</th>
-										<th>
-											<div class="text-center">小計</div>
-										</th>
-									</tr>
-									<tr th:each="ordItem : ${session.cartList}">
-										<td>
-											<div class="center">
-												<img th:src="@{/img_dogfood/} + ${ordItem.item.imagePath}"
-													class="img-responsive img-rounded item-img-center" width="100"
-													height="300" /><br />
-												<span th:text="${ordItem.item.name}"></span>
+				<div class="
+              table-responsive
+              col-lg-offset-3
+              col-lg-6
+              col-md-offset-1
+              col-md-10
+              col-sm-10
+              col-xs-12
+            ">
+					<div class="well">
+						<h3 class="text-center">お支払い方法</h3>
+						<table class="table table-striped item-list-table">
+							<tbody>									
+								<tr>
+									<td>
+										<div class="text-center">代金引換</div>
+									</td>
+									<div id="payError" th:errors="*{paymentMethod}" style="color: red;"></div>
+									<td>
+										<div class="row">
+											<div class="col-sm-12">
+												<label class="radio-inline">
+													<input type="radio" id="payMoney" name="responsibleCompany" value="1"
+														checked="checked" th:field="*{paymentMethod}" />
+													代金引換
+												</label>
 											</div>
-										</td>
-										<td>
-											<span class="" th:text="${#numbers.formatInteger(ordItem.item.price, 2, 'COMMA')}">&nbsp;Ｌ</span>
-										</td>
-										<td>
-											<span th:text="${ordItem.quantity}"></span>
-										</td>
-										<td>
-											<div class="text-center" th:text="${#numbers.formatInteger(ordItem.subTotal, 2, 'COMMA')}">3,280円</div>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-
-						</div>
-
-						<div th:unless="${session.cartList==null}">
-							<div class="row">
-								<div class="col-xs-offset-2 col-xs-8">
-									<div class="form-group text-center">
-										<span id="total-price">消費税：</span>
-										<span id="total-price" name="totalTax"
-											th:text="${#numbers.formatInteger(session.totalTax, 2, 'COMMA')} + '円'">消費税：8,000円</span><br />
-										<span id="total-price">ご注文金額合計：</span>
-										<span id="total-price" name="totalPrice"
-											th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'"></span><br />
-
-										<table>
-											<form th:action="@{/order/orderSent}" th:object="${orderForm}"
-												　method="post">
-												<div class="row">
-													<div class="table-responsive
-            col-lg-offset-1
-            col-lg-10
-            col-md-offset-1
-            col-md-10
-            col-sm-10
-            col-xs-12
-          ">
-
-														<h3 class="text-center">お届け先情報</h3>
-
-
-														<table class="table table-striped item-list-table">
-															<tbody>
-																<tr>
-																	<td>
-																		<div class="text-center">お名前</div>
-																	</td>
-
-																	<td>
-																		<div th:errors="*{destinationName}"
-																			style="color: red;"></div>
-																		<input type="text"
-																			th:field="*{destinationName}" />
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="text-center">メールアドレス</div>
-																	</td>
-																	<td>
-																		<div th:errors="*{destinationEmail}"
-																			style="color: red;"></div>
-																		<input type="text"
-																			th:field="*{destinationEmail}" />
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="text-center">電話番号</div>
-																	</td>
-																	<td>
-																		<div th:errors="*{destinationTell}"
-																			style="color: red;"></div>
-																		<input type="text"
-																			th:field="*{destinationTell}" />
-																	</td>
-																</tr>
-																<tr>
-																	<td colspan="2">
-																		<!-- モダール表示用ボタン -->
-																		<button type="button" class="btn btn-primary" id="openModal">お届け先選択</button>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="text-center">郵便番号</div>
-																	</td>
-																	<td>
-																		<div th:errors="*{destinationzipCode}"
-																			style="color: red;"></div>
-																		<input id="zipcode" class="zipcode" type="text"
-																			th:field="*{destinationzipCode}" />&nbsp;&nbsp;
-																		<button type="button" id="addressBtn"
-																			class="addressBtn">住所検索</button>
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="text-center">住所</div>
-																	</td>
-																	<td>
-																		<div th:errors="*{destinationAddress}"
-																			style="color: red;"></div>
-																		<input id="address" class="address" type="text"
-																			th:field="*{destinationAddress}" />
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="text-center">配達日時</div>
-																	</td>
-
-																	<td>
-																		<div class="form-group">
-																			<div class="row">
-																				<div th:errors="*{deliveryDate}"
-																					style="color: red;"></div>
-																				<div class="col-sm-5">
-																					<input type="date" id="deliveryDate"
-																						name="deliveryDate"
-																						class="form-control input-sm"
-																						th:field="*{deliveryDate}" />
-																				</div>
-																			</div>
-																			<div class="row">
-																				<div th:errors="*{deliveryTime}"
-																					style="color: red;"></div>
-																				<div class="col-sm-12">
-																					<label class="radio-inline">
-																						<input type="radio"
-																							name="deliveryTime"
-																							checked="checked"
-																							value="10:00:00"
-																							th:field="*{deliveryTime}">
-																						10時
-																					</label>
-																					<label class="radio-inline">
-																						<input type="radio"
-																							value="11:00:00"
-																							name="deliveryTime"
-																							th:field="*{deliveryTime}">
-																						11時
-																					</label>
-																					<label class="radio-inline">
-																						<input type="radio"
-																							value="12:00:00"
-																							name="deliveryTime"
-																							th:field="*{deliveryTime}">
-																						12時 </label><br />
-																					<label class="radio-inline">
-																						<input type="radio"
-																							value="13:00:00"
-																							name="deliveryTime"
-																							th:field="*{deliveryTime}">
-																						13時
-																					</label>
-																					<label class="radio-inline">
-																						<input type="radio"
-																							value="14:00:00"
-																							name="deliveryTime"
-																							th:field="*{deliveryTime}">
-																						14時
-																					</label>
-																					<label class="radio-inline">
-																						<input type="radio"
-																							value="15:00:00"
-																							name="deliveryTime"
-																							th:field="*{deliveryTime}">
-																						15時 </label><br />
-																					<label class="radio-inline">
-																						<input type="radio"
-																							value="16:00:00"
-																							name="deliveryTime"
-																							th:field="*{deliveryTime}">
-																						16時
-																					</label>
-																					<label class="radio-inline">
-																						<input type="radio"
-																							value="17:00:00"
-																							name="deliveryTime"
-																							th:field="*{deliveryTime}">
-																						17時
-																					</label>
-																					<label class="radio-inline">
-																						<input type="radio"
-																							value="18:00:00"
-																							name="deliveryTime"
-																							th:field="*{deliveryTime}">
-																						18時 </label><br />
-																				</div>
-																			</div>
-																		</div>
-																	</td>
-																</tr>
-															</tbody>
-														</table>
-
-													</div>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div class="text-center">クレジットカード決済</div>
+									</td>
+									<td align="center">
+										<div class="row">
+											<div class="col-sm-12">
+												<label class="radio-inline">
+													<input type="radio" id="creCard" name="responsibleCompany" value="2"
+														checked="checked" th:field="*{paymentMethod}" />
+													クレジットカード </label><br /><br />
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr id="cardNumber" style="display: none;">
+									<td>カードブランド/カード番号入力</td>
+									<td align="center">
+										<div class="row">
+											<div class="col-sm-12">
+												<!-- クレジットカード登録ボタン -->
+												<div class="creditPay-btn" id="creditPayBtn">
+													<script src="https://checkout.stripe.com/checkout.js"
+														class="stripe-button"
+														data-key="pk_test_51LA6lgEM1Eja88iZjQhH1JbgdsRaD0KsSRauG59LHg14YzqUT3UhTkOLYckvBZyJzPVnDGLI1rqGjgGxGGT2YGX000InVJnYeF"
+														data-name="RakuRakuペット" data-description="" data-amount=""
+														data-currency="jpy" data-label="この内容で注文する"></script>
+													<div>クレジットカード登録と同時に決済が完了します。</div>
 												</div>
+												
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					
+				</div>
+			</div>
+		
+			<!-- ここからお届け先情報 -->
+			<div class="row">
+				<div class="
+				  table-responsive
+				  col-lg-offset-1
+				  col-lg-10
+				  col-md-offset-1
+				  col-md-10
+				  col-sm-10
+				  col-xs-12
+				">
+				<h3 class="text-center">お届け先情報</h3>
+					<table class="table table-striped item-list-table">
+						<tbody>
+							<tr>
+								<td>
+									<div class="text-center">お名前</div>
+								</td>
+			
+								<td>
+									<div th:errors="*{destinationName}"
+										style="color: red;"></div>
+									<input type="text"
+										th:field="*{destinationName}" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="text-center">メールアドレス</div>
+								</td>
+								<td>
+									<div th:errors="*{destinationEmail}"
+										style="color: red;"></div>
+									<input type="text"
+										th:field="*{destinationEmail}" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="text-center">電話番号</div>
+								</td>
+								<td>
+									<div th:errors="*{destinationTell}"
+										style="color: red;"></div>
+									<input type="text"
+										th:field="*{destinationTell}" />
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<!-- モダール表示用ボタン -->
+									<button type="button" class="btn btn-primary" id="openModal">お届け先選択</button>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="text-center">郵便番号</div>
+								</td>
+								<td class="address-flex">
+									<div th:errors="*{destinationzipCode}" style="color: red;"></div>
+									<input id="zipcode" class="zipcode" type="text" th:field="*{destinationzipCode}" />
+									<button type="button" id="addressBtn" class="">住所検索</button>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="text-center">住所</div>
+								</td>
+								<td>
+									<div th:errors="*{destinationAddress}"
+										style="color: red;"></div>
+									<input id="address" class="address" type="text"
+										th:field="*{destinationAddress}" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="text-center">配達日時</div>
+								</td>
+			
+								<td>
+									<div class="form-group">
+										<div class="row">
+											<div th:errors="*{deliveryDate}"
+												style="color: red;"></div>
+											<div class="col-sm-5">
+												<input type="date" id="deliveryDate"
+													name="deliveryDate"
+													class="form-control input-sm"
+													th:field="*{deliveryDate}" />
+											</div>
+										</div>
+										<div class="row">
+											<div th:errors="*{deliveryTime}"
+												style="color: red;"></div>
+											<div class="col-sm-12">
+												<label class="radio-inline">
+													<input type="radio"
+														name="deliveryTime"
+														checked="checked"
+														value="10:00:00"
+														th:field="*{deliveryTime}">
+													10時
+												</label>
+												<label class="radio-inline">
+													<input type="radio"
+														value="11:00:00"
+														name="deliveryTime"
+														th:field="*{deliveryTime}">
+													11時
+												</label>
+												<label class="radio-inline">
+													<input type="radio"
+														value="12:00:00"
+														name="deliveryTime"
+														th:field="*{deliveryTime}">
+													12時 </label><br />
+												<label class="radio-inline">
+													<input type="radio"
+														value="13:00:00"
+														name="deliveryTime"
+														th:field="*{deliveryTime}">
+													13時
+												</label>
+												<label class="radio-inline">
+													<input type="radio"
+														value="14:00:00"
+														name="deliveryTime"
+														th:field="*{deliveryTime}">
+													14時
+												</label>
+												<label class="radio-inline">
+													<input type="radio"
+														value="15:00:00"
+														name="deliveryTime"
+														th:field="*{deliveryTime}">
+													15時 </label><br />
+												<label class="radio-inline">
+													<input type="radio"
+														value="16:00:00"
+														name="deliveryTime"
+														th:field="*{deliveryTime}">
+													16時
+												</label>
+												<label class="radio-inline">
+													<input type="radio"
+														value="17:00:00"
+														name="deliveryTime"
+														th:field="*{deliveryTime}">
+													17時
+												</label>
+												<label class="radio-inline">
+													<input type="radio"
+														value="18:00:00"
+														name="deliveryTime"
+														th:field="*{deliveryTime}">
+													18時 </label><br />
+											</div>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
 			<!-- モダール表示 -->
 			<section id="modalArea" class="modalArea">
 				<div id="modalBg" class="modalBg"></div>
 				<div class="modalWrapper">
 				  <div class="modalContents">
-					<h3>お届け先選択</h3>
+					<h3>お届け先選択<i class="fa-solid fa-truck"></i></h3>
 					<hr>
 						<div class="flex">
 							<li class="sample-box" th:each="address : ${session.addresseeList}">
@@ -299,88 +358,19 @@
 			</section>
 			  <!-- モーダルエリアここまで -->
 
-			<!-- table -->
 			<div class="row">
-				<div class="
-              table-responsive
-              col-lg-offset-3
-              col-lg-6
-              col-md-offset-1
-              col-md-10
-              col-sm-10
-              col-xs-12
-            ">
-					<h3 class="text-center">お支払い方法</h3>
-					<table class="table table-striped item-list-table">
-						<tbody>									
-							<tr>
-								<td>
-									<div class="text-center">代金引換</div>
-								</td>
-								<div id="payError" th:errors="*{paymentMethod}" style="color: red;"></div>
-								<td>
-									<div class="row">
-										<div class="col-sm-12">
-											<label class="radio-inline">
-												<input type="radio" id="payMoney" name="responsibleCompany" value="1"
-													checked="checked" th:field="*{paymentMethod}" />
-												代金引換
-											</label>
-										</div>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="text-center">クレジットカード決済</div>
-								</td>
-								<td align="center">
-									<div class="row">
-										<div class="col-sm-12">
-											<label class="radio-inline">
-												<input type="radio" id="creCard" name="responsibleCompany" value="2"
-													checked="checked" th:field="*{paymentMethod}" />
-												クレジットカード </label><br /><br />
-										</div>
-									</div>
-								</td>
-							</tr>
-							<tr id="cardNumber" style="display: none;">
-								<td>カードブランド/カード番号入力</td>
-								<td align="center">
-									<div class="row">
-										<div class="col-sm-12">
-											<!-- クレジットカード登録ボタン -->
-											<div class="creditPay-btn" id="creditPayBtn">
-												<script src="https://checkout.stripe.com/checkout.js"
-													class="stripe-button"
-													data-key="pk_test_51LA6lgEM1Eja88iZjQhH1JbgdsRaD0KsSRauG59LHg14YzqUT3UhTkOLYckvBZyJzPVnDGLI1rqGjgGxGGT2YGX000InVJnYeF"
-													data-name="RakuRakuペット" data-description="" data-amount=""
-													data-currency="jpy" data-label="この内容で注文する"></script>
-												<div>クレジットカード登録と同時に決済が完了します。</div>
-											</div>
-											
-										</div>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="col-xs-offset-4 col-xs-4">
+					<div class="form-group">
+						<input class="form-control btn btn-warning btn-block" type="submit" value="この内容で注文する" />
+					</div>
 				</div>
 			</div>
-		<div class="row">
-			<div class="col-xs-offset-4 col-xs-4">
-				<div class="form-group">
-					<input class="form-control btn btn-warning btn-block" type="submit" value="この内容で注文する" />
-				</div>
-			</div>
-		</div>
-	</form>
-	</div>
+		</form>
+	
 	<!-- フッター/インクルード化しているので、編集する際はfooter.htmlから -->
 	<div th:insert="footer :: frag_footer"></div>
 
-
+	</div>
 	<!-- end container -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="../static/js/bootstrap.min.js"></script>

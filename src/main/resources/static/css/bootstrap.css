@@ -6369,6 +6369,10 @@ button.close {
 	margin-left: 95px;
 }
 
+.address-flex{
+	display: flex;
+}
+
 .addressBtn{
 	margin-left: 10px;
 }
