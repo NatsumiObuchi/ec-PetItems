@@ -136,19 +136,23 @@
 																			th:field="*{destinationEmail}" />
 																	</td>
 																</tr>
-																<!-- <tr class="form-group" th:each="address : ${session.addresseeList}">
+																<tr>
 																	<td>
-																		<div class="text-center">お届け先一覧</div>
+																		<div class="text-center">電話番号</div>
 																	</td>
-																	<td> -->
-																		<!-- 選択用 -->
-																		<!-- <input type="radio" name="addresseeId" th:value="${address.addresseeId}" form="settingId" checked>
-																		<input type="hidden" name="id" th:value="${session.user.id}" form="settingId">
-																		<input type="hidden" name="setting" th:value="true" form="settingId">
-																		<div th:text="'〒 ' + ${address.zipCode}"></div>
-																		<div th:text="${address.address}"></div>
+																	<td>
+																		<div th:errors="*{destinationTell}"
+																			style="color: red;"></div>
+																		<input type="text"
+																			th:field="*{destinationTell}" />
 																	</td>
-																</tr> -->
+																</tr>
+																<tr>
+																	<td colspan="2">
+																		<!-- モダール表示用ボタン -->
+																		<button type="button" class="btn btn-primary" id="openModal">お届け先選択</button>
+																	</td>
+																</tr>
 																<tr>
 																	<td>
 																		<div class="text-center">郵便番号</div>
@@ -171,17 +175,6 @@
 																			style="color: red;"></div>
 																		<input id="address" class="address" type="text"
 																			th:field="*{destinationAddress}" />
-																	</td>
-																</tr>
-																<tr>
-																	<td>
-																		<div class="text-center">電話番号</div>
-																	</td>
-																	<td>
-																		<div th:errors="*{destinationTell}"
-																			style="color: red;"></div>
-																		<input type="text"
-																			th:field="*{destinationTell}" />
 																	</td>
 																</tr>
 																<tr>
@@ -276,7 +269,6 @@
 
 													</div>
 												</div>
-			<button type="button" class="btn btn-primary" id="openModal">お届け先選択</button>
 			<!-- モダール表示 -->
 			<section id="modalArea" class="modalArea">
 				<div id="modalBg" class="modalBg"></div>
