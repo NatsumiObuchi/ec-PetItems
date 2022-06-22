@@ -91,7 +91,14 @@ public class OrderController {
 		orderForm.setDestinationEmail(user.getEmail());
 		orderForm.setDestinationTell(user.getTelephone());
 
-		// ユーザが登録済のお届け先一覧を表示(modal表示)
+		// デフォルトで出力されるお届け先を検索
+		Addressee addressee = addresseeService.findByUserIdandSettingAddresseeTrue(user.getId());
+		if (addressee != null) {
+			orderForm.setDestinationzipCode(addressee.getZipCode());
+			orderForm.setDestinationAddress(addressee.getAddress());
+		}
+
+		// ユーザが登録済のお届け先一覧を表示(modal表示用)
 		List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(user.getId());
 		session.setAttribute("addresseeList", addresseeList);
 

@@ -8,9 +8,11 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.Addressee;
 
+@Repository
 public class AddresseeRepository {
 
 	@Autowired
@@ -121,6 +123,24 @@ public class AddresseeRepository {
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId)
 				.addValue("addresseeId", addreseeId).addValue("settingAddressee", setting);
 		template.update(sql, param);
+	}
+
+	/**
+	 * デフォルトで表示するお届け先を検索
+	 * 
+	 * @param userId
+	 * @param setting
+	 * @return
+	 */
+	public Addressee findByUserIdandSettingAddresseeTrue(Integer userId) {
+		String sql = "select id, user_id, addressee_id, zipCode, address, setting_addressee"
+				+ " from addressees where user_id = :userId and setting_addressee = true;";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
+		Addressee addressee = template.queryForObject(sql, param, ADDRESSEE_ROW_MAPPER);
+		if (addressee == null) {
+			return null;
+		}
+		return addressee;
 	}
 
 }

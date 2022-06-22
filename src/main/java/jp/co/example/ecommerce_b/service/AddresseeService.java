@@ -74,4 +74,14 @@ public class AddresseeService {
 		repository.settingAddrssee(userId, addresseeId, setting);
 	}
 
+	/**
+	 * デフォルトで表示するお届け先を検索
+	 * 
+	 * @param userId
+	 * @param setting
+	 * @return
+	 */
+	public Addressee findByUserIdandSettingAddresseeTrue(Integer userId) {
+		return repository.findByUserIdandSettingAddresseeTrue(userId);
+	}
 }
