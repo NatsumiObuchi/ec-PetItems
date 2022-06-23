@@ -118,7 +118,7 @@ public class UserController {
 				session.setAttribute("transitionSourcePage", null);
 				return "forward:/order/orderHistory";
 			default:
-				return "forward:/item/list";
+				return "forward:/item/top";
 			}
 		} else {
 			model.addAttribute("loginErrorMessage", "メールアドレス、またはパスワードが間違っています");
@@ -132,8 +132,7 @@ public class UserController {
 	@RequestMapping("/logout")
 	public String logout() {
 		session.invalidate();
-		session.removeAttribute("count");
-		return "forward:/item/list";
+		return "forward:/item/top";
 	}
 
 	/**
