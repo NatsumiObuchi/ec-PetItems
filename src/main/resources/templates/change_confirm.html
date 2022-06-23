@@ -29,73 +29,50 @@
             col-xs-12
           ">
 				<div class="well">
-					<form method="post" action="item_list_pizza.html" th:action="@{/user/signin}"
-						th:object="${userForm}">
+					<form method="post" action="item_list_pizza.html" th:action="@{/myPage/update}"
+						th:object="${userUpdateForm}">
 						<fieldset>
-							<legend>ユーザ登録</legend>
+							<legend>ユーザ情報変更</legend>
+                            <span th:text="以下の内容で登録してよろしいですか？" style="color: red;"></span>
 							<div class="form-group">
 								<label for="inputName">名前:</label> <br>
-								<label th:errors="*{name}" class="control-label" style="color: red"
-									for="inputError">名前を入力してください</label>
 								<input type="text" id="inputName" class="form-control" placeholder="Name"
-									th:field="*{name}" />
+									th:field="*{name}" disabled="disabled"/>
 							</div>
 							<div class="form-group">
 								<label for="inputEmail">メールアドレス:</label> <br>
-								<label th:errors="*{email}" class="control-label" style="color: red"
-									for="inputError">メールアドレスを入力してください</label>
-								<div>
-									<label th:if="${emailError}" class="control-label" style="color: red"
-										for="inputError" th:text="${emailError}"></label>
-								</div>
-
 								<input type="text" id="inputEmail" class="form-control" placeholder="Email"
-									th:field="*{email}" />
+									th:field="*{email}" disabled="disabled"/>
 							</div>
 							<div class="form-group">
 								<label for="inputZipcode">郵便番号:</label>
-								<input type="button" id="addressBtn" value="住所検索" /> <br>
-								<label th:errors="*{zipcode}" class="control-label" style="color: red"
-									for="inputError">郵便番号を入力してください</label>
 								<input type="text" id="zipcode" class="form-control" placeholder="Zipcode"
-									th:field="*{zipcode}" />
+									th:field="*{zipcode}" disabled="disabled"/>
 							</div>
 							<div class="form-group">
 								<label for="inputAddress">住所:</label> <br>
-								<label th:errors="*{address}" class="control-label" style="color: red"
-									for="inputError">住所を入力してください</label>
 								<input type="text" id="address" class="form-control" placeholder="Address"
-									th:field="*{address}" />
+									th:field="*{address}" disabled="disabled"/>
 							</div>
 							<div class="form-group">
 								<label for="inputTel">電話番号:</label> <br>
-								<label th:errors="*{telephone}" class="control-label" style="color: red"
-									for="inputError">電話番号を入力してください</label>
 								<input type="text" id="inputTel" class="form-control" placeholder="Tel"
-									th:field="*{telephone}" />
+									th:field="*{telephone}" disabled="disabled"/>
 							</div>
-							<div class="form-group">
-								<label for="inputPassword">パスワード:</label> <br>
-								<label th:errors="*{password}" class="control-label" style="color: red"
-									for="inputError">パスワードを入力してください</label>
-								<input type="password" id="inputPassword" class="form-control" placeholder="Password"
-									th:field="*{password}" />
-							</div>
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label for="inputConfirmationPassword">確認用パスワード:</label> <br>
 								<label th:errors="*{confirmPassword}" class="control-label" style="color: red"
-									for="inputError">確認用パスワードを入力してください</label>
+									for="inputError">確認用パスワードを入力してくだせい</label>
 								<div>
 									<label th:if="${confirmPasswordError}" class="control-label" style="color: red"
 										for="inputError" th:text="${confirmPasswordError}"></label>
 								</div>
 								<input type="password" id="inputConfirmationPassword" class="form-control"
 									placeholder="Confirmation Password" th:field="*{confirmPassword}" />
-							</div>
+							</div> -->
 							<div class="form-group">
+                                <button type="button" class="btn btn-primary" onclick="history.back()">戻る</button>
 								<button type="submit" class="btn btn-primary">登録</button>
-								<button type="submit" class="btn btn-primary"
-									th:formaction="@{/user/reset}">クリア</button>
 							</div>
 						</fieldset>
 					</form>

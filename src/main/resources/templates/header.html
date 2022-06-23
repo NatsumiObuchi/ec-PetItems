@@ -45,23 +45,24 @@
 							<p class="navbar-text navbar-right">
 
 								<span th:if="${session.user}!=null">
-									<span　th:text="${session.user.name}+さんこんにちは！">&nbsp;&nbsp;</span>
-								</span>
-								<a href="item_list_pet.html" class="navbar-link"
-									th:href="@{/item/list?genre=0}">商品一覧&nbsp;&nbsp;</a>
-								<a href="cart_list.html" class="navbar-link"
-									th:href="@{/shopping/cartList}">ショッピングカート&nbsp;&nbsp;</a>
-								<a href="order_history.html" class="navbar-link" th:href="@{/favorite/favoriteList}"
-									th:styleappend="${session.user == null} ? 'display:none'">お気に入りリスト&nbsp;&nbsp;</a>
-								<a href="order_history.html" class="navbar-link" th:href="@{/order/orderHistory}"
-									th:styleappend="${session.user == null} ? 'display:none'">注文履歴&nbsp;&nbsp;</a>
-								<a href="login.html" class="navbar-link" th:href="@{/user/toLogin}"
-									th:styleappend="${session.user != null} ? 'display:none'">ログイン&nbsp;&nbsp;</a>
-								<a href="item_list_pizza.html" class="navbar-link" th:href="@{/user/logout}"
-									th:styleappend="${session.user == null} ? 'display:none'">ログアウト</a>
+								<span th:text="${session.user.name}+さんこんにちは！">&nbsp;&nbsp;</span>
+							</span>
+							<a href="login.html" class="navbar-link" th:href="@{/myPage}"
+								th:styleappend="${session.user == null} ? 'display:none'">マイページ&nbsp;&nbsp;</a>
+							<a href="item_list_pet.html" class="navbar-link"
+								th:href="@{/item/list}">商品一覧&nbsp;&nbsp;</a>
+							<a href="cart_list.html" class="navbar-link"
+								th:href="@{/shopping/cartList}">ショッピングカート&nbsp;&nbsp;</a>
+							<a href="order_history.html" class="navbar-link" th:href="@{/favorite/favoriteList}"
+								th:styleappend="${session.user == null} ? 'display:none'">お気に入りリスト&nbsp;&nbsp;</a>
+							<a href="order_history.html" class="navbar-link" th:href="@{/order/orderHistory}"
+								th:styleappend="${session.user == null} ? 'display:none'">注文履歴&nbsp;&nbsp;</a>
+							<a href="login.html" class="navbar-link" th:href="@{/user/toLogin}"
+								th:styleappend="${session.user != null} ? 'display:none'">ログイン&nbsp;&nbsp;</a>
+							<a href="item_list_pizza.html" class="navbar-link" th:href="@{/user/logout}"
+								th:styleappend="${session.user == null} ? 'display:none'">ログアウト</a>
 							</p>
 						</div>
-						<!-- /.navbar-collapse -->
 					</div>
 					<!-- /.cosntainer-fluid -->
 				</nav>

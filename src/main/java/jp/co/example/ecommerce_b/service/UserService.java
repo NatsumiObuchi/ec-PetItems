@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
+import jp.co.example.ecommerce_b.form.UserUpdateForm;
 import jp.co.example.ecommerce_b.repository.UserRepository;
 
 @Service
@@ -13,10 +14,10 @@ public class UserService {
 	private UserRepository userRepository;
 
 	/**
-	 * @param form ユーザーを追加
+	 * @param user ユーザーを追加
 	 */
-	public void insertUser(UserForm form) {
-		userRepository.insertUser(form);
+	public void insertUser(User user) {
+		userRepository.insertUser(user);
 	}
 
 	/**
@@ -26,6 +27,13 @@ public class UserService {
 		return userRepository.findByMailAddress(form);// メールアドレスが重複していればtrue
 	}
 	
+	/**
+	 * @param form メールアドレスが既に登録されているか確認（ユーザ情報変更時）
+	 */
+	public Boolean duplicationCheckOfEmail(UserUpdateForm form) {
+		return userRepository.findByMailAddress2(form);// メールアドレスが重複していればtrue
+	}
+
 	/**
 	 * @param form
 	 * @return 入力されたメールアドレスとパスワードからユーザーを検索する。
@@ -40,5 +48,32 @@ public class UserService {
 	 */
 	public User findByEmail(UserForm form) {
 		return userRepository.findByEmail(form);
+	}
+
+	/**
+	 * ユーザ情報を更新する
+	 * 
+	 * @param user
+	 */
+	public void update(User user) {
+		userRepository.update(user);
+	}
+
+	/**
+	 * パスワードを変更する
+	 * 
+	 * @param user
+	 */
+	public void updatePassword(User user) {
+		userRepository.updatePassword(user);
+	}
+
+	/**
+	 * ユーザ情報を削除する
+	 * 
+	 * @param id
+	 */
+	public void delete(Integer id) {
+		userRepository.delete(id);
 	}
 }

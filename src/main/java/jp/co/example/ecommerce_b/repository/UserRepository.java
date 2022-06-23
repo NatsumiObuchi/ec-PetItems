@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
+import jp.co.example.ecommerce_b.form.UserUpdateForm;
 
 @Repository
 public class UserRepository {
@@ -50,13 +52,13 @@ public class UserRepository {
 	/**
 	 * @param user ユーザーを追加する
 	 */
-	public void insertUser(UserForm form) {
-		form = modifyZipcode(form);
+	public void insertUser(User user) {
+//		user = modifyZipcode(user);
 		String sql = "INSERT INTO users (name,email,password,zipcode,address,telephone) VALUES (:name,:email,:password,:zipcode,:address,:telephone)";
-		SqlParameterSource param = new MapSqlParameterSource().addValue("name", form.getName())
-				.addValue("email", form.getEmail()).addValue("password", form.getPassword())
-				.addValue("zipcode", form.getZipcode()).addValue("address", form.getAddress())
-				.addValue("telephone", form.getTelephone());
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", user.getName())
+				.addValue("email", user.getEmail()).addValue("password", user.getPassword())
+				.addValue("zipcode", user.getZipcode()).addValue("address", user.getAddress())
+				.addValue("telephone", user.getTelephone());
 		template.update(sql, param);
 	}
 
@@ -65,6 +67,21 @@ public class UserRepository {
 	 * @return 入力されたメールアドレスが既に登録されているか確認する
 	 */
 	public Boolean findByMailAddress(UserForm form) {
+		String sql = "SELECT id,name,email,password,zipcode,address,telephone FROM users WHERE email = :email";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("email", form.getEmail());
+		List<User> userList = template.query(sql, param, USER_ROW_MAPPER);
+		if (userList.size() == 0) {
+			return false;// メールアドレスが重複していなければfalse
+		} else {
+			return true;// メールアドレスが重複していればtrue
+		}
+	}
+
+	/**
+	 * @param form
+	 * @return 入力されたメールアドレスが既に登録されているか確認する（ユーザ情報変更時）
+	 */
+	public Boolean findByMailAddress2(UserUpdateForm form) {
 		String sql = "SELECT id,name,email,password,zipcode,address,telephone FROM users WHERE email = :email";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("email", form.getEmail());
 		List<User> userList = template.query(sql, param, USER_ROW_MAPPER);
@@ -104,4 +121,38 @@ public class UserRepository {
 		return userList.get(0);
 	}
 
+	/**
+	 * ユーザ情報を更新する ※パスワード以外は全て更新される
+	 * 
+	 * @param user 登録済のユーザ情報
+	 * @return 更新されたユーザ情報
+	 */
+	public void update(User user) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
+		String sql = "update users set name = :name, email = :email,  "
+				+ " zipcode = :zipcode, address = :address, telephone = :telephone where id = :id";
+		template.update(sql, param);
+	}
+
+	/**
+	 * ユーザのパスワードを変更する
+	 * 
+	 * @param user
+	 */
+	public void updatePassword(User user) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
+		String sql = "update users set password = :password where id = :id";
+		template.update(sql, param);
+	}
+
+	/**
+	 * ユーザ情報を削除する
+	 * 
+	 * @param id
+	 */
+	public void delete(Integer id) {
+		String sql = "delete from users where id = :id";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		template.update(sql, param);
+	}
 }

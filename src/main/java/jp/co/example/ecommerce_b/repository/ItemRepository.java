@@ -36,8 +36,8 @@ public class ItemRepository {
 		item.setPrice(rs.getInt("price"));
 		item.setImagePath(rs.getString("image_path"));
 		item.setImagePath2(rs.getString("image_path2"));//
-		item.setAnimal_id(rs.getInt("animal_id"));
-		item.setCategory_id(rs.getInt("category_id"));
+		item.setAnimalId(rs.getInt("animal_id"));
+		item.setCategoryId(rs.getInt("category_id"));
 		item.setDeleted(rs.getBoolean("deleted"));
 		if (rs.getBigDecimal("avg_star") == null) {
 			item.setAvgStar("0.00");
@@ -83,6 +83,27 @@ public class ItemRepository {
 		} else {
 			review.setUser_name(rs.getString("user_name") + "さん");
 		}
+		return review;
+	};
+
+	private static final RowMapper<Review> MYREVIEW_ROW_MAPPER = (rs, i) -> {
+		Review review = new Review();
+		review.setId(rs.getInt("id"));
+		review.setUser_id(rs.getInt("user_id"));
+		review.setItem_id(rs.getInt("item_id"));
+		review.setStars(rs.getInt("stars"));
+		review.setContent(rs.getString("content"));
+		Item item = new Item();
+		item.setId(rs.getInt("item_id"));
+		item.setName(rs.getString("item_name"));
+		item.setDescription(rs.getString("item_description"));
+		item.setPrice(rs.getInt("item_price"));
+		item.setImagePath(rs.getString("item_image_path"));
+		item.setImagePath2(rs.getString("item_image_path2"));
+		item.setAnimalId(rs.getInt("animal_id"));
+		item.setCategoryId(rs.getInt("category_id"));
+		item.setDeleted(rs.getBoolean("item_deleted"));
+		review.setItem(item);
 		return review;
 	};
 
@@ -330,4 +351,23 @@ public class ItemRepository {
 		}
 	}
 
+	/**
+	 * マイレビュー一覧を取得する
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<Review> myReview(Integer id) {
+		String sql = "select r.id, r.user_id, r.item_id, r.stars, r.content "
+				+ ", i.id item_id, i.name item_name, i.description item_description, i.price item_price,"
+				+ " i.image_path item_image_path, i.image_path2 item_image_path2, i.animal_id, i.category_id, i.deleted item_deleted"
+				+ " from reviews as r" + " inner join" + " items as i" + " on r.item_id = i.id"
+				+ " where r.user_id = :user_id order by r.id desc;";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("user_id", id);
+		List<Review> reviewList = template.query(sql, param, MYREVIEW_ROW_MAPPER);
+		if (reviewList.size() == 0) {
+			return null;
+		}
+		return reviewList;
+	}
 }

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymleaf.org">
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>ペット用品のネット注文</title>
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+	<link th:href="@{/css/piza.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css">
+	<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+	<header>
+		<div th:insert="header :: frag_header"></div>
+	</header>
+
+	<div class="container">
+		<div class="row">
+			<h2 class="text-center">マイページ</h2>
+			<div class="
+                    table-responsive
+                    col-lg-offset-1
+                    col-lg-10
+                    col-md-offset-1
+                    col-md-10
+                    col-sm-10
+                    col-xs-12
+                  ">
+				<div class="section1 text-center">
+					<h3><div th:text="'こんにちは' + ${session.user.name} + 'さん'"></div></h3>
+                    <h4><p class="rank">あなたは◯◯会員です</p></h4>
+                    <h5><span>利用可能ポイント：◯◯pt</span></h5>
+                </div>
+                <!-- <div class="well text-center"> -->
+                    <table class="table table-striped item-list-table">
+                        <div id="members_info" class="">
+                            <tr>
+                                <th colspan="4">
+                                    <span>よく使われている項目</span>
+                                </th>
+                            </tr>
+                            <tr class="mypagelist">
+                                <td>
+                                    <i class="fa-regular fa-user fa-3x"></i>
+                                </td>
+                                <td class="mypage_content">
+                                    <img class="icon mypage_icon" alt="">
+                                    <!-- <a th:href="@{/myPage/userConfirm?id=} + ${session.user.id}">会員情報確認・変更・退会手続き</a> -->
+                                    <a th:href="@{/myPage/changePermissionDisplay}">会員情報確認・変更・退会手続き</a>
+                                </td>
+                                <td>
+                                    <i class="fa-regular fa-heart fa-3x"></i>
+                                </td>
+                                <td class="mypage_content">
+                                    <img class="icon mypage_icon" alt="">
+                                    <a th:href="@{/favorite/favoriteList}">お気に入りリスト</a>
+                                </td>
+                            </tr>
+                            <tr class="mypagelist">
+                                <td>
+                                    <i class="fa-solid fa-clock-rotate-left fa-3x" ></i>
+                                </td>
+                                <td class="mypage_content">
+                                    <img class="icon mypage_icon" alt="">
+                                    <a th:href="@{/order/orderHistory}">購入履歴</a>
+                                </td>
+                                <td>
+                                    <i class="fa-regular fa-comment fa-3x"></i>
+                                </td>
+                                <td class="mypage_content">
+                                    <img class="icon mypage_icon" alt="">
+                                    <a th:href="@{/myPage/myReview?id=} + ${session.user.id}">マイレビュー</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <i class="fa-solid fa-house-chimney-user fa-3x"></i>
+                                </td>
+                                <td class="mypage_content">
+                                    <img class="icon mypage_icon" alt="">
+                                    <a th:href="@{/myPage/addressee?id=} + ${session.user.id}">お届け先情報</a>
+                                </td>
+                                <td>
+                                    <i class="fa-solid fa-ticket fa-3x"></i>
+                                </td>
+                                <td class="mypage_content">
+                                    <img class="icon mypage_icon" alt="">
+                                    <a href="#">マイクーポン</a>
+                                </td>
+                            </tr>
+                        </div>
+                    </table>
+                <!-- </div> -->
+			</div>
+		</div>
+
+		<!-- フッター/インクルード化しているので、編集する際はfooter.htmlから -->
+			<div th:insert="footer :: frag_footer"></div>
+
+	</div>
+	<!-- end container -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="../static/js/bootstrap.min.js"></script>
+</body>
+
+</html>
