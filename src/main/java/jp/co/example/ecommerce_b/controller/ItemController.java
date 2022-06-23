@@ -1,8 +1,6 @@
 package jp.co.example.ecommerce_b.controller;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -96,6 +94,14 @@ public class ItemController {
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		List<String> nameList = itemService.findItemName();
 		session.setAttribute("nameList", nameList);
+
+		// ユーザのポイント情報
+		User user = (User) session.getAttribute("user");
+		if (user != null) {
+			Point point = pointService.load(user.getId());
+			session.setAttribute("point", point);
+		}
+
 		return "top";
 	}
 
@@ -128,13 +134,6 @@ public class ItemController {
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		List<String> nameList = itemService.findItemName();
 		session.setAttribute("nameList", nameList);
-		
-		//ユーザのポイント情報
-		User user = (User)session.getAttribute("user");
-		if (user != null) {
-			Point point = pointService.load(user.getId());
-			session.setAttribute("point", point);
-		}
 		
 		return "item_list_pet";
 	}

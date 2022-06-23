@@ -48,4 +48,16 @@ public class PointRepository {
 		}
 		return point;
 	}
+
+	/**
+	 * ポイント情報を会員登録時に登録する
+	 * 
+	 * @param point
+	 */
+	public void insertPoint(Point point) {
+		String sql = "insert into points(user_id, point) values(:userId, :point)";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", point.getUserId()).addValue("point",
+				point.getPoint());
+		template.update(sql, param);
+	}
 }

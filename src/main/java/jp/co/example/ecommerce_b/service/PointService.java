@@ -22,4 +22,13 @@ public class PointService {
 		return repository.load(userId);
 	}
 
+	/**
+	 * ポイント情報を会員登録時に登録する
+	 * 
+	 * @param point
+	 */
+	public void insertPoint(Point point) {
+		repository.insertPoint(point);
+	}
+
 }
