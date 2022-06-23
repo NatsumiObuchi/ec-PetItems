@@ -6477,3 +6477,7 @@ li {list-style: none;}
     width: 30%;
     border-radius: 10px; /* 角を丸くする */
 }
+
+.point-position{
+	float: right;
+}

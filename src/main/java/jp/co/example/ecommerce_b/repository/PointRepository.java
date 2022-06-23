@@ -2,7 +2,9 @@ package jp.co.example.ecommerce_b.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.Point;
@@ -20,15 +22,30 @@ public class PointRepository {
 		point.setUserId(rs.getInt("user_id"));
 		point.setPoint(rs.getInt("point"));
 		User user = new User();
-		user.setId(rs.getInt("id"));
-		user.setName(rs.getString("name"));
-		user.setEmail(rs.getString("email"));
-		user.setPassword(rs.getString("password"));
-		user.setZipcode(rs.getString("zipcode"));
-		user.setAddress(rs.getString("address"));
-		user.setTelephone(rs.getString("telephone"));
-		point.setUser(user);
+//		user.setId(rs.getInt("id"));
+//		user.setName(rs.getString("name"));
+//		user.setEmail(rs.getString("email"));
+//		user.setPassword(rs.getString("password"));
+//		user.setZipcode(rs.getString("zipcode"));
+//		user.setAddress(rs.getString("address"));
+//		user.setTelephone(rs.getString("telephone"));
+//		point.setUser(user);
 		return point;
 	};
 
+	/**
+	 * ユーザのポイント情報を取得する
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public Point load(Integer userId) {
+		String sql = "select id, user_id, point from points where user_id = :userId";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
+		Point point = template.queryForObject(sql, param, POINT_ROW_MAPPER);
+		if (point == null) {
+			return null;
+		}
+		return point;
+	}
 }

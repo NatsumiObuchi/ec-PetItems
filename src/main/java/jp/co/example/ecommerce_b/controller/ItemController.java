@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
+import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.Review;
 import jp.co.example.ecommerce_b.domain.SortLabel;
 import jp.co.example.ecommerce_b.domain.User;
@@ -31,6 +32,7 @@ import jp.co.example.ecommerce_b.service.FavoriteService;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
+import jp.co.example.ecommerce_b.service.PointService;
 
 
 /**
@@ -55,6 +57,9 @@ public class ItemController {
 
 	@Autowired
 	private FavoriteService favoriteService;
+
+	@Autowired
+	private PointService pointService;
 
 	@ModelAttribute
 	private SearchForm createSearchForm() {
@@ -123,6 +128,14 @@ public class ItemController {
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		List<String> nameList = itemService.findItemName();
 		session.setAttribute("nameList", nameList);
+		
+		//ユーザのポイント情報
+		User user = (User)session.getAttribute("user");
+		if (user != null) {
+			Point point = pointService.load(user.getId());
+			session.setAttribute("point", point);
+		}
+		
 		return "item_list_pet";
 	}
 
