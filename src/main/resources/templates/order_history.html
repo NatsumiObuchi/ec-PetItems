@@ -19,16 +19,15 @@
 	<!-- ヘッダー/インクルード化しているので、編集する際はheader.htmlから -->
 	<div th:insert="header :: frag_header"></div>
 
-	<!-- /.container-fluid -->
 	<div class="container">
 
 	<!--パンくずリスト-->
 		<p class="pan-list">
-			<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
+			&nbsp;<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
 			>注文履歴
 		</p>
 
-		<span th:if="${session.user}"><span class="navbar-text navbar-right"
+		<span th:if="${session.user}"><span class="navbar-right2"
 				th:text="${session.user.name}+さんの注文履歴"></span></span>
 		<br><br>
 	
