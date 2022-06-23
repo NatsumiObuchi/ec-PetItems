@@ -25,13 +25,11 @@
 	<div class="container">
 		<!--パンくずリスト-->
 		<p class="pan-list">
-			<form th:object="${searchForm}">
 			<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
-			><a th:href="@{/item/search?animalId=}+${animalId}">
+			><a th:href="@{/item/search?genre=}+${panGenre}">
 			<span th:text="${link}">ダミー</span>
 			</a>
 			>商品詳細
-			</form>
 		</p>
 
 				<span class="list-active active" th:text="${link2}">ダミー</span>

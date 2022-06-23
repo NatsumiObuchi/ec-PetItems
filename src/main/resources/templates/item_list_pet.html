@@ -26,14 +26,16 @@
 	<div class="container">
 		<!--パンくずリスト-->
 		<p class="pan-list">
-			<form th:object="${searchForm}">
-			<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
-			><a th:href="@{/item/search?animalId=}+*{animalId}">
-			<span th:text="${link}">ダミー</span>
+		<form th:object="${searchForm}">
+			<span class="list-active active"><a th:href="@{/item/list?genre=0}">商品一覧</a></span>
+			><a th:href="@{/item/search?genre=}+${panGenre}">
+				<span th:text="${link}">ダミー</span>
 			</a>
-			</form>
-			<span th:text="${link2}">ダミー</span>
+		</form>
 		</p>
+
+
+		<span th:text="${link2}">ダミー</span>
 
 		<!-- 検索欄/インクルード化しているので、編集する際はheader.htmlから -->
 		<div th:insert="header :: frag_search"></div>
@@ -42,30 +44,32 @@
 		<div th:insert="header :: frag_category"></div>
 
 		<h3>
+			<span th:text="【全+${itemListSize}+件】 "></span>
 			<span th:text="${noItemMessage}">検索結果メッセージ</span>
 		</h3>
 
 
 		【並び替え】
-		<form th:object="${searchForm}">
-			<a th:href="@{/item/search?sortId=0&genre=}+*{genre}+@{&code=}+*{code}+@{&animalId=}+*{animalId}">新着順</a>｜
-			<a th:href="@{/item/search?sortId=1&genre=}+*{genre}+@{&code=}+*{code}">レビューが多い順</a>｜
-			<a th:href="@{/item/search?sortId=2&genre=}+*{genre}+@{&code=}+*{code}">レビューが高い順</a>｜
-			<a th:href="@{/item/search?sortId=3&genre=}+*{genre}+@{&code=}+*{code}">価格が高い順</a>｜
-			<a th:href="@{/item/search?sortId=4&genre=}+*{genre}+@{&code=}+*{code}">価格が低い順</a>
-		</form>
+		<span th:each="sortLabels : ${sortLabelList}">
+			<span th:if="${sortLabels.decisionId}">
+				&nbsp;&nbsp;<a th:href="@{/item/search?sortId=}+${sortLabels.sortId}+${setLink}">
+					<span th:text="${sortLabels.sortText}">〇〇順（リンク）</span>
+				</a>
+			</span>
+				<span th:unless="${sortLabels.decisionId}">
+					&nbsp;&nbsp;<strong th:text="${sortLabels.sortText}">〇〇順（非リンク）</strong>
+				</span>
+		</span>
 		<br><br>
 
 		<!-- table -->
 		<div class="aaa">
 			<div class="bbb" th:each="item:${itemList}">
-				<a href="item_detail.html"
-					th:href="@{/item/itemDetail?id=} + ${item.id} + @{&animalId=} + ${item.animalId}">
+				<a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id} + @{&genre=} + ${genre}">
 					<img src="../static/img_pizza/1.jpg" th:src="@{/img_dogfood/} + ${item.imagePath}"
 						class="img-responsive img-rounded item-img-center" width="200" height="600" />
 				</a><br />
-				<a href="item_detail.html"
-					th:href="@{/item/itemDetail?id=} + ${item.id} + @{&animalId=} + ${item.animalId}">
+				<a href="item_detail.html" th:href="@{/item/itemDetail?id=} + ${item.id} + @{&genre=} + ${genre}">
 					<span th:text="${item.name}">じゃがバターベーコン</span>
 				</a><br />
 				<span th:text="${#numbers.formatInteger(item.price, 3, 'COMMA')}">1,380</span>円(税抜)
@@ -86,6 +90,7 @@
 	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
 	<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
 	<script th:src="@{/js/paginathing.js}"></script>
+	<script th:src="@{/js/sort.js}"></script>
 
 	<!-- オートコンプリート機能用（インクルード化しているが、これを消すとなぜかオートコンプリートが消えるので残しといて） -->
 	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>

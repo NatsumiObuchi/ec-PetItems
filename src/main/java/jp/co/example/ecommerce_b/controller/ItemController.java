@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.Review;
+import jp.co.example.ecommerce_b.domain.SortLabel;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.FavoriteListRegisterForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
@@ -31,6 +32,11 @@ import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
 
+
+/**
+ * @author 81906
+ *
+ */
 @Controller
 @RequestMapping("/item")
 public class ItemController {
@@ -88,70 +94,58 @@ public class ItemController {
 		return "top";
 	}
 
+	
 	/**
 	 * 商品一覧を表示する
+	 * 
+	 * @param form　code/genre/sortIdの3つの変数を扱う
+	 * @param model
+	 * @return　メッセージとitemListをスコープに格納し、商品一覧画面に遷移する。
 	 */
 	@RequestMapping("/list")
-	public String itemList(Model model) {
+	public String itemList(SearchForm form, Model model) {
 		List<Item> itemList = itemService.findAll();
+
+		// 並び替えメニューを表示するメソッド
+		form.setLink(model);
+		sort(0, itemList);
+		label(0, model);
+
 		model.addAttribute("itemList", itemList);
-		session.setAttribute("animalId", 0);
-		model.addAttribute("categoryId", 0);
+		model.addAttribute("itemListSize", itemList.size());
+		model.addAttribute("genre", 0);
+		model.addAttribute("noItemMessage", "商品一覧を表示します。");
 		// カテゴリーメニューバーのリストをマッピングするメソッドを呼び出す。
 		categoryMapping();
 		// パンくずリスト用
 		model.addAttribute("link", "すべて");
-		model.addAttribute("access", "list");
+		model.addAttribute("panGenre", 0);
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		List<String> nameList = itemService.findItemName();
 		session.setAttribute("nameList", nameList);
 		return "item_list_pet";
 	}
 
-	/*
-	 * カテゴリーのマッピングメソッド
-	 */
-	public void categoryMapping() {
-		Map<Integer, String> genreMap = new HashMap<>();
-		genreMap.put(0, "すべてのカテゴリー");
-		genreMap.put(1, "犬｜すべて");
-		genreMap.put(2, "犬｜フード");
-		genreMap.put(3, "犬｜おもちゃ");
-		genreMap.put(4, "犬｜その他");
-		genreMap.put(5, "猫｜すべて");
-		genreMap.put(6, "猫｜フード");
-		genreMap.put(7, "猫｜おもちゃ");
-		genreMap.put(8, "猫｜その他");
-		session.setAttribute("genreMap", genreMap);
-	}
-
+	
 	/**
 	 * 商品詳細を表示する
+	 * 
+	 * @param id　該当の商品id
+	 * @param genre カテゴリーid
+	 * @param model
+	 * @return 
 	 */
 	@RequestMapping("/itemDetail")
-	public String itemDetail(Integer id, Integer animalId, Model model) {
-		System.out.println("id:" + id + "  animalId" + animalId);
+	public String itemDetail(Integer id, Integer genre, Model model) {
+		System.out.println("id:" + id + "  genre" + genre);
 		// 検索するitem_idでレビュー集め
 		List<Review> reviews = itemService.findReview(id);
 		model.addAttribute("reviews", reviews);
 		System.out.println(reviews);
+	
+		// パンくずリストのリンク処理
+		panList(genre, model);
 
-		if (animalId == 0) {
-			model.addAttribute("link", "すべて");
-			model.addAttribute("access", "list");
-		} else {
-			switch (animalId) {
-			case 1:
-				model.addAttribute("link", "犬用品");
-				model.addAttribute("access", "/");
-				break;
-			case 2:
-				model.addAttribute("link", "猫用品");
-				model.addAttribute("access", "cat");
-				break;
-			}
-		}
-		model.addAttribute("animalId", animalId);
 		Item item = itemService.load(id);
 		model.addAttribute("item", item);
 
@@ -159,34 +153,41 @@ public class ItemController {
 
 	}
 
+
 	/**
-	 * 商品を検索する ※該当の商品がない場合は絞り込み選択値によって、結果と表示メッセージを切り替え。
+	 * 検索欄、カテゴリーメニューバー、パンくずリスト、並び替えをクリックしたときに呼ばれるメソッド
 	 * 
-	 * @param code
+	 * @param form  code/genre/sortIdの3つの変数を扱う
 	 * @param model
-	 * @return
+	 * @return 絞り込みメッセージとitemListをスコープに格納し、商品一覧画面に遷移する。
 	 */
 	@RequestMapping("/search")
 	public String searchItem(SearchForm form, Model model) {
 		String code = form.getCode();
-		Integer genre = (Integer)(form.getGenre());
+		Integer genre = form.getGenre();
 		Integer sortId = form.getSortId();
-		Integer animalId = form.getAnimalId();
 		System.out.println(form);
-		// カテゴリーメニューバーからこのメソッドに飛んできたとき、エラーが起きないようにする。
+
+		// カテゴリーメニューバーのリストをマッピングするメソッドを呼び出す
+		categoryMapping();
+
+		// カテゴリーメニューバーからこのメソッドに飛んできたとき、エラーが起きないようにする
 		if (code == null) {
 			code = "";
 		}
-		if(genre==null){
-			if(animalId==1) {
-				genre=1;
-			}else if(animalId==2) {
-				genre=5;
-			}
-		}
-		System.out.println("genre = "+ genre);
 		
-		// genreの値からcategoryIdとanimalIdを定義する。
+		// genreの値からanimalIdを設定
+		Integer animalId = null;
+		if (genre == 1 || genre == 2 || genre == 3 || genre == 4) {
+			animalId = 1;
+		} else if (genre == 5 || genre == 6 || genre == 7 || genre == 8) {
+			animalId = 2;
+		} else if (genre == 0) {
+			animalId = 0;
+		}
+		System.out.println("animalId = " + animalId);
+
+		// genreの値からcategoryIdを設定
 		Integer categoryId = 0;
 		if (genre == 2 || genre == 6) {
 			categoryId = 1;
@@ -195,38 +196,15 @@ public class ItemController {
 		} else if (genre == 4 || genre == 8) {
 			categoryId = 3;
 		}
-		System.out.println("categoryId = "+categoryId);
-		
-		if(animalId==null) {
-		if (genre == 1 || genre == 2 || genre == 3 || genre == 4) {
-			animalId = 1;
-		} else if (genre == 5 || genre == 6 || genre == 7 || genre == 8) {
-			animalId = 2;
-		}
-		}
-		System.out.println("animalId = "+animalId);
+		System.out.println("categoryId = " + categoryId);
+
+		// パンくずリストのリンク処理
+		panList(genre, model);
+
 		List<Item> itemList = new ArrayList<>();
+		itemList = itemService.findByNameAndAnimalId(code, animalId);
 
-		// Integer animalId = (Integer) session.getAttribute("animalId");
-		// if(animalId == null) {
-		// animalId = 0;
-		// }
-		if (animalId == 0) {
-			itemList = itemService.findByNameAndAnimalId(code, 0);
-			model.addAttribute("link", "すべて");
-		} else {
-			itemList = itemService.findByNameAndAnimalId(code, animalId);
-			switch (animalId) {
-			case 1:
-				model.addAttribute("link", "犬用品");
-				break;
-			case 2:
-				model.addAttribute("link", "猫用品");
-				break;
-			}
-		}
-
-		System.out.println("itemList = "+itemList);
+		System.out.println("itemList = " + itemList);
 		// 検索結果の該当がない場合＋入力がない場合
 		if (itemList.size() == 0 || code.equals("　") || code.equals(" ") || code.isEmpty()) {
 			List<Item> itemList2 = new ArrayList<>();
@@ -243,7 +221,7 @@ public class ItemController {
 			case 1:
 				itemList2 = itemService.findByAnimalId(1);
 				if (code.isEmpty()) {
-					noItemMessage = "絞り込み検索しました。犬用品一覧を表示します。";
+					noItemMessage = "犬用品一覧を表示します。";
 				} else {
 					noItemMessage = "該当の商品がございません。犬用品一覧を表示します。";
 				}
@@ -251,7 +229,7 @@ public class ItemController {
 			case 2:
 				itemList2 = itemService.findByAnimalIdAndCategoryId(1, 1);
 				if (code.isEmpty()) {
-					noItemMessage = "絞り込み検索しました。犬｜フード一覧を表示します。";
+					noItemMessage = "犬｜フード一覧を表示します。";
 				} else {
 					noItemMessage = "該当の商品がございません。犬｜フード一覧を表示します。";
 				}
@@ -259,7 +237,7 @@ public class ItemController {
 			case 3:
 				itemList2 = itemService.findByAnimalIdAndCategoryId(1, 2);
 				if (code.isEmpty()) {
-					noItemMessage = "絞り込み検索しました。犬｜おもちゃ一覧を表示します。";
+					noItemMessage = "犬｜おもちゃ一覧を表示します。";
 				} else {
 					noItemMessage = "該当の商品がございません。犬｜おもちゃ一覧を表示します。";
 				}
@@ -267,7 +245,7 @@ public class ItemController {
 			case 4:
 				itemList2 = itemService.findByAnimalIdAndCategoryId(1, 3);
 				if (code.isEmpty()) {
-					noItemMessage = "絞り込み検索しました。犬｜その他の商品一覧を表示します。";
+					noItemMessage = "犬｜その他の商品一覧を表示します。";
 				} else {
 					noItemMessage = "該当の商品がございません。犬｜その他の商品一覧を表示します。";
 				}
@@ -275,7 +253,7 @@ public class ItemController {
 			case 5:
 				itemList2 = itemService.findByAnimalId(2);
 				if (code.isEmpty()) {
-					noItemMessage = "絞り込み検索しました。猫用品一覧を表示します。";
+					noItemMessage = "猫用品一覧を表示します。";
 				} else {
 					noItemMessage = "該当の商品がございません。猫用品一覧を表示します。";
 				}
@@ -283,7 +261,7 @@ public class ItemController {
 			case 6:
 				itemList2 = itemService.findByAnimalIdAndCategoryId(2, 1);
 				if (code.isEmpty()) {
-					noItemMessage = "絞り込み検索しました。猫｜フード一覧を表示します。";
+					noItemMessage = "猫｜フード一覧を表示します。";
 				} else {
 					noItemMessage = "該当の商品がございません。猫｜フード一覧を表示します。";
 				}
@@ -291,7 +269,7 @@ public class ItemController {
 			case 7:
 				itemList2 = itemService.findByAnimalIdAndCategoryId(2, 2);
 				if (code.isEmpty()) {
-					noItemMessage = "絞り込み検索しました。猫｜おもちゃ一覧を表示します。";
+					noItemMessage = "猫｜おもちゃ一覧を表示します。";
 				} else {
 					noItemMessage = "該当の商品がございません。猫｜おもちゃ一覧を表示します。";
 				}
@@ -299,33 +277,28 @@ public class ItemController {
 			case 8:
 				itemList2 = itemService.findByAnimalIdAndCategoryId(2, 3);
 				if (code.isEmpty()) {
-					noItemMessage = "絞り込み検索しました。猫｜その他の商品一覧を表示します。";
+					noItemMessage = "猫｜その他の商品一覧を表示します。";
 				} else {
 					noItemMessage = "該当の商品がございません。猫｜その他の商品一覧を表示します。";
 				}
 				break;
 			}
 			model.addAttribute("noItemMessage", noItemMessage);
-			model.addAttribute("categoryId", categoryId);
-//			model.addAttribute("word", code);
-			if (sortId != null) {
-				sort(sortId, itemList2);
-			}
 			model.addAttribute("itemList", itemList2);
-			return "item_list_pet";
+
+		//　入力フォームに何かしらの入力があった場合
 		} else {
 
-//			入力フォームに何かしらの入力があった場合
 			List<Item> itemList3 = itemService.findByCategoryIdAndAnimaiIdAndName(code, animalId, categoryId);
+
+			// DBのcategoryIdは1か2しかない。0(すべて)の場合はcodeとanimalIdで検索したitemListを持ってくる
 			if (categoryId == 0) {
-				if (sortId != null) {
-					sort(sortId, itemList);
-				}
 				model.addAttribute("itemList", itemList);
 				model.addAttribute("noItemMessage", "「" + code + "」の検索結果を表示します。");
+
+			// categoryIdが1か2で、何かしら入力があったが、絞り込んだ際には該当の結果がない場合
 			} else if (itemList3.size() == 0) {
 
-//				何かしら入力があったが、絞り込んだ際には該当の結果がない場合
 				List<Item> itemList2 = new ArrayList<>();
 				String mes = null;
 				switch (genre) {
@@ -367,83 +340,58 @@ public class ItemController {
 					break;
 				}
 				model.addAttribute("noItemMessage", "該当の商品がございません。" + mes + "一覧を表示します。");
-				if (sortId != null) {
-					sort(sortId, itemList2);
-				}
 				model.addAttribute("itemList", itemList2);
 
 			} else {
-				if (sortId != null) {
-					sort(sortId, itemList3);
-				}
+				// categoryIdが1か2で、検索欄入力があり、絞り込んだ際に該当の結果が見つかった場合
 				model.addAttribute("itemList", itemList3);
 				model.addAttribute("noItemMessage", "「 " + code + " 」の検索結果を表示します。");
 			}
-			model.addAttribute("categoryId", categoryId);
-			model.addAttribute("word", code);
-			return "item_list_pet";
 		}
+		// 並べ替えをするときに使うリンクをリクエストスコープに入れるメソッド
+		form.setLink(model);
+		//sortIdが入っていれば並び替え/入っていなければ、デフォルトで新着順で並び替え
+		itemList = (List<Item>) model.getAttribute("itemList");
+		if (sortId != null) {
+			sort(sortId, itemList);
+			label(sortId, model);
+		} else if (sortId == null) {
+			sort(0, itemList);
+			label(0, model);
+		}
+		//表示件数・categoryId・検索文字列・genreをスコープに格納し商品一覧ページへ渡す
+		model.addAttribute("itemListSize", itemList.size());
+		model.addAttribute("categoryId", categoryId);
+		model.addAttribute("word", code);
+		model.addAttribute("genre", genre);
+		return "item_list_pet";
 	}
-	/*
-	 * @RequestMapping("/search") public String searchItem(String code, Integer
-	 * categoryId, Model model) {
+
+	/**
+	 * 並び替えのListに値を詰めるメソッド
 	 * 
-	 * List<Item> itemList = new ArrayList<>(); Integer animalId = (Integer)
-	 * session.getAttribute("animalId");
-	 * 
-	 * if (animalId == null || animalId == 0) { itemList =
-	 * itemService.findByNameAndAnimalId(code, 0); model.addAttribute("link",
-	 * "すべて"); } else { itemList = itemService.findByNameAndAnimalId(code,
-	 * animalId); switch (animalId) { case 1: model.addAttribute("link", "犬用品");
-	 * break; case 2: model.addAttribute("link", "猫用品"); break; } }
-	 * 
-	 * // 検索結果の該当がない場合＋入力がない場合 if (itemList.size() == 0 || code.equals("　") ||
-	 * code.equals(" ") || code.isEmpty()) { List<Item> itemList2 = new
-	 * ArrayList<>(); switch (categoryId) { case 0: if (animalId == null || animalId
-	 * == 0) { itemList2 = itemService.findAll(); } else { itemList2 =
-	 * itemService.findByAnimalId(animalId); }
-	 * 
-	 * if (code.isEmpty()) { model.addAttribute("noItemMessage", "商品一覧を表示します。"); }
-	 * else { model.addAttribute("noItemMessage", "該当の商品がございません。商品一覧を表示します。"); }
-	 * break; case 1: itemList2 = itemService.findByCategoryId(animalId,
-	 * categoryId); if (code.isEmpty()) { model.addAttribute("noItemMessage",
-	 * "絞り込み検索しました。フード一覧を表示します。"); } else { model.addAttribute("noItemMessage",
-	 * "該当の商品がございません。フード一覧を表示します。"); } break; case 2: itemList2 =
-	 * itemService.findByCategoryId(animalId, categoryId); if (code.isEmpty()) {
-	 * model.addAttribute("noItemMessage", "絞り込み検索しました。おもちゃ一覧を表示します。"); } else {
-	 * model.addAttribute("noItemMessage", "該当の商品がございません。おもちゃ一覧を表示します。"); } break;
-	 * case 3: itemList2 = itemService.findByCategoryId(animalId, categoryId); if
-	 * (code.isEmpty()) { model.addAttribute("noItemMessage",
-	 * "絞り込み検索しました。その他の商品一覧を表示します。"); } else { model.addAttribute("noItemMessage",
-	 * "該当の商品がございません。その他の商品一覧を表示します。"); } break; } model.addAttribute("categoryId",
-	 * categoryId); model.addAttribute("itemList", itemList2);
-	 * model.addAttribute("word", code); return "item_list_pet"; } else {
-	 * 
-	 * // 入力フォームに何かしらの入力があった場合 List<Item> itemList3 =
-	 * itemService.findByCategoryIdAndAnimaiIdAndName(code, animalId, categoryId);
-	 * if (categoryId == 0) { model.addAttribute("itemList", itemList);
-	 * model.addAttribute("noItemMessage", "検索結果を表示します。"); } else if
-	 * (itemList3.size() == 0) {
-	 * 
-	 * // 何かしら入力があったが、絞り込んだ際には該当の結果がない場合 List<Item> itemList2 = new ArrayList<>();
-	 * switch (categoryId) { case 1: itemList2 =
-	 * itemService.findByCategoryId(animalId, categoryId);
-	 * model.addAttribute("noItemMessage", "該当の商品がございません。フード一覧を表示します。"); break; case
-	 * 2: itemList2 = itemService.findByCategoryId(animalId, categoryId);
-	 * model.addAttribute("noItemMessage", "該当の商品がございません。おもちゃ一覧を表示します。"); break;
-	 * case 3: itemList2 = itemService.findByCategoryId(animalId, categoryId);
-	 * model.addAttribute("noItemMessage", "該当の商品がございません。その他の商品一覧を表示します。"); break; }
-	 * model.addAttribute("itemList", itemList2); } else {
-	 * model.addAttribute("itemList", itemList3);
-	 * model.addAttribute("noItemMessage", "検索結果を表示します。"); }
-	 * model.addAttribute("categoryId", categoryId); model.addAttribute("word",
-	 * code); return "item_list_pet"; } }
+	 * @param sortId 各並び順に付けられたid
+	 * @param model
 	 */
+	public void label(Integer sortId, Model model) {
+		List<SortLabel> sortLabelList = new ArrayList<>();
+		sortLabelList.add(new SortLabel(0, "新着順", sortId != 0));
+		sortLabelList.add(new SortLabel(1, "レビューが多い順", sortId != 1));
+		sortLabelList.add(new SortLabel(2, "レビューが高い順", sortId != 2));
+		sortLabelList.add(new SortLabel(3, "価格が高い順", sortId != 3));
+		sortLabelList.add(new SortLabel(4, "価格が安い順", sortId != 4));
 
-	@RequestMapping("/sort")
+		model.addAttribute("sortLabelList", sortLabelList);
+	}
+
+	/**
+	 * itemListを並びけるメソッド
+	 * 
+	 * @param sortId   各並び順に付けられたid
+	 * @param itemList 並び替えを行うitemList
+	 * @return 並び替えを終えた後のitemList
+	 */
 	public String sort(Integer sortId, List<Item> itemList) {
-		System.out.println(itemList);
-
 		switch (sortId) {
 		case 0:
 			// 今回っているItemListをsortして、新着順に並び替える処理
@@ -458,7 +406,6 @@ public class ItemController {
 			itemList.sort(Comparator.comparing(Item::getAvgStar).reversed());
 			break;
 		case 3:
-
 			// 今回っているItemListをsortして、価格が高い順に並び替える処理
 			itemList.sort(Comparator.comparing(Item::getPrice).reversed());
 			break;
@@ -467,11 +414,48 @@ public class ItemController {
 			itemList.sort(Comparator.comparing(Item::getPrice));
 			break;
 		}
-
 		return "item_list_pet";
 	}
 
+	
 	/**
+	 * パンくずリストを作成するためにスコープにlinkと名前を入れる
+	 * 
+	 * @param genre カテゴリーのid
+	 * @param model
+	 */
+	public void panList(Integer genre,Model model) {
+		if (genre == 1 || genre == 2 || genre == 3 || genre == 4) {
+			model.addAttribute("link", "犬用品");
+			model.addAttribute("panGenre", 1);
+		} else if (genre == 5 || genre == 6 || genre == 7 || genre == 8) {
+			model.addAttribute("link", "猫用品");
+			model.addAttribute("panGenre", 5);
+		} else if (genre == 0) {
+			model.addAttribute("link", "すべて");
+			model.addAttribute("panGenre", 0);
+		}
+
+	}
+	
+	/**
+	 * カテゴリーのマッピングをする
+	 */
+	public void categoryMapping() {
+		Map<Integer, String> genreMap = new HashMap<>();
+		genreMap.put(0, "すべてのカテゴリー");
+		genreMap.put(1, "犬｜すべて");
+		genreMap.put(2, "犬｜フード");
+		genreMap.put(3, "犬｜おもちゃ");
+		genreMap.put(4, "犬｜その他");
+		genreMap.put(5, "猫｜すべて");
+		genreMap.put(6, "猫｜フード");
+		genreMap.put(7, "猫｜おもちゃ");
+		genreMap.put(8, "猫｜その他");
+		session.setAttribute("genreMap", genreMap);
+	}
+
+	/*
 	 * @param userId orderをセッションスコープに格納する処理。
 	 */
 	public void checkOrderBeforePayment(Integer userId) {
