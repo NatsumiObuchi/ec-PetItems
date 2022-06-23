@@ -43,7 +43,8 @@
 						<!-- ヘッダーメニュー -->
 						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 							<p class="navbar-text navbar-right">
-							<span th:if="${session.user}!=null">
+
+								<span th:if="${session.user}!=null">
 								<span th:text="${session.user.name}+さんこんにちは！">&nbsp;&nbsp;</span>
 							</span>
 							<a href="login.html" class="navbar-link" th:href="@{/myPage}"
@@ -110,7 +111,7 @@
 						</form>
 					</li>
 					<li class="menu-list">
-						<a th:href="@{/item/search?genre=5}">猫用品</a>
+						<a th:href="@{/item/search?genre=5&animalId=2}">猫用品</a>
 						<ul class="dropdown-lists">
 							<li class="dropdown-list"><a th:href="@{/item/search?genre=5}">すべて</a></li>
 							<li class="dropdown-list"><a th:href="@{/item/search?genre=6}">フード</a></li>
