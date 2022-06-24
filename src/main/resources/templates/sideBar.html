@@ -46,6 +46,9 @@
 			</nav>
 			
 			<!-- ここにクーポンバナー -->
+			<div th:each="coupons:${couponList}">
+			<div th:text="${coupons.discountPrice}+円引きクーポン"></div>
+			</div>
 			
 		</div>
 	

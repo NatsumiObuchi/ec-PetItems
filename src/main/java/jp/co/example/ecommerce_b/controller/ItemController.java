@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.ecommerce_b.domain.Coupon;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.Review;
@@ -27,6 +28,7 @@ import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.form.ReviewForm;
 import jp.co.example.ecommerce_b.form.ReviewInsertForm;
 import jp.co.example.ecommerce_b.form.SearchForm;
+import jp.co.example.ecommerce_b.service.CouponServise;
 import jp.co.example.ecommerce_b.service.FavoriteService;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
@@ -56,6 +58,10 @@ public class ItemController {
 	@Autowired
 	private FavoriteService favoriteService;
 
+	@Autowired
+	private CouponServise couponServise;
+	
+	
 	@ModelAttribute
 	private SearchForm createSearchForm() {
 		return new SearchForm();
@@ -85,12 +91,14 @@ public class ItemController {
 	 * @return トップに遷移するだけの処理
 	 */
 	@RequestMapping("/top")
-	public String top() {
+	public String top(Model model) {
 		// カテゴリーメニューバーのリストをマッピングするメソッドを呼び出す。
 		categoryMapping();
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		List<String> nameList = itemService.findItemName();
 		session.setAttribute("nameList", nameList);
+		List<Coupon> couponList = couponServise.findAll();
+		model.addAttribute("couponList", couponList);
 		return "top";
 	}
 
