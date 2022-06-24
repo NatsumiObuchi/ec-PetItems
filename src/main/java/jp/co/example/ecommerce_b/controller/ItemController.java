@@ -364,6 +364,7 @@ public class ItemController {
 		model.addAttribute("categoryId", categoryId);
 		model.addAttribute("word", code);
 		model.addAttribute("genre", genre);
+		model.addAttribute("searchGenre", genre);
 		return "item_list_pet";
 	}
 

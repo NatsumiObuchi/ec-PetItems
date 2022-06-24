@@ -1,0 +1,16 @@
+
+.side {
+  background-color:aliceblue;
+  width:20%;
+  padding:30px;
+} 
+
+.content {
+  width:80%;
+  text-align:center;
+  margin-left:20px;/*サイドバーとメインコンテンツの間に隙間をあけた*/
+}
+
+article {
+  display:flex;/*サイドバーとメインコンテンツを横並びにする指定をした*/
+}

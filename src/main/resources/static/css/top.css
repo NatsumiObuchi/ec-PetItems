@@ -55,6 +55,7 @@ color:#666;/*検索ボタンマウスオーバー時のフォントカラー*/
 /*
  *　topのメニューバー 
  */
+ /*
 *{
     box-sizing: border-box;
 }
@@ -106,11 +107,13 @@ color:#666;/*検索ボタンマウスオーバー時のフォントカラー*/
     font-weight: 600;
     transition: all .3s;
 }
+*/
+/*
 .menu-list:hover a {
     color: #fff;
 }
 .dropdown-lists {
-    display: none;/*デフォルトでは非表示の状態にしておく*/
+    display: none;
     width: 100%;
     position: absolute;
     top: 40px;
@@ -119,8 +122,9 @@ color:#666;/*検索ボタンマウスオーバー時のフォントカラー*/
     margin: 0;
     padding: 0;
 }
+
 .menu-list:hover .dropdown-lists {
-    display: block;/*Gナビメニューにホバーしたら表示*/
+    display: block;
 }
 .dropdown-list {
     background-color: #004d80;
@@ -160,6 +164,8 @@ color:#666;/*検索ボタンマウスオーバー時のフォントカラー*/
     right: 15px;
     top: calc(50% - 5px);
 }
+*/
+
 
 /*
  *　スライドショー用

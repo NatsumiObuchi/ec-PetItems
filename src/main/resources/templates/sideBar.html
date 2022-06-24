@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>ペット用品のネット注文</title>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="/resources/demos/style.css">
+	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
+	<link th:href="@{/css/piza.css}" rel="stylesheet" />
+	<link th:href="@{/css/top.css}" rel="stylesheet" />
+	<link th:href="@{/css/sideBar.css}" rel="stylesheet" />
+
+</head>
+
+<body>
+	
+
+	<!-- メニューバー -->
+	<div th:fragment="frag_category">
+			<nav class="menu-bar">
+			<span class="category">カテゴリーで探す</span><hr class="sideBar_hr">
+				<ul class="menu-lists">
+					<li class="menu-list">
+						<a class="animal_menu" th:href="@{/item/search?genre=1}">犬用品</a>
+						<ul class="dropdown-lists">							
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=1}">すべて</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=2}">フード</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=3}">おもちゃ</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=4}">その他</a></li>
+						</ul>
+						</form>
+					</li>
+					<li class="menu-list">
+						<a class="animal_menu" th:href="@{/item/search?genre=5}">猫用品</a>
+						<ul class="dropdown-lists">
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=5}">すべて</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=6}">フード</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=7}">おもちゃ</a></li>
+							<li class="dropdown-list"><a th:href="@{/item/search?genre=8}">その他</a></li>
+						</ul>
+					</li>
+				</ul>
+			</nav>
+			
+			<!-- ここにクーポンバナー -->
+			
+		</div>
+	
+
+</body>
+
+</html>
