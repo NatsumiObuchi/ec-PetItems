@@ -21,6 +21,10 @@ span.price {
 	font-size: 20px;
 }
 
+#use-point{
+	font-size: 20px;
+}
+
 /* 商品一覧の画像を中央寄せにする*/
 .item-img-center {
   margin-left: auto;
