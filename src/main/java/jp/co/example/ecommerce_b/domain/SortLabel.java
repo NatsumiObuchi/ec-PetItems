@@ -2,8 +2,11 @@ package jp.co.example.ecommerce_b.domain;
 
 public class SortLabel {
 	
+	//並び替え順のid
 	private Integer sortId;
+	//並び替え順の名前（新着順・レビューが多い順等、、）
 	private String sortText;
+	//現在選択している並び替え順をtrue、選択していない並び替え順えおfalseにする
 	private boolean decisionId;
 	
 	
