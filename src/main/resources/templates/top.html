@@ -26,9 +26,17 @@
 	<!-- ヘッダー/インクルード化しているので、編集する際はheader.htmlから -->
 	<div th:insert="header :: frag_header"></div>
 
+	<!-- ユーザのポイント情報(インクルード化) -->
+	<div th:insert="header :: frag_point"></div>
 
-		<!-- 検索欄/インクルード化しているので、編集する際はheader.htmlから -->
-		<div th:insert="header :: frag_search"></div>
+	<!-- 検索欄/インクルード化しているので、編集する際はheader.htmlから -->
+	<div th:insert="header :: frag_search"></div>
+	
+	<!-- カテゴリーメニューバー/インクルード化しているので、編集する際はheader.htmlから -->
+	<div th:insert="header :: frag_category"></div>
+
+	<!-- 検索欄/インクルード化しているので、編集する際はheader.htmlから -->
+	<div th:insert="header :: frag_search"></div>
 	<div class="container">
 		<article>
 			<div class="side">
