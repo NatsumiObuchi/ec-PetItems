@@ -7,10 +7,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>ペット用品のネット注文</title>
 	<!--<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">-->
-<!--	<link rel="stylesheet" href="/resources/demos/style.css">-->
+	<!--	<link rel="stylesheet" href="/resources/demos/style.css">-->
 	<link th:href="@{/css/bootstrap.css}" rel="stylesheet" />
 	<link th:href="@{/css/piza.css}" rel="stylesheet" />
 	<link th:href="@{/css/top.css}" rel="stylesheet" />
+	<link th:href="@{/css/sideBar.css}" rel="stylesheet" />
 
 	<!-- スライドショー用CSS -->
 	<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css}">
@@ -34,24 +35,35 @@
 	<!-- カテゴリーメニューバー/インクルード化しているので、編集する際はheader.htmlから -->
 	<div th:insert="header :: frag_category"></div>
 
+	<!-- 検索欄/インクルード化しているので、編集する際はheader.htmlから -->
+	<div th:insert="header :: frag_search"></div>
 	<div class="container">
-	
-		<div class="text-center">
-			<h1 class="font">ようこそRakuRakuペットへ</h1>
-			<p>私たちRakuRakuペットは、犬・猫たちの小さな声に耳を傾けて</p>
-			<p>彼らと飼い主さんのしあわせな毎日を支え、</p>
-			<p>笑顔あふれる心あたたかな未来を創造します。</p>
-		</div>
+		<article>
+			<div class="side">
 
-		<!-- スライドショー -->
-		<div class="slid">
-			<div class="slider">
-				<img th:src="@{/img/top1.jpg}">
-				<img th:src="@{/img/top2.jpg}">
-				<img th:src="@{/img/top3.jpg}">
-				<img th:src="@{/img/top4.jpg}">
+				<!-- カテゴリーメニューバー/インクルード化しているので、編集する際はheader.htmlから -->
+				<div th:insert="sideBar :: frag_category"></div>
 			</div>
-		</div>
+
+			<div class="content">
+				<div class="text-center">
+					<h1 class="font">ようこそRakuRakuペットへ</h1>
+					<p>私たちRakuRakuペットは、犬・猫たちの小さな声に耳を傾けて</p>
+					<p>彼らと飼い主さんのしあわせな毎日を支え、</p>
+					<p>笑顔あふれる心あたたかな未来を創造します。</p>
+				</div>
+
+				<!-- スライドショー -->
+				<div class="slid">
+					<div class="slider">
+						<img th:src="@{/img/top1.jpg}">
+						<img th:src="@{/img/top2.jpg}">
+						<img th:src="@{/img/top3.jpg}">
+						<img th:src="@{/img/top4.jpg}">
+					</div>
+				</div>
+			</div>
+		</article>
 
 		<!-- フッター/インクルード化しているので、編集する際はfooter.htmlから -->
 		<div th:insert="footer :: frag_footer"></div>
