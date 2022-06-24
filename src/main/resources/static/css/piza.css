@@ -25,6 +25,10 @@ span.price {
 	font-size: 20px;
 }
 
+#use-part-point{
+	vertical-align: bottom;
+}
+
 /* 商品一覧の画像を中央寄せにする*/
 .item-img-center {
   margin-left: auto;

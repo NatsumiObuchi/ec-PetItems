@@ -78,8 +78,9 @@
 				<div class="form-group text-center">
 					<span id="total-tax">消費税：</span>
 					<span id="total-tax" name="totalTax" th:text="${#numbers.formatInteger(session.totalTax, 2, 'COMMA')} + '円'">消費税：8,000円</span><br />
-					<span id="use-point">ポイント利用：</span>
-					<span id="use-point">0p</span>
+					<span id="use-point">ご利用ポイント：</span>
+					<!-- <span id="use-point" class="use-point" th:text="0pt"></span> -->
+					<span id="use-point" class="use-point"></span><br>
 					<span id="total-price">ご注文金額合計：</span>
 					<span id="total-price" name="totalPrice"
 						th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'"></span><br />
@@ -100,39 +101,48 @@
 		">
 				<div class="well">
 					<h3 class="text-center">ポイント利用</h3>
-					<table class="table table-striped item-list-table">
-						<tbody>									
-							<tr>
-								<td>
-									<div class="text-center">
-										<span th:text="${session.user.name} + さんのポイント残高"></span>
-									</div>
-								</td>
-								<td>
-									<div class="row">
-										<div class="col-sm-12">
-											<span th:text="${session.point.point} + ポイント（円相当）"></span>
+					<!-- ポイント利用のform -->
+					<form th:action="@{/order/usePoint}">
+						<table class="table table-striped item-list-table">
+							<tbody>									
+								<tr>
+									<td>
+										<div class="text-center">
+											<span th:text="${session.user.name} + さんのポイント残高"></span>
 										</div>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td align="center">
-									<div class="row">
-										<div class="col-sm-12">
-											<label class="radio-inline">
-												<input type="radio" value="0">ポイントを利用しない<br>
-												<input type="radio">全てのポイントを利用する<br>
-												<input type="radio">一部のポイントを利用する
-												<input type="text">
-												<button>適用</button>
-											</label>
+									</td>
+									<td>
+										<div class="row">
+											<div class="col-sm-12">
+												<span class="total-point" th:text="${session.point.point}"></span>
+												<span class="total-point-text" th:text="ポイント（円相当）"></span>
+											</div>
 										</div>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+									</td>
+								</tr>
+								<tr>
+									<td align="center">
+										<div class="row">
+											<div class="col-sm-12">
+												<label class="radio-inline">
+													<input id="not-all-use-point" type="radio" name="usePoint" th:value="0" checked>ポイントを利用しない<br>
+													<input id="all-use-point" type="radio" name="usePoint" th:value="${session.point.point}">全てのポイントを利用する<br>
+													<input id="use-part-point-radio" type="radio" name="usePoint">一部のポイントを利用する
+												</label>
+											</div>
+										</div>
+									</td>
+									<td id="use-part-point">
+										<div class="row">
+											<div class="col-sm-12">
+												<input id="use-part-point-text" name="usePoint" type="text">pt
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
 				</div>
 				
 			</div>
@@ -430,6 +440,7 @@
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script th:src="@{/js/address.js}"></script>
+	<script th:src="@{/js/point.js}"></script>
 
 </body>
 
