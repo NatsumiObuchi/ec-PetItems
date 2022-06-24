@@ -35,7 +35,7 @@
 				<div class="section1 text-center">
 					<h3><div th:text="'こんにちは' + ${session.user.name} + 'さん'"></div></h3>
                     <h4><p class="rank">あなたは◯◯会員です</p></h4>
-                    <h5><span th:text="利用可能ポイント + ${session.point.point} + pt"></span></h5>
+                    <h4><span th:text="利用可能ポイント + ${session.point.point} + pt"></span></h4>
                 </div>
                 <!-- <div class="well text-center"> -->
                     <table class="table table-striped item-list-table">
