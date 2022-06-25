@@ -32,9 +32,11 @@ import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
 import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.User;
+import jp.co.example.ecommerce_b.domain.UsersCoupon;
 import jp.co.example.ecommerce_b.form.OrderForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.service.AddresseeService;
+import jp.co.example.ecommerce_b.service.CouponServise;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
@@ -63,6 +65,9 @@ public class OrderController {
 	private AddresseeService addresseeService;
 
 	@Autowired
+	private CouponServise couponService;
+	
+	@Autowired
 	private MailSender sender;
 
 	@ModelAttribute
@@ -71,7 +76,6 @@ public class OrderController {
 	}
 
 	@RequestMapping("")
-
 	public String index(OrderForm orderForm) {// 「注文へ進む」を押したときに走る処理
 		Integer totalPrice = (Integer) session.getAttribute("totalPrice");
 		session.setAttribute("totalPrice", totalPrice);
@@ -102,7 +106,11 @@ public class OrderController {
 		List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(user.getId());
 		session.setAttribute("addresseeList", addresseeList);
 
-
+		//ユーザーが利用可能なクーポンを表示
+		List<UsersCoupon> usersCoupon = couponService.findAllUsersCoupon();
+		session.setAttribute("usersCoupon", usersCoupon);
+		
+		
 		return "order_confirm";
 
 	}

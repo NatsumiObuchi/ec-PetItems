@@ -97,7 +97,7 @@ public class ItemController {
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		List<String> nameList = itemService.findItemName();
 		session.setAttribute("nameList", nameList);
-		List<Coupon> couponList = couponServise.findAll();
+		List<Coupon> couponList = couponServise.findAllCoupon();
 		model.addAttribute("couponList", couponList);
 		return "top";
 	}
