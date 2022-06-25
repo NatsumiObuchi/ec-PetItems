@@ -13,6 +13,7 @@ $(function () {
 	$('.total-point-text').show();
 	var outputUsePoint = $('.use-point');//実際のご利用ポイント
 	var totalPoint = $('#all-use-point').val();//session内のポイント総額
+	var totalPrice = $('#total-price-answer').val();//session内の合計金額
 	
 	//「ポイントを使用しない」を押した時の挙動
 	$('#not-all-use-point').on('click', function() {
@@ -29,8 +30,11 @@ $(function () {
 		console.log('222222');
 		console.log(totalPoint);
 		$('#use-point').show();
+		Number(totalPoint).toLocaleString();//カンマ区切りに変換
 		outputUsePoint.text(totalPoint + 'pt');
 		$('.total-point').text('0pt');
+		console.log(totalPrice);
+		
 		$('#use-part-point-text').val('');
 	});
 	
@@ -43,6 +47,9 @@ $(function () {
 		console.log(answer);
 		$('#use-point').show();
 		outputUsePoint.text(value + 'pt');
+		Number(answer).toLocaleString();//カンマ区切りに変換
+		console.log(totalPrice);
+		
 		$('.total-point').text(answer + 'pt');
 	})
 });
