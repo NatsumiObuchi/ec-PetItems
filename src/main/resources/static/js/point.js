@@ -32,6 +32,7 @@ $(function () {
 	$('#all-use-point').on('click', function() {
 		console.log('222222');
 		$('#use-point').show();
+		console.log(totalPrice);
 		var totalPriceResult = totalPrice - totalPoint;
 		outputUsePoint.text(totalPoint.toLocaleString() + 'pt');//ご利用ポイント(全額ポイント)
 		$('#total-price-answer').text(totalPriceResult.toLocaleString() + '円');//合計金額
@@ -49,8 +50,8 @@ $(function () {
 			$('#error-point-message').show();
 			alert('ポイント残高を超えての決済は出来ません。\n' + '修正してください。');
 			outputUsePoint.text('0pt');//ご利用ポイント
-			$('#total-point').text(totalPoint.toLocaleString() + 'pt');//ポイント残高
 			$('#total-price-answer').text(totalPrice.toLocaleString() + '円');//合計金額
+			$('#total-point').text(totalPoint.toLocaleString() + 'pt');//ポイント残高
 			$('#use-part-point-text').val('');//「一部のポイントを利用する」のテキストは空欄にする
 		} else {
 			var totalPriceResult = totalPrice - value;//合計金額の計算
