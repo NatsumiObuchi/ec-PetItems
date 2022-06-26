@@ -31,6 +31,7 @@ import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
 import jp.co.example.ecommerce_b.domain.OrderItem;
+import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.domain.UsersCoupon;
 import jp.co.example.ecommerce_b.form.OrderForm;
@@ -40,7 +41,7 @@ import jp.co.example.ecommerce_b.service.CouponServise;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
-import jp.co.example.ecommerce_b.service.UserService;
+import jp.co.example.ecommerce_b.service.PointService;
 
 @Controller
 @RequestMapping("/order")
@@ -50,16 +51,10 @@ public class OrderController {
 	private HttpSession session;
 
 	@Autowired
-	private OrderItemService orderitemservice;
-
-	@Autowired
-	private ItemService itemService;
-
-	@Autowired
 	private OrderService orderservice;
 
 	@Autowired
-	private UserService userService;
+	private PointService pointService;
 
 	@Autowired
 	private AddresseeService addresseeService;
@@ -113,6 +108,21 @@ public class OrderController {
 		
 		return "order_confirm";
 
+	}
+
+	/**
+	 * ポイントを使用した際に走る処理(この時点ではまだDBには登録しない)
+	 * 
+	 * @param usePoint
+	 * @return
+	 */
+	@RequestMapping("/usePoint")
+	public String usePoint(OrderForm orderForm, Integer usePoint, Model model) {
+		Point point = (Point) session.getAttribute("point");
+		Integer remainingPoint = point.getPoint() - usePoint;
+		point.setPoint(remainingPoint);
+		model.addAttribute("remainingPoint", remainingPoint);
+		return index(orderForm);
 	}
 
 	/**

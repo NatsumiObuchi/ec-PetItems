@@ -13,8 +13,28 @@ span.price {
   -moz-border-radius: 50%;
 }
 /* 合計金額の文字の大きさを変える */
-span#total-price {
+#total-price{
   font-size: 35px;
+}
+
+#total-price-answer{
+  font-size: 35px;
+}
+
+#total-tax{
+	font-size: 20px;
+}
+
+#total-tax-answer{
+  font-size: 20px;
+}
+
+#use-point{
+	font-size: 20px;
+}
+
+#use-part-point{
+	vertical-align: bottom;
 }
 
 /* 商品一覧の画像を中央寄せにする*/

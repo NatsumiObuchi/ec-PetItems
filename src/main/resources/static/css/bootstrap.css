@@ -6373,6 +6373,10 @@ button.close {
 	margin-left: 95px;
 }
 
+.address-flex{
+	display: flex;
+}
+
 .addressBtn{
 	margin-left: 10px;
 }
@@ -6476,4 +6480,9 @@ li {list-style: none;}
     margin-bottom: 10px;
     width: 30%;
     border-radius: 10px; /* 角を丸くする */
+}
+
+.point-position{
+	float: right;
+	font-size: 20px;
 }

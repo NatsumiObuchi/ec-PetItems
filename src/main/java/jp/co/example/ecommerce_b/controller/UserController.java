@@ -13,8 +13,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
+import jp.co.example.ecommerce_b.service.PointService;
 import jp.co.example.ecommerce_b.service.UserService;
 
 @Controller
@@ -32,7 +34,10 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private PointService pointService;
 	
+
 	/**
 	 * @return ユーザー登録画面に遷移するだけの処理
 	 */
@@ -68,6 +73,13 @@ public class UserController {
 			user.setTelephone(form.getTelephone());
 			user.setPassword(hashPass);
 			userService.insertUser(user);
+
+			// 今登録されたユーザのuserIdに紐付けてpointテーブルに情報を追加
+			User user2 = userService.findByEmail(form);
+			Point point = new Point();
+			point.setUserId(user2.getId());
+			point.setPoint(0);
+			pointService.insertPoint(point);
 			return "redirect:/user/toLogin";
 		}
 	}
