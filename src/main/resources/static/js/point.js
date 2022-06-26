@@ -40,16 +40,25 @@ $(function () {
 	});
 	
 	//「一部のポイントを利用する」でポイントを入力する際の挙動
-	$('#use-part-point-text').on('keyup', function(){
+	$('#use-part-point-text').on('keyup', function(){//inputでもいけた
 		console.log('333333');
 		var input = $(this);//テキストに入力したポイント数
 		var value = input.val();//テキストに入力した値を変数に代入
 		var answer = totalPoint - value;//ポイント数合計
-		var totalPriceResult = totalPrice - value;//合計金額の計算
+		if (totalPoint < value) {
+			$('#error-point-message').show();
+			alert('ポイント残高を超えての決済は出来ません。\n' + '修正してください。');
+			outputUsePoint.text('0pt');//ご利用ポイント
+			$('#total-point').text(totalPoint.toLocaleString() + 'pt');//ポイント残高
+			$('#total-price-answer').text(totalPrice.toLocaleString() + '円');//合計金額
+			$('#use-part-point-text').val('');//「一部のポイントを利用する」のテキストは空欄にする
+		} else {
+			var totalPriceResult = totalPrice - value;//合計金額の計算
 		$('#use-point').show();
 		console.log(value);
 		outputUsePoint.text(value.toLocaleString() + 'pt');//ご利用ポイント
 		$('#total-price-answer').text(totalPriceResult.toLocaleString() + '円');//合計金額
 		$('#total-point').text(answer.toLocaleString() + 'pt');//ポイント残高
+		}
 	})
 });
