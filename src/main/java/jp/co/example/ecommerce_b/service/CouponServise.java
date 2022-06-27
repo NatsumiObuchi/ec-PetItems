@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import jp.co.example.ecommerce_b.domain.Coupon;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.domain.UsersCoupon;
+import jp.co.example.ecommerce_b.domain.UsersCouponHistory;
 import jp.co.example.ecommerce_b.repository.CouponRepository;
 
 @Transactional
@@ -33,7 +34,7 @@ public class CouponServise {
 	public List<Coupon> findAllCoupon() {
 		return couponRepository.findAllCoupon();
 	}
-
+	
 	/**
 	 * ユーザーがクーポンを取得したとき、DBにクーポン情報をインサートする。
 	 * @param couponId
@@ -82,10 +83,26 @@ public class CouponServise {
 	 * ユーザーが使用可能な全クーポンの一覧を取得する
 	 * @return
 	 */
-	public List<UsersCoupon> findAllUsersCoupon(){
-		return couponRepository.findAllUsersCoupon();
+	public List<UsersCoupon> findAllUsersCoupon(Integer userId){
+		return couponRepository.findAllUsersCoupon(userId);
 	}
 	
 	
+	/**
+	 * 使用したクーポンのdeletedをtrueにする
+	 * @param id ユーザーが保持しているクーポンの一意のid
+	 */
+	public void usedUsersCoupon(Integer id) {
+		couponRepository.usedUsersCoupon(id);
+	}
+	
+	
+	/**
+	 *  ユーザーが購入後、クーポンの使用履歴をインサート
+	 * @param usersCouponHistory 
+	 */
+	public void insertUsersCouponHistorys(UsersCouponHistory usersCouponHistory) {
+		couponRepository.insertUsersCouponHistorys(usersCouponHistory);
+	}
 	
 }

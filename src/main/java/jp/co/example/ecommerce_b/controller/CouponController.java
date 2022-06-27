@@ -18,6 +18,7 @@ public class CouponController {
 	@RequestMapping("/getCoupon")
 	public String getCoupon(Integer id,Integer duration,Timestamp finishUseDate) {
 		couponServise.insertUserCoupon(id,duration,finishUseDate);
+		System.out.println("id="+id);
 		return "top";
 		
 	}

@@ -1,5 +1,6 @@
 package jp.co.example.ecommerce_b.controller;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -34,6 +35,7 @@ import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.domain.UsersCoupon;
+import jp.co.example.ecommerce_b.domain.UsersCouponHistory;
 import jp.co.example.ecommerce_b.form.OrderForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.service.AddresseeService;
@@ -98,11 +100,11 @@ public class OrderController {
 		}
 
 		// ユーザが登録済のお届け先一覧を表示(modal表示用)
-		List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(user.getId());
-		session.setAttribute("addresseeList", addresseeList);
+	//	List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(user.getId());
+		//session.setAttribute("addresseeList", addresseeList);
 
 		//ユーザーが利用可能なクーポンを表示
-		List<UsersCoupon> usersCoupon = couponService.findAllUsersCoupon();
+		List<UsersCoupon> usersCoupon = couponService.findAllUsersCoupon(user.getId());
 		session.setAttribute("usersCoupon", usersCoupon);
 		
 		
@@ -125,13 +127,14 @@ public class OrderController {
 		return index(orderForm);
 	}
 
+	
 	/**
 	 * 注文をする（orderHistoryテーブルに注文履歴を格納）
 	 *
 	 */
-
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	@RequestMapping("/orderSent")
-	public String orderSent(@Validated OrderForm orderForm, BindingResult rs, OrderItemForm orderItemForm,
+	public String orderSent(@Validated OrderForm orderForm,Integer usersCouponId, BindingResult rs, OrderItemForm orderItemForm,
 //			@RequestParam("stripeToken")
 			String stripeToken,
 //	        @RequestParam("stripeTokenType")
@@ -172,8 +175,39 @@ public class OrderController {
 			e.printStackTrace();
 		}
 		
+		//クーポンを使用する場合、orderに詰める合計金額情報を変更（割引）する
+		List<UsersCoupon> usersCouponList = (List<UsersCoupon>) session.getAttribute("usersCoupon");
+		//　↓ この変数はメソッドの最後の方で履歴のテーブルに格納するデータだよ
+		Integer discountPrice = 0;
+		Timestamp couponGetDate = null;
+		Timestamp couponExpirationDate = null;
+		Integer couponId = 0;
+		for(UsersCoupon usersCoupon : usersCouponList) {
+			if(usersCoupon.getId()==usersCouponId) {
+				discountPrice =usersCoupon.getCoupon().getDiscountPrice();
+				couponGetDate = usersCoupon.getCouponGetDate();
+				couponExpirationDate = usersCoupon.getCouponExpirationDate();
+				couponId = usersCoupon.getCouponId();
+			}
+		}
+		System.out.println("クーポンで割引く金額："+discountPrice);
 		
-//		代金引換orクレジットカード
+		Integer price = 0;
+		if(usersCouponId==0) {
+			System.out.println("クーポン使ってないよ");
+			price = order.getTotalPrice();
+		}else {
+			System.out.println("割引したよ");
+			price = order.getTotalPrice() - discountPrice; 
+		}
+		order.setTotalPrice(price);
+		System.out.println("クーポン利用後合計金額："+price);
+		
+		//使用したクーポンのdeletedをtrueにアップデートする
+		couponService.usedUsersCoupon(usersCouponId);		
+		
+		
+		//	代金引換orクレジットカード
 		if(order.getPaymentMethod() == 1) {
 			order.setStatus(1);
 		}else if(order.getPaymentMethod() == 2) {
@@ -183,7 +217,6 @@ public class OrderController {
 
 			// 以下クレジットカードメソッド
 			Stripe.apiKey = "sk_test_51LA6lgEM1Eja88iZuJf4dKIA2zP1aXLbUnjHNVd013Tgob9l5SPMcbGZhkeRFiQ9z3qJgr8crduiKOMcwuBtyU1E00DikrfI8S";
-			Integer price = order.getTotalPrice();
 
 			Map<String, Object> chargeMap = new HashMap<String, Object>();
 			chargeMap.put("aomunt", price);
@@ -200,14 +233,15 @@ public class OrderController {
 			ResponseEntity response = ResponseEntity.ok().build();
 		}
 		
-//		orderテーブルに格納
+		//　orderテーブルに格納
 		orderservice.update(order);
 		System.out.println(order);
+		Integer orderHistorysOrderId = order.getId();
 		
 		// メール送信用のメソッド
 		sendEmail(orderForm.getDestinationEmail());
 
-//		orderHistoryテーブルに格納
+		//　orderHistoryテーブルに格納
 		OrderHistory orderHistory = new OrderHistory();
 		List<OrderItem> orderItemList = order.getOrderItemList();
 
@@ -215,7 +249,7 @@ public class OrderController {
 
 			orderHistory.setOrderId(orderItem.getOrderId());
 			orderHistory.setUserId(order.getUserId()); 
-
+			
 			Item item = orderItem.getItem();
 			orderHistory.setImagePath(item.getImagePath());
 			orderHistory.setItemName(item.getName());
@@ -226,9 +260,20 @@ public class OrderController {
 			System.out.println(orderHistory);
 			BeanUtils.copyProperties(order, orderHistory);
 
-			orderservice.insertHistory(orderHistory);
+			orderHistory= orderservice.insertHistory(orderHistory);
 			System.out.println(orderHistory);
 		}
+		
+		//users_coupon_historysテーブルに格納
+		UsersCouponHistory userCouponHistory = new UsersCouponHistory();
+		userCouponHistory.setUserId(user.getId());
+		userCouponHistory.setOrderHistorysId(orderHistorysOrderId);
+		userCouponHistory.setCouponId(couponId);
+		userCouponHistory.setCouponGetDate(couponGetDate);
+		userCouponHistory.setCouponExpirationDate(couponExpirationDate);
+		couponService.insertUsersCouponHistorys(userCouponHistory);
+		System.out.println(userCouponHistory);
+		
 		session.setAttribute("order", null);
 		session.setAttribute("cartList", null);
 		return "order_finished";

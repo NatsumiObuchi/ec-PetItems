@@ -16,46 +16,47 @@
 </head>
 
 <body>
-	
+
 
 	<!-- メニューバー -->
 	<div th:fragment="frag_category">
-			<nav class="menu-bar">
-			<span class="category">カテゴリーで探す</span><hr class="sideBar_hr">
-				<ul class="menu-lists">
-					<li class="menu-list">
-						<a class="animal_menu" th:href="@{/item/search?genre=1}">犬用品</a>
-						<ul class="dropdown-lists">							
-							<li class="dropdown-list"><a th:href="@{/item/search?genre=1}">すべて</a></li>
-							<li class="dropdown-list"><a th:href="@{/item/search?genre=2}">フード</a></li>
-							<li class="dropdown-list"><a th:href="@{/item/search?genre=3}">おもちゃ</a></li>
-							<li class="dropdown-list"><a th:href="@{/item/search?genre=4}">その他</a></li>
-						</ul>
-						</form>
-					</li>
-					<li class="menu-list">
-						<a class="animal_menu" th:href="@{/item/search?genre=5}">猫用品</a>
-						<ul class="dropdown-lists">
-							<li class="dropdown-list"><a th:href="@{/item/search?genre=5}">すべて</a></li>
-							<li class="dropdown-list"><a th:href="@{/item/search?genre=6}">フード</a></li>
-							<li class="dropdown-list"><a th:href="@{/item/search?genre=7}">おもちゃ</a></li>
-							<li class="dropdown-list"><a th:href="@{/item/search?genre=8}">その他</a></li>
-						</ul>
-					</li>
-				</ul>
-			</nav>
-			
-			<!-- ここにクーポンバナー -->
+		<nav class="menu-bar">
+			<span class="category">カテゴリーで探す</span>
+			<hr class="sideBar_hr">
+			<ul class="menu-lists">
+				<li class="menu-list">
+					<a class="animal_menu" th:href="@{/item/search?genre=1}">犬用品</a>
+					<ul class="dropdown-lists">
+						<li class="dropdown-list"><a th:href="@{/item/search?genre=1}">すべて</a></li>
+						<li class="dropdown-list"><a th:href="@{/item/search?genre=2}">フード</a></li>
+						<li class="dropdown-list"><a th:href="@{/item/search?genre=3}">おもちゃ</a></li>
+						<li class="dropdown-list"><a th:href="@{/item/search?genre=4}">その他</a></li>
+					</ul>
+					</form>
+				</li>
+				<li class="menu-list">
+					<a class="animal_menu" th:href="@{/item/search?genre=5}">猫用品</a>
+					<ul class="dropdown-lists">
+						<li class="dropdown-list"><a th:href="@{/item/search?genre=5}">すべて</a></li>
+						<li class="dropdown-list"><a th:href="@{/item/search?genre=6}">フード</a></li>
+						<li class="dropdown-list"><a th:href="@{/item/search?genre=7}">おもちゃ</a></li>
+						<li class="dropdown-list"><a th:href="@{/item/search?genre=8}">その他</a></li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+
+		<!-- ここにクーポンバナー -->
+		<div th:each="coupons:${couponList}">
 			<form th:action="@{/coupon/getCoupon}" method="post">
-			<div th:each="coupons:${couponList}">
-			<input type="hidden" name="id" th:value="${coupons.id}">
-			<input type="hidden" name="finishUseDate" th:value="${coupons.finishUseDate}">
-			<input type="hidden" name="duration" th:value="${coupons.duration}">
-			<button th:text="${coupons.discountPrice}+円引きクーポン"></button>
-			</div>
+				<input type="hidden" name="id" th:value="${coupons.id}">
+				<input type="hidden" name="finishUseDate" th:value="${coupons.finishUseDate}">
+				<input type="hidden" name="duration" th:value="${coupons.duration}">
+				<button th:text="${coupons.discountPrice}+円引きクーポン"></button>
 			</form>
 		</div>
-	
+	</div>
+
 
 </body>
 

@@ -42,10 +42,11 @@ public class OrderService {
 
 	/**
 	 * 注文履歴を挿入する
+	 * @return 
 	 *
 	 */
-	public void insertHistory(OrderHistory orderHistory) {
-		repository.insertHistory(orderHistory);
+	public OrderHistory insertHistory(OrderHistory orderHistory) {
+		  return repository.insertHistory(orderHistory);
 	}
 	
 	/**

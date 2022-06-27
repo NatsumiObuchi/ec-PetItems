@@ -100,6 +100,7 @@ public class ItemController {
 		List<String> nameList = itemService.findItemName();
 		session.setAttribute("nameList", nameList);
 		List<Coupon> couponList = couponServise.findAllCoupon();
+		System.out.println(couponList);
 		model.addAttribute("couponList", couponList);
 
 		// ユーザのポイント情報

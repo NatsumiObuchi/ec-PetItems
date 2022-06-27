@@ -122,16 +122,19 @@ public class OrderRepository {
 	 * 注文履歴テーブルにインサートする
 	 *
 	 */
-	public void insertHistory(OrderHistory orderHistory) {
+	public OrderHistory insertHistory(OrderHistory orderHistory) {
 		String sql="insert into order_histories (order_id,user_id,image_path,item_name,item_price,quantity,sub_totalprice,total_price,order_date,"
 				+ "	destination_name,destination_email,destinationzip_code,destination_address,destination_tell,delivery_time,payment_method)"
 				+ "	VALUES (:orderId,:userId,:imagePath,:itemName,:itemPrice,:quantity,:subTotalPrice,:totalPrice,:orderDate,:destinationName,"
 				+ " :destinationEmail,:destinationzipCode,:destinationAddress,:destinationTell,:deliveryTimestamp, :paymentMethod);";
 		
 		SqlParameterSource param = new BeanPropertySqlParameterSource(orderHistory);
-		
-		template.update(sql, param);
-	}
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		String[] keyColumnNames = { "id" };
+		template.update(sql, param, keyHolder,keyColumnNames);
+		orderHistory.setId(keyHolder.getKey().intValue());
+		return orderHistory;
+		}
 	
 
 	/**
