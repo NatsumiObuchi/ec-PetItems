@@ -42,7 +42,7 @@ public class OrderForm {
 	@NotEmpty(message="配達時間を選択してください")
 	private String deliveryTime;
 	
-	/** 配達日にち */
+	/** 配達日 */
 	@NotEmpty(message="配達日を選択してください")
 	private String deliveryDate;
 

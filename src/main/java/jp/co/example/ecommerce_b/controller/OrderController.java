@@ -31,13 +31,11 @@ import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
 import jp.co.example.ecommerce_b.domain.OrderItem;
-import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.OrderForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.service.AddresseeService;
 import jp.co.example.ecommerce_b.service.OrderService;
-import jp.co.example.ecommerce_b.service.PointService;
 
 @Controller
 @RequestMapping("/order")
@@ -48,9 +46,6 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderservice;
-
-	@Autowired
-	private PointService pointService;
 
 	@Autowired
 	private AddresseeService addresseeService;
@@ -98,21 +93,6 @@ public class OrderController {
 
 		return "order_confirm";
 
-	}
-
-	/**
-	 * ポイントを使用した際に走る処理(この時点ではまだDBには登録しない)
-	 * 
-	 * @param usePoint
-	 * @return
-	 */
-	@RequestMapping("/usePoint")
-	public String usePoint(OrderForm orderForm, Integer usePoint, Model model) {
-		Point point = (Point) session.getAttribute("point");
-		Integer remainingPoint = point.getPoint() - usePoint;
-		point.setPoint(remainingPoint);
-		model.addAttribute("remainingPoint", remainingPoint);
-		return index(orderForm);
 	}
 
 	/**
@@ -164,9 +144,9 @@ public class OrderController {
 		
 		
 //		代金引換orクレジットカード
-		if(order.getPaymentMethod() == 1) {
+		if (order.getPaymentMethod() == 1) {
 			order.setStatus(1);
-		}else if(order.getPaymentMethod() == 2) {
+		} else if (order.getPaymentMethod() == 2) {
 			order.setStatus(2);
 			order.setCardNumber(order.getCardNumber());
 			order.setCardBrand(order.getCardBrand());
@@ -183,7 +163,6 @@ public class OrderController {
 
 			try {
 				Charge charge = Charge.create(chargeMap);
-				System.out.println(charge);
 			} catch (StripeException e) {
 				e.printStackTrace();
 			}
@@ -192,7 +171,6 @@ public class OrderController {
 		
 //		orderテーブルに格納
 		orderservice.update(order);
-		System.out.println(order);
 		
 		// メール送信用のメソッド
 		sendEmail(orderForm.getDestinationEmail());
@@ -213,11 +191,9 @@ public class OrderController {
 			orderHistory.setQuantity(orderItem.getQuantity());
 			orderHistory.setSubTotalPrice(orderItem.getSubTotal());
 			
-			System.out.println(orderHistory);
 			BeanUtils.copyProperties(order, orderHistory);
 
 			orderservice.insertHistory(orderHistory);
-			System.out.println(orderHistory);
 		}
 		session.setAttribute("order", null);
 		session.setAttribute("cartList", null);
@@ -233,8 +209,6 @@ public class OrderController {
 			User user = (User) session.getAttribute("user");
 			List<List<OrderHistory>> historyList = orderservice.findOrderHistory(user.getId());
 			session.setAttribute("historyList", historyList);
-			System.out.println("historyList.size:" + historyList.size());
-			System.out.println("historyList:" + historyList);
 			if (historyList.get(0).size() == 0) {
 				model.addAttribute("alert", "注文履歴はありません。");
 			}
@@ -282,15 +256,4 @@ public class OrderController {
 			e.printStackTrace();
 		}
 	}
-
-//public void checkOrderBeforePayment(User user) {
-//// 存在すればそのorderが入り、存在しなければnullがはいる。
-//Order order = orderservice.findOrderBeforePayment(user);
-//if (order == null) {
-//	// Orderを新たにインスタンス化
-//	order = new Order();
-//}
-//session.setAttribute("order", order);
-//}
-
 }
