@@ -81,22 +81,24 @@
 				<div class="form-group text-center">
 					<div class="pay-box">
 						<span id="total-tax">消費税</span>
-						<span id="total-tax-answer" name="totalTax" th:text="${#numbers.formatInteger(session.totalTax, 2, 'COMMA')} + '円'">消費税：8,000円</span><br />
+						<span id="total-tax-answer" name="totalTax"
+							th:text="${#numbers.formatInteger(session.totalTax, 2, 'COMMA')} + '円'">消費税：8,000円</span><br />
 						<span id="use-point">ご利用ポイント</span>
 						<span id="use-point" class="use-point"></span><br>
 						<span id="prospect-acquire-point">今回の獲得予定ポイント</span>
 						<span id="prospect-acquire-point" class="prospect-acquire-point" style="color: red;"></span><br>
 						<hr>
 						<span id="total-price">ご注文金額合計</span>
-						<span id="total-price-answer" name="totalPrice" th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'" th:data-total-price="${session.totalPrice}"></span>
+						<span id="total-price-answer" name="totalPrice"
+							th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'"
+							th:data-total-price="${session.totalPrice}"></span>
 					</div>
 				</div>
 			</div>
 		</div>
 
 
-
-			<!-- ポイントtable -->
+		<!-- ポイントtable -->
 		<div class="row">
 			<div class="
 		  table-responsive
@@ -109,12 +111,12 @@
 		">
 				<div class="well">
 					<table class="table table-striped item-list-table">
-						<tbody>	
+						<tbody>
 							<tr>
 								<th colspan="2">
 									<span>ポイント利用</span>
 								</th>
-							</tr>								
+							</tr>
 							<tr>
 								<td>
 									<div class="text-center">
@@ -124,7 +126,9 @@
 								<td>
 									<div class="row">
 										<div class="col-sm-12">
-											<span id="total-point" th:text="${#numbers.formatInteger(session.point.point, 2, 'COMMA')}" th:data-total-point="${session.point.point}"></span>
+											<span id="total-point"
+												th:text="${#numbers.formatInteger(session.point.point, 2, 'COMMA')}"
+												th:data-total-point="${session.point.point}"></span>
 											<span class="total-point-text" th:text="ポイント（円相当）"></span>
 										</div>
 									</div>
@@ -135,9 +139,11 @@
 									<div class="row">
 										<div class="col-sm-12">
 											<label class="radio-inline">
-												<input id="not-all-use-point" type="radio" name="usePoint" th:value="0" checked>ポイントを利用しない<br>
+												<input id="not-all-use-point" type="radio" name="usePoint" th:value="0"
+													checked>ポイントを利用しない<br>
 												<input id="all-use-point" type="radio" name="usePoint">全てのポイントを利用する<br>
-												<input id="use-part-point-radio" type="radio" name="usePoint">一部のポイントを利用する
+												<input id="use-part-point-radio" type="radio"
+													name="usePoint">一部のポイントを利用する
 											</label>
 										</div>
 									</div>
@@ -153,12 +159,12 @@
 						</tbody>
 					</table>
 				</div>
-				
+
 			</div>
 		</div>
-		
 
-<!-- ここからorderForm -->
+
+		<!-- ここからorderForm -->
 		<form th:action="@{/order/orderSent}" th:object="${orderForm}" method="post">
 
 
@@ -450,32 +456,34 @@
 			<div class="modalWrapper">
 				<div class="modalContents">
 					<h3>お届け先選択<i class="fa-solid fa-truck"></i></h3>
-					  <hr>
-					  <div class="flex">
-						  <li class="sample-box" th:each="address : ${session.addresseeList}">
-							  <ul>
-								  <input class="radio" type="radio" name="addresseeId">
-								  <input id="hidden-zipCode" name="destinationzipCode" th:value="${address.zipCode}">
-								  <input id="hidden-address" name="destinationAddress" th:value="${address.address}">
-								  <!-- <input class="hidden" type="hidden" name="setting" th:value="true"> -->
-							  </ul>
-							  <ul>
+					<hr>
+					<div class="flex">
+						<li class="sample-box" th:each="address : ${session.addresseeList}">
+							<ul>
+								<input class="radio" type="radio" name="addresseeId">
+								<input id="hidden-zipCode" type="hidden" name="destinationzipCode"
+									th:value="${address.zipCode}">
+								<input id="hidden-address" type="hidden" name="destinationAddress"
+									th:value="${address.address}">
+								<!-- <input class="hidden" type="hidden" name="setting" th:value="true"> -->
+							</ul>
+							<ul>
 								<div th:text="'〒 ' + ${address.zipCode}"></div>
 								<div th:text="${address.address}"></div>
-							  </ul>
-						  </li>
-					  </div>
-					  <p>※お届け先が表示されていない場合、お手数ですがマイページから登録をお願いいたします。</p>
+							</ul>
+						</li>
+					</div>
+					<p>※お届け先が表示されていない場合、お手数ですがマイページから登録をお願いいたします。</p>
 					<div id="closeModal" class="closeModal">
-						  ×
+						×
 					</div>
 				</div>
-			</div>	
+			</div>
 		</section>
-		  <!-- モーダルエリアここまで -->
-	
-	<!-- フッター/インクルード化しているので、編集する際はfooter.htmlから -->
-	<div th:insert="footer :: frag_footer"></div>
+		<!-- モーダルエリアここまで -->
+
+		<!-- フッター/インクルード化しているので、編集する際はfooter.htmlから -->
+		<div th:insert="footer :: frag_footer"></div>
 
 	</div>
 	<!-- end container -->
