@@ -1,6 +1,6 @@
 'use strict'
 
-$(function () {
+/*$(function () {
 	//「一部のポイントを利用する」のテキストをクリックすると
   	$('#use-part-point-text').on('click', function(){
 		//「一部のポイントを利用する」のラジオボタンにチェックが入る
@@ -53,3 +53,4 @@ $(function () {
 		$('.total-point').text(answer + 'pt');
 	})
 });
+*/

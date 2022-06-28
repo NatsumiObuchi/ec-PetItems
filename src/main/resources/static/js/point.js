@@ -33,7 +33,7 @@ $(function () {
 		var nonPoint = $('#not-all-use-point').val();
 		outputUsePoint.text(nonPoint.toLocaleString() + 'pt');//ご利用ポイント(0ポイント)
 		$('#total-price-answer').text(totalPrice.toLocaleString() + '円');//合計金額
-		$('#total-point').text(totalPoint.toLocaleString() + 'pt');//ポイント残高
+		$('#total-point').text(totalPoint+ 'pt');//ポイント残高
 		$('#use-part-point-text').val('');//「一部のポイントを利用する」のテキストは空欄にする
 	});
 	
