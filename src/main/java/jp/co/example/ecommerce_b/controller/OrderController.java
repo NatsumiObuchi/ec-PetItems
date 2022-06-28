@@ -60,7 +60,7 @@ public class OrderController {
 
 	@RequestMapping("")
 
-	public String index(OrderForm orderForm) {// 「注文へ進む」を押したときに走る処理
+	public String index(OrderForm orderForm, Model model) {// 「注文へ進む」を押したときに走る処理
 		Integer totalPrice = (Integer) session.getAttribute("totalPrice");
 		session.setAttribute("totalPrice", totalPrice);
 
@@ -74,22 +74,26 @@ public class OrderController {
 			return "forward:/user/toLogin";
 		}
 
-		// 宛先氏名、宛先Eメール、電話番号はデフォルトでユーザ情報を反映
-		orderForm.setDestinationName(user.getName());
-		orderForm.setDestinationEmail(user.getEmail());
-		orderForm.setDestinationTell(user.getTelephone());
+		// デフォルトのユーザ情報を反映
+		if (orderForm.getDestinationName() == null && orderForm.getDestinationEmail() == null
+				&& orderForm.getDestinationTell() == null && orderForm.getDestinationzipCode() == null
+				&& orderForm.getDestinationAddress() == null && orderForm.getDeliveryTime() == null
+				&& orderForm.getDeliveryDate() == null && orderForm.getPaymentMethod() == null) {// 1回目でこのページに来たとき（Validationでここに帰ってきたときじゃない方）
+			orderForm.setDestinationName(user.getName());
+			orderForm.setDestinationEmail(user.getEmail());
+			orderForm.setDestinationTell(user.getTelephone());
 
-		// デフォルトで出力されるお届け先を検索
-		Addressee addressee = addresseeService.findByUserIdandSettingAddresseeTrue(user.getId());
-		if (addressee != null) {
-			orderForm.setDestinationzipCode(addressee.getZipCode());
-			orderForm.setDestinationAddress(addressee.getAddress());
+			// デフォルトで出力されるお届け先を検索
+			Addressee addressee = addresseeService.findByUserIdandSettingAddresseeTrue(user.getId());
+			if (addressee != null) {
+				orderForm.setDestinationzipCode(addressee.getZipCode());
+				orderForm.setDestinationAddress(addressee.getAddress());
+			}
+
+			model.addAttribute("orderForm", orderForm);
+		} else {
+			model.addAttribute("orderForm", orderForm);
 		}
-
-		// ユーザが登録済のお届け先一覧を表示(modal表示用)
-		List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(user.getId());
-		session.setAttribute("addresseeList", addresseeList);
-
 
 		return "order_confirm";
 
@@ -101,7 +105,7 @@ public class OrderController {
 	 */
 
 	@RequestMapping("/orderSent")
-	public String orderSent(@Validated OrderForm orderForm, BindingResult rs, OrderItemForm orderItemForm,
+	public String orderSent(@Validated OrderForm orderForm, BindingResult rs, OrderItemForm orderItemForm, Model model,
 //			@RequestParam("stripeToken")
 			String stripeToken,
 //	        @RequestParam("stripeTokenType")
@@ -109,9 +113,9 @@ public class OrderController {
 //	        @RequestParam("stripeEmial")
 			String stripeEmail
 			) {
-
+				System.out.println(orderForm);
 		if(rs.hasErrors()) {
-			return index(orderForm);
+			return index(orderForm, model);
 		}
 
 //		注文する

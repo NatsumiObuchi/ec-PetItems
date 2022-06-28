@@ -92,6 +92,68 @@
 			</div>
 		</div>
 
+		<!-- ポイントtable -->
+		<div class="row">
+			<div class="
+		  table-responsive
+		  col-lg-offset-3
+		  col-lg-6
+		  col-md-offset-1
+		  col-md-10
+		  col-sm-10
+		  col-xs-12
+		">
+				<div class="well">
+					<table class="table table-striped item-list-table">
+						<tbody>	
+							<tr>
+								<th colspan="2">
+									<span>ポイント利用</span>
+								</th>
+							</tr>								
+							<tr>
+								<td>
+									<div class="text-center">
+										<span th:text="${session.user.name} + さんのポイント残高"></span>
+									</div>
+								</td>
+								<td>
+									<div class="row">
+										<div class="col-sm-12">
+											<span id="total-point" th:text="${#numbers.formatInteger(session.point.point, 2, 'COMMA')}" th:data-total-point="${session.point.point}"></span>
+											<span class="total-point-text" th:text="ポイント（円相当）"></span>
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td align="center">
+									<div class="row">
+										<div class="col-sm-12">
+											<label class="radio-inline">
+												<input id="not-all-use-point" type="radio" name="usePoint" th:value="0" checked>ポイントを利用しない<br>
+												<input id="all-use-point" type="radio" name="usePoint">全てのポイントを利用する<br>
+												<input id="use-part-point-radio" type="radio" name="usePoint">一部のポイントを利用する
+											</label>
+										</div>
+									</div>
+								</td>
+								<td id="use-part-point">
+									<div class="row">
+										<div class="col-sm-12">
+											<input id="use-part-point-text" name="usePoint" type="text">pt
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+			</div>
+		</div>
+		
+
 		<!-- ここからorderForm -->
 		<form th:action="@{/order/orderSent}" th:object="${orderForm}" method="post">
 		  <!-- table -->
@@ -332,36 +394,6 @@
 				</div>
 			</div>
 
-			<!-- モダール表示 -->
-			<section id="modalArea" class="modalArea">
-				<div id="modalBg" class="modalBg"></div>
-				<div class="modalWrapper">
-				  <div class="modalContents">
-					<h3>お届け先選択<i class="fa-solid fa-truck"></i></h3>
-					<hr>
-						<div class="flex">
-							<li class="sample-box" th:each="address : ${session.addresseeList}">
-								<ul>
-									<input class="radio" type="radio" name="addresseeId">
-									<input id="hidden-zipCode" type="hidden" name="destinationzipCode" th:value="${address.zipCode}">
-									<input id="hidden-address" type="hidden" name="destinationAddress" th:value="${address.address}">
-									<!-- <input class="hidden" type="hidden" name="setting" th:value="true"> -->
-								</ul>
-								<ul>
-									<div th:text="'〒 ' + ${address.zipCode}"></div>
-									<div th:text="${address.address}"></div>
-								</ul>
-							</li>
-						</div>
-						<p>※お届け先が表示されていない場合、お手数ですがマイページから登録をお願いいたします。</p>
-				  	<div id="closeModal" class="closeModal">
-						×
-				  	</div>
-				  </div>
-				</div>
-			</section>
-			  <!-- モーダルエリアここまで -->
-
 			<div class="row">
 				<div class="col-xs-offset-4 col-xs-4">
 					<div class="form-group">
@@ -370,6 +402,37 @@
 				</div>
 			</div>
 		</form>
+
+
+		<!-- モダール表示 -->
+		<section id="modalArea" class="modalArea">
+			<div id="modalBg" class="modalBg"></div>
+			<div class="modalWrapper">
+				<div class="modalContents">
+					<h3>お届け先選択<i class="fa-solid fa-truck"></i></h3>
+					  <hr>
+					  <div class="flex">
+						  <li class="sample-box" th:each="address : ${session.addresseeList}">
+							  <ul>
+								  <input class="radio" type="radio" name="addresseeId">
+								  <input id="hidden-zipCode" type="hidden" name="destinationzipCode" th:value="${address.zipCode}">
+								  <input id="hidden-address" type="hidden" name="destinationAddress" th:value="${address.address}">
+								  <!-- <input class="hidden" type="hidden" name="setting" th:value="true"> -->
+							  </ul>
+							  <ul>
+								<div th:text="'〒 ' + ${address.zipCode}"></div>
+								<div th:text="${address.address}"></div>
+							  </ul>
+						  </li>
+					  </div>
+					  <p>※お届け先が表示されていない場合、お手数ですがマイページから登録をお願いいたします。</p>
+					<div id="closeModal" class="closeModal">
+						  ×
+					</div>
+				</div>
+			</div>	
+		</section>
+		  <!-- モーダルエリアここまで -->
 	
 	<!-- フッター/インクルード化しているので、編集する際はfooter.htmlから -->
 	<div th:insert="footer :: frag_footer"></div>

@@ -1,5 +1,5 @@
 'use strict'
-
+/*
 $(function () {
   $(function () {
   	// タイトルをクリックすると
@@ -14,4 +14,4 @@ $(function () {
     	$(this).next().slideToggle(300);
   	});
   });
-});
+});*/
