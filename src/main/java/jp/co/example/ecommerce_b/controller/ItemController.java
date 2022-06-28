@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.ecommerce_b.domain.Coupon;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.Point;
@@ -26,12 +27,12 @@ import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.form.ReviewForm;
 import jp.co.example.ecommerce_b.form.ReviewInsertForm;
 import jp.co.example.ecommerce_b.form.SearchForm;
+import jp.co.example.ecommerce_b.service.CouponServise;
 import jp.co.example.ecommerce_b.service.FavoriteService;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
 import jp.co.example.ecommerce_b.service.PointService;
-
 
 /**
  * @author 81906
@@ -55,6 +56,9 @@ public class ItemController {
 
 	@Autowired
 	private FavoriteService favoriteService;
+
+	@Autowired
+	private CouponServise couponServise;
 
 	@Autowired
 	private PointService pointService;
@@ -88,12 +92,15 @@ public class ItemController {
 	 * @return トップに遷移するだけの処理
 	 */
 	@RequestMapping("/top")
-	public String top() {
+	public String top(Model model) {
 		// カテゴリーメニューバーのリストをマッピングするメソッドを呼び出す。
 		categoryMapping();
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		List<String> nameList = itemService.findItemName();
 		session.setAttribute("nameList", nameList);
+		// 取得可能なクーポン一覧を表示
+		List<Coupon> couponList = couponServise.findAllCoupon();
+		model.addAttribute("couponList", couponList);
 
 		// ユーザのポイント情報
 		User user = (User) session.getAttribute("user");
@@ -105,13 +112,12 @@ public class ItemController {
 		return "top";
 	}
 
-	
 	/**
 	 * 商品一覧を表示する
 	 * 
-	 * @param form　code/genre/sortIdの3つの変数を扱う
+	 * @param form  code/genre/sortIdの3つの変数を扱う
 	 * @param model
-	 * @return　メッセージとitemListをスコープに格納し、商品一覧画面に遷移する。
+	 * @return メッセージとitemListをスコープに格納し、商品一覧画面に遷移する。
 	 */
 	@RequestMapping("/list")
 	public String itemList(SearchForm form, Model model) {
@@ -131,21 +137,24 @@ public class ItemController {
 		// パンくずリスト用
 		model.addAttribute("link", "すべて");
 		model.addAttribute("panGenre", 0);
+		// 取得可能なクーポン一覧を表示
+		List<Coupon> couponList = couponServise.findAllCoupon();
+		model.addAttribute("couponList", couponList);
+
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		List<String> nameList = itemService.findItemName();
 		session.setAttribute("nameList", nameList);
-		
+
 		return "item_list_pet";
 	}
 
-	
 	/**
 	 * 商品詳細を表示する
 	 * 
-	 * @param id　該当の商品id
+	 * @param id    該当の商品id
 	 * @param genre カテゴリーid
 	 * @param model
-	 * @return 
+	 * @return
 	 */
 	@RequestMapping("/itemDetail")
 	public String itemDetail(Integer id, Integer genre, Model model) {
@@ -154,7 +163,7 @@ public class ItemController {
 		List<Review> reviews = itemService.findReview(id);
 		model.addAttribute("reviews", reviews);
 		System.out.println(reviews);
-	
+
 		// パンくずリストのリンク処理
 		panList(genre, model);
 
@@ -164,7 +173,6 @@ public class ItemController {
 		return "item_detail";
 
 	}
-
 
 	/**
 	 * 検索欄、カテゴリーメニューバー、パンくずリスト、並び替えをクリックしたときに呼ばれるメソッド
@@ -179,6 +187,9 @@ public class ItemController {
 		Integer genre = form.getGenre();
 		Integer sortId = form.getSortId();
 		System.out.println(form);
+		// 取得可能なクーポン一覧を表示
+		List<Coupon> couponList = couponServise.findAllCoupon();
+		model.addAttribute("couponList", couponList);
 
 		// カテゴリーメニューバーのリストをマッピングするメソッドを呼び出す
 		categoryMapping();
@@ -187,7 +198,7 @@ public class ItemController {
 		if (code == null) {
 			code = "";
 		}
-		
+
 		// genreの値からanimalIdを設定
 		Integer animalId = null;
 		if (genre == 1 || genre == 2 || genre == 3 || genre == 4) {
@@ -298,7 +309,7 @@ public class ItemController {
 			model.addAttribute("noItemMessage", noItemMessage);
 			model.addAttribute("itemList", itemList2);
 
-		//　入力フォームに何かしらの入力があった場合
+			// 入力フォームに何かしらの入力があった場合
 		} else {
 
 			List<Item> itemList3 = itemService.findByCategoryIdAndAnimaiIdAndName(code, animalId, categoryId);
@@ -308,7 +319,7 @@ public class ItemController {
 				model.addAttribute("itemList", itemList);
 				model.addAttribute("noItemMessage", "「" + code + "」の検索結果を表示します。");
 
-			// categoryIdが1か2で、何かしら入力があったが、絞り込んだ際には該当の結果がない場合
+				// categoryIdが1か2で、何かしら入力があったが、絞り込んだ際には該当の結果がない場合
 			} else if (itemList3.size() == 0) {
 
 				List<Item> itemList2 = new ArrayList<>();
@@ -362,7 +373,7 @@ public class ItemController {
 		}
 		// 並べ替えをするときに使うリンクをリクエストスコープに入れるメソッド
 		form.setLink(model);
-		//sortIdが入っていれば並び替え/入っていなければ、デフォルトで新着順で並び替え
+		// sortIdが入っていれば並び替え/入っていなければ、デフォルトで新着順で並び替え
 		itemList = (List<Item>) model.getAttribute("itemList");
 		if (sortId != null) {
 			sort(sortId, itemList);
@@ -371,7 +382,7 @@ public class ItemController {
 			sort(0, itemList);
 			label(0, model);
 		}
-		//表示件数・categoryId・検索文字列・genreをスコープに格納し商品一覧ページへ渡す
+		// 表示件数・categoryId・検索文字列・genreをスコープに格納し商品一覧ページへ渡す
 		model.addAttribute("itemListSize", itemList.size());
 		model.addAttribute("categoryId", categoryId);
 		model.addAttribute("word", code);
@@ -430,14 +441,13 @@ public class ItemController {
 		return "item_list_pet";
 	}
 
-	
 	/**
 	 * パンくずリストを作成するためにスコープにlinkと名前を入れる
 	 * 
 	 * @param genre カテゴリーのid
 	 * @param model
 	 */
-	public void panList(Integer genre,Model model) {
+	public void panList(Integer genre, Model model) {
 		if (genre == 1 || genre == 2 || genre == 3 || genre == 4) {
 			model.addAttribute("link", "犬用品");
 			model.addAttribute("panGenre", 1);
@@ -450,7 +460,7 @@ public class ItemController {
 		}
 
 	}
-	
+
 	/**
 	 * カテゴリーのマッピングをする
 	 */

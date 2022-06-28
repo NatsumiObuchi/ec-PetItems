@@ -29,15 +29,16 @@
 		<p class="pan-list">
 			<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
 			><a th:href="@{/item/search?genre=}+${panGenre}">
-			<span th:text="${link}">ダミー</span>
+				<span th:text="${link}">ダミー</span>
 			</a>
 			>商品詳細
 		</p>
+	</div>
 
-				
-		<!-- 検索欄/インクルード化しているので、編集する際はheader.htmlから -->
-		<div th:insert="header :: frag_search"></div>
+	<!-- 検索欄/インクルード化しているので、編集する際はheader.htmlから -->
+	<div th:insert="header :: frag_search"></div>
 
+	<div class="container">
 		<div class="row">
 			<div class="col-xs-offset-3 col-xs-8">
 				<h3 class="text-center">商品詳細</h3>
@@ -73,7 +74,7 @@
 					</div>
 				</div>
 				<br />
-				
+
 				<div class="row">
 					<div class="col-xs-offset-2 col-xs-8">
 						<div class="form-group">
@@ -117,7 +118,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="row">
 					<div class="col-xs-offset-2 col-xs-10">
 						<div class="form-group">
@@ -191,7 +192,7 @@
 					<div class="row">
 						<div class="col-xs-3 col-sm-3 area">
 							<button class="form-control btn btn-warning btn-block">投稿する</button>
-									<input type="hidden" th:value="${item.animalId}" name="animalId">
+							<input type="hidden" th:value="${item.animalId}" name="animalId">
 						</div>
 					</div>
 				</form>
