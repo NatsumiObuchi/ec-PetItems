@@ -63,3 +63,15 @@ footer{
   text-align:right;
 
 }
+
+#prospect-acquire-point{
+	font-size: 20px;
+}
+
+.prospect-acquire-point{
+	font-size: 20px;
+}
+
+.table-backcolor{
+	background-color: #FFFFBB!important	;
+}

@@ -1,6 +1,8 @@
 package jp.co.example.ecommerce_b.controller;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jp.co.example.ecommerce_b.domain.Addressee;
 import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
+import jp.co.example.ecommerce_b.service.AddresseeService;
 import jp.co.example.ecommerce_b.service.PointService;
 import jp.co.example.ecommerce_b.service.UserService;
 
@@ -37,6 +41,8 @@ public class UserController {
 	@Autowired
 	private PointService pointService;
 	
+	@Autowired
+	private AddresseeService addresseeService;
 
 	/**
 	 * @return ユーザー登録画面に遷移するだけの処理
@@ -118,6 +124,10 @@ public class UserController {
 			form.setPassword(user.getPassword());
 			User user2 = userService.loginCheck(form);
 			session.setAttribute("user", user2);
+
+			// ユーザが登録済のお届け先一覧をここでログインしたタイミングでsessionにセットする
+			List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(user.getId());
+			session.setAttribute("addresseeList", addresseeList);
 
 			switch (String.valueOf(session.getAttribute("transitionSourcePage"))) {
 			case "order":
