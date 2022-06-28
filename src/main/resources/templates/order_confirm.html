@@ -83,7 +83,7 @@
 					<span id="total-price">ご注文金額合計：</span>
 					<!-- <span id="total-price" name="totalPrice"
 						th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'"></span><br /> -->
-					<span id="total-price-answer" th:value="${session.totalPrice}"></span>
+					<span id="total-price-answer" name="totalPrice" th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'" th:data-total-price="${session.totalPrice}"></span>
 				</div>
 			</div>
 		</div>
@@ -111,7 +111,7 @@
 								<td>
 									<div class="row">
 										<div class="col-sm-12">
-											<span class="total-point" th:text="${session.point.point}"></span>
+											<span id="total-point" th:text="${#numbers.formatInteger(session.point.point, 2, 'COMMA')}" th:data-total-point="${session.point.point}"></span>
 											<span class="total-point-text" th:text="ポイント（円相当）"></span>
 										</div>
 									</div>
@@ -123,7 +123,7 @@
 										<div class="col-sm-12">
 											<label class="radio-inline">
 												<input id="not-all-use-point" type="radio" name="usePoint" th:value="0" checked>ポイントを利用しない<br>
-												<input id="all-use-point" type="radio" name="usePoint" th:value="${session.point.point}">全てのポイントを利用する<br>
+												<input id="all-use-point" type="radio" name="usePoint">全てのポイントを利用する<br>
 												<input id="use-part-point-radio" type="radio" name="usePoint">一部のポイントを利用する
 											</label>
 										</div>
