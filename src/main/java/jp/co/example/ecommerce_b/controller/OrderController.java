@@ -32,7 +32,6 @@ import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
 import jp.co.example.ecommerce_b.domain.OrderItem;
-import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.domain.UsersCoupon;
 import jp.co.example.ecommerce_b.domain.UsersCouponHistory;
@@ -43,7 +42,6 @@ import jp.co.example.ecommerce_b.service.CouponServise;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
-import jp.co.example.ecommerce_b.service.PointService;
 
 @Controller
 @RequestMapping("/order")
@@ -54,9 +52,6 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderservice;
-
-	@Autowired
-	private PointService pointService;
 
 	@Autowired
 	private AddresseeService addresseeService;
@@ -73,7 +68,7 @@ public class OrderController {
 	}
 
 	@RequestMapping("")
-	public String index(OrderForm orderForm) {// 「注文へ進む」を押したときに走る処理
+	public String index(OrderForm orderForm, Model model) {// 「注文へ進む」を押したときに走る処理
 		Integer totalPrice = (Integer) session.getAttribute("totalPrice");
 		session.setAttribute("totalPrice", totalPrice);
 
@@ -87,21 +82,26 @@ public class OrderController {
 			return "forward:/user/toLogin";
 		}
 
-		// 宛先氏名、宛先Eメール、電話番号はデフォルトでユーザ情報を反映
-		orderForm.setDestinationName(user.getName());
-		orderForm.setDestinationEmail(user.getEmail());
-		orderForm.setDestinationTell(user.getTelephone());
+		// デフォルトのユーザ情報を反映
+		if (orderForm.getDestinationName() == null && orderForm.getDestinationEmail() == null
+				&& orderForm.getDestinationTell() == null && orderForm.getDestinationzipCode() == null
+				&& orderForm.getDestinationAddress() == null && orderForm.getDeliveryTime() == null
+				&& orderForm.getDeliveryDate() == null && orderForm.getPaymentMethod() == null) {// 1回目でこのページに来たとき（Validationでここに帰ってきたときじゃない方）
+			orderForm.setDestinationName(user.getName());
+			orderForm.setDestinationEmail(user.getEmail());
+			orderForm.setDestinationTell(user.getTelephone());
 
-		// デフォルトで出力されるお届け先を検索
-		Addressee addressee = addresseeService.findByUserIdandSettingAddresseeTrue(user.getId());
-		if (addressee != null) {
-			orderForm.setDestinationzipCode(addressee.getZipCode());
-			orderForm.setDestinationAddress(addressee.getAddress());
+			// デフォルトで出力されるお届け先を検索
+			Addressee addressee = addresseeService.findByUserIdandSettingAddresseeTrue(user.getId());
+			if (addressee != null) {
+				orderForm.setDestinationzipCode(addressee.getZipCode());
+				orderForm.setDestinationAddress(addressee.getAddress());
+			}
+
+			model.addAttribute("orderForm", orderForm);
+		} else {
+			model.addAttribute("orderForm", orderForm);
 		}
-
-		// ユーザが登録済のお届け先一覧を表示(modal表示用)
-	//	List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(user.getId());
-		//session.setAttribute("addresseeList", addresseeList);
 
 		//ユーザーが利用可能なクーポンを表示
 		List<UsersCoupon> usersCoupon = couponService.findAllUsersCoupon(user.getId());
@@ -113,28 +113,12 @@ public class OrderController {
 	}
 
 	/**
-	 * ポイントを使用した際に走る処理(この時点ではまだDBには登録しない)
-	 * 
-	 * @param usePoint
-	 * @return
-	 */
-	@RequestMapping("/usePoint")
-	public String usePoint(OrderForm orderForm, Integer usePoint, Model model) {
-		Point point = (Point) session.getAttribute("point");
-		Integer remainingPoint = point.getPoint() - usePoint;
-		point.setPoint(remainingPoint);
-		model.addAttribute("remainingPoint", remainingPoint);
-		return index(orderForm);
-	}
-
-	
-	/**
 	 * 注文をする（orderHistoryテーブルに注文履歴を格納）
 	 *
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	@RequestMapping("/orderSent")
-	public String orderSent(@Validated OrderForm orderForm,Integer usersCouponId, BindingResult rs, OrderItemForm orderItemForm,
+	public String orderSent(@Validated OrderForm orderForm,Integer usersCouponId, BindingResult rs, OrderItemForm orderItemForm,Model model
 //			@RequestParam("stripeToken")
 			String stripeToken,
 //	        @RequestParam("stripeTokenType")
@@ -142,9 +126,9 @@ public class OrderController {
 //	        @RequestParam("stripeEmial")
 			String stripeEmail
 			) {
-
+				System.out.println(orderForm);
 		if(rs.hasErrors()) {
-			return index(orderForm);
+			return index(orderForm, model);
 		}
 
 //		注文する
@@ -212,7 +196,7 @@ public class OrderController {
 		//	代金引換orクレジットカード
 		if(order.getPaymentMethod() == 1) {
 			order.setStatus(1);
-		}else if(order.getPaymentMethod() == 2) {
+		} else if (order.getPaymentMethod() == 2) {
 			order.setStatus(2);
 			order.setCardNumber(order.getCardNumber());
 			order.setCardBrand(order.getCardBrand());
@@ -228,7 +212,6 @@ public class OrderController {
 
 			try {
 				Charge charge = Charge.create(chargeMap);
-				System.out.println(charge);
 			} catch (StripeException e) {
 				e.printStackTrace();
 			}
@@ -288,8 +271,6 @@ public class OrderController {
 			User user = (User) session.getAttribute("user");
 			List<List<OrderHistory>> historyList = orderservice.findOrderHistory(user.getId());
 			session.setAttribute("historyList", historyList);
-			System.out.println("historyList.size:" + historyList.size());
-			System.out.println("historyList:" + historyList);
 			if (historyList.get(0).size() == 0) {
 				model.addAttribute("alert", "注文履歴はありません。");
 			}
@@ -337,15 +318,4 @@ public class OrderController {
 			e.printStackTrace();
 		}
 	}
-
-//public void checkOrderBeforePayment(User user) {
-//// 存在すればそのorderが入り、存在しなければnullがはいる。
-//Order order = orderservice.findOrderBeforePayment(user);
-//if (order == null) {
-//	// Orderを新たにインスタンス化
-//	order = new Order();
-//}
-//session.setAttribute("order", order);
-//}
-
 }

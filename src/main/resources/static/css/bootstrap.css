@@ -6486,3 +6486,14 @@ li {list-style: none;}
 	float: right;
 	font-size: 20px;
 }
+
+/*お支払いの詳細*/
+.pay-box{
+	padding: 0.5em 1em;
+    margin: 2em 0;
+    font-weight: bold;
+    /*文字色*/
+    background: #FFF;
+    border: solid 3px #e3e3e3;/*線*/
+    border-radius: 4px;/*角の丸み*/
+}
