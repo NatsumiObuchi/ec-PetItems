@@ -192,7 +192,7 @@ public class OrderController {
 		}
 		System.out.println("クーポンで割引く金額："+discountPrice);
 		
-		Integer price = 0;
+	/*	Integer price = 0;
 		if(usersCouponId==0) {
 			System.out.println("クーポン使ってないよ");
 			price = order.getTotalPrice();
@@ -200,6 +200,8 @@ public class OrderController {
 			System.out.println("割引したよ");
 			price = order.getTotalPrice() - discountPrice; 
 		}
+		*/
+		Integer price = order.getTotalPrice();
 		order.setTotalPrice(price);
 		System.out.println("クーポン利用後合計金額："+price);
 		
@@ -257,9 +259,7 @@ public class OrderController {
 			orderHistory.setQuantity(orderItem.getQuantity());
 			orderHistory.setSubTotalPrice(orderItem.getSubTotal());
 			
-			System.out.println(orderHistory);
 			BeanUtils.copyProperties(order, orderHistory);
-
 			orderHistory= orderservice.insertHistory(orderHistory);
 			System.out.println(orderHistory);
 		}

@@ -131,8 +131,8 @@
 										<div class="row">
 											<div class="col-sm-12">
 												<label class="radio-inline">
-													<input id="all-use-point" type="radio" name="usersCouponId" th:value="0"
-														　checked>クーポンを利用しない
+													<input id="all-use-point" type="radio" name="usersCouponId"
+														th:value="0" checked="checked">クーポンを利用しない
 												</label>
 											</div>
 										</div>
@@ -142,7 +142,8 @@
 											<div class="row">
 												<div class="col-sm-12">
 													<label class="radio-inline">
-													<input type="hidden" th:value="${coupon.coupon.discountPrice}" name="discountPrice"> 
+														<input type="hidden" th:value="${coupon.coupon.discountPrice}"
+															name="discountPrice">
 														<input id="all-use-point" type="radio" name="usersCouponId"
 															th:value="${coupon.id}"
 															th:text="${coupon.coupon.discountPrice}+円引きクーポン"><br>
@@ -151,12 +152,10 @@
 											</div>
 										</div>
 									</td>
-
 								</tr>
 							</tbody>
 						</table>
 					</div>
-
 				</div>
 			</div>
 
