@@ -39,10 +39,18 @@ $(function () {
 	//「全ポイントを使用する」を押した時の挙動
 	$('#all-use-point').on('click', function() {
 		console.log('222222');
-		var totalPriceResult = totalPrice - totalPoint;
-		outputUsePoint.text(totalPoint.toLocaleString() + 'pt');//ご利用ポイント(全額ポイント)
-		$('#total-price-answer').text(totalPriceResult.toLocaleString() + '円');//合計金額
-		$('#total-point').text('0pt');//ポイント残高は0ptになる
+		if (totalPrice <= totalPoint) {//合計金額よりもポイント残高の方が大きかった場合
+			var totalPointResult = totalPoint - totalPrice;
+			outputUsePoint.text(totalPrice.toLocaleString() + 'pt');//ご利用ポイント=今回の合計金額分
+			$('#total-price-answer').text('0円');//合計金額
+			$('#total-point').text(totalPointResult + 'pt');//ポイント残高
+			
+		} else {
+			var totalPriceResult = totalPrice - totalPoint;
+			outputUsePoint.text(totalPoint.toLocaleString() + 'pt');//ご利用ポイント(全額ポイント)
+			$('#total-price-answer').text(totalPriceResult.toLocaleString() + '円');//合計金額
+			$('#total-point').text('0pt');//ポイント残高は0ptになる
+		}
 		$('#use-part-point-text').val('');//「一部のポイントを利用する」のテキストは空欄にする
 	});
 	
