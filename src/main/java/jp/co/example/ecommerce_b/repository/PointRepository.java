@@ -71,7 +71,7 @@ public class PointRepository {
 	public void insertPointHistory(UsersPointHistory usersPointHistory) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(usersPointHistory);
 		String sql = "insert into users_point_histories(user_id, order_id, used_point)"
-				+ " values(:user_id, :order_id, :used_point)";
+				+ " values(:userId, :orderId, :usedPoint)";
 		template.update(sql, param);
 	}
 }

@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +28,6 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 
 import jp.co.example.ecommerce_b.domain.Addressee;
-import jp.co.example.ecommerce_b.domain.Coupon;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
@@ -37,13 +35,13 @@ import jp.co.example.ecommerce_b.domain.OrderItem;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.domain.UsersCoupon;
 import jp.co.example.ecommerce_b.domain.UsersCouponHistory;
+import jp.co.example.ecommerce_b.domain.UsersPointHistory;
 import jp.co.example.ecommerce_b.form.OrderForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.service.AddresseeService;
 import jp.co.example.ecommerce_b.service.CouponServise;
-import jp.co.example.ecommerce_b.service.ItemService;
-import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
+import jp.co.example.ecommerce_b.service.PointService;
 
 @Controller
 @RequestMapping("/order")
@@ -61,6 +59,9 @@ public class OrderController {
 	@Autowired
 	private CouponServise couponService;
 	
+	@Autowired
+	private PointService pointService;
+
 	@Autowired
 	private MailSender sender;
 
@@ -120,7 +121,8 @@ public class OrderController {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	@RequestMapping("/orderSent")
-	public String orderSent(@Validated OrderForm orderForm,Integer usersCouponId, BindingResult rs, OrderItemForm orderItemForm,Model model,
+	public String orderSent(@Validated OrderForm orderForm, BindingResult rs, Integer usersCouponId, Integer usePoint,
+			OrderItemForm orderItemForm, Model model,
 //			@RequestParam("stripeToken")
 			String stripeToken,
 //	        @RequestParam("stripeTokenType")
@@ -249,6 +251,25 @@ public class OrderController {
 			System.out.println(orderHistory);
 		}
 		
+		// ラジオボタンによって利用ポイントが変わる
+		switch (usePoint) {
+		case 1:
+
+			break;
+		case 2:
+
+			break;
+		}
+
+		// users_point_historiesにinsert
+		UsersPointHistory usersPointHistory = new UsersPointHistory();
+		usersPointHistory.setOrderId(orderHistorysOrderId);
+		usersPointHistory.setUserId(userId);
+//		usersPointHistory.setUsedPoint();
+		System.out.println("usePoint" + usePoint);
+		System.out.println(usersPointHistory);
+		pointService.insertPointHistory(usersPointHistory);
+
 		//users_coupon_historysテーブルに格納
 		UsersCouponHistory userCouponHistory = new UsersCouponHistory();
 		userCouponHistory.setUserId(user.getId());

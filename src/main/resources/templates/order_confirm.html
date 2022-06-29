@@ -74,99 +74,96 @@
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="col-xs-offset-2 col-xs-8">
-				<div class="form-group text-center">
-					<div class="pay-box">
-						<span id="total-tax">消費税</span>
-						<span id="total-tax-answer" name="totalTax"
-							th:text="${#numbers.formatInteger(session.totalTax, 2, 'COMMA')} + '円'">消費税：8,000円</span><br />
-						<span id="subtotal-price">小計（税込み）</span>
-						<span id="subtotal-price-answer" name="subtotalPrice"
-							th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'"></span><br>
-						<span id="use-point">ご利用ポイント</span>
-						<span id="use-point" class="use-point"></span><br>
-						<span id="use-coupon">ご利用クーポン</span>
-						<span id="use-coupon" class="use-coupon"></span>
-						<hr>
-						<span id="total-price">お支払い金額</span>
-						<span id="total-price-answer" name="totalPrice"
-							th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'"
-							th:data-total-price="${session.totalPrice}"></span><br>
-						<span id="prospect-acquire-point">今回の獲得予定ポイント</span>
-						<span id="prospect-acquire-point" class="prospect-acquire-point" style="color: red;"></span>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- ポイントtable -->
-		<div class="row">
-			<div class="
-		  table-responsive
-		  col-lg-offset-3
-		  col-lg-6
-		  col-md-offset-1
-		  col-md-10
-		  col-sm-10
-		  col-xs-12
-		">
-				<div class="well">
-					<table class="table table-striped item-list-table">
-						<tbody>
-							<tr>
-								<th colspan="2">
-									<span>ポイント利用</span>
-								</th>
-							</tr>
-							<tr>
-								<td>
-									<div class="text-center">
-										<span th:text="${session.user.name} + さんのポイント残高"></span>
-									</div>
-								</td>
-								<td>
-									<div class="row">
-										<div class="col-sm-12">
-											<span id="total-point"
-												th:text="${#numbers.formatInteger(session.point.point, 2, 'COMMA')}"
-												th:data-total-point="${session.point.point}"></span>
-											<span class="total-point-text" th:text="ポイント（円相当）"></span>
-										</div>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td align="center">
-									<div class="row">
-										<div class="col-sm-12">
-											<label class="radio-inline">
-												<input id="not-all-use-point" type="radio" name="usePoint" th:value="0"
-													checked>ポイントを利用しない<br>
-												<input id="all-use-point" type="radio" name="usePoint">全てのポイントを利用する<br>
-												<input id="use-part-point-radio" type="radio"
-													name="usePoint">一部のポイントを利用する
-											</label>
-										</div>
-									</div>
-								</td>
-								<td id="use-part-point">
-									<div class="row">
-										<div class="col-sm-12">
-											<input id="use-part-point-text" name="usePoint" type="text">pt
-										</div>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-
 		<!-- ここからorderForm -->
 		<form th:action="@{/order/orderSent}" th:object="${orderForm}" method="post">
 
+			<div class="row">
+				<div class="col-xs-offset-2 col-xs-8">
+					<div class="form-group text-center">
+						<div class="pay-box">
+							<span id="total-tax">消費税</span>
+							<span id="total-tax-answer" name="totalTax"
+								th:text="${#numbers.formatInteger(session.totalTax, 2, 'COMMA')} + '円'">消費税：8,000円</span><br />
+							<span id="subtotal-price">小計（税込み）</span>
+							<span id="subtotal-price-answer" name="subtotalPrice"
+								th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'"></span><br>
+							<span id="use-point">ご利用ポイント</span>
+							<span id="use-point" class="use-point"></span><br>
+							<span id="use-coupon">ご利用クーポン</span>
+							<span id="use-coupon" class="use-coupon"></span>
+							<hr>
+							<span id="total-price">お支払い金額</span>
+							<span id="total-price-answer" name="totalPrice"
+								th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'"
+								th:data-total-price="${session.totalPrice}"></span><br>
+							<span id="prospect-acquire-point">今回の獲得予定ポイント</span>
+							<span id="prospect-acquire-point" class="prospect-acquire-point" style="color: red;"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- ポイントtable -->
+			<div class="row">
+				<div class="
+			  table-responsive
+			  col-lg-offset-3
+			  col-lg-6
+			  col-md-offset-1
+			  col-md-10
+			  col-sm-10
+			  col-xs-12
+			">
+					<div class="well">
+						<table class="table table-striped item-list-table">
+							<tbody>
+								<tr>
+									<th colspan="2">
+										<span>ポイント利用</span>
+									</th>
+								</tr>
+								<tr>
+									<td>
+										<div class="text-center">
+											<span th:text="${session.user.name} + さんのポイント残高"></span>
+										</div>
+									</td>
+									<td>
+										<div class="row">
+											<div class="col-sm-12">
+												<span id="total-point"
+													th:text="${#numbers.formatInteger(session.point.point, 2, 'COMMA')}"
+													th:data-total-point="${session.point.point}"></span>
+												<span class="total-point-text" th:text="ポイント（円相当）"></span>
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td align="center">
+										<div class="row">
+											<div class="col-sm-12">
+												<label class="radio-inline">
+													<input id="not-all-use-point" type="radio" name="usePoint" checked>ポイントを利用しない<br>
+													<input id="all-use-point" type="radio" name="usePoint" value="1">全てのポイントを利用する<br>
+													<input id="use-part-point-radio" type="radio" name="usePoint" value="2">一部のポイントを利用する
+												</label>
+											</div>
+										</div>
+									</td>
+									<td id="use-part-point">
+										<div class="row">
+											<div class="col-sm-12">
+												<input id="use-part-point-text" type="text">pt
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
 
 			<!-- クーポンtable -->
 			<div class="row">
