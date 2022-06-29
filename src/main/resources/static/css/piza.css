@@ -21,7 +21,7 @@ span.price {
   font-size: 35px;
 }
 
-#total-tax{
+#subtotal-price-answer,#subtotal-price,#total-tax{
 	font-size: 20px;
 }
 
@@ -30,6 +30,10 @@ span.price {
 }
 
 #use-point{
+	font-size: 20px;
+}
+
+#use-coupon{
 	font-size: 20px;
 }
 

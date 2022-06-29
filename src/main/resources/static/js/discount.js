@@ -2,6 +2,8 @@
 
 $(function () {
 	
+	// ----------ポイントJS------------
+	
 	//「一部のポイントを利用する」のテキストをクリックすると
   	$('#use-part-point-text').on('click', function(){
 		//「一部のポイントを利用する」のラジオボタンにチェックが入る
@@ -82,5 +84,23 @@ $(function () {
 			$('#total-price-answer').text(totalPriceResult.toLocaleString() + '円');//合計金額
 			$('#total-point').text(answer.toLocaleString() + 'pt');//ポイント残高
 		}
-	})
+	});
+	
+	// ----------クーポンJS------------
+	
+	//以下、クーポン使用時の挙動
+	var outputUseCoupon = $('.use-coupon');//ご利用クーポン（円）
+
+	$(document).ready(function() {
+		outputUseCoupon.text('0円分');//ご利用クーポン（初期表示は０円）
+		
+	});
+
+	$('.radio').on('change', function() {
+		var discountPrice = $(this).parent().children('[name=discountPrice]').val();
+		console.log(discountPrice);
+		outputUseCoupon.text(discountPrice + '円分');//ご利用クーポン（円）
+
+	});
+	console.log(discountPrice+"----------");
 });
