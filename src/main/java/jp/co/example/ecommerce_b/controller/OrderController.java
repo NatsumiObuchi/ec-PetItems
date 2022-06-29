@@ -120,7 +120,7 @@ public class OrderController {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	@RequestMapping("/orderSent")
-	public String orderSent(@Validated OrderForm orderForm,Integer usersCouponId, BindingResult rs, OrderItemForm orderItemForm,Model model,
+	public String orderSent(@Validated OrderForm orderForm, BindingResult rs, Integer usersCouponId,OrderItemForm orderItemForm,Model model,
 //			@RequestParam("stripeToken")
 			String stripeToken,
 //	        @RequestParam("stripeTokenType")
