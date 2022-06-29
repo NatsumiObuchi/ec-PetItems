@@ -83,15 +83,20 @@
 						<span id="total-tax">消費税</span>
 						<span id="total-tax-answer" name="totalTax"
 							th:text="${#numbers.formatInteger(session.totalTax, 2, 'COMMA')} + '円'">消費税：8,000円</span><br />
+						<span id="subtotal-price">小計（税込み）</span>
+						<span id="subtotal-price-answer" name="subtotalPrice"
+							th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'"></span><br>
 						<span id="use-point">ご利用ポイント</span>
 						<span id="use-point" class="use-point"></span><br>
-						<span id="prospect-acquire-point">今回の獲得予定ポイント</span>
-						<span id="prospect-acquire-point" class="prospect-acquire-point" style="color: red;"></span><br>
+						<span id="use-coupon">ご利用クーポン</span>
+						<span id="use-coupon" class="use-coupon"></span>
 						<hr>
-						<span id="total-price">ご注文金額合計</span>
+						<span id="total-price">お支払い金額</span>
 						<span id="total-price-answer" name="totalPrice"
 							th:text="${#numbers.formatInteger(session.totalPrice, 2, 'COMMA')} + '円'"
-							th:data-total-price="${session.totalPrice}"></span>
+							th:data-total-price="${session.totalPrice}"></span><br>
+						<span id="prospect-acquire-point">今回の獲得予定ポイント</span>
+						<span id="prospect-acquire-point" class="prospect-acquire-point" style="color: red;"></span>
 					</div>
 				</div>
 			</div>
@@ -202,25 +207,26 @@
 										<div class="row">
 											<div class="col-sm-12">
 												<label class="radio-inline">
-													<input id="all-use-point" type="radio" name="usersCouponId"
+													<input id="not-use-point" type="radio" name="usersCouponId"
 														th:value="0" checked="checked">クーポンを利用しない
+														<input type="hidden" name="discountPrice"
+														th:value="0">
 												</label>
 											</div>
 										</div>
 									</td>
-									<td align="center">
-										<div th:each="coupon:${session.usersCoupon}">
-											<div class="row">
-												<div class="col-sm-12">
-													<label class="radio-inline">
-														<input type="hidden" th:value="${coupon.coupon.discountPrice}"
-															name="discountPrice">
-														<input id="all-use-point" type="radio" name="usersCouponId"
-															th:value="${coupon.id}"
-															th:text="${coupon.coupon.discountPrice}+円引きクーポン"><br>
-													</label>
+									<td align="center" id="discount-coupon"
+										th:data-discount-coupon="${session.usersCoupon}">
+										<div class="row col-sm-12">
+											<label class="radio-inline">
+												<div th:each="coupon:${session.usersCoupon}">
+													<input id="use-coupon" class="radio" type="radio"
+														name="usersCouponId" th:value="${coupon.id}"
+														th:text="${coupon.coupon.discountPrice}+円引きクーポン"><br>
+													<input type="hidden" name="discountPrice"
+														th:value="${coupon.coupon.discountPrice}">
 												</div>
-											</div>
+											</label>
 										</div>
 									</td>
 								</tr>
@@ -493,6 +499,8 @@
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script th:src="@{/js/address.js}"></script>
 	<script th:src="@{/js/point.js}"></script>
+	<script th:src="@{/js/coupon.js}"></script>
+
 
 </body>
 
