@@ -52,6 +52,17 @@ public class PointRepository {
 	}
 
 	/**
+	 * ユーザのポイント情報を更新する
+	 * 
+	 * @param point
+	 */
+	public void update(Point point) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(point);
+		String sql = "update points set point = :point where user_id = :userId";
+		template.update(sql, param);
+	}
+
+	/**
 	 * ポイント情報を会員登録時に登録する
 	 * 
 	 * @param point

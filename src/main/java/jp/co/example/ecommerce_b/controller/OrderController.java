@@ -251,30 +251,44 @@ public class OrderController {
 			System.out.println(orderHistory);
 		}
 		
-		// ポイントを使用した場合、users_point_historiesテーブルに格納
+		// ポイントを使用した場合
 		Point point = (Point) session.getAttribute("point");
+		Integer usePoint = Integer.parseInt(orderForm.getUsePoint());// ラジオボタン
+		Integer newGetPoint = (int) (price * 0.01);// 獲得予定ポイント
+		
+		// users_point_historiesテーブルに格納
 		UsersPointHistory usersPointHistory = new UsersPointHistory();
-
-		Integer usePoint = Integer.parseInt(orderForm.getUsePoint());
-
 		usersPointHistory.setOrderId(orderHistorysOrderId);
-		usersPointHistory.setUserId(userId);
-
+		usersPointHistory.setUserId(userId);		
+		
+		System.out.println("usePoint:" + usePoint);
 		// 以下、ポイントの使い方によって条件分岐する
-		// (ポイントを使用しない場合は、このテーブルにインサートされない)
-		if (usePoint == 1) {// 「全てのポイントを使用する」を押したとき
+		// (ポイントを使用しない場合は、users_points_historiesテーブルにはインサートされない)
+		if (usePoint == 0) {
+			Integer newPointTotal = newGetPoint + point.getPoint();
+			point.setPoint(newPointTotal);
+			pointService.update(point);
+		} else if (usePoint == 1) {// 「全てのポイントを使用する」を押したとき
 			if (point.getPoint() > price) {// ポイント残高が合計金額より高い時
-//				Integer resultPoint = point.getPoint() - price;
+				Integer resultPoint = point.getPoint() - price;
+				Integer result = resultPoint + newGetPoint;// 獲得予定ポイントと合算
+				point.setPoint(result);
+				pointService.update(point);
 				usersPointHistory.setUsedPoint(price);
-			} else {
-				usersPointHistory.setUsedPoint(point.getPoint());
+			} else {// ポイントを全て使い切る
+				usersPointHistory.setUsedPoint(point.getPoint());// 先に使用した全てのポイントをhistoryにインサート
+				point.setPoint(newGetPoint);// 獲得予定ポイントが付与される
+				pointService.update(point);// ポイントテーブルのポイントを0ptで更新
 			}
 			pointService.insertPointHistory(usersPointHistory);
 		} else if (usePoint == 2) {// 「一部のポイントを使用する」を押したとき
 			if (orderForm.getUsePartPoint() != null) {
 				Integer usePartPoint = Integer.parseInt(orderForm.getUsePartPoint());
-				usersPointHistory.setUsedPoint(usePartPoint);
+				usersPointHistory.setUsedPoint(usePartPoint);// 使用したポイントを先にインサート
 				pointService.insertPointHistory(usersPointHistory);
+				Integer resultPoint = point.getPoint() - usePartPoint + newGetPoint;
+				point.setPoint(resultPoint);
+				pointService.update(point);
 			}
 		}
 

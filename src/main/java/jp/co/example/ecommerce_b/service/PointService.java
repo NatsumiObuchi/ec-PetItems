@@ -41,4 +41,13 @@ public class PointService {
 		repository.insertPointHistory(usersPointHistory);
 	}
 
+	/**
+	 * ユーザのポイント情報を更新する
+	 * 
+	 * @param point
+	 */
+	public void update(Point point) {
+		repository.update(point);
+	}
+
 }
