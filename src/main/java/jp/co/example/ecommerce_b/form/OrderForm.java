@@ -69,6 +69,12 @@ public class OrderForm {
 //	@Pattern(regexp = "^[0-9]{2}/[0-9]{2}$", message = "有効期限を入力してください")
 	private String dateOfExpiry;
 
+	/** ポイントの使い方 */
+	private String usePoint;
+
+	/** 一部のポイントを使用した場合のポイント */
+	private String usePartPoint;
+
 	public Timestamp getDeliveryTimestamp() {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		String deliveryDateTime = deliveryDate + " " +deliveryTime;
@@ -187,6 +193,22 @@ public class OrderForm {
 		this.dateOfExpiry = dateOfExpiry;
 	}
 
+	public String getUsePoint() {
+		return usePoint;
+	}
+
+	public void setUsePoint(String usePoint) {
+		this.usePoint = usePoint;
+	}
+
+	public String getUsePartPoint() {
+		return usePartPoint;
+	}
+
+	public void setUsePartPoint(String usePartPoint) {
+		this.usePartPoint = usePartPoint;
+	}
+
 	@Override
 	public String toString() {
 		return "OrderForm [orderDate=" + orderDate + ", destinationName=" + destinationName + ", destinationEmail="
@@ -194,7 +216,8 @@ public class OrderForm {
 				+ destinationAddress + ", destinationTell=" + destinationTell + ", deliveryTime=" + deliveryTime
 				+ ", deliveryDate=" + deliveryDate + ", paymentMethod=" + paymentMethod + ", cardBrand=" + cardBrand
 				+ ", cardNumber=" + cardNumber + ", securityCode=" + securityCode + ", cardName=" + cardName
-				+ ", dateOfExpiry=" + dateOfExpiry + "]";
+				+ ", dateOfExpiry=" + dateOfExpiry + ", usePoint=" + usePoint + ", usePartPoint=" + usePartPoint + "]";
 	}
+
 
 }

@@ -32,6 +32,7 @@ import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
 import jp.co.example.ecommerce_b.domain.OrderItem;
+import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.domain.UsersCoupon;
 import jp.co.example.ecommerce_b.domain.UsersCouponHistory;
@@ -121,7 +122,7 @@ public class OrderController {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	@RequestMapping("/orderSent")
-	public String orderSent(@Validated OrderForm orderForm, BindingResult rs, Integer usersCouponId, Integer usePoint,
+	public String orderSent(@Validated OrderForm orderForm, BindingResult rs, Integer usersCouponId,
 			OrderItemForm orderItemForm, Model model,
 //			@RequestParam("stripeToken")
 			String stripeToken,
@@ -191,7 +192,6 @@ public class OrderController {
 		*/
 		Integer price = order.getTotalPrice();
 		order.setTotalPrice(price);
-		System.out.println("クーポン利用後合計金額："+price);
 		
 		//使用したクーポンのdeletedをtrueにアップデートする
 		couponService.usedUsersCoupon(usersCouponId);		
@@ -251,24 +251,32 @@ public class OrderController {
 			System.out.println(orderHistory);
 		}
 		
-		// ラジオボタンによって利用ポイントが変わる
-		switch (usePoint) {
-		case 1:
-
-			break;
-		case 2:
-
-			break;
-		}
-
-		// users_point_historiesにinsert
+		// ポイントを使用した場合、users_point_historiesテーブルに格納
+		Point point = (Point) session.getAttribute("point");
 		UsersPointHistory usersPointHistory = new UsersPointHistory();
+
+		Integer usePoint = Integer.parseInt(orderForm.getUsePoint());
+
 		usersPointHistory.setOrderId(orderHistorysOrderId);
 		usersPointHistory.setUserId(userId);
-//		usersPointHistory.setUsedPoint();
-		System.out.println("usePoint" + usePoint);
-		System.out.println(usersPointHistory);
-		pointService.insertPointHistory(usersPointHistory);
+
+		// 以下、ポイントの使い方によって条件分岐する
+		// (ポイントを使用しない場合は、このテーブルにインサートされない)
+		if (usePoint == 1) {// 「全てのポイントを使用する」を押したとき
+			if (point.getPoint() > price) {// ポイント残高が合計金額より高い時
+//				Integer resultPoint = point.getPoint() - price;
+				usersPointHistory.setUsedPoint(price);
+			} else {
+				usersPointHistory.setUsedPoint(point.getPoint());
+			}
+			pointService.insertPointHistory(usersPointHistory);
+		} else if (usePoint == 2) {// 「一部のポイントを使用する」を押したとき
+			if (orderForm.getUsePartPoint() != null) {
+				Integer usePartPoint = Integer.parseInt(orderForm.getUsePartPoint());
+				usersPointHistory.setUsedPoint(usePartPoint);
+				pointService.insertPointHistory(usersPointHistory);
+			}
+		}
 
 		//users_coupon_historysテーブルに格納
 		UsersCouponHistory userCouponHistory = new UsersCouponHistory();
