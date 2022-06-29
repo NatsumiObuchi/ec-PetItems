@@ -106,22 +106,18 @@
 		<!-- ポイントtable -->
 		<div class="row">
 			<div class="
-		  table-responsive
-		  col-lg-offset-3
-		  col-lg-6
-		  col-md-offset-1
-		  col-md-10
-		  col-sm-10
-		  col-xs-12
-		">
+				  table-responsive
+				  col-lg-offset-1
+				  col-lg-10
+				  col-md-offset-1
+				  col-md-10
+				  col-sm-10
+				  col-xs-12
+				">
 				<div class="well">
+					<h3 class="text-center">ポイント利用</h3>
 					<table class="table table-striped item-list-table">
 						<tbody>
-							<tr>
-								<th colspan="2">
-									<span>ポイント利用</span>
-								</th>
-							</tr>
 							<tr>
 								<td>
 									<div class="text-center">
@@ -174,18 +170,19 @@
 
 
 			<!-- クーポンtable -->
+
 			<div class="row">
 				<div class="
-		  table-responsive
-		  col-lg-offset-3
-		  col-lg-6
-		  col-md-offset-1
-		  col-md-10
-		  col-sm-10
-		  col-xs-12
-		">
+				  table-responsive
+				  col-lg-offset-1
+				  col-lg-10
+				  col-md-offset-1
+				  col-md-10
+				  col-sm-10
+				  col-xs-12
+				">
 					<div class="well">
-						<h4 class="text-center">クーポン利用</h4>
+						<h3 class="text-center">クーポン利用</h3>
 						<table class="table table-striped item-list-table">
 							<tbody>
 								<tr>
@@ -209,8 +206,7 @@
 												<label class="radio-inline">
 													<input id="not-use-coupon" type="radio" name="usersCouponId"
 														th:value="0" checked="checked">クーポンを利用しない
-														<input type="hidden" name="discountPrice"
-														th:value="0">
+													<input type="hidden" name="discountPrice" th:value="0">
 												</label>
 											</div>
 										</div>
@@ -218,15 +214,35 @@
 									<td align="center" id="discount-coupon"
 										th:data-discount-coupon="${session.usersCoupon}">
 										<div class="row col-sm-12">
-											<label class="radio-inline">
-												<div th:each="coupon:${session.usersCoupon}">
-													<input id="use-coupon" class="radio" type="radio"
-														name="usersCouponId" th:value="${coupon.id}"
-														th:text="${coupon.coupon.discountPrice}+円引きクーポン"><br>
-													<input type="hidden" name="discountPrice"
-														th:value="${coupon.coupon.discountPrice}">
+											<div th:each="coupon:${session.usersCoupon}">
+												<!-- 使用条件を満たすクーポンはラジオボタンで表示 -->
+												<label class="radio-inline">
+													<div　th:if="${coupon.coupon.startingAmount}<=${session.totalPrice}">
+														<input id="use-coupon" class="radio" type="radio"
+															name="usersCouponId" th:value="${coupon.id}"
+															th:text="${coupon.coupon.discountPrice}+円引きクーポン">
+														<div th:text="使用条件：+${coupon.coupon.startingAmount}+円以上のお買い上げ">
+															使用条件
+														</div>
+														<div
+															th:text="有効期限：+${#dates.format(coupon.couponExpirationDate,'yyyy年MM月dd日')}">
+															有効期限</div><br>
+														<input type="hidden" name="discountPrice"
+															th:value="${coupon.coupon.discountPrice}">
+													</div>
+												</label>
+												<!-- 使用条件に満たないクーポンは選択できない -->
+												<div th:unless="${coupon.coupon.startingAmount}<=${session.totalPrice}">
+													<div th:text="・+${coupon.coupon.discountPrice}+円引きクーポン"></div>
+													<div th:text="使用条件：+${coupon.coupon.startingAmount}+円以上のお買い上げ"
+														style="color: red;">
+														使用条件
+													</div>
+													<div
+														th:text="有効期限：+${#dates.format(coupon.couponExpirationDate,'yyyy年MM月dd日')}">
+														有効期限</div><br>
 												</div>
-											</label>
+											</div>
 										</div>
 									</td>
 								</tr>
@@ -242,16 +258,16 @@
 			<!-- table -->
 			<div class="row">
 				<div class="
-              table-responsive
-              col-lg-offset-3
-              col-lg-6
-              col-md-offset-1
-              col-md-10
-              col-sm-10
-              col-xs-12
-            ">
+				  table-responsive
+				  col-lg-offset-1
+				  col-lg-10
+				  col-md-offset-1
+				  col-md-10
+				  col-sm-10
+				  col-xs-12
+				">
 					<div class="well">
-						<h4 class="text-center">お支払い方法</h4>
+						<h3 class="text-center">お支払い方法</h3>
 						<table class="table table-striped item-list-table">
 							<tbody>
 								<tr>

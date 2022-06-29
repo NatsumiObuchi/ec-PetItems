@@ -21,20 +21,18 @@ span.price {
   font-size: 35px;
 }
 
-#subtotal-price-answer,#subtotal-price,#total-tax{
+#subtotal-price-answer,#subtotal-price,#total-tax,#use-coupon,#total-tax-answer,#use-point{
 	font-size: 20px;
 }
 
-#total-tax-answer{
-  font-size: 20px;
+#canUseCoupon{
+	background-color: papayawhip;
+	margin-bottom:5px;
 }
 
-#use-point{
-	font-size: 20px;
-}
-
-#use-coupon{
-	font-size: 20px;
+#notCanUseCoupon{
+	background-color: gainsboro;
+		margin-bottom:5px;
 }
 
 #use-part-point{

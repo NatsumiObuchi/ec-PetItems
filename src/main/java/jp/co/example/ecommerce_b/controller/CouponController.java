@@ -16,10 +16,14 @@ public class CouponController {
 	private CouponServise couponServise;
 	
 	@RequestMapping("/getCoupon")
-	public String getCoupon(Integer id,Integer duration,Timestamp finishUseDate) {
+	public String getCoupon(Integer id,Integer duration,Timestamp finishUseDate,Integer couponLink) {
 		couponServise.insertUserCoupon(id,duration,finishUseDate);
 		System.out.println("id="+id);
-		return "top";
+		if(couponLink==0) {
+			return "forward:/item/top";			
+		}else {
+			return "forward:/item/list";			
+		}
 		
 	}
 	

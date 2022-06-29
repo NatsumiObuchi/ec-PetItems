@@ -115,8 +115,8 @@ public class CouponRepository {
 	 * @param usersCouponHistory 
 	 */
 	public void insertUsersCouponHistorys(UsersCouponHistory usersCouponHistory) {
-		String sql = "INSERT INTO users_coupon_historys (user_id, order_historys_id, coupon_id, coupon_get_date, coupon_expiration_date)"
-				+ " VALUES(:userId, :orderHistorysId, :couponId, :couponGetDate, :couponExpirationDate);";
+		String sql = "INSERT INTO users_coupon_histories (user_id, order_id, coupon_id, coupon_get_date, coupon_expiration_date)"
+				+ " VALUES(:userId, :orderId, :couponId, :couponGetDate, :couponExpirationDate);";
 	SqlParameterSource param = new BeanPropertySqlParameterSource(usersCouponHistory);
 	template.update(sql, param);
 	}
