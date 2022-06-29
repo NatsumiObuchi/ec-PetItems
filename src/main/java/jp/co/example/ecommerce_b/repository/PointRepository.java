@@ -2,6 +2,7 @@ package jp.co.example.ecommerce_b.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.User;
+import jp.co.example.ecommerce_b.domain.UsersPointHistory;
 
 @Repository
 public class PointRepository {
@@ -58,6 +60,18 @@ public class PointRepository {
 		String sql = "insert into points(user_id, point) values(:userId, :point)";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", point.getUserId()).addValue("point",
 				point.getPoint());
+		template.update(sql, param);
+	}
+
+	/**
+	 * ユーザーがポイント使用時に登録される
+	 * 
+	 * @param usersPointHistory
+	 */
+	public void insertPointHistory(UsersPointHistory usersPointHistory) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(usersPointHistory);
+		String sql = "insert into users_point_histories(user_id, order_id, used_point)"
+				+ " values(:user_id, :order_id, :used_point)";
 		template.update(sql, param);
 	}
 }
