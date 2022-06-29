@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 
 import jp.co.example.ecommerce_b.domain.Addressee;
+import jp.co.example.ecommerce_b.domain.Coupon;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
@@ -67,6 +69,7 @@ public class OrderController {
 		return new OrderForm();
 	}
 
+	@SuppressWarnings("null")
 	@RequestMapping("")
 	public String index(OrderForm orderForm, Model model) {// 「注文へ進む」を押したときに走る処理
 		Integer totalPrice = (Integer) session.getAttribute("totalPrice");
@@ -106,7 +109,6 @@ public class OrderController {
 		//ユーザーが利用可能なクーポンを表示
 		List<UsersCoupon> usersCoupon = couponService.findAllUsersCoupon(user.getId());
 		session.setAttribute("usersCoupon", usersCoupon);
-		
 		
 		return "order_confirm";
 
