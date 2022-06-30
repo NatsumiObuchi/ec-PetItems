@@ -76,9 +76,15 @@ public class OrderController {
 		return new OrderForm();
 	}
 
+	/**
+	 *  「注文へ進む」を押したときの挙動
+	 * @param orderForm
+	 * @param model
+	 * @return　注文確認画面へ
+	 */
 	@SuppressWarnings("null")
 	@RequestMapping("")
-	public String index(OrderForm orderForm, Model model) {// 「注文へ進む」を押したときに走る処理
+	public String index(OrderForm orderForm, Model model) {
 		Integer totalPrice = (Integer) session.getAttribute("totalPrice");
 		session.setAttribute("totalPrice", totalPrice);
 
@@ -118,12 +124,20 @@ public class OrderController {
 		session.setAttribute("usersCoupon", usersCoupon);
 		
 		return "order_confirm";
-
 	}
 
+	
 	/**
 	 * 注文をする（orderHistoryテーブルに注文履歴を格納）
-	 *
+	 * @param orderForm
+	 * @param rs
+	 * @param usersCouponId　ユーザーが使用するクーポンのid
+	 * @param orderItemForm
+	 * @param model
+	 * @param stripeToken
+	 * @param stripeTokenType
+	 * @param stripeEmail
+	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	@RequestMapping("/orderSent")
@@ -230,7 +244,8 @@ public class OrderController {
 		
 		//　orderテーブルに格納
 		orderservice.update(order);
-		Integer orderHistorysOrderId = order.getId();
+		System.out.println(order);
+		Integer orderId = order.getId();
 		
 		// メール送信用のメソッド
 		sendEmail(orderForm.getDestinationEmail());
@@ -263,7 +278,7 @@ public class OrderController {
 		
 		// users_point_historiesテーブルに格納
 		UsersPointHistory usersPointHistory = new UsersPointHistory();
-		usersPointHistory.setOrderId(orderHistorysOrderId);
+		usersPointHistory.setOrderId(orderId);
 		usersPointHistory.setUserId(userId);		
 		
 		// 以下、ポイントの使い方によって条件分岐する
@@ -300,7 +315,7 @@ public class OrderController {
 		//users_coupon_historysテーブルに格納
 		UsersCouponHistory userCouponHistory = new UsersCouponHistory();
 		userCouponHistory.setUserId(user.getId());
-		userCouponHistory.setOrderHistorysId(orderHistorysOrderId);
+		userCouponHistory.setOrderId(orderId);
 		userCouponHistory.setCouponId(couponId);
 		userCouponHistory.setCouponGetDate(couponGetDate);
 		userCouponHistory.setCouponExpirationDate(couponExpirationDate);
@@ -311,7 +326,7 @@ public class OrderController {
 		if (discountCouponPrice != 0 || discountPointPrice != 0) {
 			totalDiscountPrice = discountCouponPrice + discountPointPrice;
 			DiscountedHistory discountedHistory = new DiscountedHistory();
-			discountedHistory.setOrderId(orderHistorysOrderId);
+			discountedHistory.setOrderId(orderId);
 			discountedHistory.setDiscountPrice(totalDiscountPrice);
 			discountedHistoryService.insert(discountedHistory);
 		}
