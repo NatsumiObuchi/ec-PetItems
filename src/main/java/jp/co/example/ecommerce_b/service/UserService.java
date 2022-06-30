@@ -21,18 +21,13 @@ public class UserService {
 	 * 
 	 * @param user ユーザーを追加
 	 */
-	public void insertUser(UserForm form) {
-		User user = new User();
-		String oldPass = form.getPassword();
+	public User insertUser(User user) {// ハッシュ化もここで行う
+		String oldPass = user.getPassword();
 		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String hashPass = passwordEncoder.encode(oldPass);
-		user.setName(form.getName());
-		user.setEmail(form.getEmail());
-		user.setZipcode(form.getZipcode());
-		user.setAddress(form.getAddress());
-		user.setTelephone(form.getTelephone());
 		user.setPassword(hashPass);
-		userRepository.insertUser(user);
+		User user2 = userRepository.insertUser(user);
+		return user2;
 	}
 
 

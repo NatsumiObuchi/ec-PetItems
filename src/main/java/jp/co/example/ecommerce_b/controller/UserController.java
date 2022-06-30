@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -71,14 +72,13 @@ public class UserController {
 			userService.signinCheck(form, model);
 			return toSignin();
 		} else {// ユーザー登録処理
-			userService.insertUser(form);
+			User user = new User();
+			BeanUtils.copyProperties(form, user);
+			User user2 = userService.insertUser(user);
 
 			// 今登録されたユーザのuserIdに紐付けてpointテーブルに情報を追加
-//			User user2 = userService.findByEmail(form);
-//			Point point = new Point();
-//			point.setUserId(user2.getId());
-//			point.setPoint(0);
-//			pointService.insertPoint(point);
+			pointService.insertPoint(user2);
+
 			return "redirect:/user/toLogin";
 		}
 	}
