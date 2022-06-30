@@ -28,6 +28,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 
 import jp.co.example.ecommerce_b.domain.Addressee;
+import jp.co.example.ecommerce_b.domain.DiscountedHistory;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.OrderHistory;
@@ -41,6 +42,7 @@ import jp.co.example.ecommerce_b.form.OrderForm;
 import jp.co.example.ecommerce_b.form.OrderItemForm;
 import jp.co.example.ecommerce_b.service.AddresseeService;
 import jp.co.example.ecommerce_b.service.CouponServise;
+import jp.co.example.ecommerce_b.service.DiscountedHistoryService;
 import jp.co.example.ecommerce_b.service.OrderService;
 import jp.co.example.ecommerce_b.service.PointService;
 
@@ -62,6 +64,9 @@ public class OrderController {
 	
 	@Autowired
 	private PointService pointService;
+
+	@Autowired
+	private DiscountedHistoryService discountedHistoryService;
 
 	@Autowired
 	private MailSender sender;
@@ -131,7 +136,6 @@ public class OrderController {
 //	        @RequestParam("stripeEmial")
 			String stripeEmail
 			) {
-				System.out.println(orderForm);
 		if(rs.hasErrors()) {
 			return index(orderForm, model);
 		}
@@ -164,22 +168,24 @@ public class OrderController {
 			e.printStackTrace();
 		}
 		
+		// discounted_historiesにインサートするようの合計値引き額の変数を用意
+		Integer totalDiscountPrice = 0;
+
 		//クーポンを使用する場合、orderに詰める合計金額情報を変更（割引）する
 		List<UsersCoupon> usersCouponList = (List<UsersCoupon>) session.getAttribute("usersCoupon");
 		//　↓ この変数はメソッドの最後の方で履歴のテーブルに格納するデータだよ
-		Integer discountPrice = 0;
+		Integer discountCouponPrice = 0;
 		Timestamp couponGetDate = null;
 		Timestamp couponExpirationDate = null;
 		Integer couponId = 0;
 		for(UsersCoupon usersCoupon : usersCouponList) {
 			if(usersCoupon.getId()==usersCouponId) {
-				discountPrice =usersCoupon.getCoupon().getDiscountPrice();
+				discountCouponPrice = usersCoupon.getCoupon().getDiscountPrice();
 				couponGetDate = usersCoupon.getCouponGetDate();
 				couponExpirationDate = usersCoupon.getCouponExpirationDate();
 				couponId = usersCoupon.getCouponId();
 			}
 		}
-		System.out.println("クーポンで割引く金額："+discountPrice);
 		
 	/*	Integer price = 0;
 		if(usersCouponId==0) {
@@ -224,7 +230,6 @@ public class OrderController {
 		
 		//　orderテーブルに格納
 		orderservice.update(order);
-		System.out.println(order);
 		Integer orderHistorysOrderId = order.getId();
 		
 		// メール送信用のメソッド
@@ -248,11 +253,11 @@ public class OrderController {
 			
 			BeanUtils.copyProperties(order, orderHistory);
 			orderHistory= orderservice.insertHistory(orderHistory);
-			System.out.println(orderHistory);
 		}
 		
 		// ポイントを使用した場合
 		Point point = (Point) session.getAttribute("point");
+		Integer discountPointPrice = 0;// ポイントによる値引き額箱の変数に代入する
 		Integer usePoint = Integer.parseInt(orderForm.getUsePoint());// ラジオボタン
 		Integer newGetPoint = (int) (price * 0.01);// 獲得予定ポイント
 		
@@ -261,7 +266,6 @@ public class OrderController {
 		usersPointHistory.setOrderId(orderHistorysOrderId);
 		usersPointHistory.setUserId(userId);		
 		
-		System.out.println("usePoint:" + usePoint);
 		// 以下、ポイントの使い方によって条件分岐する
 		// (ポイントを使用しない場合は、users_points_historiesテーブルにはインサートされない)
 		if (usePoint == 0) {
@@ -270,23 +274,25 @@ public class OrderController {
 			pointService.update(point);
 		} else if (usePoint == 1) {// 「全てのポイントを使用する」を押したとき
 			if (point.getPoint() > price) {// ポイント残高が合計金額より高い時
-				Integer resultPoint = point.getPoint() - price;
+				discountPointPrice = price;
+				Integer resultPoint = point.getPoint() - discountPointPrice;
 				Integer result = resultPoint + newGetPoint;// 獲得予定ポイントと合算
 				point.setPoint(result);
 				pointService.update(point);
-				usersPointHistory.setUsedPoint(price);
+				usersPointHistory.setUsedPoint(discountPointPrice);
 			} else {// ポイントを全て使い切る
-				usersPointHistory.setUsedPoint(point.getPoint());// 先に使用した全てのポイントをhistoryにインサート
+				discountPointPrice = point.getPoint();
+				usersPointHistory.setUsedPoint(discountPointPrice);// 先に使用した全てのポイントをhistoryにインサート
 				point.setPoint(newGetPoint);// 獲得予定ポイントが付与される
-				pointService.update(point);// ポイントテーブルのポイントを0ptで更新
+				pointService.update(point);// ポイントテーブルのポイントを更新
 			}
 			pointService.insertPointHistory(usersPointHistory);
 		} else if (usePoint == 2) {// 「一部のポイントを使用する」を押したとき
 			if (orderForm.getUsePartPoint() != null) {
-				Integer usePartPoint = Integer.parseInt(orderForm.getUsePartPoint());
-				usersPointHistory.setUsedPoint(usePartPoint);// 使用したポイントを先にインサート
+				discountPointPrice = Integer.parseInt(orderForm.getUsePartPoint());
+				usersPointHistory.setUsedPoint(discountPointPrice);// 使用したポイントを先にインサート
 				pointService.insertPointHistory(usersPointHistory);
-				Integer resultPoint = point.getPoint() - usePartPoint + newGetPoint;
+				Integer resultPoint = point.getPoint() - discountPointPrice + newGetPoint;
 				point.setPoint(resultPoint);
 				pointService.update(point);
 			}
@@ -301,7 +307,16 @@ public class OrderController {
 		userCouponHistory.setCouponExpirationDate(couponExpirationDate);
 		couponService.insertUsersCouponHistorys(userCouponHistory);
 		System.out.println(userCouponHistory);
-		
+
+		// ポイント、もしくはクーポンを使用した際にdiscounted_historiesにインサートされる
+		if (discountCouponPrice != null || discountPointPrice != null) {
+			totalDiscountPrice = discountCouponPrice + discountPointPrice;
+			DiscountedHistory discountedHistory = new DiscountedHistory();
+			discountedHistory.setOrderId(orderHistorysOrderId);
+			discountedHistory.setDiscountPrice(totalDiscountPrice);
+			discountedHistoryService.insert(discountedHistory);
+		}
+
 		session.setAttribute("order", null);
 		session.setAttribute("cartList", null);
 		return "order_finished";
