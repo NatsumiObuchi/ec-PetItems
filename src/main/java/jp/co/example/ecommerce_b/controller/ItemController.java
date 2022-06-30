@@ -101,6 +101,7 @@ public class ItemController {
 		// 取得可能なクーポン一覧を表示
 		List<Coupon> couponList = couponServise.findAllCoupon();
 		model.addAttribute("couponList", couponList);
+		model.addAttribute("couponLink", 0);
 
 		// ユーザのポイント情報
 		User user = (User) session.getAttribute("user");
@@ -137,9 +138,11 @@ public class ItemController {
 		// パンくずリスト用
 		model.addAttribute("link", "すべて");
 		model.addAttribute("panGenre", 0);
+		
 		// 取得可能なクーポン一覧を表示
 		List<Coupon> couponList = couponServise.findAllCoupon();
 		model.addAttribute("couponList", couponList);
+		model.addAttribute("couponLink", 1);
 
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		List<String> nameList = itemService.findItemName();

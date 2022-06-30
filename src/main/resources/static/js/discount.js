@@ -10,13 +10,14 @@ $(function() {
 		$('#use-part-point-radio').prop('checked', true);
 	});
 
-
+	
 	//以下、ポイント使用時の挙動
 	var outputUsePoint = $('.use-point');//実際のご利用ポイント
 	var sessionPoint = $('#total-point');//session内のポイント総額
 	var totalPoint = sessionPoint.data('total-point');
 	var sessionPrice = $('#total-price-answer');//session内の合計金額
 	var totalPrice = sessionPrice.data('total-price');
+	// 各メソッドで上書きして使用する変数
 	var partPoint = 0;
 	var notUsePoint = 0;
 

@@ -9,7 +9,7 @@ public class UsersCouponHistory {
 	// ユーザーid
 	private Integer userId;
 	// 注文履歴のid
-	private Integer orderHistorysId;
+	private Integer orderId;
 	// クーポンid
 	private Integer couponId;
 	// クーポン取得日
@@ -33,12 +33,12 @@ public class UsersCouponHistory {
 		this.userId = userId;
 	}
 
-	public Integer getOrderHistorysId() {
-		return orderHistorysId;
+	public Integer getOrderId() {
+		return orderId;
 	}
 
-	public void setOrderHistorysId(Integer orderHistorysId) {
-		this.orderHistorysId = orderHistorysId;
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
 	}
 
 	public Integer getCouponId() {
@@ -67,9 +67,8 @@ public class UsersCouponHistory {
 
 	@Override
 	public String toString() {
-		return "UsersCouponHistory [id=" + id + ", userId=" + userId + ", orderHistorysId=" + orderHistorysId
-				+ ", couponId=" + couponId + ", couponGetDate=" + couponGetDate + ", couponExpirationDate="
-				+ couponExpirationDate + "]";
+		return "UsersCouponHistory [id=" + id + ", userId=" + userId + ", orderId=" + orderId + ", couponId=" + couponId
+				+ ", couponGetDate=" + couponGetDate + ", couponExpirationDate=" + couponExpirationDate + "]";
 	}
 
 }
