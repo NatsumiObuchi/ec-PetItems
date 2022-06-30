@@ -308,7 +308,7 @@ public class OrderController {
 		System.out.println(userCouponHistory);
 
 		// ポイント、もしくはクーポンを使用した際にdiscounted_historiesにインサートされる
-		if (discountCouponPrice != null || discountPointPrice != null) {
+		if (discountCouponPrice != 0 || discountPointPrice != 0) {
 			totalDiscountPrice = discountCouponPrice + discountPointPrice;
 			DiscountedHistory discountedHistory = new DiscountedHistory();
 			discountedHistory.setOrderId(orderHistorysOrderId);
