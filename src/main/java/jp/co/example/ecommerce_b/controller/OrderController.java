@@ -278,24 +278,23 @@ public class OrderController {
 				Integer resultPoint = point.getPoint() - discountPointPrice;
 				Integer result = resultPoint + newGetPoint;// 獲得予定ポイントと合算
 				point.setPoint(result);
-				pointService.update(point);
 				usersPointHistory.setUsedPoint(discountPointPrice);
 			} else {// ポイントを全て使い切る
 				discountPointPrice = point.getPoint();
 				usersPointHistory.setUsedPoint(discountPointPrice);// 先に使用した全てのポイントをhistoryにインサート
 				point.setPoint(newGetPoint);// 獲得予定ポイントが付与される
-				pointService.update(point);// ポイントテーブルのポイントを更新
 			}
+			pointService.update(point);// ポイントテーブルのポイントを更新
 			pointService.insertPointHistory(usersPointHistory);
 		} else if (usePoint == 2) {// 「一部のポイントを使用する」を押したとき
 			if (orderForm.getUsePartPoint() != null) {
 				discountPointPrice = Integer.parseInt(orderForm.getUsePartPoint());
 				usersPointHistory.setUsedPoint(discountPointPrice);// 使用したポイントを先にインサート
-				pointService.insertPointHistory(usersPointHistory);
 				Integer resultPoint = point.getPoint() - discountPointPrice + newGetPoint;
 				point.setPoint(resultPoint);
-				pointService.update(point);
 			}
+			pointService.insertPointHistory(usersPointHistory);
+			pointService.update(point);
 		}
 
 		//users_coupon_historysテーブルに格納
