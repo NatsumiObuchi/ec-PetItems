@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Addressee;
-import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.domain.UsersCoupon;
 import jp.co.example.ecommerce_b.form.UserForm;
@@ -67,31 +65,20 @@ public class UserController {
 	@RequestMapping("/signin")
 	public String signin(@Validated UserForm form, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			signinCheck(form, model);//
 			return toSignin();
 		} else if (userService.duplicationCheckOfEmail(form)
 				|| !(form.getConfirmPassword().equals(form.getPassword()))) {// メールアドレスが重複しているか、確認用パスワードがパスワードと一致しない場合
-			signinCheck(form, model);
+			userService.signinCheck(form, model);
 			return toSignin();
-		} else {
-			User user = new User();
-			String oldPass = form.getPassword();
-			PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			String hashPass = passwordEncoder.encode(oldPass);
-			user.setName(form.getName());
-			user.setEmail(form.getEmail());
-			user.setZipcode(form.getZipcode());
-			user.setAddress(form.getAddress());
-			user.setTelephone(form.getTelephone());
-			user.setPassword(hashPass);
-			userService.insertUser(user);
+		} else {// ユーザー登録処理
+			userService.insertUser(form);
 
 			// 今登録されたユーザのuserIdに紐付けてpointテーブルに情報を追加
-			User user2 = userService.findByEmail(form);
-			Point point = new Point();
-			point.setUserId(user2.getId());
-			point.setPoint(0);
-			pointService.insertPoint(point);
+//			User user2 = userService.findByEmail(form);
+//			Point point = new Point();
+//			point.setUserId(user2.getId());
+//			point.setPoint(0);
+//			pointService.insertPoint(point);
 			return "redirect:/user/toLogin";
 		}
 	}
@@ -173,20 +160,6 @@ public class UserController {
 		return "forward:/item/top";
 	}
 
-	/**
-	 * @param form
-	 * @param model 「メールアドレスが重複している」か「確認用パスワードがパスワードと一致しない」場合にエラーコメントをスコープに格納するメソッド
-	 */
-	private void signinCheck(UserForm form, Model model) {
-		if (userService.duplicationCheckOfEmail(form)) {// メールアドレスが重複している場合
-			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
-		}
-		if (!(form.getConfirmPassword().equals(form.getPassword()))) {// 確認用パスワードがパスワードと一致しない場合
-			if (form.getPassword() != "" && form.getConfirmPassword() != "") {// 「パスワード：未入力/確認パスワード:入力」「パスワード：入力/確認パスワード:未入力」の際は以下のメッセージを表示しない。
-				model.addAttribute("confirmPasswordError", "パスワードと確認用パスワードが不一致です");
-			}
-		}
-	}
 	/**
 	 * @param model(ログインしてない人が注文履歴を見ようとした際のメッセージ)
 	 * @return ログイン画面
