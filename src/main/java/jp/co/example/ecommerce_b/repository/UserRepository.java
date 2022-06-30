@@ -56,7 +56,7 @@ public class UserRepository {
 	 */
 	public User insertUser(User user) {
 //		user = modifyZipcode(user);
-		String sql = "INSERT INTO users (name,email,password,zipcode,address,telephone) VALUES (:name,:email,:password,:zipcode,:address,:telephone)";
+		String sql = "INSERT INTO users (name,email,password,zipcode,address,telephone) VALUES (:name,:email,:password,:zipcode,:address,:telephone) returning id";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", user.getName())
 				.addValue("email", user.getEmail()).addValue("password", user.getPassword())
 				.addValue("zipcode", user.getZipcode()).addValue("address", user.getAddress())
