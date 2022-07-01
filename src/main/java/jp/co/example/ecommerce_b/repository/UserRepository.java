@@ -52,6 +52,22 @@ public class UserRepository {
 	}
 
 	/**
+	 * ユーザーidからユーザ情報を取得する
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public User load(Integer id) {
+		String sql = "select id,name,email,password,zipcode,address,telephone from users where id = :id";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		User user = template.queryForObject(sql, param, USER_ROW_MAPPER);
+		if (user == null) {
+			return null;
+		}
+		return user;
+	}
+
+	/**
 	 * @param user ユーザーを追加する
 	 */
 	public User insertUser(User user) {
@@ -87,7 +103,7 @@ public class UserRepository {
 	 * @param form
 	 * @return 入力されたメールアドレスが既に登録されているか確認する（ユーザ情報変更時）
 	 */
-	public Boolean findByMailAddress2(UserUpdateForm form) {
+	public Boolean findByMailAddress(UserUpdateForm form) {
 		String sql = "SELECT id,name,email,password,zipcode,address,telephone FROM users WHERE email = :email";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("email", form.getEmail());
 		List<User> userList = template.query(sql, param, USER_ROW_MAPPER);

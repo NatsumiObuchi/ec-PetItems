@@ -82,7 +82,7 @@ public class MyPageController {
 	public String permissionDisplay() {
 		Integer count = (Integer) session.getAttribute("count");
 		if (count == null) {
-			count = 1;// 1回目のユーザ認証
+			count = 1;// 1回目はユーザ認証が必要
 			session.setAttribute("count", count);
 			return "change_permission";
 		}
@@ -100,30 +100,16 @@ public class MyPageController {
 	public String permission(UserForm form, Model model) {
 		User user = (User) session.getAttribute("user");
 		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
-		String oldPass = form.getPassword();
-		System.out.println(user);
-		if (bcpe.matches(oldPass, user.getPassword())) {// ハッシュ化されたパスワードと入力されたパスワードがマッチしても...
+		String inputPass = form.getPassword();
+		if (bcpe.matches(inputPass, user.getPassword())) {// 入力されたパスワードとハッシュ化されたパスワードがマッチ（照合）
 			if (!(form.getEmail().equals(user.getEmail()))) {// 今ログインしているユーザのメールアドレスでなければエラー
 				model.addAttribute("AuthenticationFailureMessage", "メールアドレス、またはパスワードが間違っています");
 				return "change_permission";
-			} else {// ログインしてるユーザのメールアドレスであればユーザ認証成功
-				session.setAttribute("user", user);
 			}
 		} else {// そもそもハッシュ化されたパスワードと入力されたパスワードが一致していない
 			model.addAttribute("AuthenticationFailureMessage", "メールアドレス、またはパスワードが間違っています");
 			return "change_permission";
 		}
-
-		return "confirm_userInfo";
-	}
-
-	/**
-	 * 現在のユーザ情報を確認する画面を表示
-	 * 
-	 * @return
-	 */
-	@RequestMapping("/userConfirm")
-	public String confirm() {
 		return "confirm_userInfo";
 	}
 
@@ -136,16 +122,10 @@ public class MyPageController {
 	public String change(UserUpdateForm form, Model model) {
 		User user = (User) session.getAttribute("user");
 		if (form.getName() == null && form.getEmail() == null && form.getZipcode() == null && form.getAddress() == null
-				&& form.getTelephone() == null) {// UserUpdateformに何も情報がないとき
-			form.setName(user.getName());
-			form.setEmail(user.getEmail());
-			form.setZipcode(user.getZipcode());
-			form.setAddress(user.getAddress());
-			form.setTelephone(user.getTelephone());
-			model.addAttribute("form", form);
-		} else {
-			model.addAttribute("form", form);
+				&& form.getTelephone() == null) {// UserUpdateformに何も情報がないとき(最初にこの画面にきた時)
+			BeanUtils.copyProperties(user, form);
 		}
+		model.addAttribute("form", form);
 		return "change_userInfo";
 	}
 
@@ -165,11 +145,11 @@ public class MyPageController {
 	 */
 	@RequestMapping("/changeConfirm")
 	public String changeConfirm(@Validated UserUpdateForm form, BindingResult result, Model model) {
-		signinCheck(form, model);// ここでメールアドレスの重複があるかチェック
+		User user = (User) session.getAttribute("user");
+		signinCheck(form, user.getId(), model);// ここでメールアドレスの重複があるかチェック
 		if (result.hasErrors() || model.getAttribute("emailError") != null) {
 			return change(form, model);
 		} else {
-			User user = (User) session.getAttribute("user");
 			User updateUser = new User();
 			// session内にあるuser(既にログインしているユーザ)のidを手動でコピー
 			// 「ユーザ情報確認画面」からリンク遷移しているので、idをhiddenで送っていないため
@@ -392,13 +372,14 @@ public class MyPageController {
 	}
 
 	/**
-	 * ※UserControllerにも存在するため省略できるならしたい...
+	 * 
+	 * メールアドレスは他者と被っていないかだけを判定する
 	 * 
 	 * @param form
-	 * @param model 「メールアドレスが重複している」かを判定する
+	 * @param model
 	 */
-	private void signinCheck(UserUpdateForm form, Model model) {
-		if (userService.duplicationCheckOfEmail(form)) {// メールアドレスが重複している場合
+	private void signinCheck(UserUpdateForm form, Integer userId, Model model) {
+		if (userService.duplicationCheckOfEmail(form, userId) == true) {
 			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
 		}
 	}
