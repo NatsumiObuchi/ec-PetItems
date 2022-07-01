@@ -36,12 +36,29 @@ public class AddresseeService {
 	}
 
 	/**
-	 * お届け先情報を追加する
+	 * お届け先情報を新規追加する処理
 	 * 
 	 * @param addresee
 	 */
-	public Addressee addresseeRegister(Addressee addressee) {
-		return repository.addresseeRegister(addressee);
+	public void addresseeRegister(Addressee newAddressee) {
+		Addressee lastAddressee = lastAddresseeId(newAddressee.getUserId());
+		if (lastAddressee == null) {// 初めてお届け先情報を登録する人はaddresseeIdに1をセット
+			newAddressee.setAddresseeId(1);
+		} else {// それ以外の人（既に登録済のお届け先が存在する）
+			Integer lastAddresseeId = lastAddressee.getAddresseeId();
+			newAddressee.setAddresseeId(lastAddresseeId + 1);// 新しいaddresseeIdをセット
+		}
+		repository.addresseeRegister(newAddressee);
+	}
+
+	/**
+	 * 最後に追加したお届け先情報を取得
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public Addressee lastAddresseeId(Integer userId) {
+		return repository.lastAddreseeId(userId);
 	}
 
 	/**
@@ -52,16 +69,6 @@ public class AddresseeService {
 	 */
 	public void deleteAddressee(Integer userId, Integer addresseeId) {
 		repository.deleteAddressee(userId, addresseeId);
-	}
-
-	/**
-	 * 最後に追加したお届け先情報を取得する
-	 * 
-	 * @param userId
-	 * @return
-	 */
-	public Addressee lastAddlesseeId(Integer userId) {
-		return repository.lastAddreseeId(userId);
 	}
 
 	/**

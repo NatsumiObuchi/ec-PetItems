@@ -276,11 +276,13 @@ public class MyPageController {
 		return "addressee_register";
 	}
 
+
 	/**
+	 * 
 	 * ユーザのお届け先を新規追加する
 	 * 
-	 * @param id          userId
-	 * @param addresseeId
+	 * @param insertAddresseeForm お届け先登録情報
+	 * @param result
 	 * @param model
 	 * @return
 	 */
@@ -293,17 +295,8 @@ public class MyPageController {
 		// 値のコピー
 		Addressee newAddressee = new Addressee();
 		BeanUtils.copyProperties(insertAddresseeForm, newAddressee);
-
-		// ログインユーザが最後に登録したaddresseeIdを取得
-		Addressee addressee = addresseeService.lastAddlesseeId(insertAddresseeForm.getUserId());
-		if (addressee == null) {// 初めてお届け先情報を登録する人はaddresseeIdに1をセット
-			newAddressee.setAddresseeId(1);
-		} else {// それ以外の人（既に登録済のお届け先が存在する）
-			Integer lastAddresseeId = addressee.getAddresseeId();
-			newAddressee.setAddresseeId(lastAddresseeId + 1);// 新しいaddresseeIdを手動でセット
-		}
-
 		addresseeService.addresseeRegister(newAddressee);
+		
 		return addressee(insertAddresseeForm.getUserId(), model);
 	}
 
