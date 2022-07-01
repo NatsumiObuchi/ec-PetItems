@@ -93,7 +93,14 @@ public class CouponServise {
 	 * @param id ユーザーが保持しているクーポンの一意のid
 	 */
 	public void usedUsersCoupon(Integer id) {
-		couponRepository.usedUsersCoupon(id);
+		List<UsersCoupon> usersCouponList = couponRepository.findAllUsersCoupon(id);
+		for (UsersCoupon usersCoupon : usersCouponList) {
+			Timestamp couponExpirationDate = usersCoupon.getCouponExpirationDate();
+			Timestamp nowDate = new Timestamp(System.currentTimeMillis());
+			if (nowDate.after(couponExpirationDate)) {
+				couponRepository.usedUsersCoupon(usersCoupon.getId());
+			}
+		}
 	}
 	
 	

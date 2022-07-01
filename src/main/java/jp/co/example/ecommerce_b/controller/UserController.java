@@ -1,7 +1,6 @@
 package jp.co.example.ecommerce_b.controller;
 
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Addressee;
 import jp.co.example.ecommerce_b.domain.User;
-import jp.co.example.ecommerce_b.domain.UsersCoupon;
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.service.AddresseeService;
 import jp.co.example.ecommerce_b.service.CouponServise;
@@ -118,15 +116,8 @@ public class UserController {
 			User user2 = userService.loginCheck(form);
 			session.setAttribute("user", user2);
 
-			// ユーザがログインしたタイミングで使用できないクーポン(有効期限切れ)のdeletedをfalseに変える
-			List<UsersCoupon> usersCouponList = couponServise.findAllUsersCoupon(user.getId());
-			for(UsersCoupon usersCoupon : usersCouponList) {
-				Timestamp couponExpirationDate = usersCoupon.getCouponExpirationDate();
-				Timestamp nowDate = new Timestamp(System.currentTimeMillis());
-				if(nowDate.after(couponExpirationDate)) {
-					couponServise.usedUsersCoupon(usersCoupon.getId());
-				}
-			}
+			// ユーザがログインしたタイミングで使用できないクーポン(有効期限切れ)のdeletedをtrueに変える
+			couponServise.usedUsersCoupon(user2.getId());
 			
 			// ユーザが登録済のお届け先一覧をここでログインしたタイミングでsessionにセットする
 			List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(user.getId());
