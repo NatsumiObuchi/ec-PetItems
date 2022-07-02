@@ -152,7 +152,6 @@ public class MyPageController {
 		} else {
 			User updateUser = new User();
 			// session内にあるuser(既にログインしているユーザ)のidを手動でコピー
-			// 「ユーザ情報確認画面」からリンク遷移しているので、idをhiddenで送っていないため
 			updateUser.setId(user.getId());
 			BeanUtils.copyProperties(form, updateUser);
 			session.setAttribute("updateUser", updateUser);
@@ -197,9 +196,9 @@ public class MyPageController {
 			model.addAttribute("duplicatePasswordError", "以前のパスワードと同じ場合、変更できません");
 			return changePassDisplay();
 		} else {
-			String oldPass = form.getPassword();
+			String inputPass = form.getPassword();
 			PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			String hashPass = passwordEncoder.encode(oldPass);// パスワードのハッシュ化
+			String hashPass = passwordEncoder.encode(inputPass);// パスワードのハッシュ化
 			user.setPassword(hashPass);
 			userService.updatePassword(user);
 			return "redirect:/myPage/finish";
