@@ -85,13 +85,40 @@ public class AddresseeService {
 	}
 
 	/**
-	 * お届け先情報として設定する(setting_addresseeをtrueにする)
+	 * お届け先情報として設定する(setting_addresseeをtrueにする) & 設定していないものはfalseにする
 	 * 
 	 * @param userId
 	 * @param addreseeId
 	 */
 	public void setting(Integer userId, Integer addresseeId, boolean setting) {
-		repository.settingAddrssee(userId, addresseeId, setting);
+		List<Addressee> addresseeList = findAddresseeByUserId(userId);
+		switch (addresseeId) {// お届け先として設定したいaddresseeIdと、それ以外のsetting_addresseeはfalse
+		case 1:
+			repository.settingAddrssee(userId, addresseeId, setting);
+			if (addresseeList.size() >= 2) {
+				if (addresseeList.get(1) != null) {// addresseeIdの2番目があれば
+					repository.settingAddrssee(userId, 2, false);
+				}
+				if (addresseeList.get(2) != null) {// addresseeIdの3番目があれば
+					repository.settingAddrssee(userId, 3, false);
+				}
+			}
+			break;
+		case 2:
+			repository.settingAddrssee(userId, addresseeId, setting);
+			repository.settingAddrssee(userId, 1, false);
+			if (addresseeList.size() >= 3) {
+				if (addresseeList.get(2) != null) {// addresseeIdの3番目があれば
+					repository.settingAddrssee(userId, 3, false);
+				}
+			}
+			break;
+		case 3:
+			repository.settingAddrssee(userId, addresseeId, setting);
+			repository.settingAddrssee(userId, 1, false);
+			repository.settingAddrssee(userId, 2, false);
+			break;
+		}
 	}
 
 	/**
