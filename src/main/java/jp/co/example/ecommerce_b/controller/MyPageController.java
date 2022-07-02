@@ -311,17 +311,6 @@ public class MyPageController {
 	@RequestMapping("/addresseeDelete")
 	public String addresseeDelete(Integer id, Integer addresseeId, Model model) {
 		addresseeService.deleteAddressee(id, addresseeId);
-		List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(id);// 削除処理された後のリストを取得
-		if (addresseeList.get(0) != null) {// addresseeIdの2(Listの先頭)が存在する場合
-			Addressee addressee2 = addresseeList.get(0);
-			addressee2.setAddresseeId(1);
-			addresseeService.updateAddressee(addressee2);
-			if (addresseeList.get(1) != null) {// addresseeIdの3(Listの2番目)が存在する場合
-				Addressee addressee3 = addresseeList.get(1);
-				addressee3.setAddresseeId(2);
-				addresseeService.updateAddressee(addressee3);
-			}
-		}
 		return addressee(id, model);
 	}
 

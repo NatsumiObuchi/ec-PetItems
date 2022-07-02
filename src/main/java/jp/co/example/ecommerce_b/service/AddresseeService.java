@@ -62,13 +62,26 @@ public class AddresseeService {
 	}
 
 	/**
-	 * お届け先情報を削除する
+	 * お届け先情報を削除し、既に登録済のお届け先情報も一部更新する処理
 	 * 
 	 * @param userId
 	 * @param addreseeId
 	 */
 	public void deleteAddressee(Integer userId, Integer addresseeId) {
 		repository.deleteAddressee(userId, addresseeId);
+		List<Addressee> addresseeList = findAddresseeByUserId(userId);// 削除処理された後のリストを取得
+		if (addresseeList.size() == 1) {
+			Addressee addressee = addresseeList.get(0);
+			addressee.setAddresseeId(1);
+			updateAddressee(addressee);
+		} else if (addresseeList.size() == 2) {
+			Addressee addressee2 = addresseeList.get(0);
+			Addressee addressee3 = addresseeList.get(1);
+			addressee2.setAddresseeId(1);
+			updateAddressee(addressee2);
+			addressee3.setAddresseeId(2);
+			updateAddressee(addressee3);
+		}
 	}
 
 	/**
