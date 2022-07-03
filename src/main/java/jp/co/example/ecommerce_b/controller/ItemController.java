@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Coupon;
+import jp.co.example.ecommerce_b.domain.Favorite;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.Point;
@@ -144,6 +145,13 @@ public class ItemController {
 		model.addAttribute("couponList", couponList);
 		model.addAttribute("couponLink", 1);
 
+		// ユーザのポイント情報
+		User user = (User) session.getAttribute("user");
+		if (user != null) {
+			Point point = pointService.load(user.getId());
+			session.setAttribute("point", point);
+		}
+
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		List<String> nameList = itemService.findItemName();
 		session.setAttribute("nameList", nameList);
@@ -161,14 +169,23 @@ public class ItemController {
 	 */
 	@RequestMapping("/itemDetail")
 	public String itemDetail(Integer id, Integer genre, Model model) {
-		System.out.println("id:" + id + "  genre" + genre);
 		// 検索するitem_idでレビュー集め
 		List<Review> reviews = itemService.findReview(id);
 		model.addAttribute("reviews", reviews);
-		System.out.println(reviews);
 
 		// パンくずリストのリンク処理
 		panList(genre, model);
+
+		// お気に入りリストの情報(お気に入り済か、そうでないか)
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			model.addAttribute("nonFavorite");
+		} else {
+			Favorite favorite = favoriteService.findByUserIdItemId(user.getId(), id);
+			if (favorite != null) {
+				model.addAttribute("alreadyFavorite");
+			}
+		}
 
 		Item item = itemService.load(id);
 		model.addAttribute("item", item);

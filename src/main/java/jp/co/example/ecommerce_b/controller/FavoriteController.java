@@ -75,30 +75,25 @@ public class FavoriteController {
 			Date now = new Date();
 			newFavorite.setFavoriteDate(now);
 			session.setAttribute("newFavorite", newFavorite);
-			System.out.println(newFavorite);
 			return favoriteListShow(model);
 		}
-		Integer userId = user.getId();
-		Favorite favorite = new Favorite();
-		// formのuserIdとitemIdからお気に入り登録情報を取得する
-		favorite = favoriteService.findByUserIdItemId(userId, itemId);
-
-		System.out.println(1111111);
-		System.out.println(favorite);
-		if (favorite == null) {
-			Favorite newFavorite = new Favorite();
-			newFavorite.setItemId(itemId);
-			newFavorite.setUserId(user.getId());
-			Date now = new Date();
-			newFavorite.setFavoriteDate(now);
-			favoriteService.insertFavorite(newFavorite);
-			System.out.println(2222222);
-			String message = "お気に入り登録が完了しました！";
-			model.addAttribute("message", message);
-		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
-			String message = "既にお気に入り登録済です";
-			model.addAttribute("message", message);
-		}
+//		Integer userId = user.getId();
+//		Favorite favorite = favoriteService.findByUserIdItemId(userId, itemId);
+//
+//		if (favorite == null) {
+//			Favorite newFavorite = new Favorite();
+//			newFavorite.setItemId(itemId);
+//			newFavorite.setUserId(user.getId());
+//			Date now = new Date();
+//			newFavorite.setFavoriteDate(now);
+//			favoriteService.insertFavorite(newFavorite);
+//			System.out.println(2222222);
+//			String message = "お気に入り登録が完了しました！";
+//			model.addAttribute("message", message);
+//		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
+//			String message = "既にお気に入り登録済です";
+//			model.addAttribute("message", message);
+//		}
 		return "redirect:/favorite/favoriteList";
 	}
 

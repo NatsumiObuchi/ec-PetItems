@@ -57,7 +57,10 @@ public class FavoriteRepository {
 	 * @return
 	 */
 	public Favorite findByUserIdItemId(Integer userId, Integer itemId) {
-		String sql = "select id, user_id, item_id, favorite_date from favorites where user_id = :userId and item_id = :itemId";
+		String sql = "select f.id, f.user_id, f.item_id, f.favorite_date,"
+				+ "i.id, i.name, i.description, i.price, i.image_path, i.image_path2, i.deleted"
+				+ " from favorites as f" + " inner join items as i" + " on f.item_id = i.id"
+				+ " where f.user_id = :userId and i.id = :itemId order by favorite_date desc;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId).addValue("itemId", itemId);
 		List<Favorite> favoriteList = template.query(sql, param, FAVORITE_ROW_MAPPER);
 		if (favoriteList.size() == 0) {
