@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.Favorite;
+import jp.co.example.ecommerce_b.domain.Item;
 
 @Repository
 public class FavoriteRepository {
@@ -24,15 +25,15 @@ public class FavoriteRepository {
 		favorite.setItemId(rs.getInt("item_id"));
 		favorite.setUserId(rs.getInt("user_id"));
 		favorite.setFavoriteDate(rs.getDate("favorite_date"));
-//		Item item = new Item();
-//		item.setId(rs.getInt("id"));
-//		item.setName(rs.getString("name"));
-//		item.setDescription(rs.getString("description"));
-//		item.setPrice(rs.getInt("price"));
-//		item.setImagePath(rs.getString("image_path"));
-//		item.setImagePath(rs.getString("image_path2"));
-//		item.setDeleted(rs.getBoolean("deleted"));
-//		favorite.setItem(item);
+		Item item = new Item();
+		item.setId(rs.getInt("id"));
+		item.setName(rs.getString("name"));
+		item.setDescription(rs.getString("description"));
+		item.setPrice(rs.getInt("price"));
+		item.setImagePath(rs.getString("image_path"));
+		item.setImagePath2(rs.getString("image_path2"));
+		item.setDeleted(rs.getBoolean("deleted"));
+		favorite.setItem(item);
 		return favorite;
 	};
 
@@ -72,9 +73,13 @@ public class FavoriteRepository {
 	 * @return
 	 */
 	public List<Favorite> favoriteAll(Integer userId) {
-		String sql = "select id, user_id, item_id, favorite_date from favorites where user_id = :userId order by favorite_date desc";
+		String sql = "select f.id, f.user_id, f.item_id, f.favorite_date,"
+				+ "i.id, i.name, i.description, i.price, i.image_path, i.image_path2, i.deleted"
+				+ " from favorites as f" + " inner join items as i" + " on f.item_id = i.id"
+				+ " where user_id = :userId order by favorite_date desc;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
 		List<Favorite> favoriteList = template.query(sql, param, FAVORITE_ROW_MAPPER);
+		System.out.println(favoriteList.get(0).getItem());
 		if (favoriteList.size() == 0) {
 			return null;
 		}

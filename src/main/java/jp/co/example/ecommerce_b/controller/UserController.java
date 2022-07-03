@@ -119,7 +119,7 @@ public class UserController {
 			// ユーザがログインしたタイミングで使用できないクーポン(有効期限切れ)のdeletedをtrueに変える
 			couponServise.usedUsersCoupon(user2.getId());
 			
-			// ユーザが登録済のお届け先一覧をここでログインしたタイミングでsessionにセットする
+			// ユーザが登録済のお届け先一覧をログインしたタイミングでsessionにセットする
 			List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(user.getId());
 			session.setAttribute("addresseeList", addresseeList);
 

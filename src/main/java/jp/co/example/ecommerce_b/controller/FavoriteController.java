@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Favorite;
-import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.FavoriteListRegisterForm;
 import jp.co.example.ecommerce_b.service.FavoriteService;
@@ -44,7 +43,7 @@ public class FavoriteController {
 	@RequestMapping("/favoriteList")
 	public String favoriteListShow(Model model) {
 		User user = (User) session.getAttribute("user");
-		if (user == null) {
+		if (user == null) {// ログインせずにお気に入りリストに遷移した場合、ログイン画面へ遷移する
 			session.setAttribute("transitionSourcePage", "favoriteList");
 			return "forward:/user/toLogin3";
 		}
@@ -57,14 +56,7 @@ public class FavoriteController {
 			session.setAttribute("favoriteList", null);
 			return "favorite_list";
 		}
-
 		session.setAttribute("favoriteList", favoriteList);
-		for (Favorite favorite : favoriteList) {
-			Integer itemId = favorite.getItemId();
-			System.out.println("itemId:" + itemId);
-			Item item = itemService.load(itemId);
-			favorite.setItem(item);
-		}
 		return "favorite_list";
 	}
 
