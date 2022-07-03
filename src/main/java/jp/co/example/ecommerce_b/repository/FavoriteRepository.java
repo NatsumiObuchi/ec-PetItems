@@ -26,7 +26,7 @@ public class FavoriteRepository {
 		favorite.setUserId(rs.getInt("user_id"));
 		favorite.setFavoriteDate(rs.getDate("favorite_date"));
 		Item item = new Item();
-		item.setId(rs.getInt("id"));
+		item.setId(rs.getInt("item_id"));
 		item.setName(rs.getString("name"));
 		item.setDescription(rs.getString("description"));
 		item.setPrice(rs.getInt("price"));
@@ -44,9 +44,7 @@ public class FavoriteRepository {
 	 */
 	public void insertFavorite(Favorite favorite) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(favorite);
-
 		String sql = "insert into favorites(user_id,item_id,favorite_date)" + " values(:userId,:itemId,:favoriteDate);";
-
 		template.update(sql, param);
 	}
 
@@ -58,7 +56,7 @@ public class FavoriteRepository {
 	 */
 	public Favorite findByUserIdItemId(Integer userId, Integer itemId) {
 		String sql = "select f.id, f.user_id, f.item_id, f.favorite_date,"
-				+ "i.id, i.name, i.description, i.price, i.image_path, i.image_path2, i.deleted"
+				+ "i.id as item_id, i.name, i.description, i.price, i.image_path, i.image_path2, i.deleted"
 				+ " from favorites as f" + " inner join items as i" + " on f.item_id = i.id"
 				+ " where f.user_id = :userId and i.id = :itemId order by favorite_date desc;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId).addValue("itemId", itemId);
@@ -77,12 +75,11 @@ public class FavoriteRepository {
 	 */
 	public List<Favorite> favoriteAll(Integer userId) {
 		String sql = "select f.id, f.user_id, f.item_id, f.favorite_date,"
-				+ "i.id, i.name, i.description, i.price, i.image_path, i.image_path2, i.deleted"
+				+ "i.id as item_id, i.name, i.description, i.price, i.image_path, i.image_path2, i.deleted"
 				+ " from favorites as f" + " inner join items as i" + " on f.item_id = i.id"
 				+ " where user_id = :userId order by favorite_date desc;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
 		List<Favorite> favoriteList = template.query(sql, param, FAVORITE_ROW_MAPPER);
-		System.out.println(favoriteList.get(0).getItem());
 		if (favoriteList.size() == 0) {
 			return null;
 		}
@@ -94,9 +91,9 @@ public class FavoriteRepository {
 	 * 
 	 * @param itemId
 	 */
-	public void deleteFavorite(Integer itemId) {
-		String sql = "delete from favorites where item_id = :itemId";
-		SqlParameterSource param = new MapSqlParameterSource().addValue("itemId", itemId);
+	public void deleteFavorite(Integer userId, Integer itemId) {
+		String sql = "delete from favorites where user_id = :userId and item_id = :itemId";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId).addValue("itemId", itemId);
 		template.update(sql, param);
 	}
 }

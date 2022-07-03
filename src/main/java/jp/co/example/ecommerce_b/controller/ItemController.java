@@ -178,12 +178,13 @@ public class ItemController {
 
 		// お気に入りリストの情報(お気に入り済か、そうでないか)
 		User user = (User) session.getAttribute("user");
-		if (user == null) {
+		if (user == null) {// ユーザーでログインしていない
 			model.addAttribute("nonFavorite");
-		} else {
+		} else {// ユーザでログイン済
 			Favorite favorite = favoriteService.findByUserIdItemId(user.getId(), id);
-			if (favorite != null) {
-				model.addAttribute("alreadyFavorite");
+			System.out.println("favorite = " + favorite);
+			if (favorite == null) {// お気に入り登録していない
+				model.addAttribute("nonFavorite");
 			}
 		}
 

@@ -77,23 +77,23 @@ public class FavoriteController {
 			session.setAttribute("newFavorite", newFavorite);
 			return favoriteListShow(model);
 		}
-//		Integer userId = user.getId();
-//		Favorite favorite = favoriteService.findByUserIdItemId(userId, itemId);
-//
-//		if (favorite == null) {
-//			Favorite newFavorite = new Favorite();
-//			newFavorite.setItemId(itemId);
-//			newFavorite.setUserId(user.getId());
-//			Date now = new Date();
-//			newFavorite.setFavoriteDate(now);
-//			favoriteService.insertFavorite(newFavorite);
-//			System.out.println(2222222);
-//			String message = "お気に入り登録が完了しました！";
-//			model.addAttribute("message", message);
-//		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
-//			String message = "既にお気に入り登録済です";
-//			model.addAttribute("message", message);
-//		}
+		Integer userId = user.getId();
+		Favorite favorite = favoriteService.findByUserIdItemId(userId, itemId);
+
+		if (favorite == null) {
+			Favorite newFavorite = new Favorite();
+			newFavorite.setItemId(itemId);
+			newFavorite.setUserId(user.getId());
+			Date now = new Date();
+			newFavorite.setFavoriteDate(now);
+			favoriteService.insertFavorite(newFavorite);
+			System.out.println(2222222);
+			String message = "お気に入り登録が完了しました！";
+			model.addAttribute("message", message);
+		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
+			String message = "既にお気に入り登録済です";
+			model.addAttribute("message", message);
+		}
 		return "redirect:/favorite/favoriteList";
 	}
 
@@ -130,11 +130,10 @@ public class FavoriteController {
 	 * @param userId
 	 */
 	@RequestMapping("/deleteFavorite")
-	public String deleteFavorite(String itemId, Model model) {
-		Integer id = Integer.parseInt(itemId);
-		System.out.println(id);
-		favoriteService.delete(id);
-
+	public String deleteFavorite(Integer userId, Integer itemId, Model model) {
+		System.out.println("userId = " + userId);
+		System.out.println("itemId = " + itemId);
+		favoriteService.delete(userId, itemId);
 		return favoriteListShow(model);
 	}
 }

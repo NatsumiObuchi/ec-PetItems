@@ -329,7 +329,6 @@ public class ItemRepository {
 	}
 
 	public void insertReview(Review review) {
-		System.out.println(review);
 		String sql = "insert into reviews (user_id, item_id, stars, content) VALUES (:userId, :itemId, :stars, :content)";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", review.getUser_id())
 				.addValue("itemId", review.getItem_id()).addValue("stars", review.getStars())
@@ -343,7 +342,6 @@ public class ItemRepository {
 		SqlParameterSource param = new MapSqlParameterSource().addValue("itemId", itemId);
 		List<Review> reviews = new ArrayList<>();
 		reviews = template.query(sql, param, REVIEW_ROW_MAPPER);
-		System.out.println(reviews);
 		if (reviews.size() == 0) {
 			return null;
 		} else {
