@@ -15,7 +15,6 @@ import jp.co.example.ecommerce_b.domain.Favorite;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.FavoriteListRegisterForm;
 import jp.co.example.ecommerce_b.service.FavoriteService;
-import jp.co.example.ecommerce_b.service.ItemService;
 
 @Controller
 @RequestMapping("/favorite")
@@ -26,9 +25,6 @@ public class FavoriteController {
 
 	@Autowired
 	private FavoriteService favoriteService;
-
-	@Autowired
-	private ItemService itemService;
 
 	@ModelAttribute
 	private FavoriteListRegisterForm favoriteListRegisterForm() {

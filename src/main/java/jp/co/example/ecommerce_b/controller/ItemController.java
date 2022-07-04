@@ -145,13 +145,6 @@ public class ItemController {
 		model.addAttribute("couponList", couponList);
 		model.addAttribute("couponLink", 1);
 
-		// ユーザのポイント情報
-		User user = (User) session.getAttribute("user");
-		if (user != null) {
-			Point point = pointService.load(user.getId());
-			session.setAttribute("point", point);
-		}
-
 		// オートコンプリート用。名前の全件検索をsessionに格納。
 		List<String> nameList = itemService.findItemName();
 		session.setAttribute("nameList", nameList);

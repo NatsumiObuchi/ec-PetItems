@@ -105,9 +105,7 @@
 					<div class="row">
 						<div class="col-xs-offset-2 col-xs-10">
 							<div class="form-group">
-								<div th:if="${message}" th:text="${message}" th:object="${favoriteListRegisterForm}"
-									style="color: red"></div>
-								<form th:action="@{/favorite/insert}" method="post">
+								<form th:action="@{/favorite/insert}" method="post" th:object="${favoriteListRegisterForm}">
 									<input type="hidden" th:value="${item.id}" name="itemId">
 									<div th:if="${favorite == null}">
 										<button id="favorite_btn"><i class="fa-regular fa-star"></i>お気に入り登録</button>
@@ -115,8 +113,6 @@
 									<div th:unless="${favorite == null}">
 										<button id="favorite_btn" disabled><i class="fa-solid fa-star"></i>お気に入り登録済</button>
 									</div>
-									<span th:if="${message1}" th:text="${message1}"></span>
-									<!-- <p id="msg">お気に入りに登録しました！</p> -->
 								</form>
 							</div>
 						</div>

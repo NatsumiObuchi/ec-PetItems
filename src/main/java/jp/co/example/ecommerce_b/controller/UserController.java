@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Addressee;
+import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.service.AddresseeService;
@@ -119,6 +120,10 @@ public class UserController {
 			// ユーザがログインしたタイミングで使用できないクーポン(有効期限切れ)のdeletedをtrueに変える
 			couponServise.usedUsersCoupon(user2.getId());
 			
+			// ユーザのポイント情報をログインしたタイミングで取得
+			Point point = pointService.load(user.getId());
+			session.setAttribute("point", point);
+
 			// ユーザが登録済のお届け先一覧をログインしたタイミングでsessionにセットする
 			List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(user.getId());
 			session.setAttribute("addresseeList", addresseeList);
