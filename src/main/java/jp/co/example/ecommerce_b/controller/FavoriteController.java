@@ -69,30 +69,18 @@ public class FavoriteController {
 	public String favorite(FavoriteListRegisterForm favoriteListRegisterForm, Model model) {
 		User user = (User) session.getAttribute("user");
 		Integer itemId = Integer.parseInt(favoriteListRegisterForm.getItemId());
-		if (user == null) {// ユーザの情報はないのでuserIdはセットできない
-			Favorite newFavorite = new Favorite();
-			newFavorite.setItemId(itemId);
-			Date now = new Date();
-			newFavorite.setFavoriteDate(now);
+		Favorite newFavorite = new Favorite();
+		newFavorite.setItemId(itemId);
+		Date now = new Date();
+		newFavorite.setFavoriteDate(now);
+		if (user == null) {// ユーザの情報はないのでここでuserIdはセットできない
 			session.setAttribute("newFavorite", newFavorite);
-			return favoriteListShow(model);
-		}
-		Integer userId = user.getId();
-		Favorite favorite = favoriteService.findByUserIdItemId(userId, itemId);
-
-		if (favorite == null) {
-			Favorite newFavorite = new Favorite();
-			newFavorite.setItemId(itemId);
+			return favoriteListShow(model);// ログイン画面まで遷移してもらう
+		} else {
 			newFavorite.setUserId(user.getId());
-			Date now = new Date();
-			newFavorite.setFavoriteDate(now);
 			favoriteService.insertFavorite(newFavorite);
-			String message = "お気に入り登録が完了しました！";
-			model.addAttribute("message", message);
-		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
-			String message = "既にお気に入り登録済です";
-			model.addAttribute("message", message);
 		}
+
 		return "redirect:/favorite/favoriteList";
 	}
 

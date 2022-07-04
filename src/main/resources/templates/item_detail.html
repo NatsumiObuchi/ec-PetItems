@@ -113,7 +113,7 @@
 										<button id="favorite_btn"><i class="fa-regular fa-star"></i>お気に入り登録</button>
 									</div>
 									<div th:unless="${favorite == null}">
-										<button id="favorite_btn"><i class="fa-solid fa-star"></i>お気に入り登録済</button>
+										<button id="favorite_btn" disabled><i class="fa-solid fa-star"></i>お気に入り登録済</button>
 									</div>
 									<span th:if="${message1}" th:text="${message1}"></span>
 									<!-- <p id="msg">お気に入りに登録しました！</p> -->
