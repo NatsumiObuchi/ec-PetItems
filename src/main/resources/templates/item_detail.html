@@ -109,10 +109,10 @@
 									style="color: red"></div>
 								<form th:action="@{/favorite/insert}" method="post">
 									<input type="hidden" th:value="${item.id}" name="itemId">
-									<div th:if="${nonFavorite}">
+									<div th:if="${favorite == null}">
 										<button id="favorite_btn"><i class="fa-regular fa-star"></i>お気に入り登録</button>
 									</div>
-									<div th:unless="${nonFavorite}">
+									<div th:unless="${favorite == null}">
 										<button id="favorite_btn"><i class="fa-solid fa-star"></i>お気に入り登録済</button>
 									</div>
 									<span th:if="${message1}" th:text="${message1}"></span>

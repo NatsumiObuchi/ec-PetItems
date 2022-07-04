@@ -179,12 +179,13 @@ public class ItemController {
 		// お気に入りリストの情報(お気に入り済か、そうでないか)
 		User user = (User) session.getAttribute("user");
 		if (user == null) {// ユーザーでログインしていない
-			model.addAttribute("nonFavorite");
+			model.addAttribute("nonUser", null);// 特にこの記述は必要ないがこの分岐をしないとお気に入りボタンがうまく表示されない
 		} else {// ユーザでログイン済
 			Favorite favorite = favoriteService.findByUserIdItemId(user.getId(), id);
-			System.out.println("favorite = " + favorite);
 			if (favorite == null) {// お気に入り登録していない
-				model.addAttribute("nonFavorite");
+				model.addAttribute("favorite", null);
+			} else {
+				model.addAttribute("favorite", favorite);
 			}
 		}
 

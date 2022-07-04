@@ -87,7 +87,6 @@ public class FavoriteController {
 			Date now = new Date();
 			newFavorite.setFavoriteDate(now);
 			favoriteService.insertFavorite(newFavorite);
-			System.out.println(2222222);
 			String message = "お気に入り登録が完了しました！";
 			model.addAttribute("message", message);
 		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
@@ -131,8 +130,6 @@ public class FavoriteController {
 	 */
 	@RequestMapping("/deleteFavorite")
 	public String deleteFavorite(Integer userId, Integer itemId, Model model) {
-		System.out.println("userId = " + userId);
-		System.out.println("itemId = " + itemId);
 		favoriteService.delete(userId, itemId);
 		return favoriteListShow(model);
 	}
