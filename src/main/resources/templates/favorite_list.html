@@ -56,6 +56,7 @@
 							<div th:text="${#dates.format(favorite.favoriteDate, 'yyyy年MM月dd日')} + 'に登録済'"></div>
 							<div class="text-center">
 								<input type="hidden" th:value="${favorite.item.id}" name="itemId">
+								<input type="hidden" th:value="${session.user.id}" name="userId">
 								<button type="submit" class="btn btn-primary">お気に入りから削除</button>
 							</div>
 						</form>
