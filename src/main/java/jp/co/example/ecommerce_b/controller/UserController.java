@@ -107,12 +107,12 @@ public class UserController {
 	public String login(UserForm form, Model model) {
 
 		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
-		String oldPass = form.getPassword();
+		String inputPass = form.getPassword();
 		User user = userService.findByEmail(form);
 		if (user == null) {
 			model.addAttribute("loginErrorMessage", "メールアドレス、またはパスワードが間違っています");
 			return "login";
-		} else if (bcpe.matches(oldPass, user.getPassword())) {
+		} else if (bcpe.matches(inputPass, user.getPassword())) {
 			form.setPassword(user.getPassword());
 			User user2 = userService.loginCheck(form);
 			session.setAttribute("user", user2);

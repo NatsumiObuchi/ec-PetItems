@@ -1,5 +1,6 @@
 package jp.co.example.ecommerce_b.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,7 +21,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.ModelAndView;
 
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
@@ -126,6 +129,18 @@ class UserControllerTest {
 	@DisplayName("ログイン画面への遷移先確認")
 	void testToRogin() throws Exception {
 		mockMvc.perform(get("/user/toLogin")).andExpect(view().name("login")).andReturn();
+	}
+
+	@Test
+	@DisplayName("ログインに失敗した際(メールアドレスが見つからない)のスコープの中身と遷移先の確認")
+	void testLogin() throws Exception {
+		when(userService.findByEmail(any(UserForm.class))).thenReturn(null);
+		MvcResult result = mockMvc
+				.perform(get("/user/login").param("email", "test@test.com").param("password", "test1234"))
+				.andExpect(view().name("login")).andReturn();
+		ModelAndView mav = result.getModelAndView();
+		String message = (String) mav.getModel().get("loginErrorMessage");
+		assertEquals("メールアドレス、またはパスワードが間違っています", message);
 	}
 
 }
