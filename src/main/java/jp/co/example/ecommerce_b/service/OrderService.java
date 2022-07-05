@@ -23,11 +23,11 @@ public class OrderService {
 	public Order insertOrder(Order order) {
 		return repository.insertOrder(order);
 	}
+	
 	/**
 	 * 注文する
 	 *
 	 */
-	
 	public void update(Order order) {
 		repository.update(order);
 	}

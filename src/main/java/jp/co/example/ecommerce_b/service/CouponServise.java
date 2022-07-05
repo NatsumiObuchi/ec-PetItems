@@ -22,9 +22,6 @@ import jp.co.example.ecommerce_b.repository.CouponRepository;
 public class CouponServise {
 
 	@Autowired
-	private HttpSession session;
-
-	@Autowired
 	private CouponRepository couponRepository;
 
 	/**
@@ -41,9 +38,8 @@ public class CouponServise {
 	 * @param duration
 	 * @param finishUseDate
 	 */
-	public void insertUserCoupon(Integer couponId, Integer duration, Timestamp finishUseDate) {
+	public void insertUserCoupon(User user,Integer couponId, Integer duration, Timestamp finishUseDate) {
 		UsersCoupon usersCoupon = new UsersCoupon();
-		User user = (User) session.getAttribute("user");
 		usersCoupon.setUserId(user.getId());
 		System.out.println("USERID　：　" + user.getId());
 
