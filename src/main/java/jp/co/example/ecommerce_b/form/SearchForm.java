@@ -14,12 +14,12 @@ public class SearchForm {
 	//並び替えのリンクの分岐処理
 	public void setLink(Model model) {
 		String setLink = null;
-		if (code==null || code.isEmpty()) {
+		if (code==null || code.isEmpty() || code=="") {
 			setLink = "&genre=" + genre;
 		} else {
 			setLink = "&genre=" + genre + "&code="+ code; 
 		} 
-		System.out.println(setLink);
+		System.out.println("setLink"+setLink);
 		model.addAttribute("setLink", setLink);
 	}
 

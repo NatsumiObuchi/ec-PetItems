@@ -27,6 +27,29 @@ public class Item {
 	/** 評価件数 */
 	private String avgstar2;
 
+	/** アニマルメッセージ */
+	private String animalMessage;
+	/** カテゴリメッセージ */
+	private String categoryMessage;
+	
+	
+	
+	public String getAnimalMessage() {
+		return animalMessage;
+	}
+
+	public void setAnimalMessage(String animalMessage) {
+		this.animalMessage = animalMessage;
+	}
+
+	public String getCategoryMessage() {
+		return categoryMessage;
+	}
+
+	public void setCategoryMessage(String categoryMessage) {
+		this.categoryMessage = categoryMessage;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -133,8 +156,10 @@ public class Item {
 		return "Item [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price
 				+ ", imagePath=" + imagePath + ", imagePath2=" + imagePath2 + ", animalId=" + animalId + ", categoryId="
 				+ categoryId + ", deleted=" + deleted + ", avgStar=" + avgStar + ", countReview=" + countReview
-				+ ", avgstar2=" + avgstar2 + "]";
+				+ ", avgstar2=" + avgstar2 + ", animalMessage=" + animalMessage + ", categoryMessage=" + categoryMessage
+				+ "]";
 	}
 
+	
 	
 }

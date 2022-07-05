@@ -1,5 +1,6 @@
 package jp.co.example.ecommerce_b.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Review;
+import jp.co.example.ecommerce_b.domain.Search;
 import jp.co.example.ecommerce_b.repository.ItemRepository;
 
 @Service
@@ -16,6 +18,68 @@ public class ItemService {
 
 	@Autowired
 	private ItemRepository repository;
+
+	/**
+	 * 検索欄、カテゴリーメニューバー、パンくずリスト、並び替えをクリックしたときに検索結果を返す
+	 * @param search
+	 * @return
+	 */
+	public List<Item> search(Search search) {
+		Integer genre = search.getGenre();
+		// genreの値からanimalIdを設定
+		String animalMessage = null;
+		Integer animalId = null;
+		if (genre == 1 || genre == 2 || genre == 3 || genre == 4) {
+			animalId = 1;
+			animalMessage = "犬用品";
+		} else if (genre == 5 || genre == 6 || genre == 7 || genre == 8) {
+			animalId = 2;
+			animalMessage = "猫用品";
+		} else if (genre == 0) {
+			animalMessage = "犬・猫用品";
+		}
+		search.setAnimalId(animalId);
+
+		// genreの値からcategoryIdを設定
+		String categoryMessage = null;
+		Integer categoryId = null;
+		if (genre == 2 || genre == 6) {
+			categoryId = 1;
+			categoryMessage = "フード";
+		} else if (genre == 3 || genre == 7) {
+			categoryId = 2;
+			categoryMessage = "おもちゃ";
+		} else if (genre == 4 || genre == 8) {
+			categoryId = 3;
+			categoryMessage = "その他";
+		} else if (genre == 0 || genre==1 || genre==5) {
+			categoryMessage = "全商品";
+		}
+		search.setCategoryId(categoryId);
+
+		if (search.getCode() == null) {
+			search.setCode("");
+		}
+
+		List<Item> itemList = new ArrayList<>();
+		itemList = repository.findbyElement(animalId, categoryId, search.getCode(), search.getSortId());
+		
+		// 文字列を入れた検索結果で該当商品がない時、指定のジャンルの商品一覧を表示
+		if (itemList.size() == 0) {
+			search.setCode("");
+			itemList = repository.findbyElement(animalId, categoryId, search.getCode(), search.getSortId());
+			search.setSearchMessage("該当の商品がございません。" + animalMessage + "／" + categoryMessage + "を表示します");
+		} else {
+			// カテゴリーバーから飛んできたとき OR 検索文字列が空だった時
+			if (search.getCode()==null || search.getCode().isEmpty() || search.getCode()=="") {
+				search.setSearchMessage(animalMessage + "／" + categoryMessage + "を表示します");
+			// 文字列を入れた検索結果で該当商品がある時
+			} else {
+				search.setSearchMessage("「" + search.getCode() + "」の検索結果を表示します");
+			}
+		}
+		return itemList;
+	}
 
 	/**
 	 * 
@@ -35,59 +99,65 @@ public class ItemService {
 		return repository.findAll();
 	}
 
-	/**
-	 * 
-	 * 商品一覧をanimalIdを絞って取得するメソッド。 (item一覧表示用)
-	 */
-	public List<Item> findByAnimalId(Integer animalId) {
-
-		return repository.findByAnimalId(animalId);
-	}
-	
-	/**
-	 * 
-	 * 商品一覧をanimalIdとcategoryIdで絞って取得するメソッド。 (item一覧表示用)
-	 */
-	public List<Item> findByAnimalIdAndCategoryId(Integer animalId,Integer categoryId) {
-
-		return repository.findByAnimalIdAndCategoryId(animalId, categoryId);
-	}
-	
 	/*
 	 * オートコンプリート機能用
 	 */
-	public List<String> findItemName(){
+	public List<String> findItemName() {
 		return repository.findItemName();
 	}
+//	
+//	/**
+//	 * 
+//	 * 商品一覧をanimalIdを絞って取得するメソッド。 (item一覧表示用)
+//	 */
+//	public List<Item> findByAnimalId(Integer animalId) {
+//
+//		return repository.findByAnimalId(animalId);
+//	}
+//
+//	/**
+//	 * 
+//	 * 商品一覧をanimalIdとcategoryIdで絞って取得するメソッド。 (item一覧表示用)
+//	 */
+//	public List<Item> findByAnimalIdAndCategoryId(Integer animalId, Integer categoryId) {
+//
+//		return repository.findByAnimalIdAndCategoryId(animalId, categoryId);
+//	}
+//
+//	
+//
+//	/**
+//	 * 
+//	 * 商品をあいまい検索するメソッド。(絞り込み：すべて)
+//	 */
+//	public List<Item> findByNameAndAnimalId(String name, Integer animalId) {
+//
+//		return repository.findByNameAndAnimalId(name, animalId);
+//	}
+//
+//	/**
+//	 * 
+//	 * 商品の絞り込み検索用メソッド。(検索値の入力なし)
+//	 */
+//	public List<Item> findByCategoryId(Integer animalId, Integer categoryId) {
+//
+//		return repository.findByCategoryId(animalId, categoryId);
+//	}
+//
+//	/**
+//	 * 
+//	 * 商品のあいまい検索と、絞り込みを同時に選択された場合のメソッド
+//	 */
+//	public List<Item> findByCategoryIdAndAnimaiIdAndName(String name, Integer animalId, Integer categoryId) {
+//
+//		return repository.findByCategoryIdAndAnimaiIdAndName(animalId, categoryId, name);
+//	}
+//
 	
-	
 	/**
-	 * 
-	 * 商品をあいまい検索するメソッド。(絞り込み：すべて)
+	 * レビューを投稿したときにDBにインサートする
+	 * @param review
 	 */
-	public List<Item> findByNameAndAnimalId(String name, Integer animalId) {
-
-		return repository.findByNameAndAnimalId(name, animalId);
-	}
-
-	/**
-	 * 
-	 * 商品の絞り込み検索用メソッド。(検索値の入力なし)
-	 */
-	public List<Item> findByCategoryId(Integer animalId, Integer categoryId) {
-
-		return repository.findByCategoryId(animalId, categoryId);
-	}
-
-	/**
-	 * 
-	 * 商品のあいまい検索と、絞り込みを同時に選択された場合のメソッド
-	 */
-	public List<Item> findByCategoryIdAndAnimaiIdAndName(String name, Integer animalId, Integer categoryId) {
-
-		return repository.findByCategoryIdAndAnimaiIdAndName(name, animalId, categoryId);
-	}
-
 	public void insertReview(Review review) {
 		repository.insertReview(review);
 	}
@@ -109,7 +179,7 @@ public class ItemService {
 	public void deleteById(Integer id) {
 //		6/1　商品情報を削除するメソッドについては一旦未実装
 	}
-	
+
 	/**
 	 * @param user_id
 	 * @param item_id
