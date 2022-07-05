@@ -122,4 +122,10 @@ class UserControllerTest {
 		mockMvc.perform(get("/user/reset")).andExpect(view().name("redirect:/user/toSignin")).andReturn();
 	}
 
+	@Test
+	@DisplayName("ログイン画面への遷移先確認")
+	void testToRogin() throws Exception {
+		mockMvc.perform(get("/user/toLogin")).andExpect(view().name("login")).andReturn();
+	}
+
 }
