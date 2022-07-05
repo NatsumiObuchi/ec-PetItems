@@ -116,4 +116,10 @@ class UserControllerTest {
 				.andExpect(view().name("redirect:/user/toLogin"));
 	}
 
+	@Test
+	@DisplayName("入力値をリセットした際の遷移確認")
+	void testReset() throws Exception {
+		mockMvc.perform(get("/user/reset")).andExpect(view().name("redirect:/user/toSignin")).andReturn();
+	}
+
 }
