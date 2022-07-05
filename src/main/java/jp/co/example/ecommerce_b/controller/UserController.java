@@ -65,11 +65,11 @@ public class UserController {
 	@RequestMapping("/signin")
 	public String signin(@Validated UserForm form, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			return toSignin();
+			return "register_user";
 		} else if (userService.duplicationCheckOfEmail(form)
 				|| !(form.getConfirmPassword().equals(form.getPassword()))) {// メールアドレスが重複しているか、確認用パスワードがパスワードと一致しない場合
 			userService.signinCheck(form, model);
-			return toSignin();
+			return "register_user";
 		} else {// ユーザー登録処理
 			User user = new User();
 			BeanUtils.copyProperties(form, user);
