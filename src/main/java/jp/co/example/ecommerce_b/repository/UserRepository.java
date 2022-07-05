@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.User;
@@ -52,14 +54,18 @@ public class UserRepository {
 	/**
 	 * @param user ユーザーを追加する
 	 */
-	public void insertUser(User user) {
+	public User insertUser(User user) {
 //		user = modifyZipcode(user);
-		String sql = "INSERT INTO users (name,email,password,zipcode,address,telephone) VALUES (:name,:email,:password,:zipcode,:address,:telephone)";
+		String sql = "INSERT INTO users (name,email,password,zipcode,address,telephone) VALUES (:name,:email,:password,:zipcode,:address,:telephone) returning id";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", user.getName())
 				.addValue("email", user.getEmail()).addValue("password", user.getPassword())
 				.addValue("zipcode", user.getZipcode()).addValue("address", user.getAddress())
 				.addValue("telephone", user.getTelephone());
-		template.update(sql, param);
+		KeyHolder keyholder = new GeneratedKeyHolder();
+		template.update(sql, param, keyholder);
+		Integer id = (Integer) keyholder.getKey();
+		user.setId(id);
+		return user;
 	}
 
 	/**

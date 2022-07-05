@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jp.co.example.ecommerce_b.domain.Point;
+import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.domain.UsersPointHistory;
 import jp.co.example.ecommerce_b.repository.PointRepository;
 
@@ -24,11 +25,14 @@ public class PointService {
 	}
 
 	/**
-	 * ポイント情報を会員登録時に登録する
+	 * ユーザ情報を元にポイント情報を登録する
 	 * 
 	 * @param point
 	 */
-	public void insertPoint(Point point) {
+	public void insertPoint(User user) {
+		Point point = new Point();
+		point.setUserId(user.getId());
+		point.setPoint(0);
 		repository.insertPoint(point);
 	}
 
