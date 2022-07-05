@@ -13,6 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -20,6 +22,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import jp.co.example.ecommerce_b.domain.User;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class FavoriteControllerTest {
 
 	@Autowired
@@ -54,7 +58,6 @@ class FavoriteControllerTest {
 				.andExpect(view().name("forward:/user/toLogin3")).andReturn();
 		HttpSession session = result.getRequest().getSession();
 		assertEquals("favoriteList", session.getAttribute("transitionSourcePage"));
-
 	}
 
 }
