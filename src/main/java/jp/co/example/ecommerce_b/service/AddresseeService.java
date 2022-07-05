@@ -36,42 +36,89 @@ public class AddresseeService {
 	}
 
 	/**
-	 * お届け先情報を追加する
+	 * お届け先情報を新規追加する処理
 	 * 
 	 * @param addresee
 	 */
-	public Addressee addresseeRegister(Addressee addressee) {
-		return repository.addresseeRegister(addressee);
+	public void addresseeRegister(Addressee newAddressee) {
+		Addressee lastAddressee = lastAddresseeId(newAddressee.getUserId());
+		if (lastAddressee == null) {// 初めてお届け先情報を登録する人はaddresseeIdに1をセット
+			newAddressee.setAddresseeId(1);
+		} else {// それ以外の人（既に登録済のお届け先が存在する）
+			Integer lastAddresseeId = lastAddressee.getAddresseeId();
+			newAddressee.setAddresseeId(lastAddresseeId + 1);// 新しいaddresseeIdをセット
+		}
+		repository.addresseeRegister(newAddressee);
 	}
 
 	/**
-	 * お届け先情報を削除する
+	 * 最後に追加したお届け先情報を取得
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public Addressee lastAddresseeId(Integer userId) {
+		return repository.lastAddreseeId(userId);
+	}
+
+	/**
+	 * お届け先情報を削除し、既に登録済のお届け先情報も一部更新する処理
 	 * 
 	 * @param userId
 	 * @param addreseeId
 	 */
 	public void deleteAddressee(Integer userId, Integer addresseeId) {
 		repository.deleteAddressee(userId, addresseeId);
+		List<Addressee> addresseeList = findAddresseeByUserId(userId);// 削除処理された後のリストを取得
+		if (addresseeList.size() == 1) {
+			Addressee addressee = addresseeList.get(0);
+			addressee.setAddresseeId(1);
+			updateAddressee(addressee);
+		} else if (addresseeList.size() == 2) {
+			Addressee addressee2 = addresseeList.get(0);
+			Addressee addressee3 = addresseeList.get(1);
+			addressee2.setAddresseeId(1);
+			updateAddressee(addressee2);
+			addressee3.setAddresseeId(2);
+			updateAddressee(addressee3);
+		}
 	}
 
 	/**
-	 * 最後に追加したお届け先情報を取得する
-	 * 
-	 * @param userId
-	 * @return
-	 */
-	public Addressee lastAddlesseeId(Integer userId) {
-		return repository.lastAddreseeId(userId);
-	}
-
-	/**
-	 * お届け先情報として設定する(setting_addresseeをtrueにする)
+	 * お届け先情報として設定する(setting_addresseeをtrueにする) & 設定していないものはfalseにする
 	 * 
 	 * @param userId
 	 * @param addreseeId
 	 */
 	public void setting(Integer userId, Integer addresseeId, boolean setting) {
-		repository.settingAddrssee(userId, addresseeId, setting);
+		List<Addressee> addresseeList = findAddresseeByUserId(userId);
+		switch (addresseeId) {// お届け先として設定したいaddresseeIdと、それ以外のsetting_addresseeはfalse
+		case 1:
+			repository.settingAddrssee(userId, addresseeId, setting);
+			if (addresseeList.size() >= 2) {
+				if (addresseeList.get(1) != null) {// addresseeIdの2番目があれば
+					repository.settingAddrssee(userId, 2, false);
+				}
+				if (addresseeList.get(2) != null) {// addresseeIdの3番目があれば
+					repository.settingAddrssee(userId, 3, false);
+				}
+			}
+			break;
+		case 2:
+			repository.settingAddrssee(userId, addresseeId, setting);
+			repository.settingAddrssee(userId, 1, false);
+			if (addresseeList.size() >= 3) {
+				if (addresseeList.get(2) != null) {// addresseeIdの3番目があれば
+					repository.settingAddrssee(userId, 3, false);
+				}
+			}
+			break;
+		case 3:
+			repository.settingAddrssee(userId, addresseeId, setting);
+			repository.settingAddrssee(userId, 1, false);
+			repository.settingAddrssee(userId, 2, false);
+			break;
+		}
 	}
 
 	/**

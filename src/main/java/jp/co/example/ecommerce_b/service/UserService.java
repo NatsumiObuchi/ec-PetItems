@@ -39,10 +39,19 @@ public class UserService {
 	}
 	
 	/**
+	 * 同一ユーザのメールアドレスであれば変更しなくても良い
+	 * 
 	 * @param form メールアドレスが既に登録されているか確認（ユーザ情報変更時）
 	 */
-	public Boolean duplicationCheckOfEmail(UserUpdateForm form) {
-		return userRepository.findByMailAddress2(form);// メールアドレスが重複していればtrue
+	public Boolean duplicationCheckOfEmail(UserUpdateForm form, Integer userId) {
+		User user = userRepository.load(userId);
+		String oldEmail = user.getEmail();
+		String newEmail = form.getEmail();
+		if (oldEmail.equals(newEmail)) {// これまでとメールアドレスに変更がなければそのままでもOK
+			return false;
+		} else {
+			return userRepository.findByMailAddress(form);// メールアドレスが重複していればtrue
+		}
 	}
 
 	/**

@@ -90,13 +90,11 @@ public class AddresseeRepository {
 	 * 
 	 * @param addresee
 	 */
-	public Addressee addresseeRegister(Addressee addresee) {
+	public void addresseeRegister(Addressee addresee) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(addresee);
 		String sql = "insert into addressees (user_id, addressee_id, zipcode, address)"
 				+ " values(:userId, :addresseeId, :zipCode, :address)";
 		template.update(sql, param);
-
-		return addresee;
 	}
 
 	/**
