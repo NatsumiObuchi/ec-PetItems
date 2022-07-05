@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Coupon;
+import jp.co.example.ecommerce_b.domain.Favorite;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.Point;
@@ -177,9 +178,23 @@ public class ItemController {
 	 */
 	@RequestMapping("/itemDetail")
 	public String itemDetail(Integer id, Integer genre, Model model) {
-		// パンくずリストを表示
+
+		// パンくずリストのリンク処理
 		panList(genre, model);
-		// アイテムの情報をmodelに格納
+
+		// お気に入りリストの情報(お気に入り済か、そうでないか)
+		User user = (User) session.getAttribute("user");
+		if (user == null) {// ユーザーでログインしていない
+			model.addAttribute("nonUser", null);// 特にこの記述は必要ないがこの分岐をしないとお気に入りボタンがうまく表示されない
+		} else {// ユーザでログイン済
+			Favorite favorite = favoriteService.findByUserIdItemId(user.getId(), id);
+			if (favorite == null) {// お気に入り登録していない
+				model.addAttribute("favorite", null);
+			} else {
+				model.addAttribute("favorite", favorite);
+			}
+		}
+
 		Item item = itemService.load(id);
 		model.addAttribute("item", item);
 		return showReview(id, model);

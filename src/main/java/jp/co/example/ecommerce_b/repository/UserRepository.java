@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.User;
@@ -50,16 +52,36 @@ public class UserRepository {
 	}
 
 	/**
+	 * ユーザーidからユーザ情報を取得する
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public User load(Integer id) {
+		String sql = "select id,name,email,password,zipcode,address,telephone from users where id = :id";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		User user = template.queryForObject(sql, param, USER_ROW_MAPPER);
+		if (user == null) {
+			return null;
+		}
+		return user;
+	}
+
+	/**
 	 * @param user ユーザーを追加する
 	 */
-	public void insertUser(User user) {
+	public User insertUser(User user) {
 //		user = modifyZipcode(user);
-		String sql = "INSERT INTO users (name,email,password,zipcode,address,telephone) VALUES (:name,:email,:password,:zipcode,:address,:telephone)";
+		String sql = "INSERT INTO users (name,email,password,zipcode,address,telephone) VALUES (:name,:email,:password,:zipcode,:address,:telephone) returning id";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", user.getName())
 				.addValue("email", user.getEmail()).addValue("password", user.getPassword())
 				.addValue("zipcode", user.getZipcode()).addValue("address", user.getAddress())
 				.addValue("telephone", user.getTelephone());
-		template.update(sql, param);
+		KeyHolder keyholder = new GeneratedKeyHolder();
+		template.update(sql, param, keyholder);
+		Integer id = (Integer) keyholder.getKey();
+		user.setId(id);
+		return user;
 	}
 
 	/**
@@ -81,7 +103,7 @@ public class UserRepository {
 	 * @param form
 	 * @return 入力されたメールアドレスが既に登録されているか確認する（ユーザ情報変更時）
 	 */
-	public Boolean findByMailAddress2(UserUpdateForm form) {
+	public Boolean findByMailAddress(UserUpdateForm form) {
 		String sql = "SELECT id,name,email,password,zipcode,address,telephone FROM users WHERE email = :email";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("email", form.getEmail());
 		List<User> userList = template.query(sql, param, USER_ROW_MAPPER);

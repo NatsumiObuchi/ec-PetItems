@@ -1,7 +1,10 @@
 package jp.co.example.ecommerce_b.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.UserForm;
@@ -14,11 +17,19 @@ public class UserService {
 	private UserRepository userRepository;
 
 	/**
+	 * formに入力されたユーザー情報を登録する
+	 * 
 	 * @param user ユーザーを追加
 	 */
-	public void insertUser(User user) {
-		userRepository.insertUser(user);
+	public User insertUser(User user) {// ハッシュ化もここで行う
+		String oldPass = user.getPassword();
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashPass = passwordEncoder.encode(oldPass);
+		user.setPassword(hashPass);
+		User user2 = userRepository.insertUser(user);
+		return user2;
 	}
+
 
 	/**
 	 * @param form メールアドレスが既に登録されているか確認
@@ -28,10 +39,19 @@ public class UserService {
 	}
 	
 	/**
+	 * 同一ユーザのメールアドレスであれば変更しなくても良い
+	 * 
 	 * @param form メールアドレスが既に登録されているか確認（ユーザ情報変更時）
 	 */
-	public Boolean duplicationCheckOfEmail(UserUpdateForm form) {
-		return userRepository.findByMailAddress2(form);// メールアドレスが重複していればtrue
+	public Boolean duplicationCheckOfEmail(UserUpdateForm form, Integer userId) {
+		User user = userRepository.load(userId);
+		String oldEmail = user.getEmail();
+		String newEmail = form.getEmail();
+		if (oldEmail.equals(newEmail)) {// これまでとメールアドレスに変更がなければそのままでもOK
+			return false;
+		} else {
+			return userRepository.findByMailAddress(form);// メールアドレスが重複していればtrue
+		}
 	}
 
 	/**
@@ -75,5 +95,20 @@ public class UserService {
 	 */
 	public void delete(Integer id) {
 		userRepository.delete(id);
+	}
+
+	/**
+	 * @param form
+	 * @param model 「メールアドレスが重複している」か「確認用パスワードがパスワードと一致しない」場合にエラーコメントをスコープに格納するメソッド
+	 */
+	public void signinCheck(UserForm form, Model model) {
+		if (userRepository.findByMailAddress(form)) {// メールアドレスが重複している場合
+			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
+		}
+		if (!(form.getConfirmPassword().equals(form.getPassword()))) {// 確認用パスワードがパスワードと一致しない場合
+			if (form.getPassword() != "" && form.getConfirmPassword() != "") {// 「パスワード：未入力/確認パスワード:入力」「パスワード：入力/確認パスワード:未入力」の際は以下のメッセージを表示しない。
+				model.addAttribute("confirmPasswordError", "パスワードと確認用パスワードが不一致です");
+			}
+		}
 	}
 }

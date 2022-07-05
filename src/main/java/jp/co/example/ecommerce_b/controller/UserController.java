@@ -1,14 +1,13 @@
 package jp.co.example.ecommerce_b.controller;
 
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jp.co.example.ecommerce_b.domain.Addressee;
 import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.User;
-import jp.co.example.ecommerce_b.domain.UsersCoupon;
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.service.AddresseeService;
 import jp.co.example.ecommerce_b.service.CouponServise;
@@ -67,31 +65,19 @@ public class UserController {
 	@RequestMapping("/signin")
 	public String signin(@Validated UserForm form, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			signinCheck(form, model);//
 			return toSignin();
 		} else if (userService.duplicationCheckOfEmail(form)
 				|| !(form.getConfirmPassword().equals(form.getPassword()))) {// メールアドレスが重複しているか、確認用パスワードがパスワードと一致しない場合
-			signinCheck(form, model);
+			userService.signinCheck(form, model);
 			return toSignin();
-		} else {
+		} else {// ユーザー登録処理
 			User user = new User();
-			String oldPass = form.getPassword();
-			PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			String hashPass = passwordEncoder.encode(oldPass);
-			user.setName(form.getName());
-			user.setEmail(form.getEmail());
-			user.setZipcode(form.getZipcode());
-			user.setAddress(form.getAddress());
-			user.setTelephone(form.getTelephone());
-			user.setPassword(hashPass);
-			userService.insertUser(user);
+			BeanUtils.copyProperties(form, user);
+			User user2 = userService.insertUser(user);
 
 			// 今登録されたユーザのuserIdに紐付けてpointテーブルに情報を追加
-			User user2 = userService.findByEmail(form);
-			Point point = new Point();
-			point.setUserId(user2.getId());
-			point.setPoint(0);
-			pointService.insertPoint(point);
+			pointService.insertPoint(user2);
+
 			return "redirect:/user/toLogin";
 		}
 	}
@@ -131,17 +117,14 @@ public class UserController {
 			User user2 = userService.loginCheck(form);
 			session.setAttribute("user", user2);
 
-			// ユーザがログインしたタイミングで使用できないクーポン(有効期限切れ)のdeletedをfalseに変える
-			List<UsersCoupon> usersCouponList = couponServise.findAllUsersCoupon(user.getId());
-			for(UsersCoupon usersCoupon : usersCouponList) {
-				Timestamp couponExpirationDate = usersCoupon.getCouponExpirationDate();
-				Timestamp nowDate = new Timestamp(System.currentTimeMillis());
-				if(nowDate.after(couponExpirationDate)) {
-					couponServise.usedUsersCoupon(usersCoupon.getId());
-				}
-			}
+			// ユーザがログインしたタイミングで使用できないクーポン(有効期限切れ)のdeletedをtrueに変える
+			couponServise.usedUsersCoupon(user2.getId());
 			
-			// ユーザが登録済のお届け先一覧をここでログインしたタイミングでsessionにセットする
+			// ユーザのポイント情報をログインしたタイミングで取得
+			Point point = pointService.load(user.getId());
+			session.setAttribute("point", point);
+
+			// ユーザが登録済のお届け先一覧をログインしたタイミングでsessionにセットする
 			List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(user.getId());
 			session.setAttribute("addresseeList", addresseeList);
 
@@ -173,20 +156,6 @@ public class UserController {
 		return "forward:/item/top";
 	}
 
-	/**
-	 * @param form
-	 * @param model 「メールアドレスが重複している」か「確認用パスワードがパスワードと一致しない」場合にエラーコメントをスコープに格納するメソッド
-	 */
-	private void signinCheck(UserForm form, Model model) {
-		if (userService.duplicationCheckOfEmail(form)) {// メールアドレスが重複している場合
-			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
-		}
-		if (!(form.getConfirmPassword().equals(form.getPassword()))) {// 確認用パスワードがパスワードと一致しない場合
-			if (form.getPassword() != "" && form.getConfirmPassword() != "") {// 「パスワード：未入力/確認パスワード:入力」「パスワード：入力/確認パスワード:未入力」の際は以下のメッセージを表示しない。
-				model.addAttribute("confirmPasswordError", "パスワードと確認用パスワードが不一致です");
-			}
-		}
-	}
 	/**
 	 * @param model(ログインしてない人が注文履歴を見ようとした際のメッセージ)
 	 * @return ログイン画面

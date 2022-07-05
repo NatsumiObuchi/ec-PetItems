@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jp.co.example.ecommerce_b.domain.Favorite;
-import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.form.FavoriteListRegisterForm;
 import jp.co.example.ecommerce_b.service.FavoriteService;
-import jp.co.example.ecommerce_b.service.ItemService;
 
 @Controller
 @RequestMapping("/favorite")
@@ -27,9 +25,6 @@ public class FavoriteController {
 
 	@Autowired
 	private FavoriteService favoriteService;
-
-	@Autowired
-	private ItemService itemService;
 
 	@ModelAttribute
 	private FavoriteListRegisterForm favoriteListRegisterForm() {
@@ -44,7 +39,7 @@ public class FavoriteController {
 	@RequestMapping("/favoriteList")
 	public String favoriteListShow(Model model) {
 		User user = (User) session.getAttribute("user");
-		if (user == null) {
+		if (user == null) {// ログインせずにお気に入りリストに遷移した場合、ログイン画面へ遷移する
 			session.setAttribute("transitionSourcePage", "favoriteList");
 			return "forward:/user/toLogin3";
 		}
@@ -57,14 +52,7 @@ public class FavoriteController {
 			session.setAttribute("favoriteList", null);
 			return "favorite_list";
 		}
-
 		session.setAttribute("favoriteList", favoriteList);
-		for (Favorite favorite : favoriteList) {
-			Integer itemId = favorite.getItemId();
-			System.out.println("itemId:" + itemId);
-			Item item = itemService.load(itemId);
-			favorite.setItem(item);
-		}
 		return "favorite_list";
 	}
 
@@ -77,36 +65,18 @@ public class FavoriteController {
 	public String favorite(FavoriteListRegisterForm favoriteListRegisterForm, Model model) {
 		User user = (User) session.getAttribute("user");
 		Integer itemId = Integer.parseInt(favoriteListRegisterForm.getItemId());
-		if (user == null) {// ユーザの情報はないのでuserIdはセットできない
-			Favorite newFavorite = new Favorite();
-			newFavorite.setItemId(itemId);
-			Date now = new Date();
-			newFavorite.setFavoriteDate(now);
+		Favorite newFavorite = new Favorite();
+		newFavorite.setItemId(itemId);
+		Date now = new Date();
+		newFavorite.setFavoriteDate(now);
+		if (user == null) {// ユーザの情報はないのでここでuserIdはセットできない
 			session.setAttribute("newFavorite", newFavorite);
-			System.out.println(newFavorite);
-			return favoriteListShow(model);
-		}
-		Integer userId = user.getId();
-		Favorite favorite = new Favorite();
-		// formのuserIdとitemIdからお気に入り登録情報を取得する
-		favorite = favoriteService.findByUserIdItemId(userId, itemId);
-
-		System.out.println(1111111);
-		System.out.println(favorite);
-		if (favorite == null) {
-			Favorite newFavorite = new Favorite();
-			newFavorite.setItemId(itemId);
+			return favoriteListShow(model);// ログイン画面まで遷移してもらう
+		} else {
 			newFavorite.setUserId(user.getId());
-			Date now = new Date();
-			newFavorite.setFavoriteDate(now);
 			favoriteService.insertFavorite(newFavorite);
-			System.out.println(2222222);
-			String message = "お気に入り登録が完了しました！";
-			model.addAttribute("message", message);
-		} else if (favorite != null) {// ユーザが既にお気に入り登録済の場合
-			String message = "既にお気に入り登録済です";
-			model.addAttribute("message", message);
 		}
+
 		return "redirect:/favorite/favoriteList";
 	}
 
@@ -143,11 +113,8 @@ public class FavoriteController {
 	 * @param userId
 	 */
 	@RequestMapping("/deleteFavorite")
-	public String deleteFavorite(String itemId, Model model) {
-		Integer id = Integer.parseInt(itemId);
-		System.out.println(id);
-		favoriteService.delete(id);
-
+	public String deleteFavorite(Integer userId, Integer itemId, Model model) {
+		favoriteService.delete(userId, itemId);
 		return favoriteListShow(model);
 	}
 }
