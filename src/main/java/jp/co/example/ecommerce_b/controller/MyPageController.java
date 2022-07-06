@@ -91,7 +91,6 @@ public class MyPageController {
 			session.setAttribute("count", count);
 			return "change_permission";
 		}
-		count++;// 2回目以降のログイン(countが加算される)
 		session.setAttribute("count", count);
 		return "confirm_userInfo";
 	}
