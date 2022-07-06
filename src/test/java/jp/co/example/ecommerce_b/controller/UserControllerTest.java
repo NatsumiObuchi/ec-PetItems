@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Validator;
 
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.repository.UserRepository;
+import jp.co.example.ecommerce_b.service.CouponServise;
 import jp.co.example.ecommerce_b.service.PointService;
 import jp.co.example.ecommerce_b.service.UserService;
 
@@ -46,6 +48,12 @@ class UserControllerTest {
 
 	@Autowired
 	private Validator validator;
+
+	@Autowired
+	private HttpServletRequest request;
+
+	@MockBean
+	private CouponServise couponServise;
 
 	@MockBean
 	private UserService userService;
@@ -143,7 +151,7 @@ class UserControllerTest {
 				.andExpect(view().name("login")).andReturn();
 		ModelAndView mav = result.getModelAndView();
 		String message = (String) mav.getModel().get("loginErrorMessage");
-//		System.out.println(message);
+//		System.out.println("loginErrorMessage = " + message);
 		assertEquals("メールアドレス、またはパスワードが間違っています", message);
 	}
 
@@ -151,9 +159,40 @@ class UserControllerTest {
 //	@Test
 //	@DisplayName("パスワードが一致してログインする際の遷移先(トップページ)とスコープの値を確認")
 //	void testLoginTop() throws Exception {
-//		MockHttpSession session = new MockHttpSession();
-//		when(userService.findByEmail(any(UserForm.class))).thenReturn(new User());
-//		MvcResult result = mockMvc.perform(get("/user/login").param(null, null));
+//		User loginUser = new User();
+//		when(userService.findByEmail(any(UserForm.class))).thenReturn(loginUser);// if (user == null) を通らなくする
+//		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
+//		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//		String testPass = "aaaaaaaa";
+//		String hashPass = passwordEncoder.encode(testPass);// テスト用パスワードをハッシュ化
+//		when(bcpe.matches(hashPass, "aaaaaaaa")).thenReturn(true);
+//		when(userService.loginCheck(any(UserForm.class))).thenReturn(loginUser);
+//		MvcResult result = mockMvc
+//				.perform(get("/user/login").param("email", "test@test.com").param("password", "aaaaaaaa"))
+//				.andExpect(status().isOk()).andExpect(view().name("forward:/item/top")).andReturn();
+//		ModelAndView mav = result.getModelAndView();
+//		UserForm form = (UserForm) mav.getModel().get("userForm");// モックでセットしたパラメータの値を取得
+//	}
+
+	// ハッシュ化したパスワードをどう一致させるか不明。
+//	@Test
+//	@DisplayName("パスワードが一致しない時の遷移先とスコープの値を確認")
+//	void testLoginDisagreementPass() throws Exception {
+//		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
+//		User user = new User();
+//		when(userService.findByEmail(any(UserForm.class))).thenReturn(user);
+//		MvcResult result = mockMvc
+//				.perform(get("/user/login").param("email", "test@test.com").param("password", "aaaaaaaa"))
+//				.andExpect(view().name("login")).andReturn();
+//		ModelAndView mav = result.getModelAndView();
+////		System.out.println("mav = " + mav);
+//		String message = (String) mav.getModel().get("loginErrorMessage");
+////		System.out.println("loginErrorMessage = " + message);
+//		assertEquals("メールアドレス、またはパスワードが間違っています", message);
+//
+//		UserForm form = (UserForm) mav.getModel().get("userForm");// モックでセットしたパラメータの値を取得
+//		System.out.println("パラメータのform = " + form);
+//		System.out.println("パラメータのformのパスワード = " + form.getPassword());
 //	}
 
 	@Test
@@ -170,7 +209,7 @@ class UserControllerTest {
 		MvcResult result = mockMvc.perform(get("/user/toLogin2")).andExpect(status().isOk()).andReturn();
 		ModelAndView mav = result.getModelAndView();
 		String message = (String) mav.getModel().get("historyMessage");
-//		System.out.println(message);
+//		System.out.println("historyMessage = " + message);
 		assertEquals("注文履歴のご確認にはログインもしくはユーザー登録が必要です。", message);
 	}
 	
@@ -180,7 +219,7 @@ class UserControllerTest {
 		MvcResult result = mockMvc.perform(get("/user/toLogin3")).andExpect(status().isOk()).andReturn();
 		ModelAndView mav = result.getModelAndView();
 		String message = (String) mav.getModel().get("favoriteMessage");
-//		System.out.println(message);
+//		System.out.println("favoriteMessage = " + message);
 		assertEquals("お気に入り登録にはログイン、もしくはユーザ登録が必要です。", message);
 	}
 }
