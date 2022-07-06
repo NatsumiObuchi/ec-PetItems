@@ -28,7 +28,7 @@ class FavoriteControllerTest {
 	private WebApplicationContext wac;
 
 	@Autowired
-	private MockMvc mvc;
+	private MockMvc mockMvc;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -52,7 +52,7 @@ class FavoriteControllerTest {
 		MockHttpSession mockSession = new MockHttpSession();
 //		User user = null;
 		mockSession.setAttribute("user", null);
-		MvcResult result = mvc.perform(get("/favorite/favoriteList").session(mockSession))
+		MvcResult result = mockMvc.perform(get("/favorite/favoriteList").session(mockSession))
 				.andExpect(view().name("forward:/user/toLogin3")).andReturn();
 		HttpSession session = result.getRequest().getSession();
 		assertEquals("favoriteList", session.getAttribute("transitionSourcePage"));
