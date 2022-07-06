@@ -143,7 +143,7 @@ class UserControllerTest {
 				.andExpect(view().name("login")).andReturn();
 		ModelAndView mav = result.getModelAndView();
 		String message = (String) mav.getModel().get("loginErrorMessage");
-		System.out.println(message);
+//		System.out.println(message);
 		assertEquals("メールアドレス、またはパスワードが間違っています", message);
 	}
 
@@ -161,6 +161,16 @@ class UserControllerTest {
 	void testLogout() throws Exception {
 		MvcResult result = mockMvc.perform(get("/user/logout")).andExpect(status().isOk()).andReturn();
 		HttpSession session = result.getRequest().getSession();
-		assertEquals(null, session.getAttribute("user"));
+		assertEquals(null, session.getAttribute("user"));// ユーザだけでいいのか？
+	}
+
+	@Test
+	@DisplayName("ログインしてないユーザーが注文履歴を見ようとした際の遷移先とスコープの値を確認")
+	void testToLogin2() throws Exception {
+		MvcResult result = mockMvc.perform(get("/user/toLogin2")).andExpect(status().isOk()).andReturn();
+		ModelAndView mav = result.getModelAndView();
+		String message = (String) mav.getModel().get("historyMessage");
+//		System.out.println(message);
+		assertEquals("注文履歴のご確認にはログインもしくはユーザー登録が必要です。", message);
 	}
 }
