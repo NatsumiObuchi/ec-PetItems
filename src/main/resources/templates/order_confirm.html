@@ -104,29 +104,28 @@
 			</div>
 
 
-		<!-- ポイントtable -->
-		<div class="row">
-			<div class="
-				  table-responsive
-				  col-lg-offset-1
-				  col-lg-10
-				  col-md-offset-1
-				  col-md-10
-				  col-sm-10
-				  col-xs-12
-				">
-				<div class="well">
-					<h3 class="text-center">ポイント利用</h3>
-					<table class="table table-striped item-list-table">
-						<tbody>
-							<tr>
-								<td>
-									<div class="text-center">
-										<span th:text="${session.user.name} + さんのポイント残高"></span>
-									</div>
-								</td>
-								<td>
-									<div class="row">
+			<!-- ポイントtable -->
+			<div class="row">
+				<div class="
+					table-responsive
+				  	col-lg-offset-1
+				  	col-lg-10
+				  	col-md-offset-1
+				  	col-md-10
+				  	col-sm-10
+				  	col-xs-12
+					">
+					<div class="well">
+						<h3 class="text-center">ポイント利用</h3>
+						<table class="table table-striped item-list-table">
+							<tbody>
+								<tr>
+									<td>
+										<div class="text-center">
+											<span th:text="${session.user.name} + さんのポイント残高"></span>
+										</div>
+									</td>
+									<td>
 										<div class="col-sm-12">
 											<span id="total-point"
 												th:text="${#numbers.formatInteger(session.point.point, 2, 'COMMA')}"
@@ -163,7 +162,7 @@
 												<input id="use-part-point-text" type="text" name="usePartPoint">pt
 											</div>
 										</div>
-									</td>
+									</td>	
 								</tr>
 							</tbody>
 						</table>
@@ -306,15 +305,10 @@
 									<td align="center">
 										<div class="row">
 											<div class="col-sm-12">
-												<!-- クレジットカード登録ボタン -->
-												<div class="creditPay-btn" id="creditPayBtn">
-													<script src="https://checkout.stripe.com/checkout.js"
-														class="stripe-button"
-														data-key="pk_test_51LA6lgEM1Eja88iZjQhH1JbgdsRaD0KsSRauG59LHg14YzqUT3UhTkOLYckvBZyJzPVnDGLI1rqGjgGxGGT2YGX000InVJnYeF"
-														data-name="RakuRakuペット" data-description="" data-amount=""
-														data-currency="jpy" data-label="この内容で注文する"></script>
-													<div>クレジットカード登録と同時に決済が完了します。</div>
-												</div>
+												<!-- クレジットカード情報入力 -->
+												<script type="text/javascript" src="https://checkout.pay.jp/" class="payjp-button"
+												data-key="pk_test_6b1adaf1527ebe4a0add9e8e" data-partial="true" data-token-name="card"
+												data-submit-text="カード情報を入力する"></script><br>
 											</div>
 										</div>
 									</td>

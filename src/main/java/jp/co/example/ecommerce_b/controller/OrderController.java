@@ -23,7 +23,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 
@@ -45,6 +44,7 @@ import jp.co.example.ecommerce_b.service.CouponServise;
 import jp.co.example.ecommerce_b.service.DiscountedHistoryService;
 import jp.co.example.ecommerce_b.service.OrderService;
 import jp.co.example.ecommerce_b.service.PointService;
+import jp.pay.Payjp;
 
 @Controller
 @RequestMapping("/order")
@@ -142,7 +142,7 @@ public class OrderController {
 	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	@RequestMapping("/orderSent")
 	public String orderSent(@Validated OrderForm orderForm, BindingResult rs, Integer usersCouponId,
-			OrderItemForm orderItemForm, Model model,
+			OrderItemForm orderItemForm, Model model, String card,
 //			@RequestParam("stripeToken")
 			String stripeToken,
 //	        @RequestParam("stripeTokenType")
@@ -226,13 +226,13 @@ public class OrderController {
 			order.setCardBrand(order.getCardBrand());
 
 			// 以下クレジットカードメソッド
-			Stripe.apiKey = "sk_test_51LA6lgEM1Eja88iZuJf4dKIA2zP1aXLbUnjHNVd013Tgob9l5SPMcbGZhkeRFiQ9z3qJgr8crduiKOMcwuBtyU1E00DikrfI8S";
+			Payjp.apiKey = "sk_test_828fbb3493791a1b6f13a2a4";
 
 			Map<String, Object> chargeMap = new HashMap<String, Object>();
 			chargeMap.put("aomunt", price);
 			chargeMap.put("description", "合計金額");
 			chargeMap.put("currency", "jpy");
-			chargeMap.put("source", stripeToken);
+			chargeMap.put("card", card);
 
 			try {
 				Charge charge = Charge.create(chargeMap);
@@ -244,7 +244,6 @@ public class OrderController {
 		
 		//　orderテーブルに格納
 		orderservice.update(order);
-		System.out.println(order);
 		Integer orderId = order.getId();
 		
 		// メール送信用のメソッド
