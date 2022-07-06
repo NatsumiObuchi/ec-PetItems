@@ -173,4 +173,14 @@ class UserControllerTest {
 //		System.out.println(message);
 		assertEquals("注文履歴のご確認にはログインもしくはユーザー登録が必要です。", message);
 	}
+	
+	@Test
+	@DisplayName("ログインしてない人ユーザーがお気に入り登録をしようとした際の遷移先とスコープの値を確認")
+	void testToLogin3() throws Exception {
+		MvcResult result = mockMvc.perform(get("/user/toLogin3")).andExpect(status().isOk()).andReturn();
+		ModelAndView mav = result.getModelAndView();
+		String message = (String) mav.getModel().get("favoriteMessage");
+//		System.out.println(message);
+		assertEquals("お気に入り登録にはログイン、もしくはユーザ登録が必要です。", message);
+	}
 }
