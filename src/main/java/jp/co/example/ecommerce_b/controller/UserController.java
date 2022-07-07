@@ -66,20 +66,25 @@ public class UserController {
 	public String signin(@Validated UserForm form, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			return "register_user";
-		} else if (userService.duplicationCheckOfEmail(form)
-				|| !(form.getConfirmPassword().equals(form.getPassword()))) {// メールアドレスが重複しているか、確認用パスワードがパスワードと一致しない場合
-			userService.signinCheck(form, model);
-			return "register_user";
-		} else {// ユーザー登録処理
-			User user = new User();
-			BeanUtils.copyProperties(form, user);
-			User user2 = userService.insertUser(user);
-
-			// 今登録されたユーザのuserIdに紐付けてpointテーブルに情報を追加
-			pointService.insertPoint(user2);
-
-			return "redirect:/user/toLogin";
 		}
+		boolean found = userService.duplicationCheckOfEmail(form);
+		if (found == true) {// メールアドレスが重複している場合
+			model.addAttribute("emailError", "このメールアドレスは登録できません");
+			return "register_user";
+		}
+		if (!(form.getConfirmPassword().equals(form.getPassword()))) {// 確認用パスワードがパスワードと一致しない場合
+			model.addAttribute("confirmPasswordError", "パスワードと確認用パスワードが不一致です");
+			return "register_user";
+		}
+		// ユーザー登録処理
+		User user = new User();
+		BeanUtils.copyProperties(form, user);
+		User user2 = userService.insertUser(user);
+
+		// 今登録されたユーザのuserIdに紐付けてpointテーブルに情報を追加
+		pointService.insertPoint(user2);
+
+		return "redirect:/user/toLogin";
 	}
 
 	/**
