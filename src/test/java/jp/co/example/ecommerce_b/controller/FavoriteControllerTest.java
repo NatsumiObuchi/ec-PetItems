@@ -108,4 +108,13 @@ class FavoriteControllerTest {
 		assertEquals(null, message);
 	}
 
+	@Test
+	@DisplayName("お気に入り登録する処理の遷移先とスコープ内の値を確認")
+	void testInsertFavorite() throws Exception {
+		MvcResult result =
+		mockMvc.perform(get("/favorite/insert").param("itemId", "1").param("date", "date"))
+				.andExpect(view().name("forward:/user/toLogin3")).andReturn();
+		HttpSession session = result.getRequest().getSession();
+		assertEquals("favoriteList", session.getAttribute("transitionSourcePage"));
+	}
 }
