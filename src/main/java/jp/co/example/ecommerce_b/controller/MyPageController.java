@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jp.co.example.ecommerce_b.domain.Addressee;
 import jp.co.example.ecommerce_b.domain.Review;
 import jp.co.example.ecommerce_b.domain.User;
+import jp.co.example.ecommerce_b.domain.UsersCoupon;
 import jp.co.example.ecommerce_b.form.InsertAddresseeForm;
 import jp.co.example.ecommerce_b.form.UserForm;
 import jp.co.example.ecommerce_b.form.UserPasswordUpdateForm;
 import jp.co.example.ecommerce_b.form.UserUpdateForm;
 import jp.co.example.ecommerce_b.service.AddresseeService;
+import jp.co.example.ecommerce_b.service.CouponServise;
 import jp.co.example.ecommerce_b.service.ItemService;
 import jp.co.example.ecommerce_b.service.UserService;
 
@@ -39,6 +41,9 @@ public class MyPageController {
 
 	@Autowired
 	private AddresseeService addresseeService;
+	
+	@Autowired
+	private CouponServise couponServise;
 
 	@Autowired
 	private HttpSession session;
@@ -336,5 +341,21 @@ public class MyPageController {
 		if (userService.duplicationCheckOfEmail(form, userId) == true) {
 			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
 		}
+	}
+	
+	/**
+	 * マイクーポンを表示する
+	 * 
+	 * @param id userId
+	 * @return
+	 */
+	@RequestMapping("/myCoupon")
+	public String myCoupon(Integer id, Model model) {
+		List<UsersCoupon> usersCouponList = couponServise.findAllUsersCoupon(id);
+		session.setAttribute("usersCouponList", usersCouponList);
+		if (usersCouponList == null) {
+			model.addAttribute("non", "所持しているクーポンはありません。");
+		}
+		return "myCoupon";
 	}
 }

@@ -91,7 +91,7 @@
                                 </td>
                                 <td class="mypage_content">
                                     <img class="icon mypage_icon" alt="">
-                                    <a href="#">マイクーポン</a>
+                                    <a th:href="@{/myPage/myCoupon?id=} + ${session.user.id}">マイクーポン</a>
                                 </td>
                             </tr>
                         </div>
