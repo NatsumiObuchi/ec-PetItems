@@ -123,7 +123,7 @@ class UserControllerTest {
 						.param("address", "テスト住所").param("telephone", "08012345678"))
 				.andExpect(view().name("register_user")).andReturn();
 		ModelAndView mav = result.getModelAndView();
-		System.out.println(mav);
+//		System.out.println(mav);
 		String message = (String) mav.getModel().get("confirmPasswordError");
 		assertEquals("パスワードと確認用パスワードが不一致です", message);
 	}
@@ -177,13 +177,16 @@ class UserControllerTest {
 //		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 //		String testPass = "aaaaaaaa";
 //		String hashPass = passwordEncoder.encode(testPass);// テスト用パスワードをハッシュ化
-//		when(bcpe.matches(hashPass, "aaaaaaaa")).thenReturn(true);
+//		when(bcpe.matches(hashPass, "aaaaaaaa"));
 //		when(userService.loginCheck(any(UserForm.class))).thenReturn(loginUser);
 //		MvcResult result = mockMvc
 //				.perform(get("/user/login").param("email", "test@test.com").param("password", "aaaaaaaa"))
 //				.andExpect(status().isOk()).andExpect(view().name("forward:/item/top")).andReturn();
-//		ModelAndView mav = result.getModelAndView();
-//		UserForm form = (UserForm) mav.getModel().get("userForm");// モックでセットしたパラメータの値を取得
+//		HttpSession session = result.getRequest().getSession();
+//		assertEquals(null, session.getAttribute("transitionSourcePage"));
+////		ModelAndView mav = result.getModelAndView();
+////		UserForm form = (UserForm) mav.getModel().get("userForm");// モックでセットしたパラメータの値を取得
+//
 //	}
 
 	// ハッシュ化したパスワードをどう一致させるか不明。
