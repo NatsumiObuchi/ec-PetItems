@@ -49,8 +49,6 @@ public class FavoriteController {
 		if (favoriteList == null) {// ユーザ登録済でもお気に入りがゼロの時
 			String message = "お気に入り登録はありません";
 			model.addAttribute("message", message);
-			session.setAttribute("favoriteList", null);
-			return "favorite_list";
 		}
 		session.setAttribute("favoriteList", favoriteList);
 		return "favorite_list";

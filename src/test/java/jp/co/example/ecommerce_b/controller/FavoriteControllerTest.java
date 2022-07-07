@@ -2,6 +2,7 @@ package jp.co.example.ecommerce_b.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import javax.servlet.http.HttpSession;
@@ -19,6 +20,9 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.ModelAndView;
+
+import jp.co.example.ecommerce_b.domain.User;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -49,12 +53,28 @@ class FavoriteControllerTest {
 	@Test
 	@DisplayName("ログインせずにお気に入りリストに遷移した場合の遷移先とスコープの値を確認")
 	void testNonLoginFavorite() throws Exception {
-		MockHttpSession mockSession = new MockHttpSession();
+		// userをsessionにセットしなければ if (user == null) を通るので以下は不要
+//		MockHttpSession mockSession = new MockHttpSession();
 //		User user = null;
 //		mockSession.setAttribute("user", null);
-		MvcResult result = mockMvc.perform(get("/favorite/favoriteList"))// .session(mockSession))
+		MvcResult result = mockMvc.perform(get("/favorite/favoriteList"))// .session(mockSession))これも不要
 				.andExpect(view().name("forward:/user/toLogin3")).andReturn();
 		HttpSession session = result.getRequest().getSession();
 		assertEquals("favoriteList", session.getAttribute("transitionSourcePage"));
 	}
+	
+	@Test
+	@DisplayName("お気に入り登録がない場合の遷移先とスコープの値を確認")
+	void testNonFavorite() throws Exception {
+		User user = new User();
+		MockHttpSession mockHttpSession = new MockHttpSession();
+		mockHttpSession.setAttribute("user", user);// ユーザーがログインしている前提のテストのためMockにsessionをセット
+		MvcResult result = mockMvc.perform(get("/favorite/favoriteList").session(mockHttpSession))
+				.andExpect(status().isOk()).andExpect(view().name("favorite_list")).andReturn();
+		ModelAndView mav = result.getModelAndView();
+		String message = (String) mav.getModel().get("message");
+//		System.out.println("message = " + message);
+		assertEquals("お気に入り登録はありません", message);
+	}
+
 }
