@@ -113,11 +113,11 @@ public class OrderController {
 				orderForm.setDestinationzipCode(addressee.getZipCode());
 				orderForm.setDestinationAddress(addressee.getAddress());
 			}
-
-			model.addAttribute("orderForm", orderForm);
-		} else {
-			model.addAttribute("orderForm", orderForm);
+//			model.addAttribute("orderForm", orderForm);
 		}
+//		else {
+//			model.addAttribute("orderForm", orderForm);
+//		}
 
 		//ユーザーが利用可能なクーポンを表示
 		List<UsersCoupon> usersCoupon = couponService.findAllUsersCoupon(user.getId());
@@ -230,7 +230,7 @@ public class OrderController {
 
 			Map<String, Object> chargeMap = new HashMap<String, Object>();
 			chargeMap.put("aomunt", price);
-			chargeMap.put("description", "合計金額");
+//			chargeMap.put("description", "合計金額");
 			chargeMap.put("currency", "jpy");
 			chargeMap.put("card", card);
 
