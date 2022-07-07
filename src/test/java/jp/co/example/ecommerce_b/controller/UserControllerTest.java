@@ -97,7 +97,7 @@ class UserControllerTest {
 
 	@Test
 	@DisplayName("メールアドレス重複時のスコープの中身と遷移先チェック")
-	void testMailAddress() throws Exception {
+	void testDuplicateMailAddress() throws Exception {
 		// Controllerのinsertメソッドを呼び出して、結果を返す。メールアドレスで重複エラーが出てる前提。
 		when(userService.duplicationCheckOfEmail(any(UserForm.class))).thenReturn(true);
 		MvcResult result = mockMvc
@@ -111,6 +111,21 @@ class UserControllerTest {
 		String message = (String) mav.getModel().get("emailError");
 		// 正しく格納されているか確認
 		assertEquals("このメールアドレスは既に登録されているため登録できません", message);
+	}
+
+	@Test
+	@DisplayName("確認用パスワードがパスワードと一致しない場合の遷移先とスコープ内の確認")
+	void testDisagreementPassword() throws Exception {
+		when(userService.duplicationCheckOfEmail(any(UserForm.class))).thenReturn(false);// メールアドレスで重複エラーが出ていない
+		MvcResult result = mockMvc
+				.perform(post("/user/signin").param("name", "工藤陽介").param("email", "yksumvcl77@gmail.com")
+						.param("password", "test1234").param("confirmPassword", "test12345").param("zipcode", "1240011")
+						.param("address", "テスト住所").param("telephone", "08012345678"))
+				.andExpect(view().name("register_user")).andReturn();
+		ModelAndView mav = result.getModelAndView();
+		System.out.println(mav);
+		String message = (String) mav.getModel().get("confirmPasswordError");
+		assertEquals("パスワードと確認用パスワードが不一致です", message);
 	}
 
 	@Test
