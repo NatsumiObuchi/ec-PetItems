@@ -46,7 +46,7 @@ class UserServiceTest {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
 		template.update(deleteSql, param);
 		// テスト用に1件だけデータを用意
-		String sql = "INSERT INTO USERS(name, email, password, zipcode, address, telephone)"
+		String sql = "INSERT INTO users(name, email, password, zipcode, address, telephone)"
 				+ " VALUES('testName01', 'test01@abc.com', 'abcdABCD', '1111111', '東京都', '09011111111')";
 		template.update(sql, param);
 	}
@@ -68,7 +68,7 @@ class UserServiceTest {
 	 * userServiceクラスのinsertメソッドのテスト。 データ挿入前と挿入後でDBのデータ数が変わっているかどうかをテスト。
 	 */
 	@Test
-	void test() {
+	void testInsert() {
 		User user = new User();
 		user.setName("name");
 		user.setEmail("email@email.com");
