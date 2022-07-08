@@ -73,6 +73,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>jp.pay</groupId>
+			<artifactId>payjp-java</artifactId>
+			<version>0.4.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>
