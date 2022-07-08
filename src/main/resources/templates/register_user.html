@@ -78,6 +78,10 @@
 								<label for="inputPassword">パスワード:</label> <br>
 								<label th:errors="*{password}" class="control-label" style="color: red"
 									for="inputError">パスワードを入力してください</label>
+								<div>
+									<label th:if="${confirmPasswordError}" class="control-label" style="color: red"
+										for="inputError" th:text="${confirmPasswordError}"></label>
+								</div>
 								<input type="password" id="inputPassword" class="form-control" placeholder="Password"
 									th:field="*{password}" />
 							</div>
@@ -85,10 +89,6 @@
 								<label for="inputConfirmationPassword">確認用パスワード:</label> <br>
 								<label th:errors="*{confirmPassword}" class="control-label" style="color: red"
 									for="inputError">確認用パスワードを入力してください</label>
-								<div>
-									<label th:if="${confirmPasswordError}" class="control-label" style="color: red"
-										for="inputError" th:text="${confirmPasswordError}"></label>
-								</div>
 								<input type="password" id="inputConfirmationPassword" class="form-control"
 									placeholder="Confirmation Password" th:field="*{confirmPassword}" />
 							</div>

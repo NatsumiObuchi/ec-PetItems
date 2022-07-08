@@ -95,26 +95,38 @@ class UserControllerTest {
 				.andExpect(status().isOk()).andExpect(view().name("register_user"));
 	}
 
-//	@Test
-//	@DisplayName("メールアドレス重複時のスコープの中身と遷移先チェック")
-//	void testMailAddress() throws Exception {
-//		String email = "yksumvcl77@gmail.com";
-//		User user = new User();
-//		user.setEmail(email);
-//		user.setPassword("aaaaaaaa");
-//		// Controllerのinsertメソッドを呼び出して、結果を返す。メールアドレスで重複エラーが出てる前提。
-//		when(userService.duplicationCheckOfEmail(userForm)).thenReturn(true);
-//		MvcResult result = mockMvc
-//				.perform(post("/user/signin").param("name", "工藤陽介").param("email", "yksumvcl77@gmail.com")
-//						.param("password", "test123").param("confirmPassword", "test123").param("zipcode", "1240011")
-//						.param("address", "テスト住所").param("telephone", "08012345678"))
-//				.andExpect(view().name("user/register_user")).andReturn();
-//		// スコープのデータを取り出す
-//		ModelAndView mav = result.getModelAndView();
-//		String message = (String) mav.getModel().get("emailError");
-//		// 正しく格納されているか確認
-//		assertEquals(message, "そのメールアドレスはすでに使われています");
-//	}
+	@Test
+	@DisplayName("メールアドレス重複時のスコープの中身と遷移先チェック")
+	void testDuplicateMailAddress() throws Exception {
+		// Controllerのinsertメソッドを呼び出して、結果を返す。メールアドレスで重複エラーが出てる前提。
+		when(userService.duplicationCheckOfEmail(any(UserForm.class))).thenReturn(true);
+		MvcResult result = mockMvc
+				.perform(post("/user/signin").param("name", "工藤陽介").param("email", "yksumvcl77@gmail.com")
+						.param("password", "test1234").param("confirmPassword", "test1234").param("zipcode", "1240011")
+						.param("address", "テスト住所").param("telephone", "08012345678"))
+				.andExpect(view().name("register_user")).andReturn();
+		// スコープのデータを取り出す
+		ModelAndView mav = result.getModelAndView();
+//		System.out.println(mav);
+		String message = (String) mav.getModel().get("emailError");
+		// 正しく格納されているか確認
+		assertEquals("このメールアドレスは既に登録されているため登録できません", message);
+	}
+
+	@Test
+	@DisplayName("確認用パスワードがパスワードと一致しない場合の遷移先とスコープ内の確認")
+	void testDisagreementPassword() throws Exception {
+		when(userService.duplicationCheckOfEmail(any(UserForm.class))).thenReturn(false);// メールアドレスで重複エラーが出ていない
+		MvcResult result = mockMvc
+				.perform(post("/user/signin").param("name", "工藤陽介").param("email", "yksumvcl77@gmail.com")
+						.param("password", "test1234").param("confirmPassword", "test12345").param("zipcode", "1240011")
+						.param("address", "テスト住所").param("telephone", "08012345678"))
+				.andExpect(view().name("register_user")).andReturn();
+		ModelAndView mav = result.getModelAndView();
+//		System.out.println(mav);
+		String message = (String) mav.getModel().get("confirmPasswordError");
+		assertEquals("パスワードと確認用パスワードが不一致です", message);
+	}
 
 	@Test
 	@DisplayName("signinメソッドの正常系テスト（遷移先確認)")
@@ -165,13 +177,16 @@ class UserControllerTest {
 //		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 //		String testPass = "aaaaaaaa";
 //		String hashPass = passwordEncoder.encode(testPass);// テスト用パスワードをハッシュ化
-//		when(bcpe.matches(hashPass, "aaaaaaaa")).thenReturn(true);
+//		when(bcpe.matches(hashPass, "aaaaaaaa"));
 //		when(userService.loginCheck(any(UserForm.class))).thenReturn(loginUser);
 //		MvcResult result = mockMvc
 //				.perform(get("/user/login").param("email", "test@test.com").param("password", "aaaaaaaa"))
 //				.andExpect(status().isOk()).andExpect(view().name("forward:/item/top")).andReturn();
-//		ModelAndView mav = result.getModelAndView();
-//		UserForm form = (UserForm) mav.getModel().get("userForm");// モックでセットしたパラメータの値を取得
+//		HttpSession session = result.getRequest().getSession();
+//		assertEquals(null, session.getAttribute("transitionSourcePage"));
+////		ModelAndView mav = result.getModelAndView();
+////		UserForm form = (UserForm) mav.getModel().get("userForm");// モックでセットしたパラメータの値を取得
+//
 //	}
 
 	// ハッシュ化したパスワードをどう一致させるか不明。
