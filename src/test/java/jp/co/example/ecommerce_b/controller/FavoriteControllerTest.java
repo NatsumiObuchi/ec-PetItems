@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -92,23 +91,23 @@ class FavoriteControllerTest {
 		assertEquals("お気に入り登録はありません", message);
 	}
 
-	@Test
-	@DisplayName("お気に入り登録済がある場合の遷移先とスコープの値を確認")
-	void testFavoriteList() throws Exception {
-		User user = new User();
-		List<Favorite> favoriteList = new ArrayList<>();
-		Favorite favorite = new Favorite();
-		favoriteList.add(favorite);
-		MockHttpSession mockHttpSession = new MockHttpSession();
-		mockHttpSession.setAttribute("user", user);// ユーザーがログインしている前提のテストのためMockにsessionをセット
-		when(service.favoriteAll(anyInt())).thenReturn(favoriteList);
-		System.out.println("favoriteList.size() = " + favoriteList.size());
-		MvcResult result = mockMvc.perform(get("/favorite/favoriteList")
-				.session(mockHttpSession)).andDo(print())
-				.andExpect(status().isOk()).andExpect(view().name("favorite_list")).andReturn();
-		HttpSession session = result.getRequest().getSession();
-		assertEquals(favoriteList.getClass(), session.getAttribute("favoriteList").getClass());
-	}
+//	@Test
+//	@DisplayName("お気に入り登録済がある場合の遷移先とスコープの値を確認")
+//	void testFavoriteList() throws Exception {
+//		User user = new User();
+//		List<Favorite> favoriteList = new ArrayList<>();
+//		Favorite favorite = new Favorite();
+//		favoriteList.add(favorite);
+//		MockHttpSession mockHttpSession = new MockHttpSession();
+//		mockHttpSession.setAttribute("user", user);// ユーザーがログインしている前提のテストのためMockにsessionをセット
+//		when(service.favoriteAll(anyInt())).thenReturn(favoriteList);
+//		System.out.println("favoriteList.size() = " + favoriteList.size());
+//		MvcResult result = mockMvc.perform(get("/favorite/favoriteList")
+//				.session(mockHttpSession)).andDo(print())
+//				.andExpect(status().isOk()).andExpect(view().name("favorite_list")).andReturn();
+//		HttpSession session = result.getRequest().getSession();
+//		assertEquals(favoriteList.getClass(), session.getAttribute("favoriteList").getClass());
+//	}
 
 	@Test
 	@DisplayName("未登録ユーザーがお気に入り登録する処理の遷移先とスコープ内の値を確認")
@@ -130,4 +129,19 @@ class FavoriteControllerTest {
 				.param("userId", "1")).andExpect(view().name("redirect:/favorite/favoriteList"));
 	}
 
+	@Test
+	@DisplayName("未登録ユーザ&登録ユーザーがログインした後にお気に入り登録される処理の遷移先確認")
+	void testInsertNonRogin() throws Exception {
+		User user = new User();
+		Favorite newFavorite = new Favorite();
+		MockHttpSession mockHttpSession = new MockHttpSession();
+		mockHttpSession.setAttribute("user", user);
+		mockHttpSession.setAttribute("newFavorite", newFavorite);
+		when(service.findByUserIdItemId(anyInt(), anyInt())).thenReturn(null);
+		mockMvc.perform(get("/favorite/insert2").session(mockHttpSession))
+//				.param("itemId", "1")
+//				.param("date", "date")
+//				.param("userId", "1"))
+		.andExpect(status().isOk()).andExpect(view().name("favorite_list"));
+	}
 }

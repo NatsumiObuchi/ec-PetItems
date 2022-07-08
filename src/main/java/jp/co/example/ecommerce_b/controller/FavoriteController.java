@@ -46,12 +46,12 @@ public class FavoriteController {
 		Integer userId = user.getId();
 		List<Favorite> favoriteList = favoriteService.favoriteAll(userId);
 		if (favoriteList.size() == 0) {// ユーザ登録済でもお気に入りがゼロの時
-			System.out.println(1111111);
-			System.out.println("ControllerのfavoriteList = " + favoriteList);
+//			System.out.println(1111111);
+//			System.out.println("ControllerのfavoriteList = " + favoriteList);
 			String message = "お気に入り登録はありません";
 			model.addAttribute("message", message);
 		}
-		System.out.println(222222);
+//		System.out.println(222222);
 		session.setAttribute("favoriteList", favoriteList);
 		return "favorite_list";
 	}
@@ -91,15 +91,14 @@ public class FavoriteController {
 	public String favorite2(Model model) {
 		User user = (User) session.getAttribute("user");
 		Favorite newFavorite = (Favorite) session.getAttribute("newFavorite");
-		if (newFavorite == null) {
-			return favoriteListShow(model);
-		}
 		Favorite oldFavorite = favoriteService.findByUserIdItemId(user.getId(), newFavorite.getItemId());
 		newFavorite.setUserId(user.getId());// 取得できたuserIdをここでやっとセット
 
 		if (oldFavorite == null) {
 			favoriteService.insertFavorite(newFavorite);
+			System.out.println("----------oldFavorite==null----------");
 		} else {// 既に登録済であったユーザの処理
+			System.out.println(1234567);
 			String message = "既に登録済の商品です";
 			model.addAttribute("message", message);
 		}
