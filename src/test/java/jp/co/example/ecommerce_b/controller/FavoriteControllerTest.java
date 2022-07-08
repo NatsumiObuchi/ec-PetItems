@@ -144,4 +144,20 @@ class FavoriteControllerTest {
 //				.param("userId", "1"))
 		.andExpect(status().isOk()).andExpect(view().name("favorite_list"));
 	}
+
+	@Test
+	@DisplayName("登録ユーザーがログインした後に既にお気に入り済であった時の遷移先とスコープの値を確認")
+	void testDuplicationFavorite() throws Exception {
+		User user = new User();
+		Favorite newFavorite = new Favorite();
+		MockHttpSession mockHttpSession = new MockHttpSession();
+		mockHttpSession.setAttribute("user", user);
+		mockHttpSession.setAttribute("newFavorite", newFavorite);
+		when(service.findByUserIdItemId(anyInt(), anyInt())).thenReturn(newFavorite);
+		MvcResult result = mockMvc.perform(get("/favorite/insert2").session(mockHttpSession)).andExpect(status().isOk())
+				.andExpect(view().name("favorite_list")).andReturn();
+		ModelAndView mav = result.getModelAndView();
+		String message = (String) mav.getModel().get("message");
+		assertEquals("既に登録済の商品です", message);
+	}
 }
