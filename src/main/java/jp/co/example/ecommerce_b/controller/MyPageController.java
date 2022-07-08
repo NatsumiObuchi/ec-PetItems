@@ -103,8 +103,10 @@ public class MyPageController {
 	@RequestMapping("/changePermission")
 	public String permission(UserForm form, Model model) {
 		User user = (User) session.getAttribute("user");
+		System.out.println(user.getPassword());
 		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
 		String inputPass = form.getPassword();
+		System.out.println(inputPass);
 		if (bcpe.matches(inputPass, user.getPassword())) {// 入力されたパスワードとハッシュ化されたパスワードがマッチ（照合）
 			if (!(form.getEmail().equals(user.getEmail()))) {// 今ログインしているユーザのメールアドレスでなければエラー
 				model.addAttribute("AuthenticationFailureMessage", "メールアドレス、またはパスワードが間違っています");
@@ -120,14 +122,15 @@ public class MyPageController {
 	/**
 	 * ユーザ情報を変更する画面 ユーザ情報を更新するためのformに現在のuser情報をセットし表示する
 	 * 
-	 * @return
+	 * @return　
 	 */
 	@RequestMapping("/change")
 	public String change(UserUpdateForm form, Model model) {
 		User user = (User) session.getAttribute("user");
+		System.out.println("-----------!!!!"+form);
 		if (form.getName() == null && form.getEmail() == null && form.getZipcode() == null && form.getAddress() == null
 				&& form.getTelephone() == null) {// UserUpdateformに何も情報がないとき(最初にこの画面にきた時)
-			BeanUtils.copyProperties(user, form);
+		BeanUtils.copyProperties(user, form);
 		}
 		model.addAttribute("form", form);
 		return "change_userInfo";
@@ -352,9 +355,14 @@ public class MyPageController {
 	public String myCoupon(Integer id, Model model) {
 		List<UsersCoupon> usersCouponList = couponServise.findAllUsersCoupon(id);
 		session.setAttribute("usersCouponList", usersCouponList);
-		if (usersCouponList == null) {
-			model.addAttribute("non", "所持しているクーポンはありません。");
+		System.out.println("1111111111"+usersCouponList);
+		if (usersCouponList.isEmpty()) {
+			model.addAttribute("nonCoupon", "所持しているクーポンはありません。");
+			System.out.println("22222222222"+usersCouponList);
+
 		}
 		return "myCoupon";
 	}
+	
+	
 }
