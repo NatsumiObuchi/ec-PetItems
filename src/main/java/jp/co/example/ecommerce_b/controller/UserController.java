@@ -65,11 +65,11 @@ public class UserController {
 	@RequestMapping("/signin")
 	public String signin(@Validated UserForm form, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			return toSignin();
+			return "register_user";
 		} else if (userService.duplicationCheckOfEmail(form)
 				|| !(form.getConfirmPassword().equals(form.getPassword()))) {// メールアドレスが重複しているか、確認用パスワードがパスワードと一致しない場合
 			userService.signinCheck(form, model);
-			return toSignin();
+			return "register_user";
 		} else {// ユーザー登録処理
 			User user = new User();
 			BeanUtils.copyProperties(form, user);
@@ -107,12 +107,12 @@ public class UserController {
 	public String login(UserForm form, Model model) {
 
 		BCryptPasswordEncoder bcpe = new BCryptPasswordEncoder();
-		String oldPass = form.getPassword();
+		String inputPass = form.getPassword();
 		User user = userService.findByEmail(form);
 		if (user == null) {
 			model.addAttribute("loginErrorMessage", "メールアドレス、またはパスワードが間違っています");
 			return "login";
-		} else if (bcpe.matches(oldPass, user.getPassword())) {
+		} else if (bcpe.matches(inputPass, user.getPassword())) {
 			form.setPassword(user.getPassword());
 			User user2 = userService.loginCheck(form);
 			session.setAttribute("user", user2);
@@ -170,7 +170,7 @@ public class UserController {
 	}
 
 	/**
-	 * ログインしてない人がお気に入り登録、もしくはお気に入りリストを見ようとした際に入ってくる処理
+	 * ログインしてない人がお気に入り登録をしようとした際に入ってくる処理
 	 * 
 	 * @param model
 	 * @return

@@ -184,9 +184,7 @@ public class ItemController {
 
 		// お気に入りリストの情報(お気に入り済か、そうでないか)
 		User user = (User) session.getAttribute("user");
-		if (user == null) {// ユーザーでログインしていない
-			model.addAttribute("nonUser", null);// 特にこの記述は必要ないがこの分岐をしないとお気に入りボタンがうまく表示されない
-		} else {// ユーザでログイン済
+		if (user != null) {// ユーザーでログインしていない
 			Favorite favorite = favoriteService.findByUserIdItemId(user.getId(), id);
 			if (favorite == null) {// お気に入り登録していない
 				model.addAttribute("favorite", null);
