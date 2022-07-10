@@ -149,11 +149,16 @@ class FavoriteControllerTest {
 //	@DisplayName("登録ユーザーがログインした後に既にお気に入り済であった時の遷移先とスコープの値を確認")
 //	void testDuplicationFavorite() throws Exception {
 //		User user = new User();
+//		List<Favorite> favoriteList = new ArrayList<>();
 //		Favorite newFavorite = new Favorite();
+//		favoriteList.add(newFavorite);
 //		MockHttpSession mockHttpSession = new MockHttpSession();
+//		when(service.findByUserIdItemId(anyInt(), anyInt())).thenReturn(newFavorite);
+//		when(service.favoriteAll(anyInt())).thenReturn(favoriteList);
+//		System.out.println("favoriteList = " + favoriteList);
 //		mockHttpSession.setAttribute("user", user);
 //		mockHttpSession.setAttribute("newFavorite", newFavorite);
-//		when(service.findByUserIdItemId(anyInt(), anyInt())).thenReturn(newFavorite);
+//		mockHttpSession.setAttribute("favoriteList", favoriteList);
 //		MvcResult result = mockMvc.perform(get("/favorite/insert2").session(mockHttpSession)).andExpect(status().isOk())
 //				.andExpect(view().name("favorite_list")).andReturn();
 //		ModelAndView mav = result.getModelAndView();
