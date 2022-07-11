@@ -96,9 +96,7 @@ public class FavoriteController {
 
 		if (oldFavorite == null) {
 			favoriteService.insertFavorite(newFavorite);
-			System.out.println("----------oldFavorite==null----------");
 		} else {// 既に登録済であったユーザの処理
-			System.out.println(1234567);
 			String message = "既に登録済の商品です";
 			model.addAttribute("message", message);
 		}

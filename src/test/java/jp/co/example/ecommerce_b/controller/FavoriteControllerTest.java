@@ -149,26 +149,33 @@ class FavoriteControllerTest {
 		.andExpect(status().isOk()).andExpect(view().name("favorite_list"));
 	}
 
-//	@Test
-//	@DisplayName("登録ユーザーがログインした後に既にお気に入り済であった時の遷移先とスコープの値を確認")
-//	void testDuplicationFavorite() throws Exception {
-//		User user = new User();
-//		List<Favorite> favoriteList = new ArrayList<>();
-//		Favorite newFavorite = new Favorite();
-//		favoriteList.add(newFavorite);
-//		MockHttpSession mockHttpSession = new MockHttpSession();
-//		when(service.findByUserIdItemId(anyInt(), anyInt())).thenReturn(newFavorite);
-//		when(service.favoriteAll(anyInt())).thenReturn(favoriteList);
+	@Test
+	@DisplayName("登録ユーザーがログインした後に既にお気に入り済であった時の遷移先とスコープの値を確認")
+	void testDuplicationFavorite() throws Exception {
+		User user = new User();
+		user.setId(6);
+		List<Favorite> favoriteList = new ArrayList<>();
+		Favorite newFavorite = new Favorite();
+		Item item = new Item();
+		item.setId(1);
+		newFavorite.setItem(item);
+		newFavorite.setItemId(1);// 以下のfindByUserIdItemId()の第2引数に合致するようにここでsetItemId()を指定する→ControllerでnewFavorite.getItemId()となっているので
+		favoriteList.add(newFavorite);
+		Favorite oldFavorite = new Favorite();
+		oldFavorite.setItem(item);
+		when(service.findByUserIdItemId(anyInt(), anyInt())).thenReturn(oldFavorite);
+		when(service.favoriteAll(anyInt())).thenReturn(favoriteList);
 //		System.out.println("favoriteList = " + favoriteList);
-//		mockHttpSession.setAttribute("user", user);
-//		mockHttpSession.setAttribute("newFavorite", newFavorite);
-//		mockHttpSession.setAttribute("favoriteList", favoriteList);
-//		MvcResult result = mockMvc.perform(get("/favorite/insert2").session(mockHttpSession)).andExpect(status().isOk())
-//				.andExpect(view().name("favorite_list")).andReturn();
-//		ModelAndView mav = result.getModelAndView();
-//		String message = (String) mav.getModel().get("message");
-//		assertEquals("既に登録済の商品です", message);
-//	}
+		MockHttpSession mockHttpSession = new MockHttpSession();
+		mockHttpSession.setAttribute("user", user);
+		mockHttpSession.setAttribute("newFavorite", newFavorite);
+		mockHttpSession.setAttribute("favoriteList", favoriteList);
+		MvcResult result = mockMvc.perform(get("/favorite/insert2").session(mockHttpSession)).andExpect(status().isOk())
+				.andExpect(view().name("favorite_list")).andReturn();
+		ModelAndView mav = result.getModelAndView();
+		String message = (String) mav.getModel().get("message");
+		assertEquals("既に登録済の商品です", message);
+	}
 
 	@Test
 	@DisplayName("お気に入りリストから削除した際の遷移先確認")
