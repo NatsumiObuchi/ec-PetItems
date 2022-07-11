@@ -91,23 +91,22 @@ class FavoriteControllerTest {
 		assertEquals("お気に入り登録はありません", message);
 	}
 
-//	@Test
-//	@DisplayName("お気に入り登録済がある場合の遷移先とスコープの値を確認")
-//	void testFavoriteList() throws Exception {
-//		User user = new User();
-//		List<Favorite> favoriteList = new ArrayList<>();
-//		Favorite favorite = new Favorite();
-//		favoriteList.add(favorite);
-//		MockHttpSession mockHttpSession = new MockHttpSession();
-//		mockHttpSession.setAttribute("user", user);// ユーザーがログインしている前提のテストのためMockにsessionをセット
-//		when(service.favoriteAll(anyInt())).thenReturn(favoriteList);
-//		System.out.println("favoriteList.size() = " + favoriteList.size());
-//		MvcResult result = mockMvc.perform(get("/favorite/favoriteList")
-//				.session(mockHttpSession)).andDo(print())
-//				.andExpect(status().isOk()).andExpect(view().name("favorite_list")).andReturn();
-//		HttpSession session = result.getRequest().getSession();
-//		assertEquals(favoriteList.getClass(), session.getAttribute("favoriteList").getClass());
-//	}
+	@Test
+	@DisplayName("お気に入り登録済がある場合の遷移先とスコープの値を確認")
+	void testFavoriteList() throws Exception {
+		User user = new User();
+		List<Favorite> favoriteList = new ArrayList<>();
+		Favorite favorite = new Favorite();
+		favoriteList.add(favorite);
+		MockHttpSession mockHttpSession = new MockHttpSession();
+		mockHttpSession.setAttribute("user", user);// ユーザーがログインしている前提のテストのためMockにsessionをセット
+		when(service.favoriteAll(anyInt())).thenReturn(favoriteList);
+		System.out.println("favoriteList.size() = " + favoriteList.size());
+		MvcResult result = mockMvc.perform(get("/favorite/favoriteList").session(mockHttpSession))
+				.andExpect(status().isOk()).andExpect(view().name("favorite_list")).andReturn();
+		HttpSession session = result.getRequest().getSession();
+		assertEquals(favoriteList.getClass(), session.getAttribute("favoriteList").getClass());
+	}
 
 	@Test
 	@DisplayName("未登録ユーザーがお気に入り登録する処理の遷移先とスコープ内の値を確認")
@@ -145,26 +144,26 @@ class FavoriteControllerTest {
 		.andExpect(status().isOk()).andExpect(view().name("favorite_list"));
 	}
 
-//	@Test
-//	@DisplayName("登録ユーザーがログインした後に既にお気に入り済であった時の遷移先とスコープの値を確認")
-//	void testDuplicationFavorite() throws Exception {
-//		User user = new User();
-//		List<Favorite> favoriteList = new ArrayList<>();
-//		Favorite newFavorite = new Favorite();
-//		favoriteList.add(newFavorite);
-//		MockHttpSession mockHttpSession = new MockHttpSession();
-//		when(service.findByUserIdItemId(anyInt(), anyInt())).thenReturn(newFavorite);
-//		when(service.favoriteAll(anyInt())).thenReturn(favoriteList);
-//		System.out.println("favoriteList = " + favoriteList);
-//		mockHttpSession.setAttribute("user", user);
-//		mockHttpSession.setAttribute("newFavorite", newFavorite);
-//		mockHttpSession.setAttribute("favoriteList", favoriteList);
-//		MvcResult result = mockMvc.perform(get("/favorite/insert2").session(mockHttpSession)).andExpect(status().isOk())
-//				.andExpect(view().name("favorite_list")).andReturn();
-//		ModelAndView mav = result.getModelAndView();
-//		String message = (String) mav.getModel().get("message");
-//		assertEquals("既に登録済の商品です", message);
-//	}
+	@Test
+	@DisplayName("登録ユーザーがログインした後に既にお気に入り済であった時の遷移先とスコープの値を確認")
+	void testDuplicationFavorite() throws Exception {
+		User user = new User();
+		List<Favorite> favoriteList = new ArrayList<>();
+		Favorite newFavorite = new Favorite();
+		favoriteList.add(newFavorite);
+		MockHttpSession mockHttpSession = new MockHttpSession();
+		when(service.findByUserIdItemId(anyInt(), anyInt())).thenReturn(newFavorite);
+		when(service.favoriteAll(anyInt())).thenReturn(favoriteList);
+		System.out.println("favoriteList = " + favoriteList);
+		mockHttpSession.setAttribute("user", user);
+		mockHttpSession.setAttribute("newFavorite", newFavorite);
+		mockHttpSession.setAttribute("favoriteList", favoriteList);
+		MvcResult result = mockMvc.perform(get("/favorite/insert2").session(mockHttpSession)).andExpect(status().isOk())
+				.andExpect(view().name("favorite_list")).andReturn();
+		ModelAndView mav = result.getModelAndView();
+		String message = (String) mav.getModel().get("message");
+		assertEquals("既に登録済の商品です", message);
+	}
 
 	@Test
 	@DisplayName("お気に入りリストから削除した際の遷移先確認")
