@@ -156,7 +156,7 @@ class UserControllerTest {
 	@Test
 	@DisplayName("ログインに失敗した際(メールアドレスが見つからない)のスコープの中身と遷移先の確認")
 	void testLogin() throws Exception {
-		// メールアドレスの検索でuserがnullを返す時をしてすればよい
+		// メールアドレスの検索でuserがnullを返す時を指定すればよい
 		when(userService.findByEmail(any(UserForm.class))).thenReturn(null);
 		MvcResult result = mockMvc
 				.perform(get("/user/login"))// .param("email", "test@test.com"))上でwhen~~thenReturn(null)を返しているので不要
