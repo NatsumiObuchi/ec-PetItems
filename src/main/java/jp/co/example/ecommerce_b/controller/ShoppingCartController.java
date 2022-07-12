@@ -50,7 +50,6 @@ public class ShoppingCartController {
 			user = new User();
 			user.setId(0);
 		}
-		System.out.println("userId:" + user.getId());
 
 		// カートリスト周り
 		checkOrderBeforePayment(user.getId());// ユーザーの未払いオーダーがあった場合、その「オーダー」をセッションに格納。なくてもuserId=0の「オーダー」を格納。
@@ -62,29 +61,19 @@ public class ShoppingCartController {
 				session.setAttribute("cartList", null);
 			} else {
 				Order order = (Order) session.getAttribute("order");
-				System.out.println("order:" + order);
 				Integer orderId = order.getId();
-				System.out.println("orderId:" + orderId);
 				List<OrderItem> orderItemsFromDB = orderItemService.findByOrderId(orderId);
-				System.out.println("orderItemsFromDB:" + orderItemsFromDB);
 
-				if (orderItemsFromDB == null) {
-					String emptyMessage = "現在、カートに商品はありません。";
-					model.addAttribute("emptyMessage", emptyMessage);
-					session.setAttribute("cartList", null);
-				} else if (orderItemsFromDB.size() == 0) {
+				if (orderItemsFromDB == null || orderItemsFromDB.size() == 0) {
 					String emptyMessage = "現在、カートに商品はありません。";
 					model.addAttribute("emptyMessage", emptyMessage);
 					session.setAttribute("cartList", null);
 				} else {
 					List<OrderItem> orderItems = new ArrayList<>();
 					for (OrderItem orderItem : orderItemsFromDB) {
-						Item item = itemService.load(orderItem.getItemId());
-						orderItem.setItem(item);
-						orderItem.setSubTotal(item.getPrice() * orderItem.getQuantity());
+						orderItem.setSubTotal(orderItem.getItem().getPrice() * orderItem.getQuantity());
 						orderItems.add(orderItem);
 					}
-					System.out.println("orderItems:" + orderItems);
 					session.setAttribute("cartList", orderItems);
 					order = (Order) session.getAttribute("order");
 					session.setAttribute("totalPrice", order.getTotalPrice());
