@@ -68,7 +68,7 @@ public class MyPageController {
 		return new UserPasswordUpdateForm();
 	}
 
-	/**
+	/**test1
 	 * マイページを表示する
 	 * 
 	 * @return
@@ -78,7 +78,7 @@ public class MyPageController {
 		return "myPage";
 	}
 
-	/**
+	/**test2,test3
 	 * ユーザ変更前にパスワード入力を求める画面を表示
 	 * 
 	 * @return
@@ -119,7 +119,7 @@ public class MyPageController {
 		return "confirm_userInfo";
 	}
 
-	/**
+	/**test4,test5
 	 * ユーザ情報を変更する画面 ユーザ情報を更新するためのformに現在のuser情報をセットし表示する
 	 * 
 	 * @return　
@@ -268,6 +268,7 @@ public class MyPageController {
 	}
 
 	/**
+	 * test8,test9
 	 * お届け先情報追加画面
 	 * 
 	 * @return
@@ -275,6 +276,7 @@ public class MyPageController {
 	@RequestMapping("/registerShow")
 	public String registerShow(Integer id, Model model) {
 		List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(id);
+		System.out.println("~~~~~~~~~~~"+addresseeList);
 		if (addresseeList.size() == 3) {
 			model.addAttribute("full", "お届け先情報の登録は3件までです。追加するにはどれかを削除してください。");
 			return addressee(id, model);
@@ -283,8 +285,7 @@ public class MyPageController {
 	}
 
 
-	/**
-	 * 
+	/**test9,test10
 	 * ユーザのお届け先を新規追加する
 	 * 
 	 * @param insertAddresseeForm お届け先登録情報
@@ -295,7 +296,9 @@ public class MyPageController {
 	@RequestMapping("/addresseeRegister")
 	public String addresseeRegister(@Validated InsertAddresseeForm insertAddresseeForm, BindingResult result,
 			Model model) {
+		System.out.println(insertAddresseeForm);
 		if (result.hasErrors()) {
+			System.out.println("%%%%%%%%%%%%%%%%%%%%%%");
 			return "addressee_register";
 		}
 		// 値のコピー
@@ -306,7 +309,7 @@ public class MyPageController {
 		return addressee(insertAddresseeForm.getUserId(), model);
 	}
 
-	/**
+	/**test12
 	 * お届け先情報を削除する
 	 * 
 	 * @param id          userId
@@ -320,6 +323,14 @@ public class MyPageController {
 		return addressee(id, model);
 	}
 
+	/**test13,test14
+	 * デフォルトのお届け先を設定する
+	 * @param id　ユーザーid
+	 * @param addresseeId
+	 * @param setting
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/settingAddressee")
 	public String settingAddressee(Integer id, Integer addresseeId, boolean setting, Model model) {
 		if (addresseeId == null) {
@@ -345,7 +356,7 @@ public class MyPageController {
 		}
 	}
 	
-	/**
+	/**test6,test7
 	 * マイクーポンを表示する
 	 * 
 	 * @param id userId
@@ -356,7 +367,7 @@ public class MyPageController {
 		List<UsersCoupon> usersCouponList = couponServise.findAllUsersCoupon(id);
 		session.setAttribute("usersCouponList", usersCouponList);
 		System.out.println("1111111111"+usersCouponList);
-		if (usersCouponList.isEmpty()) {
+		if (usersCouponList.size()==0) {
 			model.addAttribute("nonCoupon", "所持しているクーポンはありません。");
 			System.out.println("22222222222"+usersCouponList);
 

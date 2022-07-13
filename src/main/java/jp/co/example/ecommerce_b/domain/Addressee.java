@@ -14,6 +14,14 @@ public class Addressee {
 	private String address;
 	/** お届け先設定 */
 	private boolean settingAddressee;
+	
+	public Addressee () {}
+	
+	public Addressee(String zipCode, String address) {
+		super();
+		this.zipCode = zipCode;
+		this.address = address;
+	}
 
 	public Integer getId() {
 		return id;
