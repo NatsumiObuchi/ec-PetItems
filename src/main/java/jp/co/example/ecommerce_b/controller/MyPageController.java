@@ -298,7 +298,6 @@ public class MyPageController {
 			Model model) {
 		System.out.println(insertAddresseeForm);
 		if (result.hasErrors()) {
-			System.out.println("%%%%%%%%%%%%%%%%%%%%%%");
 			return "addressee_register";
 		}
 		// 値のコピー
