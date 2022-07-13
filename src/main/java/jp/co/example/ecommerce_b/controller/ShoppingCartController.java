@@ -59,7 +59,7 @@ public class ShoppingCartController {
 				String emptyMessage = "現在、カートに商品はありません。";
 				model.addAttribute("emptyMessage", emptyMessage);
 				session.setAttribute("cartList", null);
-			} else {
+			} else {// ログインユーザーの場合
 				Order order = (Order) session.getAttribute("order");
 				Integer orderId = order.getId();
 				List<OrderItem> orderItemsFromDB = orderItemService.findByOrderId(orderId);
@@ -115,7 +115,7 @@ public class ShoppingCartController {
 			order = orderService.insertOrder(order);
 //			System.out.println("if:"+order);
 		} else {
-			System.out.println(111);
+//			System.out.println(111);
 		}
 
 		// OrderItem
@@ -142,7 +142,6 @@ public class ShoppingCartController {
 		orderService.update(order);// DB上のorderを最新に更新
 //		System.out.println("update:"+order);
 
-		System.out.println(order.getOrderItemList());
 		return cartListShow(model);
 	}
 
@@ -166,7 +165,6 @@ public class ShoppingCartController {
 		order.setOrderItemList(cartList);// 更新
 		order.setTotalPrice(order.calcTotalPrice());
 		session.setAttribute("order", order);// スコープへの格納
-		System.out.println(order);
 		orderService.updateOrdersWhenDeleteOrderItemFromCart(order);// DBの更新
 		return cartListShow(model);
 	}
@@ -175,10 +173,9 @@ public class ShoppingCartController {
 	 * @param userId orderをセッションスコープに格納する処理。
 	 */
 	public void checkOrderBeforePayment(Integer userId) {
-		// DBに存在すれば支払い前のorderが入り、DBに存在しなければ新しいオーダーが入る
 		Order order = orderService.findOrderBeforePayment(userId);
-		if (order == null) {
-			if (session.getAttribute("order") != null) {
+		if (order == null) {// ユーザーの支払い前のオーダー(status=0)がDBにない時
+			if (session.getAttribute("order") != null) {//
 				order = (Order) session.getAttribute("order");
 			} else {
 				order = new Order();
