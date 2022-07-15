@@ -12,14 +12,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 import jp.co.example.ecommerce_b.domain.User;
 
 @SpringBootTest
 class UserServiceTest {
 
-	@Autowired
-	private NamedParameterJdbcTemplate template;
+//	@Autowired
+//	private NamedParameterJdbcTemplate template;
 
 	@Autowired
 	private UserService service;
@@ -40,6 +41,9 @@ class UserServiceTest {
 	 */
 	@BeforeEach
 	void setUp() throws Exception {
+		SingleConnectionDataSource singleConnectionDataSource = new SingleConnectionDataSource(
+				"jdbc:postgresql://localhost:5432/ec_exam_test", "postgres", "postgres", true);
+		NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(singleConnectionDataSource);
 		User user = new User();
 		// userテーブルの情報をサラの状態にする
 		String deleteSql = "DELETE FROM users";
@@ -58,10 +62,10 @@ class UserServiceTest {
 	 */
 	@AfterEach
 	void tearDown() throws Exception {
-		User user = new User();
-		String deleteSql = "DELETE FROM users";
-		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
-		template.update(deleteSql, param);
+//		User user = new User();
+//		String deleteSql = "DELETE FROM users";
+//		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
+//		template.update(deleteSql, param);
 	}
 
 	/**
@@ -69,6 +73,9 @@ class UserServiceTest {
 	 */
 	@Test
 	void testInsert() {
+		SingleConnectionDataSource singleConnectionDataSource = new SingleConnectionDataSource(
+				"jdbc:postgresql://localhost:5432/ec_exam_test", "postgres", "postgres", true);
+		NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(singleConnectionDataSource);
 		User user = new User();
 		user.setName("name");
 		user.setEmail("email@email.com");
