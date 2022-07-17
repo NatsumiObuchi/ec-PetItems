@@ -22,8 +22,6 @@
 	<!-- /.container-fluid -->
 	<div class="container">
 
-		<img th:src="@{/img/coupon100.png}" alt="">
-
 		<!--パンくずリスト-->
 		<p class="pan-list">
 			<span class="list-active active"><a th:href="@{/item/list}">商品一覧</a></span>
@@ -64,6 +62,11 @@
 											<div th:each="coupon:${session.usersCouponList}">
 												<!-- 使用条件を満たすクーポンはラジオボタンで表示 -->
 												<label class="radio-inline">
+														<div class="center">
+															<img th:src="@{/img/} + ${coupon.coupon.couponImage}"
+																class="img-responsive img-rounded item-img-center" width="300"
+																height="500" /><br />
+														</div>
 														<div id="use-coupon" class="radio" 
 															name="usersCouponId" th:value="${coupon.id}"
 															th:text="・+${coupon.coupon.discountPrice}+円引きクーポン"></div>
