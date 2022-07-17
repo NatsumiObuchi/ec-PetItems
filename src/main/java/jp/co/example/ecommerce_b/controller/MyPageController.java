@@ -318,6 +318,15 @@ public class MyPageController {
 		return addressee(id, model);
 	}
 
+	/**
+	 * お届け先情報のデフォルト表示設定(注文確認画面)をする
+	 * 
+	 * @param id          ユーザーID
+	 * @param addresseeId お届け先ID
+	 * @param setting     true
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/settingAddressee")
 	public String settingAddressee(Integer id, Integer addresseeId, boolean setting, Model model) {
 		if (addresseeId == null) {
