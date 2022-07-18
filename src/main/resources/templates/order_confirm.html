@@ -133,16 +133,6 @@
 											<span class="total-point-text" th:text="ポイント（円相当）"></span>
 										</div>
 									</td>
-									<td>
-										<div class="row">
-											<div class="col-sm-12">
-												<span id="total-point"
-													th:text="${#numbers.formatInteger(session.point.point, 2, 'COMMA')}"
-													th:data-total-point="${session.point.point}"></span>
-												<span class="total-point-text" th:text="ポイント（円相当）"></span>
-											</div>
-										</div>
-									</td>
 								</tr>
 								<tr>
 									<td align="center">
