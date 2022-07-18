@@ -218,7 +218,12 @@
 											<div th:each="coupon:${session.usersCoupon}">
 												<!-- 使用条件を満たすクーポンはラジオボタンで表示 -->
 												<label class="radio-inline">
-													<div　th:if="${coupon.coupon.startingAmount}<=${session.totalPrice}">
+													<div th:if="${coupon.coupon.startingAmount}<=${session.totalPrice}">
+														<div class="center">
+															<img th:src="@{/img/} + ${coupon.coupon.couponImage}"
+																class="img-responsive img-rounded item-img-center" width="300"
+																height="500" /><br />
+														</div>
 														<input id="use-coupon" class="radio" type="radio"
 															name="usersCouponId" th:value="${coupon.id}"
 															th:text="${coupon.coupon.discountPrice}+円引きクーポン">
@@ -229,16 +234,20 @@
 															th:text="有効期限：+${#dates.format(coupon.couponExpirationDate,'yyyy年MM月dd日')}">
 															有効期限</div><br>
 														<input type="hidden" name="discountPrice"
-															th:value="${coupon.coupon.discountPrice}">
-													</div>
+														th:value="${coupon.coupon.discountPrice}">
 												</label>
 												<!-- 使用条件に満たないクーポンは選択できない -->
-												<div th:unless="${coupon.coupon.startingAmount}<=${session.totalPrice}">
-													<div th:text="・+${coupon.coupon.discountPrice}+円引きクーポン"></div>
-													<div th:text="使用条件：+${coupon.coupon.startingAmount}+円以上のお買い上げ"
-														style="color: red;">
-														使用条件
-													</div>
+													<div th:unless="${coupon.coupon.startingAmount}<=${session.totalPrice}">
+														<div class="center">
+															<img th:src="@{/img/} + ${coupon.coupon.couponImage}"
+																class="img-responsive img-rounded item-img-center" width="300"
+																height="500" /><br />
+														</div>
+														<div th:text="・+${coupon.coupon.discountPrice}+円引きクーポン"></div>
+														<div th:text="使用条件：+${coupon.coupon.startingAmount}+円以上のお買い上げ"
+															style="color: red;">
+															使用条件
+														</div>
 													<div
 														th:text="有効期限：+${#dates.format(coupon.couponExpirationDate,'yyyy年MM月dd日')}">
 														有効期限</div><br>
