@@ -505,7 +505,7 @@
 					  	<div class="flex">
 						  	<li class="sample-box" th:each="address : ${session.addresseeList}">
 							  	<ul>
-								  	<input class="radio" type="radio" name="addresseeId">
+								  	<input class="radio-addressee" type="radio" name="addresseeId">
 								  	<input id="hidden-zipCode" type="hidden" name="destinationzipCode" th:value="${address.zipCode}">
 								  	<input id="hidden-address" type="hidden" name="destinationAddress" th:value="${address.address}">
 								  	<!-- <input class="hidden" type="hidden" name="setting" th:value="true"> -->
