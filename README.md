@@ -42,6 +42,8 @@ ER図は下記の通りです。
 <details>
   <summary>ER図</summary>
   ![ER図](./coupon.drawio.png)
+  ![coupon drawio](https://user-images.githubusercontent.com/105257893/179710691-b4b5d51a-8ca6-4622-843c-7a1083cc4d35.png)
+
 </details>
 
 ## 実装機能
