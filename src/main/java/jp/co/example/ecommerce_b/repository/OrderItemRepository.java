@@ -12,6 +12,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.OrderItem;
 
 @Repository
@@ -25,6 +26,15 @@ public class OrderItemRepository {
 		orderItem.setItemId(rs.getInt("item_id"));
 		orderItem.setOrderId(rs.getInt("order_id"));
 		orderItem.setQuantity(rs.getInt("quantity"));
+		Item item = new Item();
+		item.setId(rs.getInt("item_id"));
+		item.setName(rs.getString("name"));
+		item.setDescription(rs.getString("description"));
+		item.setPrice(rs.getInt("price"));
+		item.setImagePath(rs.getString("image_path"));
+		item.setImagePath2(rs.getString("image_path2"));
+		item.setDeleted(rs.getBoolean("deleted"));
+		orderItem.setItem(item);
 		return orderItem;
 	};
 
@@ -35,7 +45,10 @@ public class OrderItemRepository {
 	 * @return
 	 */
 	public List<OrderItem> findByOrderId(Integer id) {
-		String sql = "select * from orderitems where order_id = :id";
+		String sql = "select o.id, o.item_id, o.order_id, o.quantity,"
+				+ " i.id as item_id, i.name, i.description, i.price, i.image_path, i.image_path2, i.deleted"
+				+ " from orderitems as o" + " inner join items as i" + " on o.item_id = i.id"
+				+ " where o.order_id = :id;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		List<OrderItem> orderItemList = template.query(sql, param, ORDERITEM_ROW_MAPPER);
 		if (orderItemList.size() == 0) {
