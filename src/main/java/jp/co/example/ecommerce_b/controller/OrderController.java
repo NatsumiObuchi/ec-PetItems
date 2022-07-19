@@ -113,11 +113,7 @@ public class OrderController {
 				orderForm.setDestinationzipCode(addressee.getZipCode());
 				orderForm.setDestinationAddress(addressee.getAddress());
 			}
-//			model.addAttribute("orderForm", orderForm);
 		}
-//		else {
-//			model.addAttribute("orderForm", orderForm);
-//		}
 
 		//ユーザーが利用可能なクーポンを表示
 		List<UsersCoupon> usersCoupon = couponService.findAllUsersCoupon(user.getId());
@@ -201,15 +197,7 @@ public class OrderController {
 			}
 		}
 		
-	/*	Integer price = 0;
-		if(usersCouponId==0) {
-			System.out.println("クーポン使ってないよ");
-			price = order.getTotalPrice();
-		}else {
-			System.out.println("割引したよ");
-			price = order.getTotalPrice() - discountPrice; 
-		}
-		*/
+	
 		Integer price = order.getTotalPrice();
 		order.setTotalPrice(price);
 		
@@ -319,7 +307,6 @@ public class OrderController {
 		userCouponHistory.setCouponGetDate(couponGetDate);
 		userCouponHistory.setCouponExpirationDate(couponExpirationDate);
 		couponService.insertUsersCouponHistorys(userCouponHistory);
-		System.out.println(userCouponHistory);
 
 		// ポイント、もしくはクーポンを使用した際にdiscounted_historiesにインサートされる
 		if (discountCouponPrice != 0 || discountPointPrice != 0) {

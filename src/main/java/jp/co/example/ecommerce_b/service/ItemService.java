@@ -82,20 +82,16 @@ public class ItemService {
 	}
 
 	/**
-	 * 
 	 * idでitemを検索するメソッド。 (item詳細表示用)
 	 */
 	public Item load(Integer id) {
-
 		return repository.load(id);
 	}
 
-	/**
-	 * 
+	/** 
 	 * 商品一覧を取得するメソッド。 (item一覧表示用)
 	 */
 	public List<Item> findAll() {
-
 		return repository.findAll();
 	}
 
@@ -105,55 +101,7 @@ public class ItemService {
 	public List<String> findItemName() {
 		return repository.findItemName();
 	}
-//	
-//	/**
-//	 * 
-//	 * 商品一覧をanimalIdを絞って取得するメソッド。 (item一覧表示用)
-//	 */
-//	public List<Item> findByAnimalId(Integer animalId) {
-//
-//		return repository.findByAnimalId(animalId);
-//	}
-//
-//	/**
-//	 * 
-//	 * 商品一覧をanimalIdとcategoryIdで絞って取得するメソッド。 (item一覧表示用)
-//	 */
-//	public List<Item> findByAnimalIdAndCategoryId(Integer animalId, Integer categoryId) {
-//
-//		return repository.findByAnimalIdAndCategoryId(animalId, categoryId);
-//	}
-//
-//	
-//
-//	/**
-//	 * 
-//	 * 商品をあいまい検索するメソッド。(絞り込み：すべて)
-//	 */
-//	public List<Item> findByNameAndAnimalId(String name, Integer animalId) {
-//
-//		return repository.findByNameAndAnimalId(name, animalId);
-//	}
-//
-//	/**
-//	 * 
-//	 * 商品の絞り込み検索用メソッド。(検索値の入力なし)
-//	 */
-//	public List<Item> findByCategoryId(Integer animalId, Integer categoryId) {
-//
-//		return repository.findByCategoryId(animalId, categoryId);
-//	}
-//
-//	/**
-//	 * 
-//	 * 商品のあいまい検索と、絞り込みを同時に選択された場合のメソッド
-//	 */
-//	public List<Item> findByCategoryIdAndAnimaiIdAndName(String name, Integer animalId, Integer categoryId) {
-//
-//		return repository.findByCategoryIdAndAnimaiIdAndName(animalId, categoryId, name);
-//	}
-//
-	
+
 	/**
 	 * レビューを投稿したときにDBにインサートする
 	 * @param review

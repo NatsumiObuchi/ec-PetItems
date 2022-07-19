@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.logging.log4j.util.StringBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -13,7 +12,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import jp.co.example.ecommerce_b.domain.Item;
 import jp.co.example.ecommerce_b.domain.Review;
 
@@ -37,7 +35,7 @@ public class ItemRepository {
 		item.setDescription(rs.getString("description"));
 		item.setPrice(rs.getInt("price"));
 		item.setImagePath(rs.getString("image_path"));
-		item.setImagePath2(rs.getString("image_path2"));//
+		item.setImagePath2(rs.getString("image_path2"));
 		item.setAnimalId(rs.getInt("animal_id"));
 		item.setCategoryId(rs.getInt("category_id"));
 		item.setDeleted(rs.getBoolean("deleted"));
@@ -115,18 +113,16 @@ public class ItemRepository {
 			from(SELECT i.id id, i.name as name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2,
 			i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star
 			from items as i left join reviews as r on i.id = r.item_id where i.deleted is false order by r.stars desc) as new_table
-			""";
-
-	int firstBuilderLength = QUERY.length();
+			 """;
 
 	public void groupByBuilder(StringBuilder builder) {
 		builder.append(
-				" group by id, name , description, price, image_path, image_path2,animal_id,category_id, deleted order by avg_star desc NULLS LAST, count_review desc, id desc");
+				" group by id, name , description, price, image_path, image_path2,animal_id,category_id, deleted order by avg_star desc NULLS LAST, count_review desc, id desc;");
 	}
 
-	/**
-	 * vc xv
-	 * 
+	int firstBuilderLength = QUERY.length();
+
+	/** 
 	 * 商品一覧を取得するメソッド。 (item一覧表示用)
 	 */
 	public List<Item> findAll() {
@@ -137,7 +133,6 @@ public class ItemRepository {
 	}
 
 	/**
-	 * 
 	 * idでitemを検索するメソッド。 (item詳細表示用)
 	 */
 	public Item load(Integer id) {
@@ -146,38 +141,8 @@ public class ItemRepository {
 		groupByBuilder(builder);
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		Item item = template.queryForObject(builder.toString(), param, ITEM_ROW_MAPPER);
-
 		return item;
 	}
-//
-//	/**
-//	 * 
-//	 * 商品一覧をanimalIdを絞って取得するメソッド。 (item一覧表示用)
-//	 */
-//
-//	public List<Item> findByAnimalId(Integer animalId) {
-//		StringBuilder builder = new StringBuilder(QUERY);
-//		builder.append(" WHERE animal_id=:animalId");
-//		groupByBuilder(builder);
-//		SqlParameterSource param = new MapSqlParameterSource().addValue("animalId", animalId);
-//		List<Item> itemList = template.query(builder.toString(), param, ITEM_ROW_MAPPER);
-//		return itemList;
-//	}
-//
-//	/**
-//	 * 
-//	 * 商品一覧をanimalId・categoryIdを絞って取得するメソッド。 (item一覧表示用)
-//	 */
-//
-//	public List<Item> findByAnimalIdAndCategoryId(Integer animalId, Integer categoryId) {
-//		StringBuilder builder = new StringBuilder(QUERY);
-//		builder.append(" WHERE animal_id=:animalId AND category_id=:categoryId");
-//		groupByBuilder(builder);
-//		SqlParameterSource param = new MapSqlParameterSource().addValue("animalId", animalId).addValue("categoryId",
-//				categoryId);
-//		List<Item> itemList = template.query(builder.toString(), param, ITEM_ROW_MAPPER);
-//		return itemList;
-//	}
 
 	/**
 	 * 検索をかけたときに条件によってSQL文を分岐させ、指定のitemListを取得するメソッド
@@ -189,23 +154,19 @@ public class ItemRepository {
 	 * @return itemList
 	 */
 	public List<Item> findbyElement(Integer animalId, Integer categoryId, String name, Integer sortId) {
-		System.out.println("name:" + name + "animalID:" + animalId + "categoryId:" + categoryId);
 		StringBuilder builder = new StringBuilder(QUERY);
 		MapSqlParameterSource param = new MapSqlParameterSource();
 		if (animalId != null) {
 			authenticationBuilder(builder);
 			builder.append(" animal_id=:animalId");
 			param.addValue("animalId", animalId);
-			System.out.println("111111111111");
 		}
 		if (categoryId != null) {
 			authenticationBuilder(builder);
 			builder.append(" category_id=:categoryId");
 			param.addValue("categoryId", categoryId);
-			System.out.println("22222222222222");
 		}
 		if (!(name.isEmpty()) || name != "") {
-			System.out.println("333333333333");
 			authenticationBuilder(builder);
 			builder.append(" name LIKE :name");
 			param.addValue("name", "%" + name + "%");
@@ -217,30 +178,23 @@ public class ItemRepository {
 			switch (sortId) {
 			case 0: // 新着順に並び替える
 				builder.append(" order by id desc, avg_star desc NULLS LAST, count_review desc");
-				System.out.println("444444444444");
 				break;
 			case 1: // レビューが多い順に並び替える
 				builder.append(" order by count_review desc, id desc, avg_star desc NULLS LAST");
-				System.out.println("5555555555555");
 				break;
 			case 2: // レビューが高い順に並び替える
 				builder.append(" order by avg_star desc NULLS LAST, count_review desc, id desc");
-				System.out.println("6666666666666");
 				break;
 			case 3: // 価格が高い順に並び替える
 				builder.append(" order by price desc, avg_star desc NULLS LAST, count_review desc, id desc");
-				System.out.println("777777777777");
 				break;
 			case 4: // 価格が安い順に並び替える
 				builder.append(" order by price, id desc, avg_star desc NULLS LAST, count_review desc");
-				System.out.println("8888888888888");
 				break;
 			}
 		} else {
 			groupByBuilder(builder);
-			System.out.println("9999999999999");
 		}
-		System.out.println("@@@@@" + builder.toString());
 		List<Item> itemList = template.query(builder.toString(), param, ITEM_ROW_MAPPER);
 		System.out.println(itemList);
 		return itemList;
@@ -259,85 +213,8 @@ public class ItemRepository {
 		}
 	}
 
-//	
-//	/**
-//	 * 
-//	 * 商品をあいまい検索するメソッド。(絞り込み：カテゴリがすべて(指定なし)の時)
-//	 */
-//	
-//	public List<Item> findByNameAndAnimalId(String name, Integer animalId) {
-//		String sql = "select id, name, description, price, image_path, image_path2,animal_id,category_id, deleted, avg(star) avg_star ,count(star) count_review "
-//				+ "from(select i.id id, i.name as name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
-//				+ "from items as i left join reviews as r on i.id = r.item_id where i.deleted is false order by r.stars desc) as new_table "
-//				+ "WHERE name LIKE :name ";
-//		String sql2 = "AND animal_id=:animalId ";//
-//		String sql3 = "group by id, name , description, price, image_path2, animal_id,category_id, image_path, deleted order by avg_star desc NULLS LAST, count_review desc, id desc";
-//		String sqlA = "";
-//
-//		if (animalId == 0) {// 動物の指定がないとき
-//			sqlA = sql + sql3;
-//		} else {
-//			sqlA = sql + sql2 + sql3;
-//		}
-//
-//		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%").addValue("animalId",
-//				animalId);
-//		List<Item> itemList = template.query(sqlA, param, ITEM_ROW_MAPPER);
-//		return itemList;
-//	}
-//	
-//
-//	/**
-//	 * 
-//	 * 商品の絞り込み検索用メソッド。(検索値の入力なし)
-//	 */
-//	public List<Item> findByCategoryId(Integer animalId, Integer categoryId) {
-//		String sql = "select id, name, description, price, image_path, image_path2,animal_id,category_id, deleted, avg(star) avg_star ,count(star) count_review "
-//				+ "from(select i.id id, i.name as name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
-//				+ "from items as i left join reviews as r on i.id = r.item_id where i.deleted is false order by r.stars desc) as new_table WHERE category_id=:categoryId ";
-//		String sql2 = "AND animal_id=:animalId ";//
-//		String sql3 = "group by id, name , description, price, image_path2, animal_id,category_id, image_path, deleted order by avg_star desc NULLS LAST, count_review desc, id desc";
-//		String sqlA = "";
-//
-//		if (animalId == 0) {
-//			sqlA = sql + sql3;
-//		} else {
-//			sqlA = sql + sql2 + sql3;
-//		}
-//		SqlParameterSource param = new MapSqlParameterSource().addValue("animalId", animalId).addValue("categoryId",
-//				categoryId);
-//		List<Item> itemList = template.query(sqlA, param, ITEM_ROW_MAPPER);
-//		return itemList;
-//	}
-//
-//	/**
-//	 * 
-//	 * 商品のあいまい検索と、絞り込みを同時に選択された場合のメソッド
-//	 */
-//
-//	public List<Item> findByCategoryIdAndAnimaiIdAndName(Integer categoryId, Integer animalId, String name) {
-//		String sql = "select id, name, description, price, image_path, image_path2,animal_id,category_id, deleted, avg(star) avg_star ,count(star) count_review "
-//				+ "from(select i.id id, i.name as name, i.description description, i.price price,i.image_path image_path, i.image_path2 image_path2, i.animal_id animal_id, i.category_id category_id, i.deleted deleted,r.stars star "
-//				+ "from items as i left join reviews as r on i.id = r.item_id where i.deleted is false order by r.stars desc) as new_table WHERE category_id=:categoryId AND name LIKE :name ";
-//		String sql2 = "AND animal_id=:animalId ";//
-//		String sql3 = "group by id, name , description, price, image_path2, animal_id,category_id, image_path, deleted order by avg_star desc NULLS LAST, count_review desc, id desc";
-//		String sqlA = "";
-//
-//		if (animalId == 0) {
-//			sqlA = sql + sql3;
-//		} else {
-//			sqlA = sql + sql2 + sql3;
-//		}
-//
-//		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%")
-//				.addValue("animalId", animalId).addValue("categoryId", categoryId);
-//		List<Item> itemList = template.query(sqlA, param, ITEM_ROW_MAPPER);
-//		return itemList;
-//	}
-
 	
 	/**
-	 * 
 	 * 商品情報を更新するメソッド。
 	 */
 	public Item save(Item item) {
@@ -347,7 +224,6 @@ public class ItemRepository {
 	}
 
 	/**
-	 * 
 	 * 商品情報を削除するメソッド。
 	 */
 	public void deleteById(Integer id) {

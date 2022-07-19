@@ -41,6 +41,7 @@ public class ShoppingCartController {
 	 * @param model
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/cartList")
 	public String cartListShow(Model model) {
 
@@ -62,9 +63,7 @@ public class ShoppingCartController {
 				session.setAttribute("cartList", null);
 			} else {
 				Order order = (Order) session.getAttribute("order");
-				System.out.println("order:" + order);
 				Integer orderId = order.getId();
-				System.out.println("orderId:" + orderId);
 				List<OrderItem> orderItemsFromDB = orderItemService.findByOrderId(orderId);
 				System.out.println("orderItemsFromDB:" + orderItemsFromDB);
 
@@ -108,6 +107,7 @@ public class ShoppingCartController {
 	 * @param model
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/inCart")
 	public String inCart(OrderItemForm form, Model model) {
 
@@ -121,10 +121,8 @@ public class ShoppingCartController {
 		}
 		checkOrderBeforePayment(userId);
 		Order order = (Order) session.getAttribute("order");
-//		System.out.println("checkOrderBeforePayment:"+order);
 		if (order.getId() == null || order.getId().equals("")) {
 			order = orderService.insertOrder(order);
-//			System.out.println("if:"+order);
 		} else {
 			System.out.println(111);
 		}
@@ -151,9 +149,7 @@ public class ShoppingCartController {
 		session.setAttribute("cartList", cartList);
 		session.setAttribute("order", order);// 最新のorderスコープへ格納
 		orderService.update(order);// DB上のorderを最新に更新
-//		System.out.println("update:"+order);
 
-		System.out.println(order.getOrderItemList());
 		return cartListShow(model);
 	}
 
@@ -162,6 +158,7 @@ public class ShoppingCartController {
 	 * @param model
 	 * @return カートから商品を削除する時
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/delete")
 	public String deleteInCartItem(String id, String index, Model model) {
 		Integer id1 = Integer.parseInt(id);

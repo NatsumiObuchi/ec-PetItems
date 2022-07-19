@@ -46,12 +46,9 @@ public class FavoriteController {
 		Integer userId = user.getId();
 		List<Favorite> favoriteList = favoriteService.favoriteAll(userId);
 		if (favoriteList.size() == 0) {// ユーザ登録済でもお気に入りがゼロの時
-//			System.out.println(1111111);
-//			System.out.println("ControllerのfavoriteList = " + favoriteList);
 			String message = "お気に入り登録はありません";
 			model.addAttribute("message", message);
 		}
-//		System.out.println(222222);
 		session.setAttribute("favoriteList", favoriteList);
 		return "favorite_list";
 	}

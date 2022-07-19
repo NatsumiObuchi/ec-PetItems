@@ -41,7 +41,7 @@ public class MyPageController {
 
 	@Autowired
 	private AddresseeService addresseeService;
-	
+
 	@Autowired
 	private CouponServise couponServise;
 
@@ -68,8 +68,8 @@ public class MyPageController {
 		return new UserPasswordUpdateForm();
 	}
 
-	/**test1
-	 * マイページを表示する
+	/**
+	 * test1 マイページを表示する
 	 * 
 	 * @return
 	 */
@@ -78,8 +78,8 @@ public class MyPageController {
 		return "myPage";
 	}
 
-	/**test2,test3
-	 * ユーザ変更前にパスワード入力を求める画面を表示
+	/**
+	 * test2,test3 ユーザ変更前にパスワード入力を求める画面を表示
 	 * 
 	 * @return
 	 */
@@ -119,18 +119,17 @@ public class MyPageController {
 		return "confirm_userInfo";
 	}
 
-	/**test4,test5
-	 * ユーザ情報を変更する画面 ユーザ情報を更新するためのformに現在のuser情報をセットし表示する
+	/**
+	 * test4,test5 ユーザ情報を変更する画面 ユーザ情報を更新するためのformに現在のuser情報をセットし表示する
 	 * 
-	 * @return　
+	 * @return
 	 */
 	@RequestMapping("/change")
 	public String change(UserUpdateForm form, Model model) {
 		User user = (User) session.getAttribute("user");
-		System.out.println("-----------!!!!"+form);
 		if (form.getName() == null && form.getEmail() == null && form.getZipcode() == null && form.getAddress() == null
 				&& form.getTelephone() == null) {// UserUpdateformに何も情報がないとき(最初にこの画面にきた時)
-		BeanUtils.copyProperties(user, form);
+			BeanUtils.copyProperties(user, form);
 		}
 		model.addAttribute("form", form);
 		return "change_userInfo";
@@ -268,15 +267,14 @@ public class MyPageController {
 	}
 
 	/**
-	 * test8,test9
-	 * お届け先情報追加画面
+	 * test8,test9 お届け先情報追加画面
 	 * 
 	 * @return
 	 */
 	@RequestMapping("/registerShow")
 	public String registerShow(Integer id, Model model) {
 		List<Addressee> addresseeList = addresseeService.findAddresseeByUserId(id);
-		System.out.println("~~~~~~~~~~~"+addresseeList);
+		System.out.println("~~~~~~~~~~~" + addresseeList);
 		if (addresseeList.size() == 3) {
 			model.addAttribute("full", "お届け先情報の登録は3件までです。追加するにはどれかを削除してください。");
 			return addressee(id, model);
@@ -284,9 +282,8 @@ public class MyPageController {
 		return "addressee_register";
 	}
 
-
-	/**test9,test10
-	 * ユーザのお届け先を新規追加する
+	/**
+	 * test9,test10 ユーザのお届け先を新規追加する
 	 * 
 	 * @param insertAddresseeForm お届け先登録情報
 	 * @param result
@@ -304,12 +301,12 @@ public class MyPageController {
 		Addressee newAddressee = new Addressee();
 		BeanUtils.copyProperties(insertAddresseeForm, newAddressee);
 		addresseeService.addresseeRegister(newAddressee);
-		
+
 		return addressee(insertAddresseeForm.getUserId(), model);
 	}
 
-	/**test12
-	 * お届け先情報を削除する
+	/**
+	 * test12 お届け先情報を削除する
 	 * 
 	 * @param id          userId
 	 * @param addresseeId
@@ -322,9 +319,10 @@ public class MyPageController {
 		return addressee(id, model);
 	}
 
-	/**test13,test14
-	 * デフォルトのお届け先を設定する
-	 * @param id　ユーザーid
+	/**
+	 * test13,test14 デフォルトのお届け先を設定する
+	 * 
+	 * @param id          ユーザーid
 	 * @param addresseeId
 	 * @param setting
 	 * @param model
@@ -354,9 +352,9 @@ public class MyPageController {
 			model.addAttribute("emailError", "そのメールアドレスはすでに使われています");
 		}
 	}
-	
-	/**test6,test7
-	 * マイクーポンを表示する
+
+	/**
+	 * test6,test7 マイクーポンを表示する
 	 * 
 	 * @param id userId
 	 * @return
@@ -365,14 +363,13 @@ public class MyPageController {
 	public String myCoupon(Integer id, Model model) {
 		List<UsersCoupon> usersCouponList = couponServise.findAllUsersCoupon(id);
 		session.setAttribute("usersCouponList", usersCouponList);
-		System.out.println("1111111111"+usersCouponList);
-		if (usersCouponList.size()==0) {
+		System.out.println("1111111111" + usersCouponList);
+		if (usersCouponList.size() == 0) {
 			model.addAttribute("nonCoupon", "所持しているクーポンはありません。");
-			System.out.println("22222222222"+usersCouponList);
+			System.out.println("22222222222" + usersCouponList);
 
 		}
 		return "myCoupon";
 	}
-	
-	
+
 }

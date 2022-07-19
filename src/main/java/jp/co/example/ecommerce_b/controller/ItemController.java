@@ -1,7 +1,6 @@
 package jp.co.example.ecommerce_b.controller;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +31,6 @@ import jp.co.example.ecommerce_b.form.SearchForm;
 import jp.co.example.ecommerce_b.service.CouponServise;
 import jp.co.example.ecommerce_b.service.FavoriteService;
 import jp.co.example.ecommerce_b.service.ItemService;
-import jp.co.example.ecommerce_b.service.OrderItemService;
 import jp.co.example.ecommerce_b.service.OrderService;
 import jp.co.example.ecommerce_b.service.PointService;
 
@@ -49,9 +47,6 @@ public class ItemController {
 
 	@Autowired
 	private ItemService itemService;
-
-	@Autowired
-	private OrderItemService orderItemService;
 
 	@Autowired
 	private OrderService orderService;
@@ -381,212 +376,4 @@ public class ItemController {
 		return "hidden";
 	}
 
-//	/**
-//	 * itemListを並び替えるメソッド
-//	 * 
-//	 * @param sortId   各並び順に付けられたid
-//	 * @param itemList 並び替えを行うitemList
-//	 * @return 並び替えを終えた後のitemList
-//	 */
-//	public String sort(Integer sortId, List<Item> itemList) {
-//		switch (sortId) {
-//		case 0:
-//			// 今回っているItemListをsortして、新着順に並び替える処理
-//			itemList.sort(Comparator.comparing(Item::getId));
-//			break;
-//		case 1:
-//			// 今回っているItemListをsortして、レビューが多い順に並び替える処理
-//			itemList.sort(Comparator.comparing(Item::getCountReview).reversed());
-//			break;
-//		case 2:
-//			// 今回っているItemListをsortして、レビューが高い順に並び替える処理
-//			itemList.sort(Comparator.comparing(Item::getAvgStar).reversed());
-//			break;
-//		case 3:
-//			// 今回っているItemListをsortして、価格が高い順に並び替える処理
-//			itemList.sort(Comparator.comparing(Item::getPrice).reversed());
-//			break;
-//		case 4:
-//			// 今回っているItemListをsortして、価格が低い順に並び替える処理
-//			itemList.sort(Comparator.comparing(Item::getPrice));
-//			break;
-//		}
-//		return "item_list_pet";
-//	}
-
-//	
-//
-//	@SuppressWarnings("unchecked")
-//	@RequestMapping("/search111")
-//	public String search111(SearchForm form, Model model) {
-//		String code = form.getCode();
-//		Integer genre = form.getGenre();
-//		Integer sortId = form.getSortId();
-//
-//		// カテゴリーメニューバーからこのメソッドに飛んできたとき、エラーが起きないようにする
-//		if (code == null) {
-//			code = "";
-//		}
-//
-//		// List<Item> itemList55 = itemService.search(genre, code);
-//
-//		// genreの値からanimalIdを設定
-//		Integer animalId = null;
-//		if (genre == 1 || genre == 2 || genre == 3 || genre == 4) {
-//			animalId = 1;
-//		} else if (genre == 5 || genre == 6 || genre == 7 || genre == 8) {
-//			animalId = 2;
-//		} else if (genre == 0) {
-//			animalId = 0;
-//		}
-//		// genreの値からcategoryIdを設定
-//		Integer categoryId = 0;
-//		if (genre == 2 || genre == 6) {
-//			categoryId = 1;
-//		} else if (genre == 3 || genre == 7) {
-//			categoryId = 2;
-//		} else if (genre == 4 || genre == 8) {
-//			categoryId = 3;
-//		}
-//		List<Item> itemList = new ArrayList<>();
-//		itemList = itemService.findByNameAndAnimalId(code, animalId);
-//
-//		// 検索結果の該当がない場合＋入力がない場合
-//		if (itemList.size() == 0 || code.equals("") || code.equals(" ") || code.isEmpty()) {
-//			List<Item> itemList2 = new ArrayList<>();
-//			String message = null;
-//			switch (genre) {
-//			case 0:
-//				itemList2 = itemService.findAll();
-//				message = "商品";
-//				break;
-//			case 1:
-//				itemList2 = itemService.findByAnimalId(1);
-//				message = "犬用品";
-//				break;
-//			case 2:
-//				itemList2 = itemService.findByAnimalIdAndCategoryId(1, 1);
-//				message = "犬｜フード";
-//				break;
-//			case 3:
-//				itemList2 = itemService.findByAnimalIdAndCategoryId(1, 2);
-//				message = "犬｜おもちゃ";
-//				break;
-//			case 4:
-//				itemList2 = itemService.findByAnimalIdAndCategoryId(1, 3);
-//				message = "犬｜その他";
-//				break;
-//			case 5:
-//				itemList2 = itemService.findByAnimalId(2);
-//				message = "猫用品";
-//				break;
-//			case 6:
-//				itemList2 = itemService.findByAnimalIdAndCategoryId(2, 1);
-//				message = "猫｜フード";
-//				break;
-//			case 7:
-//				itemList2 = itemService.findByAnimalIdAndCategoryId(2, 2);
-//				message = "猫｜おもちゃ";
-//				break;
-//			case 8:
-//				itemList2 = itemService.findByAnimalIdAndCategoryId(2, 3);
-//				message = "猫｜その他";
-//				break;
-//			}
-//			if (code.isEmpty()) {
-//				model.addAttribute("noItemMessage", message + "一覧を表示します。");
-//			} else {
-//				model.addAttribute("noItemMessage", "該当の商品がございません。" + message + "一覧を表示します。");
-//			}
-//			model.addAttribute("itemList", itemList2);
-//
-//			// 入力フォームに何かしらの入力があった場合
-//		} else {
-//
-//			List<Item> itemList3 = itemService.findByCategoryIdAndAnimaiIdAndName(code, animalId, categoryId);
-//
-//			// DBのcategoryIdは1か2しかない。0(すべて)の場合はcodeとanimalIdで検索したitemListを持ってくる
-//			if (categoryId == 0) {
-//				model.addAttribute("itemList", itemList);
-//				model.addAttribute("noItemMessage", "「" + code + "」の検索結果を表示します。");
-//
-//				// categoryIdが1か2で、何かしら入力があったが、絞り込んだ際には該当の結果がない場合
-//			} else if (itemList3.size() == 0) {
-//				List<Item> itemList2 = new ArrayList<>();
-//				String mes = null;
-//				switch (genre) {
-//				case 0:
-//					itemList2 = itemService.findAll();
-//					mes = "商品";
-//					break;
-//				case 1:
-//					itemList2 = itemService.findByAnimalId(1);
-//					mes = "犬用品";
-//					break;
-//				case 2:
-//					itemList2 = itemService.findByAnimalIdAndCategoryId(1, 1);
-//					mes = "犬｜フード";
-//					break;
-//				case 3:
-//					itemList2 = itemService.findByAnimalIdAndCategoryId(1, 2);
-//					mes = "犬｜おもちゃ";
-//					break;
-//				case 4:
-//					itemList2 = itemService.findByAnimalIdAndCategoryId(1, 3);
-//					mes = "犬｜その他";
-//					break;
-//				case 5:
-//					itemList2 = itemService.findByAnimalId(2);
-//					mes = "猫用品";
-//					break;
-//				case 6:
-//					itemList2 = itemService.findByAnimalIdAndCategoryId(2, 1);
-//					mes = "猫｜フード";
-//					break;
-//				case 7:
-//					itemList2 = itemService.findByAnimalIdAndCategoryId(2, 2);
-//					mes = "猫｜おもちゃ";
-//					break;
-//				case 8:
-//					itemList2 = itemService.findByAnimalIdAndCategoryId(2, 3);
-//					mes = "猫｜その他";
-//					break;
-//				}
-//				model.addAttribute("noItemMessage", "該当の商品がございません。" + mes + "一覧を表示します。");
-//				model.addAttribute("itemList", itemList2);
-//
-//			} else {
-//				// categoryIdが1か2で、検索欄入力があり、絞り込んだ際に該当の結果が見つかった場合
-//				model.addAttribute("itemList", itemList3);
-//				model.addAttribute("noItemMessage", "「 " + code + " 」の検索結果を表示します。");
-//			}
-//		}
-//		// 並べ替えをするときに使うリンクをリクエストスコープに入れるメソッド
-//		form.setLink(model);
-//		// sortIdが入っていれば並び替え/入っていなければ、デフォルトで新着順で並び替え
-//		itemList = (List<Item>) model.getAttribute("itemList");
-//		if (sortId != null) {
-//			sort(sortId, itemList);
-//			label(sortId, model);
-//		} else if (sortId == null) {
-//			sort(0, itemList);
-//			label(0, model);
-//		}
-//		// 表示件数・categoryId・検索文字列・genreをスコープに格納し商品一覧ページへ渡す
-//		model.addAttribute("itemListSize", itemList.size());
-//		model.addAttribute("categoryId", categoryId);
-//		model.addAttribute("word", code);
-//		model.addAttribute("genre", genre);
-//		model.addAttribute("searchGenre", genre);
-//
-//		// 取得可能なクーポン一覧を表示
-//		List<Coupon> couponList = couponServise.findAllCoupon();
-//		model.addAttribute("couponList", couponList);
-//		// パンくずリストのリンク処理
-//		panList(genre, model);
-//		// カテゴリーメニューバーのリストをマッピングするメソッドを呼び出す
-//		categoryMapping();
-//
-//		return "item_list_pet";
-//	}
 }

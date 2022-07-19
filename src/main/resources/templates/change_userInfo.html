@@ -14,68 +14,10 @@
 </head>
 
 <body>
-	<header>
-		<div th:insert="header :: frag_header"></div>
-	</header>
-	<div class="container">
-        
-        <!-- 以下、アコーディオンの動作 -->
-        <!-- <div class="accordion">
-            <div class="accordion-container">
-                <div class="accordion-item">
-                  <h3 class="accordion-title js-accordion-title">
-                    基本情報
-                  </h3> -->
-                  <!--/.accordion-title-->
-                  <!-- <div class="accordion-content">
-                    <label for="inputName">名前:</label> <br>
-                    <input type="text" id="inputName" class="" placeholder="Name"/>
-                  </div> -->
-                  <!--/.accordion-content-->
-                <!-- </div> -->
-                <!-- /.accordion-item -->
-                <!-- <div class="accordion-item">
-                  <h3 class="accordion-title js-accordion-title">
-                    アカウントとセキュリティ
-                  </h3> -->
-                  <!--/.accordion-title-->
-                  <!-- <div class="accordion-content">
-                    <label for="inputEmail">メールアドレス:</label> <br>
-                    <input type="text" id="inputEmail" class="" placeholder="Email"/>
-                    <label for="inputPassword">パスワード:</label> <br>
-                    <input type="password" id="inputPassword" class="form-control" placeholder="Password"/>
-                  </div> -->
-                  <!--/.accordion-content-->
-                <!-- </div> -->
-                <!-- /.accordion-item -->
-                <!-- <div class="accordion-item">
-                  <h3 class="accordion-title js-accordion-title">
-                    ご住所と連絡先
-                  </h3> -->
-                  <!--/.accordion-title-->
-                  <!-- <div class="accordion-content">
-                    <p>コンテンツが入ります。</p>
-                  </div> -->
-                  <!--/.accordion-content-->
-                <!-- </div> -->
-                <!-- /.accordion-item -->
-                <!-- <div class="accordion-item">
-                    <h3 class="accordion-title js-accordion-title">
-                      お支払い方法
-                    </h3> -->
-                    <!--/.accordion-title-->
-                    <!-- <div class="accordion-content">
-                      <p>コンテンツが入ります。</p>
-                    </div> -->
-                    <!--/.accordion-content-->
-                  <!-- </div> -->
-                  <!-- /.accordion-item -->
-            <!-- </div> -->
-              <!-- /.accordion-container -->
-        <!-- </div> -->
-      <!-- .accordion -->
+	<!-- ヘッダー/インクルード化しているので、編集する際はheader.htmlから -->
+	<div th:insert="header :: frag_header"></div>
 
-		<!-- login form -->
+	<div class="container">
 		<div class="row">
 			<div class="
             col-lg-offset-3
@@ -85,73 +27,73 @@
             col-sm-10
             col-xs-12
           ">
-                <div class="well">
-                    <form method="post" action="item_list_pizza.html" th:action="@{/myPage/changeConfirm}" th:object="${userUpdateForm}">
-                        <fieldset>
-                            <legend>ユーザ情報変更</legend>
-                            <div class="form-group">
-                                <label for="inputName">名前:</label> <br>
-                                <label th:errors="*{name}" class="control-label" style="color: red"
-                                    for="inputError">名前を入力してください</label>
-                                <input type="text" id="inputName" class="form-control" placeholder="Name" name="name"
-                                    th:field="*{name}" th:value="${form.name}"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputEmail">メールアドレス:</label> <br>
-                                <label th:errors="*{email}" class="control-label" style="color: red"
-                                    for="inputError">メールアドレスを入力してください</label>
-                                <div>
-                                    <label th:if="${emailError}" class="control-label" style="color: red"
-                                        for="inputError" th:text="${emailError}"></label>
-                                </div>
-                                <input type="text" id="inputEmail" class="form-control" placeholder="Email" name="email"
-                                    th:field="*{email}" th:value="${form.email}"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputZipcode">郵便番号:</label>
-                                <input type="button" id="addressBtn" value="住所検索" /> <br>
-                                <label th:errors="*{zipcode}" class="control-label" style="color: red"
-                                    for="inputError">郵便番号を入力してください</label>
-                                <input type="text" id="zipcode" class="form-control" placeholder="Zipcode" name="zipcode"
-                                    th:field="*{zipcode}" th:value="${form.zipcode}"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputAddress">住所:</label> <br>
-                                <label th:errors="*{address}" class="control-label" style="color: red"
-                                    for="inputError">住所を入力してください</label>
-                                <input type="text" id="address" class="form-control" placeholder="Address" name="address"
-                                    th:field="*{address}" th:value="${form.address}"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputTel">電話番号:</label> <br>
-                                <label th:errors="*{telephone}" class="control-label" style="color: red"
-                                    for="inputError">電話番号を入力してください</label>
-                                <input type="text" id="inputTel" class="form-control" placeholder="Tel" name="telephone"
-                                    th:field="*{telephone}" th:value="${form.telephone}"/>
-                            </div>
-                            <div class="form-group">
-                                <input type="hidden" th:value="${session.user.id}">
-                                <button type="submit" class="btn btn-primary">変更</button>
-                                <button type="submit" class="btn btn-primary" th:formaction="@{/myPage/reset}">クリア</button>
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+				<div class="well">
+					<form method="post" action="item_list_pizza.html" th:action="@{/myPage/changeConfirm}"
+						th:object="${userUpdateForm}">
+						<fieldset>
+							<legend>ユーザ情報変更</legend>
+							<div class="form-group">
+								<label for="inputName">名前:</label> <br>
+								<label th:errors="*{name}" class="control-label" style="color: red"
+									for="inputError">名前を入力してください</label>
+								<input type="text" id="inputName" class="form-control" placeholder="Name" name="name"
+									th:field="*{name}" th:value="${form.name}" />
+							</div>
+							<div class="form-group">
+								<label for="inputEmail">メールアドレス:</label> <br>
+								<label th:errors="*{email}" class="control-label" style="color: red"
+									for="inputError">メールアドレスを入力してください</label>
+								<div>
+									<label th:if="${emailError}" class="control-label" style="color: red"
+										for="inputError" th:text="${emailError}"></label>
+								</div>
+								<input type="text" id="inputEmail" class="form-control" placeholder="Email" name="email"
+									th:field="*{email}" th:value="${form.email}" />
+							</div>
+							<div class="form-group">
+								<label for="inputZipcode">郵便番号:</label>
+								<input type="button" id="addressBtn" value="住所検索" /> <br>
+								<label th:errors="*{zipcode}" class="control-label" style="color: red"
+									for="inputError">郵便番号を入力してください</label>
+								<input type="text" id="zipcode" class="form-control" placeholder="Zipcode"
+									name="zipcode" th:field="*{zipcode}" th:value="${form.zipcode}" />
+							</div>
+							<div class="form-group">
+								<label for="inputAddress">住所:</label> <br>
+								<label th:errors="*{address}" class="control-label" style="color: red"
+									for="inputError">住所を入力してください</label>
+								<input type="text" id="address" class="form-control" placeholder="Address"
+									name="address" th:field="*{address}" th:value="${form.address}" />
+							</div>
+							<div class="form-group">
+								<label for="inputTel">電話番号:</label> <br>
+								<label th:errors="*{telephone}" class="control-label" style="color: red"
+									for="inputError">電話番号を入力してください</label>
+								<input type="text" id="inputTel" class="form-control" placeholder="Tel" name="telephone"
+									th:field="*{telephone}" th:value="${form.telephone}" />
+							</div>
+							<div class="form-group">
+								<input type="hidden" th:value="${session.user.id}">
+								<button type="submit" class="btn btn-primary">変更</button>
+								<button type="submit" class="btn btn-primary"
+									th:formaction="@{/myPage/reset}">クリア</button>
+							</div>
+						</fieldset>
+					</form>
+				</div>
 			</div>
 		</div>
-		
+
 		<!-- フッター/インクルード化しているので、編集する際はfooter.htmlから -->
-		<div>
-			<div th:insert="footer :: frag_footer"></div>
-		</div>
-		
+		<div th:insert="footer :: frag_footer"></div>
+
 	</div>
 	<!-- end container -->
 	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js}"></script>
 	<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
 	<script th:src="@{https://code.jquery.com/ui/1.13.1/jquery-ui.js}"></script>
 	<script th:src="@{/js/paginathing.js}"></script>
-    <script th:src="@{/js/address.js}"></script>
+	<script th:src="@{/js/address.js}"></script>
 	<script th:src="@{/js/accordion.js}"></script>
 </body>
 
