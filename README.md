@@ -41,7 +41,7 @@ PostgeSQLを使用しています。
 ER図は下記の通りです。  
 <details>
   <summary>ER図</summary>
-  ![ER図](coupon.drawio.png)
+  ![ER図](./coupon.drawio.png)
 </details>
 
 ## 実装機能
