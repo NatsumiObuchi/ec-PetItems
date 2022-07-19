@@ -1,5 +1,6 @@
 # ECサイト　らくらくペット
-ペット用品
+らくらくペットでは、ペット用品販売ECサイトを想定し作成しました。
+今後も実装機能を追加していく予定です。
 
 ## 目次
 - [使用ツール](https://github.com/rpentry202204w/ec-202204b##使用ツール)
@@ -21,6 +22,9 @@
 *データベース*
 - PostgreSQL
 
+*テスト*
+- JUnit 5
+
 ## セットアップ
 ### Javaインストール
 openjdk(18.0.1.1)を使用しています。  
@@ -37,7 +41,7 @@ PostgeSQLを使用しています。
 ER図は下記の通りです。  
 <details>
   <summary>ER図</summary>
-  準備中
+  ![ER図](coupon.drawio.png)
 </details>
 
 ## 実装機能
