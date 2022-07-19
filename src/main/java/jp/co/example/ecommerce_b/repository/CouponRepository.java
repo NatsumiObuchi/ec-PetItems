@@ -30,6 +30,7 @@ public class CouponRepository {
 		coupon.setStartUseDate(rs.getTimestamp("start_use_date"));
 		coupon.setFinishUseDate(rs.getTimestamp("finish_use_date"));
 		coupon.setStartingAmount(rs.getInt("starting_amount"));
+		coupon.setCouponImage(rs.getString("coupon_image"));
 		return coupon;
 	};
 	
@@ -49,6 +50,7 @@ public class CouponRepository {
 		coupon.setStartUseDate(rs.getTimestamp("start_use_date"));
 		coupon.setFinishUseDate(rs.getTimestamp("finish_use_date"));
 		coupon.setStartingAmount(rs.getInt("starting_amount"));
+		coupon.setCouponImage(rs.getString("coupon_image"));
 		usersCoupon.setCoupon(coupon);
 		return usersCoupon;
 	};
@@ -60,7 +62,7 @@ public class CouponRepository {
 	public List<Coupon> findAllCoupon(){
 		
 		String sql = "SELECT id,discount_price,duration,start_distribution_date,finish_distribution_date,"
-				+ "start_use_date,finish_use_date,starting_amount from coupon;";
+				+ "start_use_date,finish_use_date,starting_amount, coupon_image from coupon;";
 		
 		List<Coupon> couponList = template.query(sql, COUPON_ROW_MAPPER);
 		return couponList;
@@ -91,7 +93,7 @@ public class CouponRepository {
 	public List<UsersCoupon> findAllUsersCoupon(Integer userId){
 		String sql = "SELECT u.id, u.user_id, u.coupon_id, u.coupon_get_date, u.coupon_expiration_date, "
 				+ "c.id,c.discount_price,c.duration,c.start_distribution_date,c.finish_distribution_date, "
-				+ "c.start_use_date,c.finish_use_date,c.starting_amount "
+				+ "c.start_use_date,c.finish_use_date,c.starting_amount, c.coupon_image "
 				+ "from users_coupon u LEFT JOIN coupon c ON c.id = u.coupon_id WHERE user_id=:userId AND deleted=false;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
 		List<UsersCoupon> usersCouponList = template.query(sql, param, USERS_COUPON_ROW_MAPPER);

@@ -323,11 +323,12 @@ public class MyPageController {
 		return addressee(id, model);
 	}
 
-	/**test13,test14
-	 * デフォルトのお届け先を設定する
-	 * @param id　ユーザーid
-	 * @param addresseeId
-	 * @param setting
+	/**
+	 * test13,test14 お届け先情報のデフォルト表示設定(注文確認画面)をする
+	 * 
+	 * @param id          ユーザーid
+	 * @param addresseeId お届け先ID
+	 * @param setting     true
 	 * @param model
 	 * @return
 	 */

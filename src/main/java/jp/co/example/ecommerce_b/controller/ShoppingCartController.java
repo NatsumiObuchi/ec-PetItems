@@ -110,15 +110,11 @@ public class ShoppingCartController {
 		}
 		checkOrderBeforePayment(userId);
 		Order order = (Order) session.getAttribute("order");
-//		System.out.println("checkOrderBeforePayment:"+order);
-		if (order.getId() == null || order.getId().equals("")) {
+		if (order.getId() == null || order.getId().equals("")) {// この処理の意味がわからない
 			order = orderService.insertOrder(order);
-//			System.out.println("if:"+order);
-		} else {
-//			System.out.println(111);
 		}
 
-		// OrderItem
+		// OrderItemを生成→ショッピングカートにセットする
 		OrderItem orderItem = new OrderItem();
 		int itemId = Integer.parseInt(form.getItemId());
 		orderItem.setItemId(itemId);// itemIdの格納
@@ -140,7 +136,6 @@ public class ShoppingCartController {
 		session.setAttribute("cartList", cartList);
 		session.setAttribute("order", order);// 最新のorderスコープへ格納
 		orderService.update(order);// DB上のorderを最新に更新
-//		System.out.println("update:"+order);
 
 		return cartListShow(model);
 	}

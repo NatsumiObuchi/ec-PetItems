@@ -95,13 +95,12 @@ public class AddresseeService {
 		switch (addresseeId) {// お届け先として設定したいaddresseeIdと、それ以外のsetting_addresseeはfalse
 		case 1:
 			repository.settingAddrssee(userId, addresseeId, setting);
-			if (addresseeList.size() >= 2) {
-				if (addresseeList.get(1) != null) {// addresseeIdの2番目があれば
-					repository.settingAddrssee(userId, 2, false);
-				}
-				if (addresseeList.get(2) != null) {// addresseeIdの3番目があれば
-					repository.settingAddrssee(userId, 3, false);
-				}
+			if (addresseeList.size() == 2) {
+				repository.settingAddrssee(userId, 2, false);
+			}
+			if (addresseeList.size() == 3) {
+				repository.settingAddrssee(userId, 2, false);
+				repository.settingAddrssee(userId, 3, false);
 			}
 			break;
 		case 2:
