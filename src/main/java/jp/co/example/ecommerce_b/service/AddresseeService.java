@@ -14,7 +14,7 @@ public class AddresseeService {
 	@Autowired
 	private AddresseeRepository repository;
 
-	/**
+	/**test1
 	 * ユーザidから複数のお届け先情報を取得する
 	 * 
 	 * @param id
@@ -35,13 +35,13 @@ public class AddresseeService {
 		return repository.addressee(userId, addresseeId);
 	}
 
-	/**
+	/**test1
 	 * お届け先情報を新規追加する処理
 	 * 
 	 * @param addresee
 	 */
 	public void addresseeRegister(Addressee newAddressee) {
-		Addressee lastAddressee = lastAddresseeId(newAddressee.getUserId());
+		Addressee lastAddressee = repository.lastAddreseeId(newAddressee.getUserId());
 		if (lastAddressee == null) {// 初めてお届け先情報を登録する人はaddresseeIdに1をセット
 			newAddressee.setAddresseeId(1);
 		} else {// それ以外の人（既に登録済のお届け先が存在する）
@@ -51,15 +51,6 @@ public class AddresseeService {
 		repository.addresseeRegister(newAddressee);
 	}
 
-	/**
-	 * 最後に追加したお届け先情報を取得
-	 * 
-	 * @param userId
-	 * @return
-	 */
-	public Addressee lastAddresseeId(Integer userId) {
-		return repository.lastAddreseeId(userId);
-	}
 
 	/**
 	 * お届け先情報を削除し、既に登録済のお届け先情報も一部更新する処理
@@ -120,7 +111,7 @@ public class AddresseeService {
 		}
 	}
 
-	/**
+	/**test2
 	 * デフォルトで表示するお届け先を検索
 	 * 
 	 * @param userId

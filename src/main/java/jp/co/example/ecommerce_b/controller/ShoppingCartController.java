@@ -41,6 +41,7 @@ public class ShoppingCartController {
 	 * @param model
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/cartList")
 	public String cartListShow(Model model) {
 
@@ -97,6 +98,7 @@ public class ShoppingCartController {
 	 * @param model
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/inCart")
 	public String inCart(OrderItemForm form, Model model) {
 
@@ -145,6 +147,7 @@ public class ShoppingCartController {
 	 * @param model
 	 * @return カートから商品を削除する時
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping("/delete")
 	public String deleteInCartItem(String id, String index, Model model) {
 		Integer id1 = Integer.parseInt(id);

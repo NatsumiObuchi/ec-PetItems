@@ -172,7 +172,7 @@ public class OrderController {
 				couponId = usersCoupon.getCouponId();
 			}
 		}
-		
+	
 		Integer price = order.getTotalPrice();
 		order.setTotalPrice(price);
 		

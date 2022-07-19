@@ -59,7 +59,7 @@ class MyPageControllerTest {
 
 	private MockMvc mockMvc;
 
-	@Mock
+	@MockBean
 	private UserService userService;
 
 	// CouponServiceをモックオブジェクトとして使いますよ、という指定
@@ -270,9 +270,6 @@ class MyPageControllerTest {
 		mockSession.setAttribute("user", user);
 
 		List<Addressee> addresseeList = new ArrayList<>();
-		Addressee addressee = new Addressee();
-		addressee.setAddresseeId(1);
-		addresseeList.add(addressee);
 		when(addresseeService.findAddresseeByUserId(anyInt())).thenReturn(addresseeList);
 
 		mockMvc.perform(get("/myPage/registerShow").param("id", "6").session(mockSession)).andExpect(status().isOk())
