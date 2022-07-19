@@ -20,6 +20,8 @@ public class Coupon {
 	private Timestamp finishUseDate;
 	//クーポンの適用開始金額
 	private Integer startingAmount;
+	// クーポンのイメージ画像
+	private String couponImage;
 
 	public Integer getId() {
 		return id;
@@ -85,12 +87,21 @@ public class Coupon {
 		this.startingAmount = startingAmount;
 	}
 
+	public String getCouponImage() {
+		return couponImage;
+	}
+
+	public void setCouponImage(String couponImage) {
+		this.couponImage = couponImage;
+	}
+
 	@Override
 	public String toString() {
 		return "Coupon [id=" + id + ", discountPrice=" + discountPrice + ", duration=" + duration
 				+ ", startDistributionDate=" + startDistributionDate + ", finishDistributionDate="
 				+ finishDistributionDate + ", startUseDate=" + startUseDate + ", finishUseDate=" + finishUseDate
-				+ ", startingAmount=" + startingAmount + "]";
+				+ ", startingAmount=" + startingAmount + ", couponImage=" + couponImage + "]";
 	}
+
 
 }

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jp.co.example.ecommerce_b.domain.Coupon;
 import jp.co.example.ecommerce_b.domain.Favorite;
 import jp.co.example.ecommerce_b.domain.Item;
-import jp.co.example.ecommerce_b.domain.Order;
 import jp.co.example.ecommerce_b.domain.Point;
 import jp.co.example.ecommerce_b.domain.Review;
 import jp.co.example.ecommerce_b.domain.Search;
@@ -300,37 +299,37 @@ public class ItemController {
 		session.setAttribute("genreMap", genreMap);
 	}
 
-	/*
-	 * @param userId orderをセッションスコープに格納する処理。
-	 */
-	public void checkOrderBeforePayment(Integer userId) {
-		// DBに存在すれば支払い前のorderが入り、DBに存在しなければ新しいオーダーが入る
-		Order order = orderService.findOrderBeforePayment(userId);
-
-		// 支払い前のorderがDBになければ（ショッピングカートに商品が入っていなければ）新しくインサートする。
-		if (order == null) {
-			if (session.getAttribute("order") != null) {
-				order = (Order) session.getAttribute("order");
-			} else {
-				order = new Order();
-				order.setStatus(0);
-				order.setUserId(userId);
-				orderService.insertOrder(order);
-			}
-			// userIdが0の場合（ログインしていない場合）新しくDBにインサートする。
-		} else if (order.getUserId() == 0) {
-			if (session.getAttribute("order") != null) {
-				order = (Order) session.getAttribute("order");
-			} else {
-				order = new Order();
-				order.setStatus(0);
-				order.setUserId(userId);
-				orderService.insertOrder(order);
-			}
-		}
-		System.out.println("このメソッドいつ使ってるの？");
-		session.setAttribute("order", order);
-	}
+//	/*
+//	 * @param userId orderをセッションスコープに格納する処理。
+//	 */
+//	public void checkOrderBeforePayment(Integer userId) {
+//		// DBに存在すれば支払い前のorderが入り、DBに存在しなければ新しいオーダーが入る
+//		Order order = orderService.findOrderBeforePayment(userId);
+//
+//		// 支払い前のorderがDBになければ（ショッピングカートに商品が入っていなければ）新しくインサートする。
+//		if (order == null) {
+//			if (session.getAttribute("order") != null) {
+//				order = (Order) session.getAttribute("order");
+//			} else {
+//				order = new Order();
+//				order.setStatus(0);
+//				order.setUserId(userId);
+//				orderService.insertOrder(order);
+//			}
+//			// userIdが0の場合（ログインしていない場合）新しくDBにインサートする。
+//		} else if (order.getUserId() == 0) {
+//			if (session.getAttribute("order") != null) {
+//				order = (Order) session.getAttribute("order");
+//			} else {
+//				order = new Order();
+//				order.setStatus(0);
+//				order.setUserId(userId);
+//				orderService.insertOrder(order);
+//			}
+//		}
+//		System.out.println("このメソッドいつ使ってるの？");
+//		session.setAttribute("order", order);
+//	}
 
 	/**
 	 * レビューを投稿したときにDBにインサートする
