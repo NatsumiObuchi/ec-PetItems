@@ -62,31 +62,33 @@
 											<div th:each="coupon:${session.usersCouponList}">
 												<!-- 使用条件を満たすクーポンはラジオボタンで表示 -->
 												<label class="radio-inline">
-														<div class="center">
-															<img th:src="@{/img/} + ${coupon.coupon.couponImage}"
-																class="img-responsive img-rounded item-img-center" width="300"
-																height="500" /><br />
-														</div>
-														<div id="use-coupon" class="radio" 
-															name="usersCouponId" th:value="${coupon.id}"
-															th:text="・+${coupon.coupon.discountPrice}+円引きクーポン"></div>
-														<div th:text="使用条件：+${coupon.coupon.startingAmount}+円以上のお買い上げ">
-															使用条件
-														</div>
-														<div
-															th:text="有効期限：+${#dates.format(coupon.couponExpirationDate,'yyyy年MM月dd日')}">
-															有効期限</div><br>
-														<input type="hidden" name="discountPrice"
-															th:value="${coupon.coupon.discountPrice}">
+													<div class="center">
+														<img th:src="@{/img/} + ${coupon.coupon.couponImage}"
+															class="img-responsive img-rounded item-img-center" width="300"
+															height="500" /><br />
 													</div>
+													<div id="use-coupon" class="radio" 
+														name="usersCouponId" th:value="${coupon.id}"
+														th:text="・+${coupon.coupon.discountPrice}+円引きクーポン"></div>
+													<div th:text="使用条件：+${coupon.coupon.startingAmount}+円以上のお買い上げ">
+														使用条件
+													</div>
+													<div
+														th:text="有効期限：+${#dates.format(coupon.couponExpirationDate,'yyyy年MM月dd日')}">
+														有効期限
+													</div><br>
+													<input type="hidden" name="discountPrice"
+														th:value="${coupon.coupon.discountPrice}">
 												</label>
-												
 											</div>
 										</div>
 									</td>
 								</tr>
 							</tbody>
 						</table>
+						<div th:styleappend="${nonCoupon != null} ? 'display:none'">
+							<div th:text="${nonCoupon}"></div>
+						</div>
 					</div>
 				</div>
 			</div>
