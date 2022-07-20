@@ -40,11 +40,8 @@ PostgeSQLを使用しています。
 
 ER図は下記の通りです。  
 <details>
-  <summary>ER図</summary>
-  ![ER図](./coupon.drawio.png)
-  
+  <summary>ER図</summary>  
   ![coupon drawio](https://user-images.githubusercontent.com/105257893/179710691-b4b5d51a-8ca6-4622-843c-7a1083cc4d35.png)
-
 </details>
 
 ## 実装機能
@@ -53,15 +50,76 @@ ER図は下記の通りです。
   
   ![サイトマップ](./img/sitemap.png)
 </details>
+
 <details>
   <summary>ユーザー登録・入力値チェック・ログイン・ログアウト機能</summary>
   準備中
 </details>
+
+<details>
+  <summary>新規登録フォームの郵便番号入力部分の住所検索機能</summary>
+  準備中
+</details>
+
+<details>
+  <summary>ページング機能</summary>
+  準備中
+</details>
+
 <details>
   <summary>商品検索時のオートコンプリート機能</summary>
   準備中
   商品一覧ページ上部に商品検索フォームを設置しています。  
   フォームに文字を入力すると、それが含まれる商品名が候補として表示されます。  
   ![オートコンプリート](./img/autoComplete.jpg)
-  
+</details>
+
+<details>
+  <summary>商品検索・並び替え機能</summary>
+  準備中
+</details>
+
+<details>
+  <summary>商品レビュー機能</summary>
+  準備中
+</details>
+
+<details>
+  <summary>商品お気に入り機能</summary>
+  準備中
+</details>
+
+<details>
+  <summary>ポイント機能</summary>
+  準備中
+</details>
+
+<details>
+  <summary>クーポン機能</summary>
+  準備中
+</details>
+
+<details>
+  <summary>商品の数量と、クーポン・ポイント使用時に連動する金額の動的変更処理</summary>
+  準備中
+</details>
+
+<details>
+  <summary>クレジット決済における有効性チェック機能</summary>
+  準備中
+</details>
+
+<details>
+  <summary>注文完了自動送信メール送信機能</summary>
+  準備中
+</details>
+
+<details>
+  <summary>お届け先情報登録機能</summary>
+  準備中
+</details>
+
+<details>
+  <summary>登録者情報変更・退会機能</summary>
+  準備中
 </details>
