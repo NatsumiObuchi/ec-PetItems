@@ -39,6 +39,7 @@ public class UserRepository {
 	 * @return UserFormの郵便番号を変更するメソッド
 	 *         ユースケースの制約上「ハイフンありの８桁」で入力を受け取るが、DBの制約上「ハイフンなしの７桁」で登録する必要がある。
 	 */
+	@SuppressWarnings("unused")
 	private UserForm modifyZipcode(UserForm form) {
 		String zipcode8 = form.getZipcode();
 		String zipcode7 = "";

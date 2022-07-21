@@ -48,9 +48,6 @@ public class ItemController {
 	private ItemService itemService;
 
 	@Autowired
-	private OrderService orderService;
-
-	@Autowired
 	private FavoriteService favoriteService;
 
 	@Autowired

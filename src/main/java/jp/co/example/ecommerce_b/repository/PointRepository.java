@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import jp.co.example.ecommerce_b.domain.Point;
-import jp.co.example.ecommerce_b.domain.User;
 import jp.co.example.ecommerce_b.domain.UsersPointHistory;
 
 @Repository
@@ -23,7 +22,7 @@ public class PointRepository {
 		point.setId(rs.getInt("id"));
 		point.setUserId(rs.getInt("user_id"));
 		point.setPoint(rs.getInt("point"));
-		User user = new User();
+//		User user = new User();
 //		user.setId(rs.getInt("id"));
 //		user.setName(rs.getString("name"));
 //		user.setEmail(rs.getString("email"));
