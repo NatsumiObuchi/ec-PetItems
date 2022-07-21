@@ -21,7 +21,7 @@
 	<!-- メニューバー -->
 	<div th:fragment="frag_category">
 		<nav class="menu-bar">
-			<span class="category">カテゴリーで探す</span>
+			<span class="category side-category">カテゴリーで探す</span>
 			<hr class="sideBar_hr">
 			<ul class="menu-lists">
 				<li class="menu-list">
@@ -46,7 +46,11 @@
 			</ul>
 		</nav>
 
+		<br>
+		<span class="category side-category">クーポンをGET！</span>
+		<hr class="sideBar_hr">
 		<!-- ここにクーポンバナー -->
+	
 		<div th:styleappend="${session.user == null} ? 'display:none'">
 		<div th:each="coupons:${couponList}">
 			<form th:action="@{/coupon/getCoupon}" method="post">
@@ -54,7 +58,7 @@
 				<input type="hidden" name="finishUseDate" th:value="${coupons.finishUseDate}">
 				<input type="hidden" name="duration" th:value="${coupons.duration}">
 				<input type="hidden" name="couponLink" th:value="${couponLink}">
-				<button th:text="${coupons.discountPrice}+円引きクーポン"></button>
+				<button class="coupon-btn"　th:text="${coupons.discountPrice}+円引きクーポン"></button>
 			</form>
 		</div>
 	</div>

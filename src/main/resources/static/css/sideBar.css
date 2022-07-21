@@ -14,3 +14,28 @@
 article {
   display:flex;/*サイドバーとメインコンテンツを横並びにする指定をした*/
 }
+
+.side-category {
+  padding: 1rem 2rem;
+  border-left: 6px double darkblue;
+  color:darkblue;	
+}
+
+
+.animal_menu{
+	font-size: 18px;
+	margin-bottom:25px;
+	color:darkblue;	
+	text-decoration: none;
+}
+
+.dropdown-lists{
+	 margin-bottom:20px;
+	 text-decoration: none;
+}
+
+.coupon-btn{
+	margin-bottom:15px;
+	background:#7fbfff;
+	border:none;
+}
