@@ -29,7 +29,7 @@ $(function(){
 	});
 	
 	//お届け先ラジオボタン選択時
-	$('.radio').on('change', function() {
+	$('.radio-addressee').on('change', function() {
 		let destinationzipCode = $(this).parent().children('[name=destinationzipCode]').val();
 		let destinationAddress = $(this).parent().children('[name=destinationAddress]').val();
 		console.log(destinationzipCode);
@@ -49,7 +49,7 @@ $(function(){
 	 	$("#cardNumber").hide();
 	 });
 	 
-	 var grayThemeCreditly = Creditly.initialize(
+	 /*var grayThemeCreditly = Creditly.initialize(
 		'.creditly-wrapper.gray-theme .expiration-month-and-yaer',
 		'.creditly-wrapper.gray-theme .credit-card-number',
 		'.creditly-wrapper.gray-theme .security-code',
@@ -61,7 +61,7 @@ $(function(){
 		if (output) {
 			console.log(output);
 		}
-	});
+	});*/
 });
 
 
