@@ -39,7 +39,7 @@ Spring Tools 4 for Eclipseを使用しています。（最新バージョンは
 
 ### データベース
 PostgeSQLを使用しています。  
-「student」という名前のデータベースを作成し、[こちら](https://docs.google.com/document/d/1qPmDEEQ5emsmlowiZsx1e-v_p-lIZqphPEnjqm9M5EI/edit)のSQLを実行してください。  
+「student」という名前のデータベースを作成し、[こちら](https://docs.google.com/spreadsheets/d/1Mr0rphtDlUzo05eS7zZjsYN2b0vL47I9n2LzVEogJ4Y/edit#gid=0)のSQLを実行してください。  
 
 ER図は下記の通りです。  
 <details>
