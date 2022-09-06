@@ -39,7 +39,6 @@ public class UserRepository {
 	 * @return UserFormの郵便番号を変更するメソッド
 	 *         ユースケースの制約上「ハイフンありの８桁」で入力を受け取るが、DBの制約上「ハイフンなしの７桁」で登録する必要がある。
 	 */
-	@SuppressWarnings("unused")
 	private UserForm modifyZipcode(UserForm form) {
 		String zipcode8 = form.getZipcode();
 		String zipcode7 = "";
@@ -162,10 +161,14 @@ public class UserRepository {
 	 * 
 	 * @param user
 	 */
-	public void updatePassword(User user) {
+	public User updatePassword(User user) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(user);
-		String sql = "update users set password = :password where id = :id";
-		template.update(sql, param);
+		String sql = "update users set password = :password where id = :id returning id";
+		KeyHolder keyholder = new GeneratedKeyHolder();
+		template.update(sql, param, keyholder);
+		Integer id = (Integer) keyholder.getKey();
+		user.setId(id);
+		return user;
 	}
 
 	/**

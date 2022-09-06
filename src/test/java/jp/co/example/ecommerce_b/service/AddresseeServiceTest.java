@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -19,15 +21,14 @@ import jp.co.example.ecommerce_b.domain.Addressee;
 import jp.co.example.ecommerce_b.repository.AddresseeRepository;
 
 @SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 class AddresseeServiceTest {
 
-	@SuppressWarnings("unused")
 	private static final RowMapper<Addressee> ADDRESSEE_ROW_MAPPER = new BeanPropertyRowMapper<>(Addressee.class);
 
 	@Autowired
 	private AddresseeRepository addresseeRepository;
 
-	@SuppressWarnings("unused")
 	@Autowired
 	private AddresseeService addresseeService;
 

@@ -160,14 +160,14 @@ public class UserController {
 	}
 
 	/**
-	 * @param model(ログインしてない人が注文履歴を見ようとした際のメッセージ)
+	 * @param model(ログインしてない人が商品を注文した際のメッセージ)
 	 * @return ログイン画面
 	 */
 	@RequestMapping("/toLogin2")
 	public String index2(Model model) {
 		User user = (User) session.getAttribute("user");
 		if(user==null) {
-			model.addAttribute("historyMessage","注文履歴のご確認にはログインもしくはユーザー登録が必要です。");
+			model.addAttribute("orderMessage", "商品のご注文にはログインもしくはユーザー登録が必要です。");
 		}
 		return "login";
 	}
