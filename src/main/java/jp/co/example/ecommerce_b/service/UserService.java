@@ -83,8 +83,13 @@ public class UserService {
 	 * 
 	 * @param user
 	 */
-	public void updatePassword(User user) {
-		userRepository.updatePassword(user);
+	public User updatePassword(User user) {
+		String inputPass = user.getPassword();
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String hashPass = passwordEncoder.encode(inputPass);// パスワードのハッシュ化
+		user.setPassword(hashPass);
+		User updatePassUser = userRepository.updatePassword(user);
+		return updatePassUser;
 	}
 
 	/**
@@ -95,4 +100,5 @@ public class UserService {
 	public void delete(Integer id) {
 		userRepository.delete(id);
 	}
+	
 }

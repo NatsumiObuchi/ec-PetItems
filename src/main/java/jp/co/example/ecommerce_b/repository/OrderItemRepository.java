@@ -82,4 +82,15 @@ public class OrderItemRepository {
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		template.update(sql, param);
 	}
+
+	/**
+	 * 同じ商品をカートに追加した場合、orderItemsの個数(quantity)を更新する
+	 * 
+	 * @param orderItem
+	 */
+	public void update(OrderItem orderItem) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(orderItem);
+		String updateSql = "UPDATE orderItems SET quantity = :quantity WHERE item_id = :itemId";
+		template.update(updateSql, param);
+	}
 }

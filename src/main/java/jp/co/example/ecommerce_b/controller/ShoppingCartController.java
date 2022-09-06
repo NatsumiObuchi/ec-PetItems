@@ -23,6 +23,7 @@ import jp.co.example.ecommerce_b.service.OrderService;
 @RequestMapping("/shopping")
 public class ShoppingCartController {
 
+
 	@Autowired
 	private HttpSession session;
 
@@ -111,32 +112,30 @@ public class ShoppingCartController {
 			userId = user.getId();
 		}
 		checkOrderBeforePayment(userId);
+
 		Order order = (Order) session.getAttribute("order");
-		if (order.getId() == null || order.getId().equals("")) {// この処理の意味がわからない
+		if (order.getId() == null || order.getId().equals("")) {
+			// sessionスコープに"order"が存在しない場合、この時点でデータベースにorderを新規登録する
+			// →ここでinsertした上で、後処理でupdateをかけるため
 			order = orderService.insertOrder(order);
 		}
-
-		// OrderItemを生成→ショッピングカートにセットする
-		OrderItem orderItem = new OrderItem();
-		int itemId = Integer.parseInt(form.getItemId());
-		orderItem.setItemId(itemId);// itemIdの格納
-		orderItem.setOrderId(order.getId());// orderIdの格納
-		int quantity = Integer.parseInt(form.getQuantity());
-		orderItem.setQuantity(quantity);// quantityの格納
-		Item item = itemService.load(itemId);// itemの格納
-		orderItem.setItem(item);
-		Integer subtotal = item.getPrice() * orderItem.getQuantity();// subTotalの格納
-		orderItem.setSubTotal(subtotal);
-		orderItem = orderItemService.insert(orderItem);// orderItemテーブルにインサートかつidの取得(idが詰まったorderItem)
-		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");//
+		
+		// カートリストの情報をsessionから取得。ない場合はArrayListを格納する
+		List<OrderItem> cartList = (List<OrderItem>) session.getAttribute("cartList");
 		if (cartList == null || cartList.size() == 0) {
 			cartList = new ArrayList<>();
 		}
-		cartList.add(orderItem);
+		int itemId = Integer.parseInt(form.getItemId());	
+		int quantity = Integer.parseInt(form.getQuantity());
+		Item item = itemService.load(itemId);
+
+		// カートリストに同じ商品があれば合算し、新しい商品であれば追加する処理を実行
+		cartList = orderItemService.insertOrUpdateCartList(cartList, itemId, quantity, item, order);
+
 		order.setOrderItemList(cartList);
-		order.setTotalPrice(order.calcTotalPrice());
-		session.setAttribute("cartList", cartList);
-		session.setAttribute("order", order);// 最新のorderスコープへ格納
+		order.setTotalPrice(order.calcTotalPrice());// 消費税込みの合計金額を算出し格納
+		session.setAttribute("cartList", cartList);// 最新の"cartList"のスコープへ格納
+		session.setAttribute("order", order);// 最新の"order"のスコープへ格納
 		orderService.update(order);// DB上のorderを最新に更新
 
 		return cartListShow(model);
